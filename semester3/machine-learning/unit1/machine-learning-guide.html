@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Study Guide</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Machine Learning</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 1: Machine Learning Study Guide</h1>
+            <p class="subtitle">An Introduction to Machine Learning Concepts</p>
+        </header>
+
+        <section id="introduction">
+            <h2>1. Introduction to Machine Learning</h2>
+            
+            <h3>What is Machine Learning?</h3>
+            <p>Machine Learning (ML) is a subset of artificial intelligence that enables computers to learn and make decisions from data without being explicitly programmed for every possible scenario. Think of it like teaching a computer to recognize patterns, just like how humans learn from experience.</p>
+            
+            <h4>Understanding the Core Concept</h4>
+            <p>Traditional programming follows this approach: Input + Program → Output. For example, you write a program with specific rules to calculate taxes based on income brackets. But what if the rules are too complex or unknown?</p>
+            
+            <p>Machine Learning flips this: Input + Output → Program. You give the computer many examples of inputs and their correct outputs, and it figures out the rules (program) by itself.</p>
+            
+            <h4>Simple Analogy: Learning to Recognize Faces</h4>
+            <p><strong>Human Learning:</strong> As a baby, you see thousands of faces and gradually learn to recognize your parents, friends, and strangers. You don't memorize every face - you learn patterns like eye shape, nose size, facial structure.</p>
+            
+            <p><strong>Machine Learning:</strong> Similarly, we show a computer thousands of photos with labels like "John", "Mary", "Unknown Person". The computer learns patterns in pixel arrangements, colors, and shapes to recognize faces in new photos.</p>
+            
+            <h4>Why is Machine Learning Important?</h4>
+            <div class="concept">
+                <p><strong>Problems ML Solves:</strong></p>
+                <ul>
+                    <li><strong>Complex Pattern Recognition:</strong> Identifying cancer cells in medical images where human eyes might miss subtle patterns</li>
+                    <li><strong>Handling Big Data:</strong> Processing millions of customer transactions to detect fraud in real-time</li>
+                    <li><strong>Automation:</strong> Making decisions automatically, like adjusting car engine performance based on driving conditions</li>
+                    <li><strong>Prediction:</strong> Forecasting weather, stock prices, or equipment failures before they happen</li>
+                </ul>
+            </div>
+            
+            <h4>Real-World Example: Email Spam Detection</h4>
+            <p><strong>The Problem:</strong> Billions of emails are sent daily, and manually checking each one for spam is impossible.</p>
+            
+            <p><strong>Traditional Programming Approach:</strong> Create rules like "if email contains 'FREE MONEY', mark as spam". But spammers quickly learn to bypass these rules by using creative spellings like "Fr3e M0ney".</p>
+            
+            <p><strong>Machine Learning Approach:</strong></p>
+            <ol>
+                <li><strong>Training Data:</strong> Collect 100,000 emails already labeled as "spam" or "legitimate"</li>
+                <li><strong>Feature Extraction:</strong> Computer analyzes patterns like word frequency, sender reputation, subject line characteristics</li>
+                <li><strong>Pattern Learning:</strong> Computer discovers that legitimate emails often have personal greetings, proper grammar, and come from known contacts</li>
+                <li><strong>Prediction:</strong> For new emails, the system calculates probability of being spam based on learned patterns</li>
+            </ol>
+
+            <h3>Types of Machine Learning</h3>
+            
+            <div class="ml-type">
+                <h4>1. Supervised Learning</h4>
+                <p>This is like learning with a teacher. The computer is given examples with correct answers (called labeled data) and learns to predict the right answer for new examples.</p>
+                
+                <h5>How Supervised Learning Works:</h5>
+                <p>Imagine teaching a child to identify animals. You show them pictures and tell them "This is a cat", "This is a dog", "This is a bird". After seeing many examples, the child learns to identify animals in new pictures.</p>
+                
+                <p><strong>Training Phase:</strong> Computer analyzes thousands of examples where both input (image) and correct output (animal type) are provided.</p>
+                <p><strong>Testing Phase:</strong> Computer tries to predict the correct output for new inputs it has never seen.</p>
+                
+                <h5>Two Main Types:</h5>
+                <ul>
+                    <li><strong>Classification:</strong> Predicting categories (cat/dog/bird, spam/not spam, approve/deny loan)</li>
+                    <li><strong>Regression:</strong> Predicting numbers (house price $350,000, temperature 25°C, stock price $50)</li>
+                </ul>
+                
+                <p><strong>Detailed Example - Medical Diagnosis:</strong></p>
+                <ul>
+                    <li><strong>Training Data:</strong> 10,000 patient records with symptoms (fever, cough, fatigue) and confirmed diagnoses (flu, cold, pneumonia)</li>
+                    <li><strong>Learning Process:</strong> Computer identifies patterns like "high fever + severe cough + fatigue usually = pneumonia"</li>
+                    <li><strong>Prediction:</strong> For new patients, system suggests most likely diagnosis based on symptoms</li>
+                    <li><strong>Accuracy:</strong> Can achieve 85-95% accuracy, helping doctors make faster, more informed decisions</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h4>2. Unsupervised Learning</h4>
+                <p>This is like learning without a teacher. The computer finds hidden patterns in data without being told what to look for.</p>
+                
+                <h5>The Challenge:</h5>
+                <p>Unlike supervised learning, there are no "correct answers" provided. The computer must discover structure and patterns on its own, like a detective finding clues.</p>
+                
+                <h5>What Unsupervised Learning Discovers:</h5>
+                <ul>
+                    <li><strong>Hidden Groups:</strong> Finding natural clusters in data</li>
+                    <li><strong>Associations:</strong> Discovering which items are frequently found together</li>
+                    <li><strong>Anomalies:</strong> Identifying unusual or suspicious data points</li>
+                    <li><strong>Structure:</strong> Understanding the underlying organization of complex data</li>
+                </ul>
+                
+                <p><strong>Detailed Example - Netflix Recommendations:</strong></p>
+                <ul>
+                    <li><strong>Data:</strong> Millions of users watching different movies and TV shows</li>
+                    <li><strong>Discovery Process:</strong> Algorithm notices that users who watch "The Office" also tend to watch "Parks and Recreation" and "Brooklyn Nine-Nine"</li>
+                    <li><strong>Pattern Recognition:</strong> System identifies genre preferences, viewing time patterns, and user behavior similarities</li>
+                    <li><strong>Application:</strong> Creates recommendation groups like "Comedy Lovers", "Sci-Fi Enthusiasts" without anyone telling it these categories exist</li>
+                    <li><strong>Business Value:</strong> Increases user engagement by 75% through personalized recommendations</li>
+                </ul>
+                
+                <p><strong>Another Example - Market Research:</strong></p>
+                <p>A company analyzes customer data and discovers three natural groups: "Price-conscious families" (buy in bulk, prefer discounts), "Quality seekers" (buy premium brands), and "Convenience shoppers" (buy frequently, small quantities). This segmentation helps create targeted marketing strategies.</p>
+            </div>
+
+            <div class="ml-type">
+                <h4>3. Reinforcement Learning</h4>
+                <p>This is learning through trial and error, like a video game where you get rewards for good moves and penalties for bad ones.</p>
+                
+                <h5>Key Components:</h5>
+                <ul>
+                    <li><strong>Agent:</strong> The learner (computer program)</li>
+                    <li><strong>Environment:</strong> The world the agent operates in</li>
+                    <li><strong>Actions:</strong> What the agent can do</li>
+                    <li><strong>Rewards:</strong> Positive feedback for good actions</li>
+                    <li><strong>Penalties:</strong> Negative feedback for bad actions</li>
+                </ul>
+                
+                <p><strong>Detailed Example - Training a Robot to Walk:</strong></p>
+                <ul>
+                    <li><strong>Initial State:</strong> Robot starts with random leg movements, falls constantly</li>
+                    <li><strong>Learning Process:</strong> Robot tries millions of different leg movement combinations</li>
+                    <li><strong>Reward System:</strong> +10 points for each step forward, -50 points for falling, +100 points for walking 10 steps</li>
+                    <li><strong>Evolution:</strong> Robot gradually learns that certain leg movements lead to rewards, others to penalties</li>
+                    <li><strong>Result:</strong> After millions of attempts, robot learns smooth, stable walking patterns</li>
+                </ul>
+                
+                <p><strong>Gaming Example - Learning to Play Pac-Man:</strong></p>
+                <ul>
+                    <li><strong>Environment:</strong> Pac-Man maze with ghosts and dots</li>
+                    <li><strong>Actions:</strong> Move up, down, left, right</li>
+                    <li><strong>Rewards:</strong> +10 for eating dot, +100 for eating fruit, -500 for being caught by ghost</li>
+                    <li><strong>Learning:</strong> AI plays thousands of games, gradually learning strategies like "avoid ghosts", "collect dots efficiently", "use power pellets strategically"</li>
+                    <li><strong>Outcome:</strong> Eventually outperforms human players through optimal path planning</li>
+                </ul>
+            </div>
+            
+            <h3>Comparison of Learning Types</h3>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Supervised</th>
+                        <th>Unsupervised</th>
+                        <th>Reinforcement</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Required</strong></td>
+                        <td>Input + Correct Output</td>
+                        <td>Input Only</td>
+                        <td>Environment + Feedback</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Goal</strong></td>
+                        <td>Predict outcomes</td>
+                        <td>Discover patterns</td>
+                        <td>Maximize rewards</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Example</strong></td>
+                        <td>Email spam detection</td>
+                        <td>Customer segmentation</td>
+                        <td>Game playing AI</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Human Analogy</strong></td>
+                        <td>Studying with answer key</td>
+                        <td>Discovering patterns in nature</td>
+                        <td>Learning to ride a bicycle</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>Common Misconceptions About Machine Learning</h3>
+            <div class="concept">
+                <h4>Myth vs Reality:</h4>
+                <ul>
+                    <li><strong>Myth:</strong> "AI is magic and can solve any problem"
+                    <br><strong>Reality:</strong> ML requires good data, proper problem formulation, and appropriate algorithms</li>
+                    
+                    <li><strong>Myth:</strong> "More data always means better results"
+                    <br><strong>Reality:</strong> Quality matters more than quantity. Bad data leads to bad predictions</li>
+                    
+                    <li><strong>Myth:</strong> "Machine learning models are always objective"
+                    <br><strong>Reality:</strong> Models can inherit biases present in training data</li>
+                    
+                    <li><strong>Myth:</strong> "You need to be a math genius to understand ML"
+                    <br><strong>Reality:</strong> Basic concepts can be understood through intuitive explanations and examples</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="applications">
+            <h2>2. Machine Learning Applications</h2>
+            
+            <h3>Learning Associations (Association Rule Mining)</h3>
+            <p>Association learning finds relationships between different items or events. It discovers patterns like "If this happens, then that usually happens too." This is also called Market Basket Analysis.</p>
+            
+            <h4>How Association Learning Works:</h4>
+            <ol>
+                <li><strong>Data Collection:</strong> Gather transaction data showing what items are bought together</li>
+                <li><strong>Pattern Discovery:</strong> Find frequent combinations of items</li>
+                <li><strong>Rule Generation:</strong> Create rules like "If customer buys A and B, they often buy C"</li>
+                <li><strong>Validation:</strong> Test rules on new data to ensure they're reliable</li>
+            </ol>
+            
+            <h4>Key Concepts:</h4>
+            <ul>
+                <li><strong>Support:</strong> How often items appear together (e.g., bread and butter appear together in 30% of transactions)</li>
+                <li><strong>Confidence:</strong> How reliable the association is (e.g., 80% of people who buy bread also buy butter)</li>
+                <li><strong>Lift:</strong> How much more likely the association is compared to random chance</li>
+            </ul>
+            
+            <h4>Detailed Example - Supermarket Analysis:</h4>
+            <div class="example-detailed">
+                <p><strong>Data:</strong> 10,000 shopping receipts from a supermarket</p>
+                <p><strong>Discovery Process:</strong></p>
+                <ul>
+                    <li><strong>Pattern 1:</strong> 60% of customers buying pasta also buy tomato sauce (high confidence)</li>
+                    <li><strong>Pattern 2:</strong> Customers buying baby diapers often buy baby food and wipes</li>
+                    <li><strong>Pattern 3:</strong> Friday evening shoppers buying beer also buy snacks 75% of the time</li>
+                </ul>
+                <p><strong>Business Actions:</strong></p>
+                <ul>
+                    <li>Place tomato sauce near pasta shelves</li>
+                    <li>Create baby care bundles with diapers, food, and wipes</li>
+                    <li>Position premium snacks near beer refrigerators on Fridays</li>
+                    <li><strong>Result:</strong> 15% increase in average transaction value</li>
+                </ul>
+            </div>
+            
+            <h4>Other Association Learning Applications:</h4>
+            <ul>
+                <li><strong>Website Navigation:</strong> "Users who visit page A often visit page B" helps improve website design</li>
+                <li><strong>Medical Diagnosis:</strong> "Patients with symptoms A and B often have condition C"</li>
+                <li><strong>Online Streaming:</strong> "People who watch show X also enjoy shows Y and Z"</li>
+                <li><strong>Social Media:</strong> "Users who like post A often like posts with similar themes"</li>
+            </ul>
+
+            <h3>Classification</h3>
+            <p>Classification is about putting things into predefined categories or classes. It's like having a sorting machine that looks at characteristics and decides "this belongs in group A, that belongs in group B."</p>
+            
+            <h4>How Classification Works:</h4>
+            <ol>
+                <li><strong>Training Phase:</strong> Show the computer many examples with known categories</li>
+                <li><strong>Feature Identification:</strong> Computer learns which characteristics (features) are important for each category</li>
+                <li><strong>Model Creation:</strong> Computer creates decision rules based on patterns in the training data</li>
+                <li><strong>Prediction Phase:</strong> For new, unlabeled data, computer applies learned rules to assign categories</li>
+            </ol>
+            
+            <h4>Types of Classification:</h4>
+            <ul>
+                <li><strong>Binary Classification:</strong> Two categories only (Yes/No, Spam/Not Spam, Pass/Fail)</li>
+                <li><strong>Multi-class Classification:</strong> Multiple categories (Dog/Cat/Bird, Low/Medium/High Risk)</li>
+                <li><strong>Multi-label Classification:</strong> Multiple categories can apply simultaneously (Movie genres: Action + Comedy + Romance)</li>
+            </ul>
+            
+            <h4>Detailed Example 1 - Bank Loan Approval:</h4>
+            <div class="example-detailed">
+                <p><strong>Training Data:</strong> 50,000 previous loan applications with outcomes</p>
+                <p><strong>Features Analyzed:</strong></p>
+                <ul>
+                    <li>Annual income ($30,000 - $200,000)</li>
+                    <li>Credit score (300 - 850)</li>
+                    <li>Employment duration (0 - 20 years)</li>
+                    <li>Debt-to-income ratio (0% - 100%)</li>
+                    <li>Previous loan history (good/bad/none)</li>
+                </ul>
+                <p><strong>Learning Process:</strong></p>
+                <ul>
+                    <li>Computer discovers: "Income > $60,000 + Credit Score > 700 + Employment > 2 years → 95% approval rate"</li>
+                    <li>"Credit Score < 500 → 90% rejection rate regardless of income"</li>
+                    <li>"Debt-to-income ratio > 40% → High risk category"</li>
+                </ul>
+                <p><strong>New Application:</strong> John earns $75,000, has credit score 720, employed for 3 years, debt ratio 25%</p>
+                <p><strong>Prediction:</strong> Model classifies as "APPROVE" with 92% confidence</p>
+            </div>
+            
+            <h4>Detailed Example 2 - Medical Image Analysis:</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Detecting skin cancer from photographs</p>
+                <p><strong>Training Data:</strong> 100,000 skin lesion images labeled by dermatologists as "benign" or "malignant"</p>
+                <p><strong>Feature Learning:</strong></p>
+                <ul>
+                    <li>Color variations (irregular colors often indicate cancer)</li>
+                    <li>Shape irregularities (asymmetrical shapes are concerning)</li>
+                    <li>Border characteristics (uneven, blurred borders)</li>
+                    <li>Size changes (lesions that grow over time)</li>
+                </ul>
+                <p><strong>Performance:</strong> Achieves 95% accuracy, matching expert dermatologists</p>
+                <p><strong>Impact:</strong> Enables early detection in remote areas without specialist doctors</p>
+            </div>
+
+            <h3>Regression</h3>
+            <p>Regression predicts continuous numerical values rather than categories. Think of it as drawing the "best fit line" through scattered data points to predict future values.</p>
+            
+            <h4>Understanding Regression Intuitively:</h4>
+            <p>Imagine you're tracking your study hours vs exam scores. After plotting several exams, you notice a pattern: more study hours generally lead to higher scores. Regression finds the mathematical relationship and lets you predict your score based on planned study hours.</p>
+            
+            <h4>Types of Regression:</h4>
+            <ul>
+                <li><strong>Linear Regression:</strong> Relationship forms a straight line (score = 60 + 2 × study hours)</li>
+                <li><strong>Polynomial Regression:</strong> Relationship forms a curve (like diminishing returns after too many study hours)</li>
+                <li><strong>Multiple Regression:</strong> Multiple factors affect the outcome (study hours + sleep + nutrition → exam score)</li>
+            </ul>
+            
+            <h4>Detailed Example 1 - House Price Prediction:</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Real estate company wants to automatically estimate house values</p>
+                <p><strong>Training Data:</strong> 20,000 recently sold houses with actual sale prices</p>
+                <p><strong>Features Used:</strong></p>
+                <ul>
+                    <li>Square footage (1,000 - 5,000 sq ft)</li>
+                    <li>Number of bedrooms (1 - 6)</li>
+                    <li>Number of bathrooms (1 - 4)</li>
+                    <li>Age of house (0 - 100 years)</li>
+                    <li>Distance to city center (1 - 50 miles)</li>
+                    <li>School district rating (1 - 10)</li>
+                    <li>Crime rate in area (low/medium/high)</li>
+                </ul>
+                <p><strong>Learning Process:</strong></p>
+                <ul>
+                    <li>Computer analyzes relationships: "Each additional 100 sq ft adds ~$15,000 to price"</li>
+                    <li>"Each mile from city center reduces price by ~$5,000"</li>
+                    <li>"Houses in top-rated school districts cost 20% more"</li>
+                    <li>"Each additional bedroom adds ~$25,000, but effect decreases after 4 bedrooms"</li>
+                </ul>
+                <p><strong>New House Prediction:</strong></p>
+                <ul>
+                    <li>Input: 2,200 sq ft, 3 bed, 2 bath, 15 years old, 8 miles from center, school rating 8/10</li>
+                    <li>Model calculation: Base price + size bonus + school bonus - age penalty - distance penalty</li>
+                    <li>Predicted price: $425,000 (±$25,000 confidence interval)</li>
+                </ul>
+            </div>
+            
+            <h4>Detailed Example 2 - Student Performance Prediction:</h4>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> University wants to predict student final grades to provide early intervention</p>
+                <p><strong>Input Features:</strong></p>
+                <ul>
+                    <li>Midterm exam score (0-100)</li>
+                    <li>Assignment average (0-100)</li>
+                    <li>Class attendance percentage (0-100%)</li>
+                    <li>Hours spent on coursework per week</li>
+                    <li>Previous semester GPA</li>
+                </ul>
+                <p><strong>Discovered Relationships:</strong></p>
+                <ul>
+                    <li>"Each 10% increase in attendance correlates with 5-point grade increase"</li>
+                    <li>"Students with >90% attendance rarely fail, regardless of other factors"</li>
+                    <li>"Assignment scores are the strongest predictor of final performance"</li>
+                </ul>
+                <p><strong>Early Warning System:</strong> If model predicts grade below 60%, system alerts both student and advisor for intervention</p>
+            </div>
+
+            <h3>Unsupervised Learning Applications</h3>
+            <p>These applications find hidden patterns without being told what to look for. They're like exploratory tools that reveal structure in seemingly random data.</p>
+            
+            <h4>Customer Segmentation - Detailed Case Study:</h4>
+            <div class="example-detailed">
+                <p><strong>Company:</strong> Online clothing retailer with 100,000 customers</p>
+                <p><strong>Data Available:</strong> Purchase history, browsing behavior, demographics, seasonal patterns</p>
+                <p><strong>Challenge:</strong> Create marketing campaigns without knowing customer types in advance</p>
+                
+                <p><strong>Unsupervised Discovery Process:</strong></p>
+                <ol>
+                    <li><strong>Data Analysis:</strong> Algorithm examines all customer behaviors simultaneously</li>
+                    <li><strong>Pattern Recognition:</strong> Identifies natural groupings based on similarities</li>
+                    <li><strong>Segment Discovery:</strong> Reveals 5 distinct customer types:</li>
+                </ol>
+                
+                <ul>
+                    <li><strong>"Fashion Forward" (15%):</strong> Buy trendy items, high spending, follow seasonal trends</li>
+                    <li><strong>"Practical Buyers" (35%):</strong> Purchase basics, focus on durability, price-sensitive</li>
+                    <li><strong>"Bargain Hunters" (25%):</strong> Buy only during sales, highly price-sensitive, large cart sizes</li>
+                    <li><strong>"Impulse Shoppers" (15%):</strong> Frequent small purchases, influenced by recommendations</li>
+                    <li><strong>"Occasional Buyers" (10%):</strong> Infrequent purchases, usually specific items or gifts</li>
+                </ul>
+                
+                <p><strong>Business Impact:</strong></p>
+                <ul>
+                    <li>Targeted emails increase click rates by 40%</li>
+                    <li>Personalized recommendations boost sales by 25%</li>
+                    <li>Inventory planning improves based on segment preferences</li>
+                </ul>
+            </div>
+            
+            <h4>Anomaly Detection - Credit Card Fraud:</h4>
+            <div class="example-detailed">
+                <p><strong>The Challenge:</strong> Detect fraudulent transactions without knowing what fraud looks like in advance</p>
+                <p><strong>Normal Behavior Learning:</strong></p>
+                <ul>
+                    <li>John typically spends $50-200 per transaction</li>
+                    <li>Shops mainly in his city, during daytime hours</li>
+                    <li>Frequent purchases: gas, groceries, restaurants</li>
+                    <li>Uses card 3-5 times per week</li>
+                </ul>
+                <p><strong>Anomaly Detection:</strong></p>
+                <ul>
+                    <li><strong>Suspicious Activity:</strong> $2,000 purchase at 3 AM in different country</li>
+                    <li><strong>Algorithm Response:</strong> "This is highly unusual compared to John's normal pattern"</li>
+                    <li><strong>Automatic Action:</strong> Block transaction, send SMS verification to John</li>
+                    <li><strong>False Positive Handling:</strong> If John confirms it's legitimate, system learns this as acceptable behavior</li>
+                </ul>
+            </div>
+            
+            <h4>Other Unsupervised Applications:</h4>
+            <ul>
+                <li><strong>Gene Analysis:</strong> Grouping genes with similar functions without prior biological knowledge</li>
+                <li><strong>Social Network Analysis:</strong> Discovering communities and influence patterns</li>
+                <li><strong>Image Segmentation:</strong> Automatically identifying objects in images without labeled examples</li>
+                <li><strong>Document Clustering:</strong> Organizing large document collections by topic</li>
+            </ul>
+
+            <h3>Reinforcement Learning Applications</h3>
+            <p>These applications learn optimal strategies through trial and error, getting better through experience and feedback.</p>
+            
+            <h4>Game Playing - AlphaGo Case Study:</h4>
+            <div class="example-detailed">
+                <p><strong>The Challenge:</strong> Go is considered the most complex board game, with more possible moves than atoms in the observable universe</p>
+                <p><strong>Traditional Approach Failed:</strong> Impossible to program all possible strategies manually</p>
+                
+                <p><strong>Reinforcement Learning Approach:</strong></p>
+                <ol>
+                    <li><strong>Self-Play Training:</strong> AI plays millions of games against copies of itself</li>
+                    <li><strong>Reward System:</strong> +1 for winning, -1 for losing, 0 for ongoing game</li>
+                    <li><strong>Strategy Evolution:</strong> Successful moves are reinforced, unsuccessful ones are discouraged</li>
+                    <li><strong>Pattern Recognition:</strong> Learns to recognize winning positions and strategic patterns</li>
+                </ol>
+                
+                <p><strong>Learning Process Example:</strong></p>
+                <ul>
+                    <li><strong>Early Games:</strong> Random moves, loses 90% of games</li>
+                    <li><strong>After 1,000 games:</strong> Learns basic rules, wins 20% against random play</li>
+                    <li><strong>After 1,000,000 games:</strong> Develops sophisticated strategies, beats amateur players</li>
+                    <li><strong>After 100,000,000 games:</strong> Defeats world champion, discovers new strategies unknown to humans</li>
+                </ul>
+            </div>
+            
+            <h4>Autonomous Driving - Real-World Application:</h4>
+            <div class="example-detailed">
+                <p><strong>Environment:</strong> Roads with other cars, pedestrians, traffic signals, weather conditions</p>
+                <p><strong>Actions Available:</strong> Accelerate, brake, turn left/right, change lanes</p>
+                
+                <p><strong>Reward System:</strong></p>
+                <ul>
+                    <li>+10 points for reaching destination safely</li>
+                    <li>+5 points for smooth driving (no sudden movements)</li>
+                    <li>+3 points for following traffic rules</li>
+                    <li>-50 points for near-miss accidents</li>
+                    <li>-1000 points for actual accidents</li>
+                    <li>-5 points for passenger discomfort</li>
+                </ul>
+                
+                <p><strong>Learning Progression:</strong></p>
+                <ul>
+                    <li><strong>Simulation Training:</strong> Practices in virtual environments with millions of scenarios</li>
+                    <li><strong>Pattern Learning:</strong> "When pedestrian appears at crosswalk, slow down" gets positive reinforcement</li>
+                    <li><strong>Complex Strategy Development:</strong> Learns to predict other drivers' behavior and plan accordingly</li>
+                    <li><strong>Real-World Application:</strong> Gradual deployment with human oversight</li>
+                </ul>
+            </div>
+            
+            <h4>Resource Optimization - Data Center Cooling:</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Data centers consume massive amounts of electricity for cooling, but too much cooling wastes energy while too little risks equipment damage</p>
+                
+                <p><strong>Reinforcement Learning Solution:</strong></p>
+                <ul>
+                    <li><strong>State Information:</strong> Temperature sensors, humidity, server load, outside weather</li>
+                    <li><strong>Actions:</strong> Adjust cooling fan speeds, redirect airflow, modify temperature targets</li>
+                    <li><strong>Reward Function:</strong> +100 for optimal temperature maintenance, -10 for each degree above/below target, -50 for energy waste</li>
+                    <li><strong>Learning Outcome:</strong> System learns to predict heat patterns and cool proactively</li>
+                    <li><strong>Results:</strong> 30% reduction in cooling costs while maintaining equipment safety</li>
+                </ul>
+            </div>
+            
+            <h4>Other RL Applications:</h4>
+            <ul>
+                <li><strong>Trading Systems:</strong> Learn optimal buying/selling strategies in financial markets</li>
+                <li><strong>Robotics:</strong> Teaching robots to walk, manipulate objects, or perform surgery</li>
+                <li><strong>Personalization:</strong> Optimizing content recommendations based on user engagement</li>
+                <li><strong>Supply Chain:</strong> Optimizing inventory levels and delivery routes dynamically</li>
+            </ul>
+        </section>
+
+        <section id="kmeans">
+            <h2>3. K-Means Clustering</h2>
+            
+            <h3>What is K-Means Clustering?</h3>
+            <p>K-means is an unsupervised learning algorithm that groups similar data points together into clusters. Imagine you have a bag of mixed colored balls, and you want to sort them into groups of similar colors - that's essentially what K-means does with data.</p>
+            
+            <h4>The Clustering Concept</h4>
+            <p><strong>Real-world Analogy:</strong> Think about organizing your music library. You might naturally group songs by genre (rock, pop, classical), but you could also group by mood (energetic, relaxing, sad) or by when you listen to them (morning, workout, study). K-means finds these natural groupings automatically based on song characteristics like tempo, loudness, and instruments used.</p>
+            
+            <h4>Why Do We Need Clustering?</h4>
+            <ul>
+                <li><strong>Data Exploration:</strong> Understanding the natural structure in your data</li>
+                <li><strong>Market Research:</strong> Finding customer segments without pre-conceived notions</li>
+                <li><strong>Data Compression:</strong> Representing groups instead of individual points</li>
+                <li><strong>Preprocessing:</strong> Simplifying data before applying other algorithms</li>
+            </ul>
+            
+            <h3>How K-Means Works</h3>
+            <div class="algorithm-steps">
+                <h4>Step-by-Step Process (Detailed):</h4>
+                <ol>
+                    <li><strong>Choose the number of clusters (k):</strong> This is like deciding how many groups you want to organize things into. For customer segmentation, you might choose k=4 for four customer types.</li>
+                    
+                    <li><strong>Initialize cluster centers (centroids):</strong> Randomly place k points in your data space. Think of these as "group leaders" that will attract similar data points.</li>
+                    
+                    <li><strong>Assign data points to nearest cluster:</strong> For each data point, calculate the distance to each cluster center and assign it to the closest one. This is like students choosing to sit near their closest friends in a cafeteria.</li>
+                    
+                    <li><strong>Recalculate cluster centers:</strong> For each cluster, find the average position of all its members and move the center there. This is like the "group leader" moving to the center of their group.</li>
+                    
+                    <li><strong>Check for convergence:</strong> If cluster centers don't move much from the previous iteration, the algorithm has converged (finished). If they moved significantly, repeat steps 3-4.</li>
+                    
+                    <li><strong>Final result:</strong> Data points are organized into k distinct groups, each with its own characteristics.</li>
+                </ol>
+            </div>
+            
+            <h4>Mathematical Intuition (Simple):</h4>
+            <div class="concept">
+                <p><strong>Distance Calculation:</strong> K-means uses Euclidean distance (straight-line distance) to measure how similar data points are. In 2D, this is like measuring the distance between two points on a map.</p>
+                
+                <p><strong>Example:</strong> If customer A spends (Annual: $1000, Frequency: 10 purchases) and customer B spends (Annual: $1200, Frequency: 12 purchases), they're closer to each other than to customer C who spends (Annual: $200, Frequency: 30 purchases).</p>
+                
+                <p><strong>Center Calculation:</strong> If a cluster contains customers with spending [1000, 1200, 800] and frequencies [10, 12, 8], the new center would be at (Average spending: $1000, Average frequency: 10).</p>
+            </div>
+
+            <h3>Complete Worked Example: E-commerce Customer Segmentation</h3>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> "ShopSmart" online store has 1,000 customers and wants to understand their buying patterns to improve marketing.</p>
+                
+                <p><strong>Data Available for Each Customer:</strong></p>
+                <ul>
+                    <li>Annual spending amount ($100 - $5,000)</li>
+                    <li>Number of purchases per year (2 - 50)</li>
+                </ul>
+                
+                <p><strong>Step 1: Choose k=3 (Three customer segments)</strong></p>
+                <p>Business decides they want to create three marketing campaigns, so they choose k=3.</p>
+                
+                <p><strong>Step 2: Initial Random Centers</strong></p>
+                <ul>
+                    <li>Center 1: ($1,500, 10 purchases)</li>
+                    <li>Center 2: ($800, 25 purchases)</li>
+                    <li>Center 3: ($3,000, 5 purchases)</li>
+                </ul>
+                
+                <p><strong>Step 3: Sample Customer Assignment (First Iteration)</strong></p>
+                <ul>
+                    <li>Customer Alice: ($400, 30 purchases) → Closest to Center 2 → Assigned to Cluster 2</li>
+                    <li>Customer Bob: ($2,800, 4 purchases) → Closest to Center 3 → Assigned to Cluster 3</li>
+                    <li>Customer Carol: ($1,200, 12 purchases) → Closest to Center 1 → Assigned to Cluster 1</li>
+                </ul>
+                
+                <p><strong>Step 4: Recalculate Centers</strong></p>
+                <p>After assigning all 1,000 customers, calculate new centers:</p>
+                <ul>
+                    <li>New Center 1: Average of all customers in Cluster 1 = ($1,100, 14 purchases)</li>
+                    <li>New Center 2: Average of all customers in Cluster 2 = ($450, 28 purchases)</li>
+                    <li>New Center 3: Average of all customers in Cluster 3 = ($2,900, 6 purchases)</li>
+                </ul>
+                
+                <p><strong>Step 5: Repeat Until Convergence</strong></p>
+                <p>After 5 iterations, centers stabilize, revealing three natural customer segments:</p>
+                
+                <ul>
+                    <li><strong>Cluster 1 - "Moderate Spenders" (40% of customers):</strong> $1,000-1,500 annually, 10-20 purchases</li>
+                    <li><strong>Cluster 2 - "Bargain Hunters" (35% of customers):</strong> $300-600 annually, 25-40 purchases</li>
+                    <li><strong>Cluster 3 - "Premium Customers" (25% of customers):</strong> $2,500-4,000 annually, 3-8 purchases</li>
+                </ul>
+                
+                <p><strong>Business Strategy Based on Results:</strong></p>
+                <ul>
+                    <li><strong>Moderate Spenders:</strong> Regular promotions, loyalty programs, seasonal sales</li>
+                    <li><strong>Bargain Hunters:</strong> Bulk discounts, clearance alerts, price-match guarantees</li>
+                    <li><strong>Premium Customers:</strong> Exclusive products, VIP services, early access to new items</li>
+                </ul>
+            </div>
+            
+            <h4>Another Worked Example: Student Study Habits</h4>
+            <div class="example-detailed">
+                <p><strong>University Scenario:</strong> Analyze 500 students based on study patterns to improve academic support</p>
+                
+                <p><strong>Data Features:</strong></p>
+                <ul>
+                    <li>Weekly study hours (5-50 hours)</li>
+                    <li>Library usage frequency (0-20 visits per week)</li>
+                </ul>
+                
+                <p><strong>K-means Results (k=3):</strong></p>
+                <ul>
+                    <li><strong>"Intensive Studiers" (20%):</strong> 35+ hours/week, frequent library use</li>
+                    <li><strong>"Balanced Learners" (60%):</strong> 15-25 hours/week, moderate library use</li>
+                    <li><strong>"Minimal Studiers" (20%):</strong> <10 hours/week, rare library visits</li>
+                </ul>
+                
+                <p><strong>Academic Interventions:</strong></p>
+                <ul>
+                    <li><strong>Intensive Studiers:</strong> Stress management workshops, advanced study techniques</li>
+                    <li><strong>Balanced Learners:</strong> Time management tips, study group formation</li>
+                    <li><strong>Minimal Studiers:</strong> Motivation programs, tutoring services, study habit development</li>
+                </ul>
+            </div>
+
+            <h3>Advantages and Limitations (Detailed Analysis)</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li><strong>Simplicity:</strong> Easy to understand and implement, doesn't require complex mathematics</li>
+                        <li><strong>Efficiency:</strong> Works quickly even with large datasets (millions of points)</li>
+                        <li><strong>Scalability:</strong> Performance improves with modern computing power</li>
+                        <li><strong>Interpretability:</strong> Results are easy to explain to non-technical stakeholders</li>
+                        <li><strong>Memory Efficient:</strong> Only needs to store cluster centers, not all training data</li>
+                        <li><strong>Guaranteed Convergence:</strong> Algorithm always finds a solution (though not always optimal)</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>Limitations:</h4>
+                    <ul>
+                        <li><strong>Choosing k:</strong> No automatic way to determine optimal number of clusters</li>
+                        <li><strong>Initial Sensitivity:</strong> Different starting points can lead to different results</li>
+                        <li><strong>Shape Assumptions:</strong> Expects circular/spherical clusters, struggles with elongated or irregular shapes</li>
+                        <li><strong>Size Sensitivity:</strong> Large clusters can "absorb" smaller nearby clusters</li>
+                        <li><strong>Outlier Impact:</strong> Single extreme data points can skew entire cluster centers</li>
+                        <li><strong>Equal Size Bias:</strong> Tends to create clusters of similar sizes even when natural groups vary</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>How to Choose the Right Number of Clusters (k)</h3>
+            <div class="concept">
+                <h4>Methods for Determining k:</h4>
+                <ul>
+                    <li><strong>Business Knowledge:</strong> Use domain expertise (e.g., company wants exactly 3 marketing segments)</li>
+                    <li><strong>Elbow Method:</strong> Plot the "within-cluster sum of squares" for different k values. Choose k where the improvement curve bends (like an elbow)</li>
+                    <li><strong>Trial and Error:</strong> Test different k values and see which produces most meaningful business insights</li>
+                </ul>
+                
+                <p><strong>Example:</strong> For customer segmentation, try k=2,3,4,5. If k=3 reveals "Budget/Premium/Luxury" customers with clear behavioral differences, while k=4 creates confusing overlaps, choose k=3.</p>
+            </div>
+
+            <div class="visual-diagram">
+                <h4>Complete K-Means Visualization:</h4>
+                <div class="diagram-text">
+                    <p>Customer segmentation progression through iterations:</p>
+                    <pre>
+    ITERATION 1 (Initial):                 ITERATION 2:                      FINAL RESULT:
+    
+    Spending                               Spending                          Spending
+    $3000│                                $3000│                           $3000│    ◆ Premium
+         │  ×₃   ● Premium                     │      ◆ ×₃ Premium               │      Cluster
+    $2000│       Customers                $2000│        Customers          $2000│         
+         │                                     │                               │         
+    $1000│×₁ ●   ● Moderate               $1000│    ◆ ×₁ Moderate           $1000│    ◆ Moderate
+         │    ●   Customers                    │      Customers                │      Cluster
+     $500│●●●                             $500│                            $500│         
+         │    ×₂                              │×₂                             │  ◆ Budget
+       $0└────────────────                  $0└────────────────            $0└──Cluster──
+         0   10   20   30                    0   10   20   30                0   10   20   30
+              Purchases/Year                      Purchases/Year                  Purchases/Year
+    
+    × = Initial random centers             × = Updated centers              ◆ = Final clusters
+    ● = Customer data points               ◆ = Customers assigned           Each cluster has distinct
+    Random placement                       Centers moving toward            characteristics and
+                                          group averages                   business strategies
+                    </pre>
+                </div>
+            </div>
+            
+            <h3>Step-by-Step Numerical Example</h3>
+            <div class="example-detailed">
+                <p><strong>Sample Data - 6 Customers (k=2):</strong></p>
+                <table class="data-table">
+                    <tr><th>Customer</th><th>Annual Spending</th><th>Purchases/Year</th></tr>
+                    <tr><td>A</td><td>$400</td><td>25</td></tr>
+                    <tr><td>B</td><td>$500</td><td>30</td></tr>
+                    <tr><td>C</td><td>$2000</td><td>8</td></tr>
+                    <tr><td>D</td><td>$2200</td><td>6</td></tr>
+                    <tr><td>E</td><td>$450</td><td>28</td></tr>
+                    <tr><td>F</td><td>$1800</td><td>10</td></tr>
+                </table>
+                
+                <p><strong>Initial Centers (Random):</strong></p>
+                <ul>
+                    <li>Center 1: ($1000, 15)</li>
+                    <li>Center 2: ($1500, 20)</li>
+                </ul>
+                
+                <p><strong>Iteration 1 - Distance Calculations:</strong></p>
+                <ul>
+                    <li>Customer A ($400, 25) to Center 1: Distance = √[(400-1000)² + (25-15)²] = √[360,000 + 100] = 600</li>
+                    <li>Customer A to Center 2: Distance = √[(400-1500)² + (25-20)²] = √[1,210,000 + 25] = 1,100</li>
+                    <li>Customer A assigned to Center 1 (closer)</li>
+                </ul>
+                
+                <p><strong>After All Assignments:</strong></p>
+                <ul>
+                    <li><strong>Cluster 1:</strong> Customers A, B, E (frequent, low-value buyers)</li>
+                    <li><strong>Cluster 2:</strong> Customers C, D, F (infrequent, high-value buyers)</li>
+                </ul>
+                
+                <p><strong>Update Centers:</strong></p>
+                <ul>
+                    <li>New Center 1: Average of A,B,E = (($400+$500+$450)/3, (25+30+28)/3) = ($450, 28)</li>
+                    <li>New Center 2: Average of C,D,F = (($2000+$2200+$1800)/3, (8+6+10)/3) = ($2000, 8)</li>
+                </ul>
+                
+                <p><strong>Convergence:</strong> Centers stabilize after 2-3 iterations, creating two clear customer segments for targeted marketing.</p>
+            </div>
+        </section>
+
+        <section id="som">
+            <h2>4. Self-Organizing Feature Map (SOM Algorithm)</h2>
+            
+            <h3>What is SOM?</h3>
+            <p>Self-Organizing Feature Map (SOM), also known as Kohonen Map, is an unsupervised learning algorithm that creates a low-dimensional representation of high-dimensional data while preserving the topological structure. Think of it as creating a map where similar data points are placed close to each other.</p>
+            
+            <h4>Understanding SOM Through Analogy</h4>
+            <p><strong>City Planning Analogy:</strong> Imagine you're planning a new city and want to organize different types of businesses. You'd naturally place similar businesses near each other - all restaurants in one area, all banks in another, retail shops clustered together. SOM does this automatically with data.</p>
+            
+            <p><strong>What Makes SOM Special:</strong></p>
+            <ul>
+                <li><strong>Topology Preservation:</strong> If two data points are similar, they'll be placed near each other on the map</li>
+                <li><strong>Dimensionality Reduction:</strong> Takes complex high-dimensional data and creates simple 2D maps</li>
+                <li><strong>Visualization:</strong> Helps humans understand complex data through visual patterns</li>
+                <li><strong>Self-Organization:</strong> No external supervision needed - the map organizes itself</li>
+            </ul>
+            
+            <h4>SOM vs K-Means: Key Differences</h4>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr><th>Aspect</th><th>SOM</th><th>K-Means</th></tr>
+                    <tr><td><strong>Output</strong></td><td>2D grid/map</td><td>Cluster labels</td></tr>
+                    <tr><td><strong>Structure</strong></td><td>Preserves neighborhood relationships</td><td>Only groups similar items</td></tr>
+                    <tr><td><strong>Visualization</strong></td><td>Creates intuitive maps</td><td>Shows cluster membership</td></tr>
+                    <tr><td><strong>Use Case</strong></td><td>Data exploration, pattern discovery</td><td>Customer segmentation, grouping</td></tr>
+                </table>
+            </div>
+            
+            <h3>Key Concepts (Detailed)</h3>
+            <div class="concept">
+                <h4>Neural Network Structure:</h4>
+                <p>SOM uses a grid of neurons (usually 2D) where each neuron has a weight vector of the same dimension as the input data. Unlike traditional neural networks, neurons in SOM are arranged in a specific geometric pattern (grid, hexagonal, etc.).</p>
+                
+                <p><strong>Simple Explanation:</strong> Think of SOM as a grid of "specialists." Each specialist (neuron) has preferences (weights) for certain types of data. When data comes in, the specialist most similar to that data becomes more specialized in that type, and nearby specialists also become slightly more similar.</p>
+                
+                <h4>Important SOM Terms:</h4>
+                <ul>
+                    <li><strong>Neuron/Node:</strong> Each cell in the grid that can "learn" to represent certain types of data</li>
+                    <li><strong>Weight Vector:</strong> The characteristics that each neuron has learned to recognize</li>
+                    <li><strong>Best Matching Unit (BMU):</strong> The neuron most similar to the current input data</li>
+                    <li><strong>Neighborhood:</strong> Neurons around the BMU that also get updated (but less strongly)</li>
+                    <li><strong>Learning Rate:</strong> How much neurons change when they encounter new data (starts high, decreases over time)</li>
+                </ul>
+            </div>
+            
+            <h4>The Self-Organization Process</h4>
+            <p><strong>Biological Inspiration:</strong> SOM mimics how the human brain organizes sensory information. In your brain, neurons handling similar information (like vision) cluster together in specific regions.</p>
+            
+            <div class="concept">
+                <h5>Why "Self-Organizing"?</h5>
+                <ul>
+                    <li><strong>No External Teacher:</strong> Unlike supervised learning, no one tells SOM what the correct output should be</li>
+                    <li><strong>Competitive Learning:</strong> Neurons compete to represent different types of data</li>
+                    <li><strong>Neighborhood Cooperation:</strong> Winning neurons share knowledge with nearby neurons</li>
+                    <li><strong>Adaptive Structure:</strong> The map structure emerges naturally from the data characteristics</li>
+                </ul>
+            </div>
+
+            <h3>How SOM Algorithm Works (Comprehensive)</h3>
+            <div class="algorithm-steps">
+                <h4>Detailed Step-by-Step Process:</h4>
+                <ol>
+                    <li><strong>Initialize the Grid:</strong>
+                        <ul>
+                            <li>Create a 2D grid (e.g., 10×10 = 100 neurons)</li>
+                            <li>Each neuron gets random weight values</li>
+                            <li>If input data has 3 features, each neuron has 3 random weights</li>
+                            <li>Example: Neuron(1,1) might start with weights [0.3, 0.7, 0.1]</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Present Input Data:</strong>
+                        <ul>
+                            <li>Take one data point from your dataset</li>
+                            <li>Example: Customer data [Age:25, Income:50000, Purchases:12]</li>
+                            <li>Normalize data to same scale (e.g., all values between 0 and 1)</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Find Best Matching Unit (BMU):</strong>
+                        <ul>
+                            <li>Calculate distance between input and each neuron's weights</li>
+                            <li>Use Euclidean distance formula</li>
+                            <li>Neuron with smallest distance becomes the BMU</li>
+                            <li>Example: If input is [0.25, 0.5, 0.12] and neuron has weights [0.23, 0.48, 0.15], distance is very small</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Update Weights:</strong>
+                        <ul>
+                            <li><strong>BMU Update:</strong> Adjust BMU weights to be more similar to input</li>
+                            <li><strong>Neighborhood Update:</strong> Also update nearby neurons, but less strongly</li>
+                            <li>Update strength decreases with distance from BMU</li>
+                            <li>Example: If BMU is at grid position (5,5), neurons at (4,5), (6,5), (5,4), (5,6) get strong updates, while (3,5), (7,5) get weaker updates</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Repeat and Adapt:</strong>
+                        <ul>
+                            <li>Process all data points multiple times (epochs)</li>
+                            <li>Gradually reduce learning rate (from 0.9 to 0.01)</li>
+                            <li>Gradually reduce neighborhood size (from large area to just BMU)</li>
+                            <li>This ensures early exploration and later fine-tuning</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <h4>Learning Rate and Neighborhood Decay</h4>
+            <div class="concept">
+                <p><strong>Learning Rate Schedule:</strong></p>
+                <ul>
+                    <li><strong>Initial (Epoch 1-100):</strong> High learning rate (0.5-0.9) for rapid organization</li>
+                    <li><strong>Middle (Epoch 100-500):</strong> Medium learning rate (0.1-0.5) for refinement</li>
+                    <li><strong>Final (Epoch 500+):</strong> Low learning rate (0.01-0.1) for fine-tuning</li>
+                </ul>
+                
+                <p><strong>Neighborhood Size Schedule:</strong></p>
+                <ul>
+                    <li><strong>Initially:</strong> Large neighborhood (radius 5-10) for global organization</li>
+                    <li><strong>Gradually:</strong> Shrinking neighborhood (radius 3-1) for local refinement</li>
+                    <li><strong>Finally:</strong> Only BMU updates (radius 0) for precise positioning</li>
+                </ul>
+            </div>
+
+            <h3>Complete Worked Example: Color Organization</h3>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> Art software company wants to create an intuitive color palette where artists can easily find similar colors.</p>
+                
+                <p><strong>Input Data:</strong> 1000 different colors represented as RGB values</p>
+                <ul>
+                    <li>Pure Red: (255, 0, 0)</li>
+                    <li>Light Pink: (255, 192, 203)</li>
+                    <li>Deep Blue: (0, 0, 139)</li>
+                    <li>Sky Blue: (135, 206, 235)</li>
+                    <li>Forest Green: (34, 139, 34)</li>
+                </ul>
+                
+                <p><strong>SOM Setup:</strong> 20×20 grid (400 neurons), each neuron will learn to represent certain color characteristics</p>
+                
+                <p><strong>Training Process:</strong></p>
+                <ol>
+                    <li><strong>Initialization:</strong> Each neuron starts with random RGB values</li>
+                    <li><strong>Color Presentation:</strong> Show SOM the pure red color (255, 0, 0)</li>
+                    <li><strong>BMU Selection:</strong> Find neuron with RGB values closest to (255, 0, 0)</li>
+                    <li><strong>Weight Update:</strong> BMU becomes more red, nearby neurons also become slightly more red</li>
+                    <li><strong>Iteration:</strong> Repeat with all 1000 colors, multiple times</li>
+                </ol>
+                
+                <p><strong>Final Result:</strong></p>
+                <ul>
+                    <li>Top-left corner: Various shades of red and pink</li>
+                    <li>Top-right corner: Blues and purples</li>
+                    <li>Bottom area: Greens and yellows</li>
+                    <li>Smooth transitions between neighboring cells</li>
+                    <li>Artists can click anywhere and find similar colors nearby</li>
+                </ul>
+                
+                <p><strong>Business Value:</strong> Artists report 50% faster color selection, leading to increased software adoption</p>
+            </div>
+            
+            <h3>Advanced Example: Document Organization</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> News website wants to automatically organize 10,000 articles by topic</p>
+                
+                <p><strong>Input Features (per article):</strong></p>
+                <ul>
+                    <li>Word frequencies for key terms (politics, sports, technology, health, etc.)</li>
+                    <li>Article length, publication time, author information</li>
+                    <li>Reader engagement metrics</li>
+                </ul>
+                
+                <p><strong>SOM Implementation:</strong></p>
+                <ul>
+                    <li><strong>Grid Size:</strong> 15×15 map (225 neurons)</li>
+                    <li><strong>Training:</strong> Each article updates the map based on its characteristics</li>
+                    <li><strong>Emergent Organization:</strong>
+                        <ul>
+                            <li>Sports articles cluster in one region</li>
+                            <li>Political news groups in another area</li>
+                            <li>Technology articles form their own neighborhood</li>
+                            <li>Health and science articles cluster together</li>
+                            <li>Mixed topics appear at boundaries</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p><strong>Navigation Benefits:</strong></p>
+                <ul>
+                    <li>Readers browsing sports can easily discover related fitness articles</li>
+                    <li>Political readers find opinion pieces and analysis nearby</li>
+                    <li>Technology enthusiasts discover startup news and product reviews in adjacent areas</li>
+                </ul>
+            </div>
+
+            <h3>Comprehensive Applications of SOM</h3>
+            
+            <h4>1. Market Research - Consumer Behavior Mapping</h4>
+            <div class="example-detailed">
+                <p><strong>Company:</strong> Global beverage manufacturer</p>
+                <p><strong>Data:</strong> Consumer preferences across 50 countries</p>
+                <p><strong>Features:</strong> Sweetness preference, carbonation level, price sensitivity, brand loyalty, health consciousness</p>
+                <p><strong>SOM Results:</strong></p>
+                <ul>
+                    <li><strong>Region 1:</strong> Health-conscious consumers (prefer low-sugar, natural ingredients)</li>
+                    <li><strong>Region 2:</strong> Traditional taste seekers (classic cola flavors, brand loyal)</li>
+                    <li><strong>Region 3:</strong> Adventure seekers (try new flavors, premium products)</li>
+                    <li><strong>Region 4:</strong> Price-sensitive families (bulk purchases, store brands acceptable)</li>
+                </ul>
+                <p><strong>Strategy Impact:</strong> Different product lines developed for each region, increasing market share by 18%</p>
+            </div>
+            
+            <h4>2. Medical Diagnosis - Symptom Pattern Analysis</h4>
+            <div class="example-detailed">
+                <p><strong>Application:</strong> Emergency room triage system</p>
+                <p><strong>Input:</strong> Patient symptoms (fever level, pain severity, duration, location, associated symptoms)</p>
+                <p><strong>SOM Organization:</strong></p>
+                <ul>
+                    <li><strong>Cardiac Region:</strong> Chest pain, shortness of breath, arm numbness</li>
+                    <li><strong>Respiratory Region:</strong> Cough, fever, breathing difficulty</li>
+                    <li><strong>Gastrointestinal Region:</strong> Nausea, stomach pain, digestive issues</li>
+                    <li><strong>Neurological Region:</strong> Headache, dizziness, coordination problems</li>
+                </ul>
+                <p><strong>Clinical Benefit:</strong> Faster preliminary diagnosis, better resource allocation, 25% reduction in diagnostic errors</p>
+            </div>
+            
+            <h4>3. Image Processing - Texture Analysis</h4>
+            <div class="example-detailed">
+                <p><strong>Use Case:</strong> Quality control in textile manufacturing</p>
+                <p><strong>Process:</strong></p>
+                <ul>
+                    <li><strong>Input:</strong> Fabric texture samples analyzed for smoothness, pattern regularity, color uniformity</li>
+                    <li><strong>SOM Training:</strong> Learns to organize textures from smooth silk to rough burlap</li>
+                    <li><strong>Quality Detection:</strong> Defective fabrics appear as outliers on the map</li>
+                    <li><strong>Automatic Sorting:</strong> Production line automatically sorts fabrics by quality grade</li>
+                </ul>
+            </div>
+            
+            <h3>Detailed Advantages and Limitations</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li><strong>Topology Preservation:</strong> Similar data points remain neighbors on the map, maintaining natural relationships</li>
+                        <li><strong>Visualization Power:</strong> Transforms complex multi-dimensional data into intuitive 2D maps anyone can understand</li>
+                        <li><strong>Unsupervised Nature:</strong> No need for labeled training data - discovers patterns independently</li>
+                        <li><strong>Noise Tolerance:</strong> Robust against outliers and noisy data points</li>
+                        <li><strong>Interpretability:</strong> Easy to explain results to non-technical stakeholders</li>
+                        <li><strong>Adaptive Learning:</strong> Can incorporate new data without retraining from scratch</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>Limitations:</h4>
+                    <ul>
+                        <li><strong>Grid Size Selection:</strong> Choosing optimal map dimensions requires experimentation</li>
+                        <li><strong>Training Time:</strong> Can be slow with very large datasets</li>
+                        <li><strong>Parameter Tuning:</strong> Learning rate and neighborhood schedules need careful adjustment</li>
+                        <li><strong>High-Dimensional Challenge:</strong> Performance can degrade with extremely high-dimensional data</li>
+                        <li><strong>Quantization Error:</strong> Some information loss when mapping to discrete grid positions</li>
+                        <li><strong>Non-deterministic:</strong> Different runs may produce slightly different maps due to random initialization</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="pca">
+            <h2>5. Principal Component Analysis (PCA)</h2>
+            
+            <h3>What is Principal Component Analysis?</h3>
+            <p>Principal Component Analysis (PCA) is a dimensionality reduction technique that simplifies complex data while keeping the most important information. Imagine you're taking a 3D object and creating the best possible 2D shadow of it - PCA does something similar with data.</p>
+            
+            <h4>Understanding PCA Through Simple Analogies</h4>
+            
+            <div class="concept">
+                <h5>Photography Analogy:</h5>
+                <p>You're photographing a 3D sculpture for a catalog. You want one photo that shows the sculpture's most important features. You wouldn't take it from a random angle - you'd find the best viewpoint that captures the most detail and character. PCA finds these "best viewpoints" for complex data.</p>
+                
+                <h5>Shadow Analogy:</h5>
+                <p>Hold a 3D object under a light. Depending on the angle, the shadow might be:</p>
+                <ul>
+                    <li><strong>Informative:</strong> Shows the object's true shape and features</li>
+                    <li><strong>Misleading:</strong> Makes the object look flat or distorted</li>
+                </ul>
+                <p>PCA finds the "light angles" (principal components) that create the most informative shadows.</p>
+            </div>
+            
+            <h4>Why is Dimensionality a Problem?</h4>
+            <div class="concept">
+                <h5>The Curse of Dimensionality:</h5>
+                <ul>
+                    <li><strong>Visualization:</strong> Humans can only visualize 2D or 3D, but data often has 10, 100, or 1000+ dimensions</li>
+                    <li><strong>Computation:</strong> Algorithms slow down exponentially with more dimensions</li>
+                    <li><strong>Storage:</strong> More dimensions require more memory and storage</li>
+                    <li><strong>Noise:</strong> More dimensions often mean more irrelevant information</li>
+                </ul>
+                
+                <h5>Example of High-Dimensional Data:</h5>
+                <p><strong>Customer Profile:</strong> Age, Income, Education, Location, 50+ Purchase Categories, Website Behavior, Social Media Activity = 60+ dimensions</p>
+                <p><strong>The Challenge:</strong> How do you analyze or visualize 60-dimensional customer data?</p>
+                <p><strong>PCA Solution:</strong> Find 2-3 "super-features" that capture most customer differences</p>
+            </div>
+            
+            <h3>The Mathematics Behind PCA (Intuitive Explanation)</h3>
+            <div class="concept">
+                <h4>Variance - The Key Concept:</h4>
+                <p><strong>What is Variance?</strong> Variance measures how spread out data points are. High variance means data points are scattered widely; low variance means they're clustered tightly.</p>
+                
+                <p><strong>PCA's Goal:</strong> Find the direction where data has the highest variance (most spread out). This direction contains the most information about differences between data points.</p>
+                
+                <h4>Step-by-Step Mathematical Intuition:</h4>
+                <ol>
+                    <li><strong>Data Standardization:</strong>
+                        <ul>
+                            <li><strong>Why needed:</strong> If one feature is "age" (20-80) and another is "income" ($20,000-$80,000), income will dominate simply due to scale</li>
+                            <li><strong>Solution:</strong> Convert all features to same scale (usually 0-1 or standard normal distribution)</li>
+                            <li><strong>Example:</strong> Age 25 becomes 0.1, Age 65 becomes 0.9</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Covariance Matrix:</strong>
+                        <ul>
+                            <li><strong>Purpose:</strong> Measures how features change together</li>
+                            <li><strong>Example:</strong> If "education level" and "income" tend to increase together, they have positive covariance</li>
+                            <li><strong>Insight:</strong> High covariance between features suggests they might be measuring similar underlying concepts</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Finding Principal Components:</strong>
+                        <ul>
+                            <li><strong>First Component:</strong> Direction of maximum variance in the data</li>
+                            <li><strong>Second Component:</strong> Direction of second-highest variance, perpendicular to first</li>
+                            <li><strong>Subsequent Components:</strong> Continue finding perpendicular directions of decreasing variance</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>How PCA Works (Comprehensive Process)</h3>
+            <div class="algorithm-steps">
+                <h4>Detailed Algorithm Steps:</h4>
+                <ol>
+                    <li><strong>Data Preparation and Standardization:</strong>
+                        <ul>
+                            <li>Collect all data in a matrix format (rows = samples, columns = features)</li>
+                            <li>Calculate mean and standard deviation for each feature</li>
+                            <li>Standardize: New value = (Original value - Mean) / Standard deviation</li>
+                            <li><strong>Example:</strong> Ages [25, 35, 45] become [-1, 0, +1] after standardization</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Covariance Matrix Calculation:</strong>
+                        <ul>
+                            <li>Create a matrix showing how each pair of features relates to each other</li>
+                            <li>Positive values: Features increase together</li>
+                            <li>Negative values: One increases while other decreases</li>
+                            <li>Zero values: Features are independent</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Eigenvalue and Eigenvector Computation:</strong>
+                        <ul>
+                            <li><strong>Eigenvectors:</strong> The directions of principal components</li>
+                            <li><strong>Eigenvalues:</strong> How much variance each component explains</li>
+                            <li><strong>Ranking:</strong> Sort components by eigenvalue (highest variance first)</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Component Selection:</strong>
+                        <ul>
+                            <li>Decide how many components to keep (usually 2-3 for visualization)</li>
+                            <li>Rule of thumb: Keep components that explain 80-90% of total variance</li>
+                            <li>Create transformation matrix using selected eigenvectors</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Data Transformation:</strong>
+                        <ul>
+                            <li>Project original data onto selected principal components</li>
+                            <li>Result: Each data point now has fewer dimensions</li>
+                            <li>Original 10D data becomes 2D or 3D while preserving most information</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Complete Worked Example: Student Performance Analysis</h3>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> "Excellence High School" has detailed performance data for 500 students across 10 subjects and wants to understand underlying academic patterns.</p>
+                
+                <h4>Original Data (10 dimensions per student):</h4>
+                <table class="data-table">
+                    <tr><th>Subject</th><th>Sample Student Scores</th></tr>
+                    <tr><td>Mathematics</td><td>85, 92, 78, 65, 88</td></tr>
+                    <tr><td>Physics</td><td>82, 89, 75, 62, 85</td></tr>
+                    <tr><td>Chemistry</td><td>88, 94, 80, 68, 90</td></tr>
+                    <tr><td>Biology</td><td>75, 78, 85, 82, 79</td></tr>
+                    <tr><td>English</td><td>78, 65, 92, 88, 72</td></tr>
+                    <tr><td>History</td><td>80, 68, 89, 85, 75</td></tr>
+                    <tr><td>Geography</td><td>77, 70, 87, 83, 73</td></tr>
+                    <tr><td>Art</td><td>65, 55, 95, 90, 60</td></tr>
+                    <tr><td>Music</td><td>70, 60, 98, 85, 65</td></tr>
+                    <tr><td>Physical Education</td><td>88, 85, 70, 75, 92</td></tr>
+                </table>
+                
+                <h4>PCA Analysis Process:</h4>
+                
+                <p><strong>Step 1: Data Standardization</strong></p>
+                <ul>
+                    <li>Convert all scores to standard scale to ensure fair comparison</li>
+                    <li>Math score 85 might become 0.2, English score 78 might become -0.1</li>
+                </ul>
+                
+                <p><strong>Step 2: Correlation Discovery</strong></p>
+                <ul>
+                    <li><strong>High Correlation Found:</strong> Math ↔ Physics ↔ Chemistry (correlation 0.85+)</li>
+                    <li><strong>Moderate Correlation:</strong> English ↔ History ↔ Geography (correlation 0.6+)</li>
+                    <li><strong>Art ↔ Music:</strong> Strong creative correlation (0.7+)</li>
+                    <li><strong>Physical Education:</strong> Largely independent of academic subjects</li>
+                </ul>
+                
+                <p><strong>Step 3: Principal Components Identification</strong></p>
+                <ul>
+                    <li><strong>PC1 - "STEM Aptitude" (45% of variance):</strong>
+                        <ul>
+                            <li>Heavily weighted: Math(0.4), Physics(0.4), Chemistry(0.4)</li>
+                            <li>Moderately weighted: Biology(0.2)</li>
+                            <li>Low weight: Other subjects</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>PC2 - "Humanities Aptitude" (25% of variance):</strong>
+                        <ul>
+                            <li>Heavily weighted: English(0.4), History(0.4), Geography(0.3)</li>
+                            <li>Low weight: STEM and creative subjects</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>PC3 - "Creative Aptitude" (15% of variance):</strong>
+                        <ul>
+                            <li>Heavily weighted: Art(0.5), Music(0.5)</li>
+                            <li>Low weight: Academic subjects</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>PC4 - "Physical Aptitude" (10% of variance):</strong>
+                        <ul>
+                            <li>Heavily weighted: Physical Education(0.8)</li>
+                            <li>Some weight: Biology(0.2)</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p><strong>Step 4: Student Representation</strong></p>
+                <p>Instead of tracking 10 separate scores, each student now has 4 component scores:</p>
+                <ul>
+                    <li>Student John: STEM(0.8), Humanities(0.3), Creative(-0.2), Physical(0.5)</li>
+                    <li>Student Mary: STEM(-0.1), Humanities(0.9), Creative(0.7), Physical(0.1)</li>
+                </ul>
+                
+                <p><strong>Educational Insights:</strong></p>
+                <ul>
+                    <li><strong>Curriculum Planning:</strong> 85% of variance explained by first 3 components suggests students have distinct aptitude profiles</li>
+                    <li><strong>Personalized Learning:</strong> High STEM students get advanced science courses, high Creative students get arts enrichment</li>
+                    <li><strong>Career Guidance:</strong> Component scores help suggest suitable career paths</li>
+                    <li><strong>Resource Allocation:</strong> School can focus resources on developing identified aptitude areas</li>
+                </ul>
+            </div>
+
+            <h3>Advanced Example: Image Compression with PCA</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Company needs to compress profile photos for faster website loading without losing image quality</p>
+                
+                <p><strong>Original Image Data:</strong></p>
+                <ul>
+                    <li>100×100 pixel grayscale image = 10,000 dimensions (one per pixel)</li>
+                    <li>Each pixel value ranges from 0 (black) to 255 (white)</li>
+                    <li>Original file size: 10,000 bytes per image</li>
+                </ul>
+                
+                <p><strong>PCA Compression Process:</strong></p>
+                <ol>
+                    <li><strong>Data Matrix:</strong> Each row represents one image (10,000 pixel values)</li>
+                    <li><strong>Component Analysis:</strong> PCA discovers that most facial variation can be captured by 50-100 principal components</li>
+                    <li><strong>Variance Distribution:</strong>
+                        <ul>
+                            <li>First 50 components: 90% of image variance</li>
+                            <li>Next 50 components: 8% of image variance</li>
+                            <li>Remaining 9,900 components: 2% of image variance (mostly noise)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Compression:</strong> Store only first 100 components instead of 10,000 pixels</li>
+                    <li><strong>Result:</strong> 99% compression (100 bytes vs 10,000 bytes) with minimal visual quality loss</li>
+                </ol>
+            </div>
+            
+            <h3>Key Concepts Explained (Comprehensive)</h3>
+            <div class="key-concepts">
+                <h4>Principal Components (Detailed):</h4>
+                <p>Think of principal components as "meta-features" that combine original features in smart ways:</p>
+                <ul>
+                    <li><strong>Example:</strong> In house price prediction, PC1 might be "Overall Luxury" = 0.4×Size + 0.3×Location + 0.3×Age</li>
+                    <li><strong>Interpretation:</strong> PC1 captures the general "fanciness" of a house by combining multiple related features</li>
+                    <li><strong>Benefit:</strong> Instead of tracking size, location, and age separately, just track "luxury score"</li>
+                </ul>
+                
+                <h4>Variance Explained (With Numbers):</h4>
+                <p><strong>Example Breakdown:</strong></p>
+                <ul>
+                    <li>PC1 explains 60% of variance (most important patterns)</li>
+                    <li>PC2 explains 25% of variance (second most important)</li>
+                    <li>PC3 explains 10% of variance</li>
+                    <li>PC4-PC10 explain 5% of variance (mostly noise)</li>
+                </ul>
+                <p><strong>Decision:</strong> Keep PC1 and PC2 (85% of information) for 85% compression with minimal information loss</p>
+                
+                <h4>Eigenvalues and Eigenvectors (Simplified):</h4>
+                <ul>
+                    <li><strong>Eigenvector:</strong> Direction of a principal component (which features to combine and how)</li>
+                    <li><strong>Eigenvalue:</strong> Strength/importance of that direction (how much variance it explains)</li>
+                    <li><strong>Analogy:</strong> If data is a football, eigenvectors point along the length and width, eigenvalues tell you the football is much longer than it is wide</li>
+                </ul>
+            </div>
+
+            <h3>Comprehensive PCA Applications</h3>
+            
+            <h4>1. Finance - Portfolio Risk Analysis</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Investment firm tracks 100 stock prices and wants to understand market patterns</p>
+                <p><strong>Original Data:</strong> Daily price changes for 100 different stocks over 2 years</p>
+                <p><strong>PCA Discovery:</strong></p>
+                <ul>
+                    <li><strong>PC1 (60% variance) - "Market Trend":</strong> Almost all stocks move together with market</li>
+                    <li><strong>PC2 (20% variance) - "Sector Effects":</strong> Technology vs traditional industry differences</li>
+                    <li><strong>PC3 (10% variance) - "Company Size":</strong> Large vs small company performance patterns</li>
+                </ul>
+                <p><strong>Business Value:</strong> Instead of tracking 100 stocks individually, monitor 3 key factors that drive 90% of market movement</p>
+            </div>
+            
+            <h4>2. Healthcare - Disease Pattern Recognition</h4>
+            <div class="example-detailed">
+                <p><strong>Application:</strong> Hospital analyzes patient symptoms to identify disease patterns</p>
+                <p><strong>Input Data:</strong> 50 different symptom measurements and test results per patient</p>
+                <p><strong>PCA Results:</strong></p>
+                <ul>
+                    <li><strong>PC1 - "Infection Severity":</strong> Combines fever, white blood cell count, inflammation markers</li>
+                    <li><strong>PC2 - "Respiratory Function":</strong> Breathing rate, oxygen levels, lung capacity</li>
+                    <li><strong>PC3 - "Cardiovascular Health":</strong> Heart rate, blood pressure, circulation indicators</li>
+                </ul>
+                <p><strong>Clinical Impact:</strong> Doctors can quickly assess patient condition using 3 comprehensive health scores instead of analyzing 50 individual measurements</p>
+            </div>
+            
+            <h4>3. Manufacturing - Quality Control</h4>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> Car manufacturer monitors 200 quality parameters during production</p>
+                <p><strong>Parameters:</strong> Engine specifications, body measurements, electrical systems, paint quality, assembly precision</p>
+                <p><strong>PCA Simplification:</strong></p>
+                <ul>
+                    <li><strong>PC1 - "Overall Build Quality":</strong> Combines precision, fit, and finish measurements</li>
+                    <li><strong>PC2 - "Performance Systems":</strong> Engine, transmission, and electrical performance</li>
+                    <li><strong>PC3 - "Aesthetic Quality":</strong> Paint, interior, and visual appeal factors</li>
+                </ul>
+                <p><strong>Production Benefit:</strong> Quality control technicians monitor 3 composite scores instead of 200 individual measurements, reducing inspection time by 75%</p>
+            </div>
+            
+            <h4>4. Social Media - User Behavior Analysis</h4>
+            <div class="example-detailed">
+                <p><strong>Platform:</strong> Social media company with 10 million users</p>
+                <p><strong>User Features (30+ dimensions):</strong> Post frequency, like patterns, share behavior, comment length, emoji usage, time online, friend connections, etc.</p>
+                <p><strong>PCA Insights:</strong></p>
+                <ul>
+                    <li><strong>PC1 - "Engagement Level":</strong> Overall activity and participation</li>
+                    <li><strong>PC2 - "Content Type Preference":</strong> Visual vs text content preference</li>
+                    <li><strong>PC3 - "Social Connectivity":</strong> How much users interact vs consume passively</li>
+                </ul>
+                <p><strong>Platform Optimization:</strong> Customize user interface and content recommendations based on 3 key behavioral dimensions</p>
+            </div>
+
+            <div class="visual-diagram">
+                <h4>PCA Transformation Visualization:</h4>
+                <div class="diagram-text">
+                    <pre>
+    ORIGINAL DATA (Student Scores):           AFTER PCA TRANSFORMATION:
+    
+    Math │                                  PC2 │
+    100  │     ●                           (Arts) │    ●
+         │   ●   ●                                │  ●   ●
+     80  │ ●   ●   ●                           0  │●   ●   ●
+         │   ●     ●                            │        ●
+     60  │     ●                               │
+         └─────────────── English            └──────────────── PC1
+        60   80   100                                        (STEM)
+    
+    CORRELATION VISIBLE:                    INDEPENDENT COMPONENTS:
+    Students good at Math                   PC1: STEM aptitude
+    tend to be good at English             PC2: Arts aptitude
+    (diagonal pattern)                     (perpendicular axes)
+    
+    
+    3D TO 2D REDUCTION EXAMPLE:
+    
+    Original: Math, Physics, Chemistry      After PCA: STEM Score, Creativity Score
+    
+           Math                                PC2
+          ╱                                 (Creativity)
+         ●                                      │    ●
+        ╱ ●                                     │  ●
+       ●───● Physics                            ●────●  PC1
+          ╱                                          (STEM)
+      Chemistry
+    
+    3D scattered data becomes              Clear 2D representation
+    2D organized view                      preserving relationships
+                    </pre>
+                </div>
+            </div>
+
+            <h3>When to Use PCA (Decision Framework)</h3>
+            <div class="usage-guidelines">
+                <h4>Ideal Scenarios for PCA:</h4>
+                <ul>
+                    <li><strong>High-dimensional data (10+ features):</strong> When you have many measurements per data point</li>
+                    <li><strong>Correlated features:</strong> When many features measure similar underlying concepts</li>
+                    <li><strong>Visualization needs:</strong> When you need to plot complex data for human understanding</li>
+                    <li><strong>Performance optimization:</strong> When other algorithms are too slow on full dataset</li>
+                    <li><strong>Noise reduction:</strong> When data contains measurement errors or irrelevant variations</li>
+                    <li><strong>Storage constraints:</strong> When you need to reduce data size for storage or transmission</li>
+                </ul>
+                
+                <h4>Avoid PCA When:</h4>
+                <ul>
+                    <li><strong>Low-dimensional data (3 or fewer features):</strong> Not enough dimensions to benefit from reduction</li>
+                    <li><strong>All features equally important:</strong> When every original feature provides unique, crucial information</li>
+                    <li><strong>Interpretability required:</strong> When stakeholders need to understand each original feature</li>
+                    <li><strong>Sparse data:</strong> When most feature values are zero (common in text analysis)</li>
+                    <li><strong>Non-linear relationships:</strong> When features relate in complex, non-linear ways</li>
+                    <li><strong>Small datasets:</strong> When you have fewer data points than features</li>
+                </ul>
+            </div>
+            
+            <h3>PCA in Practice: Implementation Considerations</h3>
+            <div class="concept">
+                <h4>Before Applying PCA:</h4>
+                <ul>
+                    <li><strong>Data Quality Check:</strong> Ensure no missing values or outliers that could skew results</li>
+                    <li><strong>Feature Scaling:</strong> Standardize features to prevent high-magnitude features from dominating</li>
+                    <li><strong>Correlation Analysis:</strong> Verify that features are actually correlated (if not, PCA won't help much)</li>
+                </ul>
+                
+                <h4>Choosing Number of Components:</h4>
+                <ul>
+                    <li><strong>80% Rule:</strong> Keep components that explain 80% of variance for general analysis</li>
+                    <li><strong>95% Rule:</strong> Keep components that explain 95% of variance when precision is critical</li>
+                    <li><strong>Business Rule:</strong> Choose number based on practical constraints (e.g., can only create 3 customer segments)</li>
+                </ul>
+                
+                <h4>Interpreting Results:</h4>
+                <ul>
+                    <li><strong>Component Weights:</strong> Understand which original features contribute most to each component</li>
+                    <li><strong>Variance Percentage:</strong> Know how much information each component captures</li>
+                    <li><strong>Business Meaning:</strong> Give meaningful names to components based on what they represent</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <h2>6. Comprehensive Exam Preparation</h2>
+            
+            <h3>How to Structure 15-Mark Answers</h3>
+            <div class="exam-tips">
+                <h4>General Template for Any Algorithm Question:</h4>
+                <ol>
+                    <li><strong>Definition & Purpose (3 marks):</strong>
+                        <ul>
+                            <li>Clear definition in your own words</li>
+                            <li>What problem it solves</li>
+                            <li>What type of learning it represents</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Algorithm Steps (6 marks):</strong>
+                        <ul>
+                            <li>Step-by-step process with explanations</li>
+                            <li>Why each step is necessary</li>
+                            <li>What happens at each iteration</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Detailed Example (4 marks):</strong>
+                        <ul>
+                            <li>Use specific numbers and data</li>
+                            <li>Show calculations where relevant</li>
+                            <li>Explain the interpretation of results</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Applications & Evaluation (2 marks):</strong>
+                        <ul>
+                            <li>Real-world applications</li>
+                            <li>Advantages and limitations</li>
+                            <li>When to use vs when not to use</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <h3>Sample Complete 15-Mark Answers</h3>
+            
+            <h4>Question 1: "Explain the K-means clustering algorithm with a suitable example."</h4>
+            <div class="example-detailed">
+                <p><strong>Sample Answer Structure:</strong></p>
+                
+                <p><strong>[Definition - 3 marks]</strong></p>
+                <p>"K-means clustering is an unsupervised machine learning algorithm that partitions data into k clusters based on similarity. It aims to minimize the within-cluster sum of squares by grouping data points such that points within the same cluster are more similar to each other than to points in other clusters. This algorithm is useful when we want to discover natural groupings in data without prior knowledge of categories."</p>
+                
+                <p><strong>[Algorithm Steps - 6 marks]</strong></p>
+                <p>"The algorithm follows these steps: 1) Choose the number of clusters k based on domain knowledge or analysis methods. 2) Initialize k cluster centroids randomly in the data space. 3) For each data point, calculate the Euclidean distance to all centroids and assign the point to the nearest centroid's cluster. 4) Recalculate centroid positions as the mean of all points assigned to each cluster. 5) Repeat steps 3-4 until centroids stop moving significantly or maximum iterations are reached. The algorithm converges when cluster assignments stabilize."</p>
+                
+                <p><strong>[Example - 4 marks]</strong></p>
+                <p>"Consider customer segmentation for an online store with data: Customer A($400, 25 purchases), B($500, 30), C($2000, 8), D($2200, 6). For k=2, initial centroids at ($1000, 15) and ($1500, 20). First iteration assigns A,B to cluster 1, C,D to cluster 2 based on distances. New centroids become ($450, 27.5) and ($2100, 7). After convergence, we get 'frequent low-spenders' and 'infrequent high-spenders' segments for targeted marketing."</p>
+                
+                <p><strong>[Applications & Evaluation - 2 marks]</strong></p>
+                <p>"K-means applications include customer segmentation, image compression, and data preprocessing. Advantages: simple, efficient, guaranteed convergence. Limitations: requires choosing k beforehand, sensitive to initialization, assumes spherical clusters."</p>
+            </div>
+            
+            <h4>Question 2: "Describe Principal Component Analysis and its applications."</h4>
+            <div class="example-detailed">
+                <p><strong>[Definition - 3 marks]</strong></p>
+                <p>"PCA is a dimensionality reduction technique that transforms high-dimensional data into lower-dimensional space while preserving maximum variance. It identifies principal components (linear combinations of original features) that capture the most important patterns in data. This helps visualize complex data and reduces computational complexity."</p>
+                
+                <p><strong>[Process - 6 marks]</strong></p>
+                <p>"PCA process: 1) Standardize data to ensure all features have equal scale. 2) Calculate covariance matrix to measure feature relationships. 3) Compute eigenvalues and eigenvectors to find principal components. 4) Rank components by eigenvalues (explained variance). 5) Select top k components that explain desired percentage of variance. 6) Transform original data using selected components."</p>
+                
+                <p><strong>[Example - 4 marks]</strong></p>
+                <p>"Student performance across 10 subjects can be reduced to 3 components: PC1 'STEM aptitude' (Math+Physics+Chemistry), PC2 'Humanities aptitude' (English+History), PC3 'Creative aptitude' (Art+Music). If these explain 90% of variance, students can be characterized by 3 scores instead of 10, enabling better academic guidance and resource allocation."</p>
+                
+                <p><strong>[Applications - 2 marks]</strong></p>
+                <p>"Applications: image compression, data visualization, noise reduction, feature selection. Best for correlated high-dimensional data. Avoid when original feature interpretability is crucial or data is sparse."</p>
+            </div>
+            
+            <h3>Common Exam Mistakes to Avoid</h3>
+            <div class="concept">
+                <h4>Frequent Errors:</h4>
+                <ul>
+                    <li><strong>Confusing supervised and unsupervised:</strong> Remember - supervised has "teacher" (labeled data), unsupervised discovers patterns alone</li>
+                    <li><strong>Mixing up clustering algorithms:</strong> K-means groups data points, SOM creates organized maps, PCA reduces dimensions</li>
+                    <li><strong>Forgetting to explain "why":</strong> Always explain why each step is necessary and what it achieves</li>
+                    <li><strong>Vague examples:</strong> Use specific numbers and scenarios, not general statements</li>
+                    <li><strong>Ignoring limitations:</strong> Every algorithm has trade-offs - mention them to show complete understanding</li>
+                </ul>
+            </div>
+            
+            <h3>Quick Reference for Exam Success</h3>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr><th>Algorithm</th><th>Purpose</th><th>Key Example</th><th>Main Advantage</th><th>Main Limitation</th></tr>
+                    <tr>
+                        <td><strong>K-means</strong></td>
+                        <td>Group similar data</td>
+                        <td>Customer segmentation</td>
+                        <td>Simple, efficient</td>
+                        <td>Need to choose k</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SOM</strong></td>
+                        <td>Create organized maps</td>
+                        <td>Color palette organization</td>
+                        <td>Preserves relationships</td>
+                        <td>Parameter tuning complex</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCA</strong></td>
+                        <td>Reduce dimensions</td>
+                        <td>Student aptitude analysis</td>
+                        <td>Maintains most information</td>
+                        <td>Loses interpretability</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2>7. Practice Questions & Exam Strategies</h2>
+            
+            <h3>Practice Questions (Try These First)</h3>
+            <div class="exam-tips">
+                <h4>Short Answer Questions (5 marks each):</h4>
+                <ol>
+                    <li>"Differentiate between supervised and unsupervised learning with examples."</li>
+                    <li>"What are the main steps involved in the K-means clustering algorithm?"</li>
+                    <li>"Why is dimensionality reduction important in machine learning?"</li>
+                    <li>"Explain three real-world applications of machine learning."</li>
+                </ol>
+                
+                <h4>Long Answer Questions (15 marks each):</h4>
+                <ol>
+                    <li>"Describe the Self-Organizing Map algorithm. Explain its working with a suitable example and discuss its advantages and limitations."</li>
+                    <li>"What is Principal Component Analysis? Explain the algorithm steps and demonstrate with an example. When should PCA be used and when should it be avoided?"</li>
+                    <li>"Compare and contrast K-means clustering and SOM algorithms. Provide detailed examples showing when each should be used."</li>
+                </ol>
+            </div>
+            
+            <h3>Time Management Strategy</h3>
+            <div class="concept">
+                <h4>For 15-Mark Questions (30 minutes each):</h4>
+                <ul>
+                    <li><strong>Minutes 1-3:</strong> Read question carefully, plan your answer structure</li>
+                    <li><strong>Minutes 4-8:</strong> Write definition and explanation (5-6 marks)</li>
+                    <li><strong>Minutes 9-18:</strong> Detailed algorithm steps or example (6-7 marks)</li>
+                    <li><strong>Minutes 19-25:</strong> Applications, advantages, limitations (3-4 marks)</li>
+                    <li><strong>Minutes 26-30:</strong> Review, add missing details, check clarity</li>
+                </ul>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="summary-box">
+                <h3>Complete Study Checklist</h3>
+                <div class="checklist">
+                    <h4>Before Your Exam, Make Sure You Can:</h4>
+                    <ul>
+                        <li>✓ <strong>Define ML:</strong> Explain what machine learning is and why it's important</li>
+                        <li>✓ <strong>Compare Learning Types:</strong> Distinguish supervised, unsupervised, and reinforcement learning</li>
+                        <li>✓ <strong>Give Examples:</strong> Provide real-world examples for classification, regression, clustering</li>
+                        <li>✓ <strong>Explain K-means:</strong> Walk through the algorithm step-by-step with numbers</li>
+                        <li>✓ <strong>Describe SOM:</strong> Explain self-organization and topology preservation</li>
+                        <li>✓ <strong>Understand PCA:</strong> Explain dimensionality reduction and principal components</li>
+                        <li>✓ <strong>Compare Algorithms:</strong> Know when to use each technique and their trade-offs</li>
+                        <li>✓ <strong>Apply Concepts:</strong> Solve new problems using these algorithms</li>
+                    </ul>
+                </div>
+                
+                <h4>Final Review Summary:</h4>
+                <table class="summary-table">
+                    <tr><th>Concept</th><th>Key Point</th><th>Remember This</th></tr>
+                    <tr><td><strong>ML Definition</strong></td><td>Learning from data without explicit programming</td><td>Computer finds patterns like humans do</td></tr>
+                    <tr><td><strong>Supervised Learning</strong></td><td>Learning with teacher (labeled data)</td><td>Training with answer key</td></tr>
+                    <tr><td><strong>Unsupervised Learning</strong></td><td>Finding patterns without teacher</td><td>Discovering hidden structure</td></tr>
+                    <tr><td><strong>K-means</strong></td><td>Groups similar data into clusters</td><td>Like sorting colored balls</td></tr>
+                    <tr><td><strong>SOM</strong></td><td>Creates organized maps of data</td><td>Like organizing a city by districts</td></tr>
+                    <tr><td><strong>PCA</strong></td><td>Reduces dimensions keeping important info</td><td>Like finding best camera angle</td></tr>
+                </table>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Add interactive features for better learning
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click-to-highlight for key terms
+            const keyTerms = document.querySelectorAll('strong');
+            keyTerms.forEach(term => {
+                term.addEventListener('click', function() {
+                    this.style.backgroundColor = this.style.backgroundColor ? '' : '#ffeb3b';
+                });
+            });
+            
+            // Print-friendly mode toggle
+            const printButton = document.createElement('button');
+            printButton.textContent = 'Print Study Guide';
+            printButton.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 10px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+        });
+    </script>
+</body>
+</html>

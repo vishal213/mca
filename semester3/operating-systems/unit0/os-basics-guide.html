@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 0: Operating Systems Basics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Operating Systems</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 0: Operating Systems Basics</h1>
+            <p class="subtitle">Understanding the Foundation - What is an Operating System?</p>
+        </header>
+
+        <section id="what-is-os">
+            <h2>1. What is an Operating System?</h2>
+            
+            <h3>Simple Definition</h3>
+            <p>An <strong>Operating System (OS)</strong> is like the manager of your computer. Just like how a restaurant manager coordinates between customers, waiters, chefs, and kitchen equipment, an operating system coordinates between you (the user), your programs (like Chrome, Word, games), and your computer's hardware (CPU, memory, hard disk, keyboard, monitor).</p>
+            
+            <div class="concept">
+                <h5>Think of OS as a Translator and Manager:</h5>
+                <ul>
+                    <li><strong>Translator:</strong> You say "save this file" → OS tells the hard disk exactly how to store it</li>
+                    <li><strong>Manager:</strong> Multiple programs want to use CPU → OS decides who gets to use it when</li>
+                    <li><strong>Security Guard:</strong> Protects your files from malicious programs</li>
+                    <li><strong>Resource Allocator:</strong> Shares computer resources fairly among all running programs</li>
+                </ul>
+            </div>
+
+            <h3>Real-World Analogy: Traffic Control System</h3>
+            <div class="example-detailed">
+                <h4>City Traffic Management (Like an Operating System)</h4>
+                <p>Imagine a busy city intersection:</p>
+                <ul>
+                    <li><strong>Cars = Programs:</strong> Different programs want to use computer resources</li>
+                    <li><strong>Roads = Computer Resources:</strong> CPU, memory, storage are like roads</li>
+                    <li><strong>Traffic Lights = OS Scheduler:</strong> Controls which car (program) can move when</li>
+                    <li><strong>Traffic Police = OS Security:</strong> Ensures rules are followed, prevents crashes</li>
+                    <li><strong>Road Signs = User Interface:</strong> Help drivers (users) navigate safely</li>
+                </ul>
+                <p><strong>Result:</strong> Without traffic control, there would be chaos. With proper management, everyone reaches their destination efficiently and safely.</p>
+            </div>
+        </section>
+
+        <section id="why-need-os">
+            <h2>2. Why Do We Need an Operating System?</h2>
+
+            <h3>Problems Without an Operating System</h3>
+            <div class="concept">
+                <h5>Imagine Using a Computer Without OS:</h5>
+                <ol>
+                    <li><strong>Direct Hardware Programming:</strong> You'd need to write complex code just to display "Hello" on screen</li>
+                    <li><strong>No File Organization:</strong> Data would be scattered randomly on hard disk with no way to find it</li>
+                    <li><strong>One Program at a Time:</strong> You couldn't listen to music while typing a document</li>
+                    <li><strong>No Memory Protection:</strong> Programs could interfere with each other and crash the system</li>
+                    <li><strong>Hardware Complexity:</strong> Every programmer would need to understand intricate hardware details</li>
+                </ol>
+            </div>
+
+            <h3>How Operating System Solves These Problems</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ OS Benefits</h4>
+                    <ul>
+                        <li><strong>Easy Programming:</strong> Simple commands like "print()" work without hardware knowledge</li>
+                        <li><strong>File Management:</strong> Organize files in folders, search, copy, delete easily</li>
+                        <li><strong>Multitasking:</strong> Run multiple programs simultaneously</li>
+                        <li><strong>Resource Sharing:</strong> Multiple programs can safely share CPU, memory</li>
+                        <li><strong>User-Friendly Interface:</strong> Click icons instead of typing complex commands</li>
+                        <li><strong>Error Handling:</strong> System protects itself from program crashes</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Without OS</h4>
+                    <ul>
+                        <li><strong>Complex Programming:</strong> Every detail must be programmed manually</li>
+                        <li><strong>No File System:</strong> Data stored as raw numbers on disk</li>
+                        <li><strong>Single Program:</strong> Only one task at a time</li>
+                        <li><strong>Resource Conflicts:</strong> Programs fight over resources, system crashes</li>
+                        <li><strong>Technical Interface:</strong> Only experts can use computer</li>
+                        <li><strong>System Instability:</strong> One error crashes entire computer</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="computer-basics">
+            <h2>3. Basic Computer Components (Hardware Review)</h2>
+
+            <p>To understand how operating systems work, let's quickly review the main parts of a computer:</p>
+
+            <div class="visual-diagram">
+                <h4>Computer System Components</h4>
+                <div class="diagram-text">
+                    <pre>
+┌─────────────────────────────────────────────────────────┐
+│                    COMPUTER SYSTEM                      │
+├─────────────────────────────────────────────────────────┤
+│  USER PROGRAMS                                          │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐      │
+│  │   Chrome    │ │    Word     │ │   Games     │ ...  │
+│  └─────────────┘ └─────────────┘ └─────────────┘      │
+├─────────────────────────────────────────────────────────┤
+│              OPERATING SYSTEM                           │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  File System │ Memory Mgmt │ Process Scheduler │   │
+│  └─────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────┤
+│                    HARDWARE                             │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐      │
+│  │   CPU   │ │ Memory  │ │ Storage │ │  I/O    │      │
+│  │ (Brain) │ │  (RAM)  │ │ (Disk)  │ │ Devices │      │
+│  └─────────┘ ┌─────────┘ └─────────┘ └─────────┘      │
+└─────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Key Hardware Components</h3>
+            
+            <h4>1. Central Processing Unit (CPU) - The Brain</h4>
+            <div class="concept">
+                <h5>What CPU Does:</h5>
+                <ul>
+                    <li><strong>Executes Instructions:</strong> Follows step-by-step commands from programs</li>
+                    <li><strong>Performs Calculations:</strong> Math, comparisons, logical operations</li>
+                    <li><strong>Controls Operations:</strong> Coordinates all other computer parts</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>CPU is like a super-fast chef who can follow thousands of recipes (programs) simultaneously, but can only cook one dish (instruction) at a time.</p>
+            </div>
+
+            <h4>2. Memory (RAM) - Temporary Workspace</h4>
+            <div class="concept">
+                <h5>What Memory Does:</h5>
+                <ul>
+                    <li><strong>Temporary Storage:</strong> Holds data and programs currently being used</li>
+                    <li><strong>Fast Access:</strong> CPU can quickly read/write data from memory</li>
+                    <li><strong>Volatile:</strong> Contents disappear when computer is turned off</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>Memory is like your desk workspace. You keep current projects (running programs) and tools (data) on your desk for easy access. When you finish work (turn off computer), you clear the desk.</p>
+            </div>
+
+            <h4>3. Storage (Hard Disk/SSD) - Permanent Storage</h4>
+            <div class="concept">
+                <h5>What Storage Does:</h5>
+                <ul>
+                    <li><strong>Permanent Storage:</strong> Keeps data even when computer is off</li>
+                    <li><strong>Large Capacity:</strong> Stores operating system, programs, documents, photos</li>
+                    <li><strong>Slower Access:</strong> Takes longer to read/write compared to memory</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>Storage is like a filing cabinet. You store important documents (files) in organized folders. It keeps everything safe even when office is closed, but takes time to find specific documents.</p>
+            </div>
+
+            <h4>4. Input/Output (I/O) Devices - Communication</h4>
+            <div class="concept">
+                <h5>What I/O Devices Do:</h5>
+                <ul>
+                    <li><strong>Input Devices:</strong> Keyboard, mouse, microphone - let you communicate with computer</li>
+                    <li><strong>Output Devices:</strong> Monitor, speakers, printer - let computer communicate with you</li>
+                    <li><strong>Two-Way Devices:</strong> Network cards, USB drives - both send and receive data</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="os-role">
+            <h2>4. How Operating System Manages Everything</h2>
+
+            <h3>The OS as a Resource Manager</h3>
+            <p>The operating system's main job is to manage all computer resources efficiently and fairly. Think of it as managing a shared apartment where multiple roommates (programs) need to use common facilities (hardware resources).</p>
+
+            <div class="example-detailed">
+                <h4>Apartment Management Analogy</h4>
+                <p><strong>Scenario:</strong> You share an apartment with 3 roommates, but you have only 1 kitchen, 1 bathroom, and 1 TV.</p>
+                
+                <h5>Resource Conflicts Without Management:</h5>
+                <ul>
+                    <li>Everyone tries to cook at the same time → Kitchen chaos</li>
+                    <li>Multiple people want bathroom → Arguments and delays</li>
+                    <li>Everyone wants to watch different shows → TV remote wars</li>
+                </ul>
+
+                <h5>Resource Management With Rules (Like OS):</h5>
+                <ul>
+                    <li><strong>Scheduling:</strong> Time slots for kitchen use, bathroom queue system</li>
+                    <li><strong>Priority:</strong> Emergency bathroom needs get higher priority</li>
+                    <li><strong>Sharing:</strong> TV time divided fairly, or everyone watches together</li>
+                    <li><strong>Conflict Resolution:</strong> Rules for resolving disputes</li>
+                </ul>
+
+                <p><strong>Result:</strong> Everyone gets fair access, no conflicts, apartment runs smoothly!</p>
+            </div>
+
+            <h3>Main OS Management Areas</h3>
+
+            <h4>1. Process Management</h4>
+            <div class="concept">
+                <h5>What is a Process?</h5>
+                <p>A process is a running program. When you click on Chrome icon, it becomes a Chrome process.</p>
+                
+                <h5>OS Process Management Tasks:</h5>
+                <ul>
+                    <li><strong>Creating Processes:</strong> Starting new programs</li>
+                    <li><strong>Scheduling:</strong> Deciding which process gets CPU time</li>
+                    <li><strong>Communication:</strong> Helping processes share data safely</li>
+                    <li><strong>Termination:</strong> Properly ending processes</li>
+                </ul>
+            </div>
+
+            <h4>2. Memory Management</h4>
+            <div class="concept">
+                <h5>Memory Challenges:</h5>
+                <ul>
+                    <li><strong>Limited Space:</strong> Not enough memory for all programs</li>
+                    <li><strong>Protection:</strong> Prevent programs from accessing each other's data</li>
+                    <li><strong>Allocation:</strong> Give each program the memory it needs</li>
+                </ul>
+                
+                <h5>OS Memory Solutions:</h5>
+                <ul>
+                    <li><strong>Virtual Memory:</strong> Make programs think they have more memory than available</li>
+                    <li><strong>Memory Protection:</strong> Build walls between programs' memory areas</li>
+                    <li><strong>Swapping:</strong> Move unused data to disk to free up memory</li>
+                </ul>
+            </div>
+
+            <h4>3. File System Management</h4>
+            <div class="concept">
+                <h5>File System Purpose:</h5>
+                <p>Organizes data on storage devices so you can easily find, save, and manage your files.</p>
+                
+                <h5>File System Features:</h5>
+                <ul>
+                    <li><strong>Hierarchical Structure:</strong> Folders within folders (like Russian dolls)</li>
+                    <li><strong>File Operations:</strong> Create, read, write, delete, copy files</li>
+                    <li><strong>Access Control:</strong> Control who can access which files</li>
+                    <li><strong>Space Management:</strong> Efficiently use disk space</li>
+                </ul>
+            </div>
+
+            <h4>4. Device Management</h4>
+            <div class="concept">
+                <h5>Device Communication:</h5>
+                <p>OS acts as interpreter between programs and hardware devices (printer, keyboard, mouse, etc.)</p>
+                
+                <h5>Device Management Tasks:</h5>
+                <ul>
+                    <li><strong>Device Drivers:</strong> Special programs that know how to talk to specific devices</li>
+                    <li><strong>I/O Operations:</strong> Handle input from keyboard, output to screen</li>
+                    <li><strong>Buffering:</strong> Temporarily store data when devices work at different speeds</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="types-of-os">
+            <h2>5. Common Types of Operating Systems</h2>
+
+            <h3>Based on User Interface</h3>
+            
+            <h4>1. Graphical User Interface (GUI) Operating Systems</h4>
+            <div class="example-detailed">
+                <h5>Examples: Windows, macOS, Ubuntu Desktop</h5>
+                <ul>
+                    <li><strong>Visual Interface:</strong> Icons, windows, menus you can click</li>
+                    <li><strong>Mouse-Driven:</strong> Point and click to perform actions</li>
+                    <li><strong>User-Friendly:</strong> Easy for beginners to learn</li>
+                    <li><strong>Multitasking:</strong> Multiple windows open simultaneously</li>
+                </ul>
+                <p><strong>Best For:</strong> Home users, office work, general computing tasks</p>
+            </div>
+
+            <h4>2. Command Line Interface (CLI) Operating Systems</h4>
+            <div class="example-detailed">
+                <h5>Examples: Linux Server, MS-DOS</h5>
+                <ul>
+                    <li><strong>Text-Based:</strong> Type commands to perform actions</li>
+                    <li><strong>Keyboard-Driven:</strong> All interaction through typing</li>
+                    <li><strong>Powerful:</strong> Can perform complex tasks with single commands</li>
+                    <li><strong>Resource-Efficient:</strong> Uses less memory and CPU</li>
+                </ul>
+                <p><strong>Best For:</strong> Servers, programmers, system administrators</p>
+            </div>
+
+            <h3>Based on Number of Users</h3>
+
+            <h4>1. Single-User Operating Systems</h4>
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>One User at a Time:</strong> Only one person can use the computer</li>
+                    <li><strong>Simple Design:</strong> No complex user management needed</li>
+                    <li><strong>Examples:</strong> Old MS-DOS, early Windows versions</li>
+                </ul>
+            </div>
+
+            <h4>2. Multi-User Operating Systems</h4>
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Multiple Users:</strong> Several people can use the computer simultaneously</li>
+                    <li><strong>User Accounts:</strong> Each user has separate login and personal files</li>
+                    <li><strong>Security:</strong> Users cannot access each other's private data</li>
+                    <li><strong>Examples:</strong> Modern Windows, Linux, macOS</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="os-evolution">
+            <h2>6. Evolution of Operating Systems</h2>
+
+            <h3>The Journey from Simple to Smart</h3>
+            
+            <div class="algorithm-steps">
+                <h4>Historical Development Timeline:</h4>
+                <ol>
+                    <li><strong>1940s-1950s: No Operating System</strong>
+                        <ul>
+                            <li>Programmers directly controlled hardware</li>
+                            <li>One program at a time</li>
+                            <li>Punch cards and manual operation</li>
+                        </ul>
+                    </li>
+                    <li><strong>1960s: Batch Processing Systems</strong>
+                        <ul>
+                            <li>Groups of similar programs processed together</li>
+                            <li>Reduced setup time between programs</li>
+                            <li>Still no interaction during execution</li>
+                        </ul>
+                    </li>
+                    <li><strong>1970s: Time-Sharing Systems</strong>
+                        <ul>
+                            <li>Multiple users could interact with computer simultaneously</li>
+                            <li>CPU time divided among users</li>
+                            <li>Birth of interactive computing</li>
+                        </ul>
+                    </li>
+                    <li><strong>1980s-1990s: Personal Computer OS</strong>
+                        <ul>
+                            <li>Graphical user interfaces (Windows, Mac)</li>
+                            <li>User-friendly desktop environments</li>
+                            <li>Networking capabilities</li>
+                        </ul>
+                    </li>
+                    <li><strong>2000s-Present: Modern Operating Systems</strong>
+                        <ul>
+                            <li>Internet integration</li>
+                            <li>Mobile operating systems</li>
+                            <li>Cloud computing support</li>
+                            <li>Advanced security features</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="modern-os-examples">
+            <h2>7. Popular Operating Systems Today</h2>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operating System</th>
+                            <th>Type</th>
+                            <th>Best Used For</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Windows</strong></td>
+                            <td>Desktop/Server</td>
+                            <td>Home users, business, gaming</td>
+                            <td>User-friendly, compatible with most software</td>
+                        </tr>
+                        <tr>
+                            <td><strong>macOS</strong></td>
+                            <td>Desktop</td>
+                            <td>Creative work, development</td>
+                            <td>Elegant design, Unix-based, creative tools</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Linux</strong></td>
+                            <td>Server/Desktop</td>
+                            <td>Servers, programming, customization</td>
+                            <td>Open source, highly customizable, secure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Android</strong></td>
+                            <td>Mobile</td>
+                            <td>Smartphones, tablets</td>
+                            <td>Touch interface, app ecosystem</td>
+                        </tr>
+                        <tr>
+                            <td><strong>iOS</strong></td>
+                            <td>Mobile</td>
+                            <td>iPhones, iPads</td>
+                            <td>Secure, smooth performance, app store</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="os-services">
+            <h2>8. What Services Does an Operating System Provide?</h2>
+
+            <h3>Core Services for Users</h3>
+            
+            <div class="ml-type">
+                <h4>1. User Interface Services</h4>
+                <ul>
+                    <li><strong>Graphical Interface:</strong> Windows, icons, menus, buttons</li>
+                    <li><strong>Command Line:</strong> Text-based commands for power users</li>
+                    <li><strong>Touch Interface:</strong> Gestures for mobile devices</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h4>2. Program Execution Services</h4>
+                <ul>
+                    <li><strong>Load Programs:</strong> Read program from disk into memory</li>
+                    <li><strong>Execute Programs:</strong> Start running the program's instructions</li>
+                    <li><strong>Handle Errors:</strong> Deal with program crashes gracefully</li>
+                    <li><strong>Terminate Programs:</strong> Properly end program execution</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h4>3. File Operation Services</h4>
+                <ul>
+                    <li><strong>File Creation:</strong> Create new files and directories</li>
+                    <li><strong>File Access:</strong> Read and write file contents</li>
+                    <li><strong>File Organization:</strong> Organize files in directories</li>
+                    <li><strong>File Protection:</strong> Control who can access which files</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h4>4. Communication Services</h4>
+                <ul>
+                    <li><strong>Inter-Process Communication:</strong> Let programs share data</li>
+                    <li><strong>Network Communication:</strong> Connect to internet and other computers</li>
+                    <li><strong>Device Communication:</strong> Talk to printers, keyboards, etc.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="basic-concepts">
+            <h2>9. Important Basic Concepts</h2>
+
+            <h3>Concept 1: Multitasking</h3>
+            <div class="example-detailed">
+                <h4>How Can Computer Do Multiple Things at Once?</h4>
+                <p><strong>The Secret:</strong> Computer doesn't actually do multiple things simultaneously (usually). It switches between tasks so quickly that it appears simultaneous to humans.</p>
+                
+                <h5>Analogy: Juggling Act</h5>
+                <p>A juggler keeps multiple balls in the air by quickly throwing and catching each ball. The balls aren't floating - they're constantly being managed. Similarly, CPU rapidly switches between programs.</p>
+                
+                <h5>Technical Explanation:</h5>
+                <ul>
+                    <li><strong>Time Slicing:</strong> Each program gets small time slices (like 20 milliseconds)</li>
+                    <li><strong>Context Switching:</strong> OS saves current program state and loads next program</li>
+                    <li><strong>Illusion of Parallelism:</strong> Switching happens so fast we don't notice</li>
+                </ul>
+            </div>
+
+            <h3>Concept 2: System Calls</h3>
+            <div name="concept">
+                <h5>What are System Calls?</h5>
+                <p>System calls are how programs ask the operating system for help. It's like calling customer service - programs can't directly access hardware, so they call OS for assistance.</p>
+                
+                <h5>Common System Call Examples:</h5>
+                <ul>
+                    <li><strong>File Operations:</strong> "OS, please open this file for me"</li>
+                    <li><strong>Memory Allocation:</strong> "OS, I need more memory space"</li>
+                    <li><strong>Process Creation:</strong> "OS, please start this new program"</li>
+                    <li><strong>Network Access:</strong> "OS, help me connect to the internet"</li>
+                </ul>
+            </div>
+
+            <h3>Concept 3: Kernel</h3>
+            <div class="concept">
+                <h5>What is the Kernel?</h5>
+                <p>The kernel is the core part of the operating system - the most important component that directly manages hardware and provides essential services.</p>
+                
+                <h5>Kernel Responsibilities:</h5>
+                <ul>
+                    <li><strong>Hardware Control:</strong> Direct communication with CPU, memory, devices</li>
+                    <li><strong>Resource Allocation:</strong> Decide which program gets what resources</li>
+                    <li><strong>Security Enforcement:</strong> Protect system from malicious programs</li>
+                    <li><strong>System Stability:</strong> Prevent one program crash from affecting others</li>
+                </ul>
+
+                <h5>Analogy: Government Core</h5>
+                <p>If OS is like a government, the kernel is like the core administration that directly controls essential services (military, treasury, infrastructure), while other OS components are like various government departments.</p>
+            </div>
+        </section>
+
+        <section id="preparing-for-advanced">
+            <h2>10. Preparing for Advanced Operating System Topics</h2>
+
+            <h3>Key Terms You Should Know</h3>
+            <div class="key-concepts">
+                <h4>Essential Vocabulary</h4>
+                <ul>
+                    <li><strong>Process:</strong> A running program</li>
+                    <li><strong>Thread:</strong> A smaller unit of process that can run independently</li>
+                    <li><strong>Scheduling:</strong> Deciding which process/thread runs when</li>
+                    <li><strong>Virtual Memory:</strong> Technique to use more memory than physically available</li>
+                    <li><strong>Deadlock:</strong> Situation where processes wait for each other indefinitely</li>
+                    <li><strong>Synchronization:</strong> Coordinating access to shared resources</li>
+                    <li><strong>System Call:</strong> How programs request OS services</li>
+                    <li><strong>Kernel:</strong> The core part of operating system</li>
+                </ul>
+            </div>
+
+            <h3>Mental Models to Remember</h3>
+            <div class="exam-tips">
+                <h4>🧠 Thinking Frameworks for OS Understanding</h4>
+                
+                <h5>1. The Restaurant Management Model</h5>
+                <ul>
+                    <li><strong>Customers = User Programs</strong> (they make requests)</li>
+                    <li><strong>Manager = Operating System</strong> (coordinates everything)</li>
+                    <li><strong>Kitchen = CPU</strong> (where actual work happens)</li>
+                    <li><strong>Tables = Memory</strong> (temporary workspace)</li>
+                    <li><strong>Storage Room = Hard Disk</strong> (permanent storage)</li>
+                    <li><strong>Waiters = Device Drivers</strong> (communicate between kitchen and customers)</li>
+                </ul>
+
+                <h5>2. The Library Management Model</h5>
+                <ul>
+                    <li><strong>Books = Data/Files</strong> (information to be managed)</li>
+                    <li><strong>Librarian = File System</strong> (organizes and finds books)</li>
+                    <li><strong>Reading Tables = RAM</strong> (temporary work area)</li>
+                    <li><strong>Book Shelves = Storage</strong> (permanent organization)</li>
+                    <li><strong>Library Rules = Security</strong> (who can access what)</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>🎯 Unit 0 Summary: Operating System Basics</h3>
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th>Concept</th>
+                            <th>Simple Definition</th>
+                            <th>Key Point</th>
+                        </tr>
+                        <tr>
+                            <td>Operating System</td>
+                            <td>Computer's manager and translator</td>
+                            <td>Makes computers usable for everyone</td>
+                        </tr>
+                        <tr>
+                            <td>Hardware Components</td>
+                            <td>CPU (brain), Memory (desk), Storage (filing cabinet)</td>
+                            <td>OS coordinates all these parts</td>
+                        </tr>
+                        <tr>
+                            <td>System Services</td>
+                            <td>File management, program execution, communication</td>
+                            <td>OS provides these so programs don't have to</td>
+                        </tr>
+                        <tr>
+                            <td>Multitasking</td>
+                            <td>Appears to do multiple things at once</td>
+                            <td>Rapid switching between tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Kernel</td>
+                            <td>Core part that directly controls hardware</td>
+                            <td>Most critical component of OS</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="checklist">
+                    <h4>✅ After studying this unit, you should understand:</h4>
+                    <ul>
+                        <li>Why computers need operating systems</li>
+                        <li>How OS acts as a manager for computer resources</li>
+                        <li>Basic computer hardware components</li>
+                        <li>Different types of operating systems</li>
+                        <li>Key concepts like multitasking and system calls</li>
+                        <li>Essential vocabulary for advanced OS topics</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tips">
+                    <h4>📝 Exam Strategy for OS Basics (15-mark questions)</h4>
+                    <ul>
+                        <li><strong>Define Clearly:</strong> Start with simple definitions, then add details</li>
+                        <li><strong>Use Analogies:</strong> Real-world examples make explanations clearer</li>
+                        <li><strong>Give Examples:</strong> Mention specific OS names (Windows, Linux, etc.)</li>
+                        <li><strong>Show Understanding:</strong> Explain 'why' something is needed, not just 'what' it is</li>
+                        <li><strong>Structure Answers:</strong> Use headings and bullet points for clarity</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

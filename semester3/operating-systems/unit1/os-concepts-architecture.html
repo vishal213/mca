@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Operating System Functions and Architecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Operating Systems</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 1: Operating System Functions and Architecture</h1>
+            <p class="subtitle">System Organization, Architecture, and Operating System Types</p>
+        </header>
+
+        <section id="os-functions">
+            <h2>1. Operating System Functions and Characteristics</h2>
+            
+            <h3>Core Functions of an Operating System</h3>
+            <p>An operating system performs several critical functions that make computers usable and efficient. Think of the OS as a city's infrastructure that provides essential services to all residents (programs and users).</p>
+
+            <div class="concept">
+                <h5>Primary OS Functions:</h5>
+                <h4>1. Resource Management</h4>
+                <ul>
+                    <li><strong>CPU Management:</strong> Decides which program gets to use the processor and for how long</li>
+                    <li><strong>Memory Management:</strong> Allocates and deallocates memory space for programs</li>
+                    <li><strong>Storage Management:</strong> Organizes data on hard drives and manages file systems</li>
+                    <li><strong>Device Management:</strong> Controls input/output devices like keyboard, mouse, printer</li>
+                </ul>
+
+                <h4>2. Process Management</h4>
+                <ul>
+                    <li><strong>Process Creation:</strong> Starting new programs when users request them</li>
+                    <li><strong>Process Scheduling:</strong> Deciding execution order of multiple programs</li>
+                    <li><strong>Process Synchronization:</strong> Coordinating programs that need to work together</li>
+                    <li><strong>Process Communication:</strong> Enabling programs to share data safely</li>
+                </ul>
+
+                <h4>3. Security and Protection</h4>
+                <ul>
+                    <li><strong>User Authentication:</strong> Verifying user identity through passwords</li>
+                    <li><strong>Access Control:</strong> Controlling who can access which files and programs</li>
+                    <li><strong>System Protection:</strong> Preventing malicious programs from damaging system</li>
+                    <li><strong>Data Protection:</strong> Ensuring data integrity and preventing unauthorized access</li>
+                </ul>
+            </div>
+
+            <h3>Key Characteristics of Operating Systems</h3>
+            
+            <div class="example-detailed">
+                <h4>Essential OS Characteristics</h4>
+                
+                <h5>1. Concurrency</h5>
+                <p><strong>Definition:</strong> Ability to handle multiple tasks simultaneously</p>
+                <p><strong>Example:</strong> You can listen to music while browsing internet and downloading files</p>
+                <p><strong>How it works:</strong> OS rapidly switches CPU attention between tasks</p>
+
+                <h5>2. Sharing</h5>
+                <p><strong>Definition:</strong> Multiple users/programs can share computer resources</p>
+                <p><strong>Example:</strong> Multiple browser tabs sharing the same computer memory</p>
+                <p><strong>Benefit:</strong> Efficient use of expensive computer resources</p>
+
+                <h5>3. Long-term Storage</h5>
+                <p><strong>Definition:</strong> Data persists even when computer is turned off</p>
+                <p><strong>Example:</strong> Your documents remain saved even after shutdown</p>
+                <p><strong>Implementation:</strong> File system organizes data on permanent storage</p>
+
+                <h5>4. Nondeterminacy</h5>
+                <p><strong>Definition:</strong> OS must handle unpredictable events and user actions</p>
+                <p><strong>Example:</strong> User might suddenly close a program or plug in a USB drive</p>
+                <p><strong>Challenge:</strong> OS must be prepared for any sequence of events</p>
+            </div>
+        </section>
+
+        <section id="computer-organization">
+            <h2>2. Computer System Organization</h2>
+
+            <h3>Understanding Computer System Structure</h3>
+            <p>A computer system is organized in layers, with each layer building upon the lower layers. Understanding this organization helps explain how the operating system fits into the overall system.</p>
+
+            <div class="visual-diagram">
+                <h4>Computer System Layers (Bottom to Top)</h4>
+                <div class="diagram-text">
+                    <pre>
+┌─────────────────────────────────────────────────────────┐
+│                    USER PROGRAMS                        │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐      │
+│  │   Browser   │ │Text Editors │ │   Games     │      │
+│  │   Office    │ │Calculators  │ │Media Players│ ...  │
+│  └─────────────┘ └─────────────┘ └─────────────┘      │
+├─────────────────────────────────────────────────────────┤
+│                 SYSTEM SOFTWARE                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │         OPERATING SYSTEM                        │   │
+│  │  File Mgmt │ Process Mgmt │ Memory Mgmt │ I/O   │   │
+│  └─────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │    DEVICE DRIVERS & SYSTEM UTILITIES           │   │
+│  └─────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────┤
+│                     HARDWARE                            │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐      │
+│  │   CPU   │ │ Memory  │ │ Storage │ │   I/O   │      │
+│  │ Control │ │  (RAM)  │ │(HDD/SSD)│ │ Devices │      │
+│  │  Unit   │ │  Cache  │ │ Optical │ │Keyboard │      │
+│  │   ALU   │ │Register │ │   etc.  │ │ Mouse   │      │
+│  └─────────┘ └─────────┘ └─────────┘ └─────────┘      │
+└─────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Layer-by-Layer Explanation</h3>
+
+            <h4>Layer 1: Hardware (Foundation)</h4>
+            <div class="concept">
+                <h5>Physical Components:</h5>
+                <ul>
+                    <li><strong>Central Processing Unit (CPU):</strong> Executes instructions and performs calculations</li>
+                    <li><strong>Memory Hierarchy:</strong> Registers → Cache → RAM → Storage (fastest to slowest)</li>
+                    <li><strong>Input/Output Devices:</strong> Keyboard, mouse, monitor, network cards</li>
+                    <li><strong>System Bus:</strong> Communication pathway connecting all components</li>
+                </ul>
+                <p><strong>Analogy:</strong> Like the building's foundation, electrical system, and plumbing - essential infrastructure that everything else depends on.</p>
+            </div>
+
+            <h4>Layer 2: Operating System (Manager)</h4>
+            <div class="concept">
+                <h5>OS Components:</h5>
+                <ul>
+                    <li><strong>Kernel:</strong> Core that directly manages hardware resources</li>
+                    <li><strong>Device Drivers:</strong> Special programs that know how to communicate with specific hardware</li>
+                    <li><strong>System Services:</strong> File system, process management, memory management</li>
+                    <li><strong>User Interface:</strong> Shell (command line) or GUI (graphical interface)</li>
+                </ul>
+                <p><strong>Analogy:</strong> Like building management - handles utilities, security, maintenance, and provides services to residents.</p>
+            </div>
+
+            <h4>Layer 3: Application Programs (Residents)</h4>
+            <div class="concept">
+                <h5>User Applications:</h5>
+                <ul>
+                    <li><strong>System Applications:</strong> Built-in programs like calculator, text editor</li>
+                    <li><strong>User Applications:</strong> Programs you install like browsers, games, office software</li>
+                    <li><strong>Development Tools:</strong> Compilers, debuggers, IDEs for creating new programs</li>
+                </ul>
+                <p><strong>Analogy:</strong> Like residents in a building - they use the building's services but don't manage the infrastructure.</p>
+            </div>
+        </section>
+
+        <section id="computer-architecture">
+            <h2>3. Computer System Architecture</h2>
+
+            <h3>Von Neumann Architecture</h3>
+            <p>Most modern computers follow the Von Neumann architecture model, which defines how the main components of a computer interact with each other.</p>
+
+            <div class="visual-diagram">
+                <h4>Von Neumann Architecture Model</h4>
+                <div class="diagram-text">
+                    <pre>
+                    ┌─────────────────────────────────────┐
+                    │              MEMORY                 │
+                    │  ┌─────────────────────────────┐   │
+                    │  │     Instructions           │   │
+                    │  │  ┌─────┐  ┌─────┐  ┌─────┐ │   │
+                    │  │  │Load │  │ Add │  │Save │ │   │ 
+                    │  │  └─────┘  └─────┘  └─────┘ │   │
+                    │  └─────────────────────────────┘   │
+                    │  ┌─────────────────────────────┐   │
+                    │  │         Data               │   │
+                    │  │  ┌─────┐  ┌─────┐  ┌─────┐ │   │
+                    │  │  │  X  │  │  Y  │  │  Z  │ │   │
+                    │  │  └─────┘  └─────┘  └─────┘ │   │
+                    │  └─────────────────────────────┘   │
+                    └─────────────┬───────────────────────┘
+                                  │ Bus (Data Transfer)
+                    ┌─────────────┴───────────────────────┐
+                    │              CPU                    │
+                    │  ┌─────────────────────────────┐   │
+                    │  │     Control Unit            │   │
+                    │  │  (Fetches & Decodes)        │   │
+                    │  └─────────────────────────────┘   │
+                    │  ┌─────────────────────────────┐   │
+                    │  │  Arithmetic Logic Unit      │   │
+                    │  │     (Calculations)          │   │
+                    │  └─────────────────────────────┘   │
+                    └─────────────┬───────────────────────┘
+                                  │
+                    ┌─────────────┴───────────────────────┐
+                    │          INPUT/OUTPUT               │
+                    │  Keyboard  Monitor  Disk  Network   │
+                    └─────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>How Von Neumann Architecture Works</h3>
+            <div class="algorithm-steps">
+                <h4>The Fetch-Decode-Execute Cycle</h4>
+                <ol>
+                    <li><strong>FETCH:</strong> CPU gets next instruction from memory
+                        <ul>
+                            <li>Control unit reads instruction from memory address</li>
+                            <li>Instruction is brought into CPU</li>
+                        </ul>
+                    </li>
+                    <li><strong>DECODE:</strong> CPU figures out what the instruction means
+                        <ul>
+                            <li>Control unit interprets the instruction</li>
+                            <li>Determines what operation to perform</li>
+                            <li>Identifies what data is needed</li>
+                        </ul>
+                    </li>
+                    <li><strong>EXECUTE:</strong> CPU performs the instruction
+                        <ul>
+                            <li>ALU performs calculations if needed</li>
+                            <li>Data is moved between memory and CPU</li>
+                            <li>Results are stored back in memory</li>
+                        </ul>
+                    </li>
+                    <li><strong>REPEAT:</strong> Move to next instruction and start cycle again</li>
+                </ol>
+            </div>
+
+            <h3>Modern Architecture Enhancements</h3>
+            
+            <h4>Multi-Core Processors</h4>
+            <div class="example-detailed">
+                <h5>What are Multi-Core Processors?</h5>
+                <p>Instead of one CPU brain, modern computers have multiple CPU cores (like having multiple brains working together).</p>
+                
+                <h5>Benefits of Multi-Core Design:</h5>
+                <ul>
+                    <li><strong>True Parallel Processing:</strong> Different cores can work on different tasks simultaneously</li>
+                    <li><strong>Better Performance:</strong> Overall system can handle more work</li>
+                    <li><strong>Energy Efficiency:</strong> Multiple slower cores use less power than one very fast core</li>
+                </ul>
+
+                <h5>Real-World Example:</h5>
+                <p>A dual-core processor can run music player on core 1 while downloading files on core 2, without either task slowing down the other.</p>
+            </div>
+        </section>
+
+        <section id="os-structure">
+            <h2>4. Operating System Structure</h2>
+
+            <h3>Layered Structure Approach</h3>
+            <p>Operating systems are designed in layers, where each layer provides services to the layer above it and uses services from the layer below it.</p>
+
+            <div class="visual-diagram">
+                <h4>Layered Operating System Structure</h4>
+                <div class="diagram-text">
+                    <pre>
+┌─────────────────────────────────────────────────────────┐
+│   Layer 5: USER PROGRAMS                               │
+│   Applications, Games, Browsers, Office Software       │
+├─────────────────────────────────────────────────────────┤
+│   Layer 4: USER INTERFACE                              │
+│   Command Line Shell, Graphical User Interface         │
+├─────────────────────────────────────────────────────────┤
+│   Layer 3: SYSTEM SERVICES                             │
+│   File Management, Device Management, Communication    │
+├─────────────────────────────────────────────────────────┤
+│   Layer 2: SYSTEM CALLS                                │
+│   Interface between User Programs and Kernel           │
+├─────────────────────────────────────────────────────────┤
+│   Layer 1: KERNEL                                      │
+│   Core OS: Process Scheduling, Memory Management       │
+├─────────────────────────────────────────────────────────┤
+│   Layer 0: HARDWARE                                    │
+│   CPU, Memory, Storage, Input/Output Devices           │
+└─────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Understanding Each Layer</h3>
+
+            <h4>Layer 0: Hardware Layer</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Provides the physical foundation - actual computer components</p>
+                <h5>Components:</h5>
+                <ul>
+                    <li><strong>Processor:</strong> Executes instructions</li>
+                    <li><strong>Memory:</strong> Stores data and programs</li>
+                    <li><strong>Storage:</strong> Permanent data storage</li>
+                    <li><strong>I/O Devices:</strong> Communication with outside world</li>
+                </ul>
+            </div>
+
+            <h4>Layer 1: Kernel Layer</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Core operating system that directly controls hardware</p>
+                <h5>Responsibilities:</h5>
+                <ul>
+                    <li><strong>Process Scheduling:</strong> Deciding which program runs when</li>
+                    <li><strong>Memory Allocation:</strong> Giving programs memory space</li>
+                    <li><strong>Device Control:</strong> Managing hardware devices</li>
+                    <li><strong>Interrupt Handling:</strong> Responding to hardware signals</li>
+                </ul>
+            </div>
+
+            <h4>Layer 2: System Call Interface</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Bridge between user programs and kernel - provides safe way for programs to request OS services</p>
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>File Operations:</strong> open(), read(), write(), close()</li>
+                    <li><strong>Process Operations:</strong> fork(), exec(), exit()</li>
+                    <li><strong>Memory Operations:</strong> malloc(), free()</li>
+                </ul>
+            </div>
+
+            <h4>Layer 3: System Services</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Higher-level services that make common tasks easier for programs</p>
+                <h5>Services Include:</h5>
+                <ul>
+                    <li><strong>File System:</strong> Organize files in directories</li>
+                    <li><strong>Network Services:</strong> Internet communication</li>
+                    <li><strong>Security Services:</strong> User authentication, access control</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="virtual-machines">
+            <h2>5. Virtual Machines</h2>
+
+            <h3>What is a Virtual Machine?</h3>
+            <p>A virtual machine (VM) is like having a computer inside a computer. It's software that creates a fake computer environment that behaves exactly like a real computer.</p>
+
+            <div class="example-detailed">
+                <h4>Hotel Room Analogy</h4>
+                <p>Imagine a large hotel building (your physical computer) that's divided into separate hotel rooms (virtual machines):</p>
+                
+                <ul>
+                    <li><strong>Each Room (VM):</strong> Has its own furniture, TV, bathroom (operating system and programs)</li>
+                    <li><strong>Hotel Building (Host):</strong> Provides electricity, water, internet (hardware resources)</li>
+                    <li><strong>Hotel Manager (Hypervisor):</strong> Allocates resources and manages rooms</li>
+                    <li><strong>Guests (Users):</strong> Each room's guests don't know about other rooms</li>
+                </ul>
+
+                <p><strong>Key Insight:</strong> Each guest thinks they have the entire building to themselves, but actually they're sharing the building's resources.</p>
+            </div>
+
+            <h3>Types of Virtual Machines</h3>
+
+            <h4>1. System Virtual Machines (Full Virtualization)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Creates complete virtual computer that can run entire operating system</p>
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>VMware:</strong> Run Windows inside macOS</li>
+                    <li><strong>VirtualBox:</strong> Run Linux inside Windows</li>
+                    <li><strong>Cloud VMs:</strong> Amazon EC2, Google Compute Engine</li>
+                </ul>
+                <h5>Use Cases:</h5>
+                <ul>
+                    <li><strong>Testing:</strong> Test software on different operating systems</li>
+                    <li><strong>Security:</strong> Isolate potentially dangerous programs</li>
+                    <li><strong>Server Consolidation:</strong> Run multiple servers on one physical machine</li>
+                </ul>
+            </div>
+
+            <h4>2. Process Virtual Machines (Application Virtualization)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Provides platform-independent execution environment for specific applications</p>
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Java Virtual Machine (JVM):</strong> Runs Java programs on any operating system</li>
+                    <li><strong>.NET Runtime:</strong> Runs .NET applications</li>
+                    <li><strong>Python Interpreter:</strong> Runs Python scripts</li>
+                </ul>
+                <h5>Benefits:</h5>
+                <ul>
+                    <li><strong>Portability:</strong> Same program runs on Windows, Linux, macOS</li>
+                    <li><strong>Security:</strong> Programs run in controlled environment</li>
+                </ul>
+            </div>
+
+            <h3>Virtual Machine Benefits</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Advantages</h4>
+                    <ul>
+                        <li><strong>Resource Efficiency:</strong> Better hardware utilization</li>
+                        <li><strong>Isolation:</strong> Problems in one VM don't affect others</li>
+                        <li><strong>Flexibility:</strong> Easy to create, destroy, or modify VMs</li>
+                        <li><strong>Cost Savings:</strong> Multiple virtual servers on one physical machine</li>
+                        <li><strong>Testing:</strong> Safe environment for experimenting</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Disadvantages</h4>
+                    <ul>
+                        <li><strong>Performance Overhead:</strong> VMs run slightly slower than native</li>
+                        <li><strong>Resource Requirements:</strong> Need extra CPU and memory</li>
+                        <li><strong>Complexity:</strong> More components to manage and troubleshoot</li>
+                        <li><strong>Security Risks:</strong> VM escape attacks possible</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="protection-security">
+            <h2>6. Protection and Security</h2>
+
+            <h3>Protection vs Security - Understanding the Difference</h3>
+            
+            <div class="concept">
+                <h4>Protection (Internal Safety)</h4>
+                <p><strong>Definition:</strong> Mechanisms to control access to system resources by programs and users</p>
+                <p><strong>Focus:</strong> Preventing accidental damage by legitimate users/programs</p>
+                <p><strong>Example:</strong> File permissions prevent you from accidentally deleting system files</p>
+
+                <h4>Security (External Safety)</h4>
+                <p><strong>Definition:</strong> Defending the system against external threats and malicious attacks</p>
+                <p><strong>Focus:</strong> Preventing intentional damage by hackers, viruses, malicious software</p>
+                <p><strong>Example:</strong> Antivirus software, firewalls, user authentication</p>
+            </div>
+
+            <h3>Protection Mechanisms</h3>
+
+            <h4>1. Access Control</h4>
+            <div class="example-detailed">
+                <h5>File Permission Example (Linux/Unix Style)</h5>
+                <ul>
+                    <li><strong>Read (r):</strong> Can view file contents</li>
+                    <li><strong>Write (w):</strong> Can modify file contents</li>
+                    <li><strong>Execute (x):</strong> Can run file as a program</li>
+                </ul>
+                
+                <h5>Permission Groups:</h5>
+                <ul>
+                    <li><strong>Owner:</strong> Person who created the file</li>
+                    <li><strong>Group:</strong> Users in the same group as owner</li>
+                    <li><strong>Others:</strong> Everyone else on the system</li>
+                </ul>
+                
+                <p><strong>Example:</strong> rwxr--r-- means owner can read/write/execute, group and others can only read</p>
+            </div>
+
+            <h4>2. Memory Protection</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Ensure each program can only access its own memory space</p>
+                <h5>Techniques:</h5>
+                <ul>
+                    <li><strong>Address Space Isolation:</strong> Each process has separate memory area</li>
+                    <li><strong>Privileged Instructions:</strong> Only OS can execute certain CPU instructions</li>
+                    <li><strong>Hardware Support:</strong> CPU helps enforce memory boundaries</li>
+                </ul>
+            </div>
+
+            <h3>Security Threats and Defenses</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Threat Type</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                            <th>Defense Mechanism</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Malware</strong></td>
+                            <td>Malicious software designed to damage system</td>
+                            <td>Viruses, trojans, ransomware</td>
+                            <td>Antivirus software, code signing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unauthorized Access</strong></td>
+                            <td>People gaining access without permission</td>
+                            <td>Password cracking, social engineering</td>
+                            <td>Strong authentication, encryption</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Breach</strong></td>
+                            <td>Sensitive information stolen or leaked</td>
+                            <td>Credit card numbers, personal data</td>
+                            <td>Encryption, access controls</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Denial of Service</strong></td>
+                            <td>Overwhelming system to make it unusable</td>
+                            <td>DDoS attacks on websites</td>
+                            <td>Rate limiting, traffic filtering</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="os-services">
+            <h2>7. Operating System Services and System Calls</h2>
+
+            <h3>OS Services for Users</h3>
+            <p>Operating systems provide various services that make computers useful and user-friendly. These services are categorized based on who benefits from them.</p>
+
+            <h4>Services That Help Users</h4>
+            <div class="ml-type">
+                <h5>1. User Interface</h5>
+                <ul>
+                    <li><strong>Graphical Interface (GUI):</strong> Windows, icons, mouse interaction</li>
+                    <li><strong>Command Line (CLI):</strong> Text-based commands</li>
+                    <li><strong>Touch Interface:</strong> Gestures for mobile devices</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h5>2. Program Execution</h5>
+                <ul>
+                    <li><strong>Loading:</strong> Bring programs from disk into memory</li>
+                    <li><strong>Running:</strong> Execute program instructions</li>
+                    <li><strong>Error Handling:</strong> Manage program crashes gracefully</li>
+                    <li><strong>Termination:</strong> Properly clean up when programs end</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h5>3. File System Operations</h5>
+                <ul>
+                    <li><strong>File Management:</strong> Create, delete, copy, move files</li>
+                    <li><strong>Directory Management:</strong> Organize files in folders</li>
+                    <li><strong>Access Control:</strong> Control who can access which files</li>
+                    <li><strong>Search:</strong> Find files by name or content</li>
+                </ul>
+            </div>
+
+            <h4>Services That Help System Efficiency</h4>
+            <div class="ml-type">
+                <h5>1. Resource Allocation</h5>
+                <ul>
+                    <li><strong>CPU Allocation:</strong> Share processor time among programs</li>
+                    <li><strong>Memory Allocation:</strong> Distribute available memory efficiently</li>
+                    <li><strong>Device Allocation:</strong> Manage access to printers, network cards</li>
+                </ul>
+            </div>
+
+            <div class="ml-type">
+                <h5>2. Accounting and Monitoring</h5>
+                <ul>
+                    <li><strong>Resource Usage Tracking:</strong> Monitor CPU, memory, disk usage</li>
+                    <li><strong>Performance Statistics:</strong> Identify system bottlenecks</li>
+                    <li><strong>Billing Information:</strong> Track usage for billing purposes (in commercial systems)</li>
+                </ul>
+            </div>
+
+            <h3>System Calls Explained</h3>
+            
+            <div name="example-detailed">
+                <h4>What are System Calls?</h4>
+                <p>System calls are the way programs request services from the operating system. Think of them as a formal request system, like submitting a form to a government office.</p>
+
+                <h5>System Call Process:</h5>
+                <ol>
+                    <li><strong>Program Needs Help:</strong> Application wants to save a file</li>
+                    <li><strong>Makes System Call:</strong> Calls write() function with file data</li>
+                    <li><strong>OS Takes Over:</strong> Kernel handles the actual disk writing</li>
+                    <li><strong>OS Returns Control:</strong> Tells program whether operation succeeded</li>
+                </ol>
+
+                <h5>Why Use System Calls?</h5>
+                <ul>
+                    <li><strong>Security:</strong> Programs can't directly access hardware (could be dangerous)</li>
+                    <li><strong>Consistency:</strong> All programs use same interface for common operations</li>
+                    <li><strong>Simplicity:</strong> Programs don't need to know hardware details</li>
+                </ul>
+            </div>
+
+            <h3>Common System Call Categories</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Purpose</th>
+                            <th>Common Calls</th>
+                            <th>Example Usage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Process Control</strong></td>
+                            <td>Manage program execution</td>
+                            <td>fork(), exec(), exit(), wait()</td>
+                            <td>Starting new program, ending program</td>
+                        </tr>
+                        <tr>
+                            <td><strong>File Management</strong></td>
+                            <td>Handle file operations</td>
+                            <td>open(), read(), write(), close()</td>
+                            <td>Opening document, saving changes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device Management</strong></td>
+                            <td>Control I/O devices</td>
+                            <td>ioctl(), read(), write()</td>
+                            <td>Printing document, reading keyboard input</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Information Maintenance</strong></td>
+                            <td>Get/set system information</td>
+                            <td>getpid(), alarm(), sleep()</td>
+                            <td>Getting current time, setting alarms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Communication</strong></td>
+                            <td>Inter-process communication</td>
+                            <td>pipe(), shmget(), msgget()</td>
+                            <td>Programs sharing data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="os-types">
+            <h2>8. Types of Operating Systems</h2>
+
+            <h3>Classification by Processing Method</h3>
+
+            <h4>1. Batch Operating Systems</h4>
+            <div class="concept">
+                <h5>How Batch OS Works:</h5>
+                <p>Programs are collected into groups (batches) and executed one batch at a time without user interaction during execution.</p>
+                
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>No User Interaction:</strong> Once started, batch runs to completion</li>
+                    <li><strong>Sequential Processing:</strong> Programs execute one after another</li>
+                    <li><strong>Efficient for Large Jobs:</strong> Good for processing large amounts of data</li>
+                </ul>
+
+                <h5>Real-World Example:</h5>
+                <p>Like a laundromat where you put in a batch of clothes, start the machine, and wait for completion without intervention.</p>
+
+                <h5>Modern Usage:</h5>
+                <ul>
+                    <li><strong>Payroll Processing:</strong> Monthly salary calculations for all employees</li>
+                    <li><strong>Bank Transactions:</strong> Processing end-of-day transactions</li>
+                    <li><strong>Data Backup:</strong> Automated nightly backups</li>
+                </ul>
+            </div>
+
+            <h4>2. Time-Sharing Operating Systems</h4>
+            <div name="concept">
+                <h5>How Time-Sharing Works:</h5>
+                <p>CPU time is divided into small time slices, and each user/program gets allocated time slices in rotation.</p>
+
+                <h5>Key Features:</h5>
+                <ul>
+                    <li><strong>Interactive:</strong> Users can interact with programs while they run</li>
+                    <li><strong>Multi-User:</strong> Multiple users can work simultaneously</li>
+                    <li><strong>Response Time:</strong> System responds quickly to user commands</li>
+                </ul>
+
+                <h5>Restaurant Analogy:</h5>
+                <p>Like a chef who takes orders from multiple tables and prepares a little bit from each order in rotation, so all customers get served approximately simultaneously.</p>
+            </div>
+
+            <h4>3. Real-Time Operating Systems (RTOS)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Designed for applications where timing is critical - must respond to events within strict time limits.</p>
+
+                <h5>Types of Real-Time Systems:</h5>
+                <ul>
+                    <li><strong>Hard Real-Time:</strong> Missing deadline causes system failure (airplane control)</li>
+                    <li><strong>Soft Real-Time:</strong> Missing deadline degrades performance (video streaming)</li>
+                </ul>
+
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Medical Devices:</strong> Heart pacemaker must respond immediately</li>
+                    <li><strong>Industrial Control:</strong> Factory automation systems</li>
+                    <li><strong>Automotive:</strong> Anti-lock braking systems, airbag deployment</li>
+                    <li><strong>Multimedia:</strong> Video games, music players</li>
+                </ul>
+            </div>
+
+            <h3>Classification by System Architecture</h3>
+
+            <h4>1. Distributed Operating Systems</h4>
+            <div class="example-detailed">
+                <h4>What is a Distributed OS?</h4>
+                <p>A distributed operating system manages a group of separate computers and makes them appear as a single computer to users.</p>
+
+                <h5>Team Project Analogy:</h5>
+                <p>Imagine a large school project where students from different schools collaborate:</p>
+                <ul>
+                    <li><strong>Students = Computers:</strong> Each working on part of project</li>
+                    <li><strong>Communication Tools = Network:</strong> Email, video calls to coordinate</li>
+                    <li><strong>Project Coordinator = Distributed OS:</strong> Ensures all parts work together</li>
+                    <li><strong>Final Presentation = Result:</strong> Appears as one unified project</li>
+                </ul>
+
+                <h5>Benefits:</h5>
+                <ul>
+                    <li><strong>Performance:</strong> Multiple computers working together</li>
+                    <li><strong>Reliability:</strong> If one computer fails, others continue working</li>
+                    <li><strong>Scalability:</strong> Easy to add more computers to increase power</li>
+                </ul>
+
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Google's Infrastructure:</strong> Thousands of computers working as one system</li>
+                    <li><strong>Cloud Computing:</strong> Amazon AWS, Microsoft Azure</li>
+                    <li><strong>Blockchain Networks:</strong> Distributed ledger systems</li>
+                </ul>
+            </div>
+
+            <h4>2. Multiprocessor Operating Systems</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>OS designed to work with computers that have multiple processors or CPU cores in the same machine.</p>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Increased Throughput:</strong> More work done in same time</li>
+                    <li><strong>Reliability:</strong> If one processor fails, others can continue</li>
+                    <li><strong>Cost Efficiency:</strong> Share resources like memory and storage</li>
+                </ul>
+
+                <h5>Challenges:</h5>
+                <ul>
+                    <li><strong>Synchronization:</strong> Coordinating work between processors</li>
+                    <li><strong>Load Balancing:</strong> Distributing work evenly</li>
+                    <li><strong>Communication:</strong> Processors need to share information</li>
+                </ul>
+            </div>
+
+            <h4>3. Network Operating Systems (NOS)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Designed to support networking features and allow computers to communicate and share resources over a network.</p>
+
+                <h5>Key Features:</h5>
+                <ul>
+                    <li><strong>File Sharing:</strong> Share files across network</li>
+                    <li><strong>Printer Sharing:</strong> Multiple computers use same printer</li>
+                    <li><strong>User Authentication:</strong> Central login system</li>
+                    <li><strong>Resource Management:</strong> Control access to shared resources</li>
+                </ul>
+
+                <h5>Examples:</strong>
+                <ul>
+                    <li><strong>Windows Server:</strong> Microsoft's network operating system</li>
+                    <li><strong>Linux Server Distributions:</strong> Ubuntu Server, CentOS</li>
+                    <li><strong>Novell NetWare:</strong> Early popular NOS</li>
+                </ul>
+            </div>
+
+            <h4>4. Mobile Operating Systems</h4>
+            <div class="example-detailed">
+                <h4>Special Requirements for Mobile Devices</h4>
+                
+                <h5>Unique Challenges:</h5>
+                <ul>
+                    <li><strong>Limited Battery:</strong> Must conserve power efficiently</li>
+                    <li><strong>Small Screen:</strong> Different user interface design</li>
+                    <li><strong>Touch Input:</strong> No keyboard or mouse</li>
+                    <li><strong>Connectivity:</strong> Frequent network switching (WiFi ↔ cellular)</li>
+                    <li><strong>Limited Memory:</strong> Less RAM than desktop computers</li>
+                </ul>
+
+                <h5>Mobile OS Solutions:</h5>
+                <ul>
+                    <li><strong>Power Management:</strong> Automatic sleep, background app limitations</li>
+                    <li><strong>Touch-Friendly Interface:</strong> Large buttons, gesture recognition</li>
+                    <li><strong>App Stores:</strong> Centralized, secure software distribution</li>
+                    <li><strong>Background Processing:</strong> Intelligent handling of background tasks</li>
+                </ul>
+
+                <h5>Popular Mobile OS:</h5>
+                <ul>
+                    <li><strong>Android:</strong> Google's open-source mobile OS</li>
+                    <li><strong>iOS:</strong> Apple's mobile OS for iPhones and iPads</li>
+                    <li><strong>HarmonyOS:</strong> Huawei's distributed mobile OS</li>
+                </ul>
+            </div>
+
+            <h4>5. Cloud Operating Systems</h4>
+            <div class="concept">
+                <h5>What is Cloud OS?</h5>
+                <p>Operating system designed to manage cloud computing resources and provide cloud services to users.</p>
+
+                <h5>Key Features:</h5>
+                <ul>
+                    <li><strong>Virtualization:</strong> Create virtual machines on demand</li>
+                    <li><strong>Scalability:</strong> Automatically add/remove resources based on demand</li>
+                    <li><strong>Multi-Tenancy:</strong> Safely serve multiple customers on same infrastructure</li>
+                    <li><strong>Service-Oriented:</strong> Provide computing as a service</li>
+                </ul>
+
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Amazon EC2:</strong> Elastic cloud computing platform</li>
+                    <li><strong>Google Cloud Platform:</strong> Google's cloud infrastructure</li>
+                    <li><strong>Microsoft Azure:</strong> Microsoft's cloud services</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>🎯 Unit 1 Summary: OS Functions and Architecture</h3>
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Concept</th>
+                            <th>Remember This</th>
+                        </tr>
+                        <tr>
+                            <td>OS Functions</td>
+                            <td>Resource management, process management, security</td>
+                            <td>OS is like a city manager coordinating services</td>
+                        </tr>
+                        <tr>
+                            <td>Computer Organization</td>
+                            <td>Layered structure from hardware to applications</td>
+                            <td>Each layer serves the layer above it</td>
+                        </tr>
+                        <tr>
+                            <td>System Architecture</td>
+                            <td>Von Neumann model with fetch-decode-execute cycle</td>
+                            <td>CPU, Memory, Storage, I/O work together</td>
+                        </tr>
+                        <tr>
+                            <td>Virtual Machines</td>
+                            <td>Computer inside a computer for isolation/efficiency</td>
+                            <td>Like hotel rooms sharing a building</td>
+                        </tr>
+                        <tr>
+                            <td>Protection & Security</td>
+                            <td>Protection (internal) vs Security (external threats)</td>
+                            <td>Access control and threat prevention</td>
+                        </tr>
+                        <tr>
+                            <td>System Calls</td>
+                            <td>Programs request OS services through system calls</td>
+                            <td>Safe interface between apps and kernel</td>
+                        </tr>
+                        <tr>
+                            <td>OS Types</td>
+                            <td>Batch, time-sharing, real-time, distributed, mobile</td>
+                            <td>Each type optimized for specific use cases</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="checklist">
+                    <h4>✅ Unit 1 Learning Objectives Achieved:</h4>
+                    <ul>
+                        <li>Understand core functions and characteristics of operating systems</li>
+                        <li>Know computer system organization and architecture principles</li>
+                        <li>Grasp layered structure and component interactions</li>
+                        <li>Understand virtual machine concepts and benefits</li>
+                        <li>Distinguish between protection and security mechanisms</li>
+                        <li>Know OS services and system call interface</li>
+                        <li>Identify different types of operating systems and their use cases</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tips">
+                    <h4>📝 15-Mark Question Strategy for Unit 1</h4>
+                    <ul>
+                        <li><strong>Function Questions:</strong> List functions + explain each with real examples</li>
+                        <li><strong>Architecture Questions:</strong> Draw diagrams + explain component relationships</li>
+                        <li><strong>Comparison Questions:</strong> Use tables to compare different OS types</li>
+                        <li><strong>System Call Questions:</strong> Give examples + explain the process step-by-step</li>
+                        <li><strong>Always Include:</strong> Definitions, examples, diagrams, and practical applications</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

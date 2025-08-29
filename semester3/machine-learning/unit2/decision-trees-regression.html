@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Decision Trees and Regression</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Machine Learning</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 2: Decision Trees and Linear Regression</h1>
+            <p class="subtitle">Understanding Decision-Making Algorithms and Predictive Modeling</p>
+        </header>
+
+        <section id="decision-trees-intro">
+            <h2>1. Introduction to Decision Trees</h2>
+            
+            <h3>What is a Decision Tree?</h3>
+            <p>A decision tree is a supervised learning algorithm that makes decisions by asking a series of questions about the data, similar to playing "20 Questions" or following a flowchart. It creates a tree-like model of decisions where each internal node represents a "test" on an attribute, each branch represents the outcome of that test, and each leaf represents a class label or prediction.</p>
+            
+            <h4>Real-World Analogy: Medical Diagnosis</h4>
+            <p>Think about how a doctor diagnoses illness:</p>
+            <ol>
+                <li><strong>First Question:</strong> "Do you have a fever?" → If Yes, go to fever-related questions; If No, explore other symptoms</li>
+                <li><strong>Second Question:</strong> "Is your temperature above 102°F?" → High fever vs moderate fever paths</li>
+                <li><strong>Third Question:</strong> "Do you have a cough?" → Respiratory vs non-respiratory illness</li>
+                <li><strong>Final Decision:</strong> Based on the path through questions, diagnose specific condition</li>
+            </ol>
+            
+            <h4>Why Decision Trees Are Powerful</h4>
+            <div class="concept">
+                <h5>Human-Like Decision Making:</h5>
+                <ul>
+                    <li><strong>Intuitive:</strong> Mirrors how humans naturally make decisions through questions</li>
+                    <li><strong>Explainable:</strong> You can trace exactly why a decision was made</li>
+                    <li><strong>Visual:</strong> Can be drawn as flowcharts that anyone can understand</li>
+                    <li><strong>No Assumptions:</strong> Doesn't require assumptions about data distribution</li>
+                </ul>
+                
+                <h5>Practical Benefits:</h5>
+                <ul>
+                    <li><strong>Handles Mixed Data:</strong> Works with both numerical (age, income) and categorical (gender, color) features</li>
+                    <li><strong>Built-in Feature Selection:</strong> Automatically identifies most important features</li>
+                    <li><strong>Non-linear Relationships:</strong> Can capture complex relationships that linear models miss</li>
+                    <li><strong>Missing Data Tolerance:</strong> Can work even when some information is missing</li>
+                </ul>
+            </div>
+            
+            <h4>Simple Example: Weekend Activity Decision</h4>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> Deciding what to do on weekends based on weather and available time</p>
+                
+                <p><strong>Decision Process:</strong></p>
+                <ul>
+                    <li><strong>Root Question:</strong> "Is it sunny?"</li>
+                    <li><strong>If Sunny:</strong> "Do you have more than 3 hours free?"</li>
+                    <li><strong>If Yes:</strong> Go to beach (outdoor activity)</li>
+                    <li><strong>If No:</strong> Go for a walk (short outdoor activity)</li>
+                    <li><strong>If Not Sunny:</strong> "Is it raining?"</li>
+                    <li><strong>If Raining:</strong> Watch movies indoors</li>
+                    <li><strong>If Cloudy:</strong> Go shopping (covered activity)</li>
+                </ul>
+                
+                <p>This creates a tree structure that automatically decides activities based on conditions!</p>
+            </div>
+        </section>
+
+        <section id="decision-tree-representation">
+            <h2>2. Decision Tree Representation</h2>
+            
+            <h3>Components of a Decision Tree</h3>
+            
+            <h4>Tree Structure Elements:</h4>
+            <div class="concept">
+                <ul>
+                    <li><strong>Root Node:</strong> The topmost node containing the first question/test</li>
+                    <li><strong>Internal Nodes:</strong> Middle nodes representing questions/tests on attributes</li>
+                    <li><strong>Leaf Nodes:</strong> End nodes containing final predictions/classifications</li>
+                    <li><strong>Branches:</strong> Connections between nodes representing possible answers to questions</li>
+                    <li><strong>Depth:</strong> Number of questions from root to deepest leaf</li>
+                </ul>
+            </div>
+            
+            <h4>Visual Representation Example: Student Admission Decision</h4>
+            <div class="visual-diagram">
+                <h5>University Admission Decision Tree:</h5>
+                <div class="diagram-text">
+                    <pre>
+                           [GPA ≥ 3.5?]
+                          /            \
+                       YES/              \NO
+                        /                  \
+            [SAT ≥ 1200?]                [Extracurricular?]
+             /        \                    /              \
+          YES/          \NO              YES/              \NO
+           /              \               /                  \
+    [ADMITTED]     [Interview Score≥8?]  [GPA ≥ 3.0?]      [REJECTED]
+                    /              \      /          \
+                 YES/               \NO  YES/         \NO
+                  /                   \ /              \
+            [ADMITTED]            [REJECTED]     [WAITLISTED]  [REJECTED]
+
+    Decision Path Example:
+    Student: GPA=3.2, SAT=1100, Has Extracurriculars, Interview=N/A
+    Path: Root→NO→YES→YES→WAITLISTED
+                    </pre>
+                </div>
+            </div>
+            
+            <h3>Mathematical Representation</h3>
+            <div class="concept">
+                <h4>Decision Tree as Rules:</h4>
+                <p>Each path from root to leaf can be written as an IF-THEN rule:</p>
+                
+                <ul>
+                    <li><strong>Rule 1:</strong> IF (GPA ≥ 3.5) AND (SAT ≥ 1200) THEN Admit</li>
+                    <li><strong>Rule 2:</strong> IF (GPA ≥ 3.5) AND (SAT < 1200) AND (Interview ≥ 8) THEN Admit</li>
+                    <li><strong>Rule 3:</strong> IF (GPA < 3.5) AND (Has Extracurriculars) AND (GPA ≥ 3.0) THEN Waitlist</li>
+                    <li><strong>Rule 4:</strong> IF (GPA < 3.5) AND (No Extracurriculars) THEN Reject</li>
+                </ul>
+                
+                <p><strong>Advantage:</strong> These rules are completely transparent and can be verified by domain experts!</p>
+            </div>
+        </section>
+
+        <section id="appropriate-problems">
+            <h2>3. Appropriate Problems for Decision Trees</h2>
+            
+            <h3>When Decision Trees Excel</h3>
+            
+            <h4>Perfect Scenarios for Decision Trees:</h4>
+            <div class="ml-type">
+                <h5>1. Classification Problems with Clear Decision Boundaries</h5>
+                <p><strong>Example:</strong> Email spam detection, medical diagnosis, loan approval</p>
+                <p><strong>Why Good:</strong> Clear yes/no decisions based on specific criteria</p>
+                
+                <h5>2. Problems Requiring Explanation</h5>
+                <p><strong>Example:</strong> Legal decisions, medical diagnoses, financial approvals</p>
+                <p><strong>Why Good:</strong> Must be able to explain "why" a decision was made</p>
+                
+                <h5>3. Mixed Data Types</h5>
+                <p><strong>Example:</strong> Customer analysis with age (numerical), gender (categorical), income (numerical)</p>
+                <p><strong>Why Good:</strong> Handles different data types naturally without preprocessing</p>
+                
+                <h5>4. Non-linear Relationships</h5>
+                <p><strong>Example:</strong> "Young OR old people buy luxury cars, but middle-aged people prefer practical cars"</p>
+                <p><strong>Why Good:</strong> Can capture complex, non-linear patterns</p>
+            </div>
+            
+            <h3>Detailed Use Case: Credit Card Approval System</h3>
+            <div class="example-detailed">
+                <p><strong>Bank Problem:</strong> Automate credit card approval while maintaining risk control and regulatory compliance</p>
+                
+                <p><strong>Why Decision Tree is Perfect:</strong></p>
+                <ul>
+                    <li><strong>Explainability Required:</strong> Must explain rejection reasons to applicants (legal requirement)</li>
+                    <li><strong>Mixed Data Types:</strong> Income (numerical), employment type (categorical), credit history (ordinal)</li>
+                    <li><strong>Business Rules:</strong> Can incorporate existing bank policies as constraints</li>
+                    <li><strong>Risk Management:</strong> Clear thresholds for different risk levels</li>
+                </ul>
+                
+                <p><strong>Sample Decision Tree Structure:</strong></p>
+                <ul>
+                    <li><strong>Root Question:</strong> "Is credit score ≥ 650?"</li>
+                    <li><strong>Branch 1 (Score ≥ 650):</strong> "Is annual income ≥ $40,000?"</li>
+                    <li><strong>Branch 2 (Score < 650):</strong> "Is applicant a student with co-signer?"</li>
+                    <li><strong>Leaf Outcomes:</strong> Approve with $5000 limit, Approve with $1000 limit, Request additional documentation, Reject</li>
+                </ul>
+                
+                <p><strong>Business Benefits:</strong></p>
+                <ul>
+                    <li>95% automation of routine applications</li>
+                    <li>Consistent decision-making across all branches</li>
+                    <li>Easy to update rules when policies change</li>
+                    <li>Complete audit trail for regulatory compliance</li>
+                </ul>
+            </div>
+            
+            <h3>When NOT to Use Decision Trees</h3>
+            <div class="concept">
+                <h4>Problematic Scenarios:</h4>
+                <ul>
+                    <li><strong>Linear Relationships:</strong> If outcome simply increases with feature values, linear regression is better</li>
+                    <li><strong>Highly Correlated Features:</strong> Trees may become unstable and overfit</li>
+                    <li><strong>Very Large Feature Sets:</strong> Trees can become too complex and hard to interpret</li>
+                    <li><strong>Continuous Smooth Predictions:</strong> Trees create step-wise predictions, not smooth curves</li>
+                </ul>
+                
+                <p><strong>Example Where Trees Struggle:</strong> Predicting house prices where price smoothly increases with size. A tree might create awkward boundaries like "houses 1000-1500 sq ft = $200K, houses 1501-2000 sq ft = $300K" instead of smooth price progression.</p>
+            </div>
+        </section>
+
+        <section id="decision-tree-algorithm">
+            <h2>4. Basic Decision Tree Learning Algorithm</h2>
+            
+            <h3>The Core Algorithm: Top-Down Recursive Approach</h3>
+            
+            <h4>Algorithm Overview:</h4>
+            <div class="algorithm-steps">
+                <ol>
+                    <li><strong>Start with entire dataset at root node</strong></li>
+                    <li><strong>If all examples have same class:</strong> Create leaf node with that class</li>
+                    <li><strong>Otherwise:</strong> Find the best attribute to split on</li>
+                    <li><strong>Create internal node</strong> for that attribute</li>
+                    <li><strong>Split dataset</strong> based on attribute values</li>
+                    <li><strong>Recursively apply</strong> same process to each subset</li>
+                    <li><strong>Stop when:</strong> All examples in subset have same class, or no more attributes to test, or subset becomes too small</li>
+                </ol>
+            </div>
+            
+            <h4>Detailed Algorithm Walkthrough</h4>
+            <div class="concept">
+                <h5>Key Questions the Algorithm Answers:</h5>
+                <ul>
+                    <li><strong>Which attribute to split on?</strong> Use measures like information gain (explained below)</li>
+                    <li><strong>When to stop splitting?</strong> When further splits don't improve prediction accuracy</li>
+                    <li><strong>How to handle missing values?</strong> Use most common value or probabilistic assignment</li>
+                    <li><strong>How to prevent overfitting?</strong> Set minimum samples per leaf, maximum tree depth</li>
+                </ul>
+            </div>
+            
+            <h3>Complete Example: Tennis Playing Decision</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Predict whether someone will play tennis based on weather conditions</p>
+                
+                <h4>Training Data (14 examples):</h4>
+                <table class="data-table">
+                    <tr><th>Day</th><th>Outlook</th><th>Temperature</th><th>Humidity</th><th>Wind</th><th>Play Tennis?</th></tr>
+                    <tr><td>1</td><td>Sunny</td><td>Hot</td><td>High</td><td>Weak</td><td>No</td></tr>
+                    <tr><td>2</td><td>Sunny</td><td>Hot</td><td>High</td><td>Strong</td><td>No</td></tr>
+                    <tr><td>3</td><td>Overcast</td><td>Hot</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>4</td><td>Rain</td><td>Mild</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>5</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>6</td><td>Rain</td><td>Cool</td><td>Normal</td><td>Strong</td><td>No</td></tr>
+                    <tr><td>7</td><td>Overcast</td><td>Cool</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
+                    <tr><td>8</td><td>Sunny</td><td>Mild</td><td>High</td><td>Weak</td><td>No</td></tr>
+                    <tr><td>9</td><td>Sunny</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>10</td><td>Rain</td><td>Mild</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>11</td><td>Sunny</td><td>Mild</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
+                    <tr><td>12</td><td>Overcast</td><td>Mild</td><td>High</td><td>Strong</td><td>Yes</td></tr>
+                    <tr><td>13</td><td>Overcast</td><td>Hot</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                    <tr><td>14</td><td>Rain</td><td>Mild</td><td>High</td><td>Strong</td><td>No</td></tr>
+                </table>
+                
+                <h4>Step-by-Step Tree Building:</h4>
+                <p><strong>Initial State:</strong> 14 examples, 9 "Yes" and 5 "No" for playing tennis</p>
+                
+                <p><strong>Question:</strong> Which attribute should be the root node? Let's analyze each option...</p>
+                
+                <p>(<em>We'll calculate information gain for each attribute in the next section</em>)</p>
+            </div>
+        </section>
+
+        <section id="entropy-information-gain">
+            <h2>5. Entropy and Information Gain</h2>
+            
+            <h3>Understanding Entropy</h3>
+            <p>Entropy measures the "disorder" or "uncertainty" in a dataset. Think of entropy as measuring how mixed up your data is - pure datasets (all same class) have low entropy, while mixed datasets have high entropy.</p>
+            
+            <h4>Entropy Intuition with Examples</h4>
+            <div class="concept">
+                <h5>Coin Flip Analogy:</h5>
+                <ul>
+                    <li><strong>Fair Coin:</strong> 50% heads, 50% tails → Maximum uncertainty (entropy = 1.0)</li>
+                    <li><strong>Biased Coin:</strong> 90% heads, 10% tails → Less uncertainty (entropy = 0.47)</li>
+                    <li><strong>Fixed Coin:</strong> 100% heads, 0% tails → No uncertainty (entropy = 0.0)</li>
+                </ul>
+                
+                <h5>Class Distribution Examples:</h5>
+                <ul>
+                    <li><strong>Perfect Split:</strong> 50% Class A, 50% Class B → Entropy = 1.0 (maximum)</li>
+                    <li><strong>Moderate Split:</strong> 75% Class A, 25% Class B → Entropy = 0.81</li>
+                    <li><strong>Heavily Skewed:</strong> 95% Class A, 5% Class B → Entropy = 0.29</li>
+                    <li><strong>Pure:</strong> 100% Class A, 0% Class B → Entropy = 0.0 (minimum)</li>
+                </ul>
+            </div>
+            
+            <h4>Entropy Formula (Simple Explanation)</h4>
+            <div class="algorithm-steps">
+                <p><strong>Formula:</strong> Entropy = -Σ(p × log₂(p))</p>
+                <p>Where p is the proportion of examples in each class</p>
+                
+                <h5>Step-by-Step Calculation:</h5>
+                <ol>
+                    <li><strong>Count examples in each class</strong></li>
+                    <li><strong>Calculate proportion</strong> of each class (count/total)</li>
+                    <li><strong>For each class:</strong> multiply proportion × log₂(proportion)</li>
+                    <li><strong>Sum all results</strong> and multiply by -1</li>
+                </ol>
+                
+                <h5>Worked Example:</h5>
+                <p><strong>Dataset:</strong> 10 examples, 7 "Yes", 3 "No"</p>
+                <ul>
+                    <li>Proportion of "Yes" = 7/10 = 0.7</li>
+                    <li>Proportion of "No" = 3/10 = 0.3</li>
+                    <li>Entropy = -(0.7 × log₂(0.7) + 0.3 × log₂(0.3))</li>
+                    <li>= -(0.7 × (-0.515) + 0.3 × (-1.737))</li>
+                    <li>= -(−0.36 + −0.52) = 0.88</li>
+                </ul>
+            </div>
+            
+            <h3>Information Gain</h3>
+            <p>Information Gain measures how much uncertainty is reduced by splitting on a particular attribute. It's the difference between entropy before and after the split.</p>
+            
+            <h4>Information Gain Formula</h4>
+            <div class="concept">
+                <p><strong>Information Gain = Original Entropy - Weighted Average of Subset Entropies</strong></p>
+                
+                <h5>Step-by-Step Calculation:</h5>
+                <ol>
+                    <li><strong>Calculate original entropy</strong> of entire dataset</li>
+                    <li><strong>Split dataset</strong> based on attribute values</li>
+                    <li><strong>Calculate entropy</strong> of each subset</li>
+                    <li><strong>Calculate weighted average</strong> of subset entropies</li>
+                    <li><strong>Subtract</strong> weighted average from original entropy</li>
+                </ol>
+            </div>
+            
+            <h4>Complete Information Gain Example</h4>
+            <div class="example-detailed">
+                <p><strong>Using Tennis Dataset - Testing "Outlook" Attribute:</strong></p>
+                
+                <p><strong>Step 1: Original Entropy</strong></p>
+                <ul>
+                    <li>Total: 14 examples, 9 "Yes", 5 "No"</li>
+                    <li>Entropy(Original) = -(9/14 × log₂(9/14) + 5/14 × log₂(5/14))</li>
+                    <li>= -(0.643 × (-0.638) + 0.357 × (-1.485))</li>
+                    <li>= 0.94</li>
+                </ul>
+                
+                <p><strong>Step 2: Split by Outlook</strong></p>
+                <ul>
+                    <li><strong>Sunny:</strong> 5 examples (2 Yes, 3 No)</li>
+                    <li><strong>Overcast:</strong> 4 examples (4 Yes, 0 No)</li>
+                    <li><strong>Rain:</strong> 5 examples (3 Yes, 2 No)</li>
+                </ul>
+                
+                <p><strong>Step 3: Calculate Subset Entropies</strong></p>
+                <ul>
+                    <li><strong>Sunny:</strong> -(2/5 × log₂(2/5) + 3/5 × log₂(3/5)) = 0.97</li>
+                    <li><strong>Overcast:</strong> -(4/4 × log₂(4/4) + 0/4 × log₂(0/4)) = 0.0 (pure!)</li>
+                    <li><strong>Rain:</strong> -(3/5 × log₂(3/5) + 2/5 × log₂(2/5)) = 0.97</li>
+                </ul>
+                
+                <p><strong>Step 4: Weighted Average</strong></p>
+                <ul>
+                    <li>Weighted Entropy = (5/14 × 0.97) + (4/14 × 0.0) + (5/14 × 0.97)</li>
+                    <li>= 0.347 + 0 + 0.347 = 0.694</li>
+                </ul>
+                
+                <p><strong>Step 5: Information Gain</strong></p>
+                <ul>
+                    <li>Information Gain(Outlook) = 0.94 - 0.694 = 0.246</li>
+                </ul>
+                
+                <p><strong>Interpretation:</strong> Splitting on "Outlook" reduces uncertainty by 0.246 bits. The "Overcast" subset is perfectly pure (entropy = 0), which is excellent for prediction!</p>
+            </div>
+        </section>
+
+        <section id="id3-algorithm">
+            <h2>6. ID3 Algorithm Example</h2>
+            
+            <h3>What is ID3?</h3>
+            <p>ID3 (Iterative Dichotomiser 3) is a classic decision tree algorithm that uses information gain to select the best attribute for each split. It was developed by Ross Quinlan and forms the foundation for many modern decision tree algorithms.</p>
+            
+            <h4>ID3 Algorithm Steps</h4>
+            <div class="algorithm-steps">
+                <ol>
+                    <li><strong>Calculate entropy</strong> of the target variable for the current dataset</li>
+                    <li><strong>For each attribute:</strong> Calculate information gain if we split on that attribute</li>
+                    <li><strong>Select attribute</strong> with highest information gain</li>
+                    <li><strong>Create internal node</strong> with selected attribute</li>
+                    <li><strong>Split dataset</strong> based on attribute values</li>
+                    <li><strong>Recursively apply</strong> ID3 to each subset</li>
+                    <li><strong>Create leaf nodes</strong> when stopping criteria are met</li>
+                </ol>
+            </div>
+            
+            <h3>Complete ID3 Example: Tennis Decision Tree</h3>
+            <div class="example-detailed">
+                <p><strong>Building the tree step by step using our tennis dataset...</strong></p>
+                
+                <h4>Step 1: Calculate Information Gain for All Attributes</h4>
+                
+                <p><strong>We already calculated Outlook = 0.246. Now let's calculate others:</strong></p>
+                
+                <h5>Temperature Attribute:</h5>
+                <ul>
+                    <li><strong>Hot:</strong> 4 examples (2 Yes, 2 No) → Entropy = 1.0</li>
+                    <li><strong>Mild:</strong> 6 examples (4 Yes, 2 No) → Entropy = 0.918</li>
+                    <li><strong>Cool:</strong> 4 examples (3 Yes, 1 No) → Entropy = 0.811</li>
+                    <li><strong>Weighted Average:</strong> (4/14 × 1.0) + (6/14 × 0.918) + (4/14 × 0.811) = 0.911</li>
+                    <li><strong>Information Gain(Temperature):</strong> 0.94 - 0.911 = 0.029</li>
+                </ul>
+                
+                <h5>Humidity Attribute:</h5>
+                <ul>
+                    <li><strong>High:</strong> 7 examples (3 Yes, 4 No) → Entropy = 0.985</li>
+                    <li><strong>Normal:</strong> 7 examples (6 Yes, 1 No) → Entropy = 0.592</li>
+                    <li><strong>Information Gain(Humidity):</strong> 0.94 - (7/14 × 0.985 + 7/14 × 0.592) = 0.151</li>
+                </ul>
+                
+                <h5>Wind Attribute:</h5>
+                <ul>
+                    <li><strong>Weak:</strong> 8 examples (6 Yes, 2 No) → Entropy = 0.811</li>
+                    <li><strong>Strong:</strong> 6 examples (3 Yes, 3 No) → Entropy = 1.0</li>
+                    <li><strong>Information Gain(Wind):</strong> 0.94 - (8/14 × 0.811 + 6/14 × 1.0) = 0.048</li>
+                </ul>
+                
+                <h4>Step 2: Select Best Attribute</h4>
+                <table class="comparison-table">
+                    <tr><th>Attribute</th><th>Information Gain</th></tr>
+                    <tr><td>Outlook</td><td>0.246 (Highest!)</td></tr>
+                    <tr><td>Humidity</td><td>0.151</td></tr>
+                    <tr><td>Wind</td><td>0.048</td></tr>
+                    <tr><td>Temperature</td><td>0.029</td></tr>
+                </table>
+                
+                <p><strong>Decision:</strong> "Outlook" has highest information gain, so it becomes the root node!</p>
+                
+                <h4>Step 3: Create Tree Structure</h4>
+                <div class="visual-diagram">
+                    <div class="diagram-text">
+                        <pre>
+                             [Outlook]
+                          /      |      \
+                      Sunny/     |Overcast \Rain
+                        /        |          \
+                [Need more    [YES]     [Need more
+                 questions]   (Pure!)     questions]
+                
+                Overcast branch is done - all 4 examples are "Yes"!
+                Still need to process Sunny and Rain branches...
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>Step 4: Process Sunny Branch</h4>
+                <p><strong>Sunny subset:</strong> 5 examples (2 Yes, 3 No)</p>
+                <p>Calculate information gain for remaining attributes (Temperature, Humidity, Wind) on this subset...</p>
+                <p><strong>Best attribute for Sunny branch:</strong> Humidity (creates pure subsets)</p>
+                
+                <h4>Step 5: Process Rain Branch</h4>
+                <p><strong>Rain subset:</strong> 5 examples (3 Yes, 2 No)</p>
+                <p><strong>Best attribute for Rain branch:</strong> Wind (creates pure subsets)</p>
+                
+                <h4>Final Complete Tree</h4>
+                <div class="visual-diagram">
+                    <div class="diagram-text">
+                        <pre>
+                                    [Outlook]
+                              /         |         \
+                          Sunny/        |Overcast  \Rain
+                            /           |           \
+                    [Humidity]       [YES]       [Wind]
+                     /      \                    /     \
+                  High/      \Normal         Weak/     \Strong
+                   /          \               /         \
+               [NO]          [YES]         [YES]       [NO]
+                        
+                Final Decision Rules:
+                1. If Overcast → Play Tennis
+                2. If Sunny and Humidity=High → Don't Play
+                3. If Sunny and Humidity=Normal → Play Tennis  
+                4. If Rain and Wind=Weak → Play Tennis
+                5. If Rain and Wind=Strong → Don't Play
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Testing the Decision Tree</h3>
+            <div class="example-detailed">
+                <p><strong>New Example:</strong> Sunny day, Hot temperature, Normal humidity, Strong wind</p>
+                
+                <p><strong>Tree Traversal:</strong></p>
+                <ol>
+                    <li><strong>Root Test:</strong> Outlook = Sunny → Go to Sunny branch</li>
+                    <li><strong>Humidity Test:</strong> Humidity = Normal → Go to Normal branch</li>
+                    <li><strong>Prediction:</strong> YES (Play Tennis)</li>
+                </ol>
+                
+                <p><strong>Confidence:</strong> This prediction is based on training examples where Sunny + Normal Humidity always led to playing tennis.</p>
+            </div>
+        </section>
+
+        <section id="linear-regression">
+            <h2>7. Linear Regression</h2>
+            
+            <h3>Introduction to Linear Regression</h3>
+            <p>Linear regression is a supervised learning algorithm used for predicting continuous numerical values. It assumes there's a linear (straight-line) relationship between input features and the target variable.</p>
+            
+            <h4>The Core Concept: Drawing the Best Line</h4>
+            <p>Imagine plotting study hours (x-axis) vs exam scores (y-axis) for 100 students. You'll see scattered points, but there's generally an upward trend - more study leads to higher scores. Linear regression finds the straight line that best fits through these points.</p>
+            
+            <div class="concept">
+                <h5>Mathematical Representation:</h5>
+                <p><strong>Simple Linear Regression:</strong> y = mx + b</p>
+                <ul>
+                    <li><strong>y:</strong> Predicted value (exam score)</li>
+                    <li><strong>x:</strong> Input feature (study hours)</li>
+                    <li><strong>m:</strong> Slope (how much y changes when x increases by 1)</li>
+                    <li><strong>b:</strong> Y-intercept (predicted y when x = 0)</li>
+                </ul>
+                
+                <p><strong>Example:</strong> Score = 3 × Study_Hours + 50</p>
+                <ul>
+                    <li>0 hours → Predicted score: 50</li>
+                    <li>10 hours → Predicted score: 80</li>
+                    <li>20 hours → Predicted score: 110 (but scores cap at 100!)</li>
+                </ul>
+            </div>
+            
+            <h4>How Linear Regression Learns</h4>
+            <div class="algorithm-steps">
+                <h5>The Learning Process:</h5>
+                <ol>
+                    <li><strong>Start with random line:</strong> Random values for slope (m) and intercept (b)</li>
+                    <li><strong>Make predictions:</strong> Use current line to predict y for each training example</li>
+                    <li><strong>Calculate errors:</strong> Find difference between predicted and actual values</li>
+                    <li><strong>Adjust line:</strong> Move the line to reduce total error</li>
+                    <li><strong>Repeat:</strong> Continue adjusting until error stops decreasing</li>
+                </ol>
+                
+                <h5>Error Measurement:</h5>
+                <p><strong>Mean Squared Error (MSE):</strong> Average of squared differences between predicted and actual values</p>
+                <p><strong>Why Square Errors?</strong> Penalizes large errors more heavily and makes math easier</p>
+            </div>
+            
+            <h3>Detailed Linear Regression Example</h3>
+            <div class="example-detailed">
+                <h4>Problem: Predicting House Prices Based on Size</h4>
+                
+                <p><strong>Training Data:</strong></p>
+                <table class="data-table">
+                    <tr><th>House</th><th>Size (sq ft)</th><th>Price ($1000s)</th></tr>
+                    <tr><td>1</td><td>1000</td><td>200</td></tr>
+                    <tr><td>2</td><td>1500</td><td>300</td></tr>
+                    <tr><td>3</td><td>2000</td><td>400</td></tr>
+                    <tr><td>4</td><td>2500</td><td>500</td></tr>
+                    <tr><td>5</td><td>3000</td><td>600</td></tr>
+                </table>
+                
+                <h4>Step-by-Step Learning Process:</h4>
+                
+                <p><strong>Step 1: Initial Random Line</strong></p>
+                <ul>
+                    <li>Random guess: Price = 0.1 × Size + 100</li>
+                    <li>Prediction for 1000 sq ft house: 0.1 × 1000 + 100 = $200K</li>
+                    <li>Actual price: $200K → Error = 0 (lucky guess for first point!)</li>
+                </ul>
+                
+                <p><strong>Step 2: Check All Predictions</strong></p>
+                <table class="data-table">
+                    <tr><th>Size</th><th>Actual Price</th><th>Predicted Price</th><th>Error</th><th>Squared Error</th></tr>
+                    <tr><td>1000</td><td>200</td><td>200</td><td>0</td><td>0</td></tr>
+                    <tr><td>1500</td><td>300</td><td>250</td><td>50</td><td>2500</td></tr>
+                    <tr><td>2000</td><td>400</td><td>300</td><td>100</td><td>10000</td></tr>
+                    <tr><td>2500</td><td>500</td><td>350</td><td>150</td><td>22500</td></tr>
+                    <tr><td>3000</td><td>600</td><td>400</td><td>200</td><td>40000</td></tr>
+                </table>
+                
+                <p><strong>Total Squared Error:</strong> 75,000 → Average (MSE) = 15,000</p>
+                
+                <p><strong>Step 3: Improve the Line</strong></p>
+                <ul>
+                    <li>Algorithm sees that predictions are consistently too low for larger houses</li>
+                    <li>Increases slope: New line becomes Price = 0.2 × Size + 0</li>
+                    <li>New MSE calculation shows improvement</li>
+                    <li>Continue adjusting until optimal line: Price = 0.2 × Size + 0</li>
+                </ul>
+                
+                <p><strong>Final Model Performance:</strong></p>
+                <ul>
+                    <li><strong>Perfect Fit:</strong> MSE = 0 (all predictions exactly correct)</li>
+                    <li><strong>Model Equation:</strong> House Price = $200 per square foot</li>
+                    <li><strong>New Prediction:</strong> 1800 sq ft house = 0.2 × 1800 = $360K</li>
+                </ul>
+            </div>
+            
+            <h3>Multiple Linear Regression</h3>
+            <p>When multiple factors affect the outcome, we use multiple features in our equation.</p>
+            
+            <div class="example-detailed">
+                <h4>Enhanced House Price Prediction</h4>
+                <p><strong>Formula:</strong> Price = b₀ + b₁×Size + b₂×Bedrooms + b₃×Age</p>
+                
+                <p><strong>Training Data Analysis:</strong></p>
+                <table class="data-table">
+                    <tr><th>Size</th><th>Bedrooms</th><th>Age</th><th>Price ($K)</th></tr>
+                    <tr><td>1500</td><td>3</td><td>10</td><td>300</td></tr>
+                    <tr><td>2000</td><td>4</td><td>5</td><td>450</td></tr>
+                    <tr><td>1200</td><td>2</td><td>20</td><td>250</td></tr>
+                    <tr><td>2500</td><td>4</td><td>1</td><td>550</td></tr>
+                </table>
+                
+                <p><strong>Learned Model:</strong> Price = 50 + 0.15×Size + 20×Bedrooms - 2×Age</p>
+                
+                <p><strong>Interpretation:</strong></p>
+                <ul>
+                    <li><strong>Base Price:</strong> $50K (intercept)</li>
+                    <li><strong>Size Effect:</strong> Each sq ft adds $150 to price</li>
+                    <li><strong>Bedroom Effect:</strong> Each bedroom adds $20K to price</li>
+                    <li><strong>Age Effect:</strong> Each year of age reduces price by $2K</li>
+                </ul>
+                
+                <p><strong>New Prediction:</strong> House with 1800 sq ft, 3 bedrooms, 8 years old</p>
+                <ul>
+                    <li>Price = 50 + (0.15×1800) + (20×3) + (-2×8)</li>
+                    <li>= 50 + 270 + 60 - 16 = $364K</li>
+                </ul>
+            </div>
+            
+            <h3>Linear Regression Applications</h3>
+            
+            <h4>Business and Scientific Applications</h4>
+            <ul>
+                <li><strong>Sales Forecasting:</strong> Predicting future sales based on advertising spend, seasonality, economic indicators</li>
+                <li><strong>Medical Research:</strong> Relating drug dosage to treatment effectiveness</li>
+                <li><strong>Economics:</strong> Understanding relationship between education level and income</li>
+                <li><strong>Sports Analytics:</strong> Predicting player performance based on training metrics</li>
+                <li><strong>Marketing:</strong> ROI prediction for different advertising channels</li>
+            </ul>
+            
+            <h4>Assumptions and Limitations</h4>
+            <div class="concept">
+                <h5>Key Assumptions:</h5>
+                <ul>
+                    <li><strong>Linearity:</strong> Relationship between features and target is linear</li>
+                    <li><strong>Independence:</strong> Observations are independent of each other</li>
+                    <li><strong>Homoscedasticity:</strong> Error variance is constant across all prediction levels</li>
+                    <li><strong>No Multicollinearity:</strong> Input features aren't highly correlated with each other</li>
+                </ul>
+                
+                <h5>When Linear Regression Struggles:</h5>
+                <ul>
+                    <li><strong>Non-linear Relationships:</strong> If relationship curves rather than follows straight line</li>
+                    <li><strong>Outliers:</strong> Extreme values can skew the entire line</li>
+                    <li><strong>Complex Interactions:</strong> When effect of one feature depends on value of another</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="comparison-dt-lr">
+            <h2>8. Decision Trees vs Linear Regression</h2>
+            
+            <h3>When to Choose Which Algorithm</h3>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr><th>Aspect</th><th>Decision Trees</th><th>Linear Regression</th></tr>
+                    <tr>
+                        <td><strong>Problem Type</strong></td>
+                        <td>Classification or Regression</td>
+                        <td>Regression only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Requirements</strong></td>
+                        <td>Mixed types (numerical + categorical)</td>
+                        <td>Primarily numerical features</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Relationship Type</strong></td>
+                        <td>Non-linear, complex interactions</td>
+                        <td>Linear relationships</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interpretability</strong></td>
+                        <td>Rules easy to understand</td>
+                        <td>Coefficients show feature importance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Overfitting Risk</strong></td>
+                        <td>High (can memorize training data)</td>
+                        <td>Low (simple model)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prediction Type</strong></td>
+                        <td>Step-wise, discrete regions</td>
+                        <td>Smooth, continuous</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h4>Practical Decision Guide</h4>
+            <div class="usage-guidelines">
+                <h5>Choose Decision Trees When:</h5>
+                <ul>
+                    <li>Need to classify into categories</li>
+                    <li>Must explain decisions to stakeholders</li>
+                    <li>Data contains both numbers and categories</li>
+                    <li>Relationships are complex and non-linear</li>
+                    <li>Domain experts can validate the rules</li>
+                </ul>
+                
+                <h5>Choose Linear Regression When:</h5>
+                <ul>
+                    <li>Predicting continuous numerical values</li>
+                    <li>Relationship appears roughly linear</li>
+                    <li>Need smooth predictions</li>
+                    <li>Want to understand feature importance through coefficients</li>
+                    <li>Have limited training data</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-prep-unit2">
+            <h2>9. Exam Preparation for Unit 2</h2>
+            
+            <h3>Key Concepts Summary</h3>
+            <div class="exam-tips">
+                <h4>Decision Trees - Must Know Points:</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Supervised learning using tree-like decision model</li>
+                    <li><strong>Components:</strong> Root, internal nodes (tests), leaf nodes (predictions), branches</li>
+                    <li><strong>Algorithm:</strong> Top-down recursive approach using information gain</li>
+                    <li><strong>Entropy:</strong> Measure of uncertainty/disorder in dataset</li>
+                    <li><strong>Information Gain:</strong> Reduction in entropy after splitting on attribute</li>
+                    <li><strong>ID3:</strong> Classic algorithm that uses information gain for attribute selection</li>
+                </ul>
+                
+                <h4>Linear Regression - Must Know Points:</h4>
+                <ul>
+                    <li><strong>Purpose:</strong> Predict continuous values assuming linear relationship</li>
+                    <li><strong>Equation:</strong> y = mx + b (simple) or y = b₀ + b₁x₁ + b₂x₂ + ... (multiple)</li>
+                    <li><strong>Learning:</strong> Find best line by minimizing prediction errors</li>
+                    <li><strong>Applications:</strong> Price prediction, forecasting, trend analysis</li>
+                </ul>
+            </div>
+            
+            <h3>Sample Exam Questions and Answers</h3>
+            
+            <h4>Question 1 (15 marks): "Explain the ID3 algorithm for building decision trees. Include entropy and information gain calculations with an example."</h4>
+            <div class="example-detailed">
+                <p><strong>Answer Structure:</strong></p>
+                
+                <p><strong>[Definition - 3 marks]</strong> "ID3 is a decision tree learning algorithm that uses information gain to select the best attribute for splitting at each node. It builds trees top-down by recursively choosing attributes that provide maximum information gain, creating interpretable decision rules."</p>
+                
+                <p><strong>[Algorithm Steps - 4 marks]</strong> "Steps: 1) Calculate entropy of target variable, 2) For each attribute, calculate information gain, 3) Select attribute with highest gain, 4) Split dataset on selected attribute, 5) Recursively apply to subsets, 6) Create leaf when subset is pure or stopping criteria met."</p>
+                
+                <p><strong>[Entropy & Info Gain - 4 marks]</strong> "Entropy = -Σ(p × log₂(p)) measures dataset uncertainty. Information Gain = Original Entropy - Weighted Average of Subset Entropies. Example: Dataset with 9 Yes, 5 No has entropy 0.94. Splitting creates subsets with lower entropy, gain measures improvement."</p>
+                
+                <p><strong>[Example - 4 marks]</strong> "Tennis dataset: Original entropy 0.94. Outlook attribute: Sunny(0.97), Overcast(0.0), Rain(0.97). Weighted average 0.694. Information Gain = 0.94 - 0.694 = 0.246. Outlook selected as root. Overcast branch pure (all Yes), continue processing Sunny and Rain branches."</p>
+            </div>
+            
+            <h4>Question 2 (15 marks): "Compare decision trees and linear regression. When should each be used?"</h4>
+            <div class="example-detailed">
+                <p><strong>[Definitions - 3 marks]</strong> "Decision trees create tree-like models for classification/regression using recursive splitting. Linear regression models linear relationships between features and continuous targets using equation y = mx + b."</p>
+                
+                <p><strong>[Comparison - 6 marks]</strong> "Trees handle mixed data types, non-linear relationships, provide rule-based explanations but risk overfitting. Regression requires numerical data, assumes linearity, provides smooth predictions, shows feature importance through coefficients but limited to linear relationships."</p>
+                
+                <p><strong>[Applications - 4 marks]</strong> "Use trees for: medical diagnosis (explainable decisions), mixed data classification, rule discovery. Use regression for: price prediction, trend forecasting, simple linear relationships, when smooth predictions needed."</p>
+                
+                <p><strong>[Examples - 2 marks]</strong> "Tree example: loan approval (categorical + numerical features, need explanations). Regression example: house price prediction (linear relationship with size, smooth price estimates)."</p>
+            </div>
+            
+            <h3>Practice Problems</h3>
+            <div class="concept">
+                <h4>Try These Yourself:</h4>
+                <ol>
+                    <li><strong>Calculate entropy</strong> for dataset with 12 positive and 8 negative examples</li>
+                    <li><strong>Build decision tree</strong> for determining if a student should take advanced math based on: previous math grade, time available, career goals</li>
+                    <li><strong>Linear regression:</strong> Given data points (1,3), (2,5), (3,7), (4,9), find the best line equation</li>
+                    <li><strong>Compare approaches:</strong> For predicting daily ice cream sales, would you use decision tree or linear regression? Justify your choice.</li>
+                </ol>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 2 Quick Reference</h3>
+                <table class="summary-table">
+                    <tr><th>Algorithm</th><th>Purpose</th><th>Key Strength</th><th>Best Use Case</th></tr>
+                    <tr>
+                        <td><strong>Decision Trees</strong></td>
+                        <td>Classification/Regression via questions</td>
+                        <td>Highly interpretable rules</td>
+                        <td>Medical diagnosis, loan approval</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ID3</strong></td>
+                        <td>Build trees using information gain</td>
+                        <td>Optimal attribute selection</td>
+                        <td>Educational examples, small datasets</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Linear Regression</strong></td>
+                        <td>Predict numbers via linear relationship</td>
+                        <td>Simple, smooth predictions</td>
+                        <td>Price prediction, trend analysis</td>
+                    </tr>
+                </table>
+                
+                <div class="key-formulas">
+                    <h4>Key Formulas to Remember:</h4>
+                    <ul>
+                        <li><strong>Entropy:</strong> -Σ(p × log₂(p))</li>
+                        <li><strong>Information Gain:</strong> Original Entropy - Weighted Subset Entropies</li>
+                        <li><strong>Linear Regression:</strong> y = b₀ + b₁x₁ + b₂x₂ + ...</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keyTerms = document.querySelectorAll('strong');
+            keyTerms.forEach(term => {
+                term.addEventListener('click', function() {
+                    this.style.backgroundColor = this.style.backgroundColor ? '' : '#ffeb3b';
+                });
+            });
+            
+            const printButton = document.createElement('button');
+            printButton.textContent = 'Print Study Guide';
+            printButton.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 10px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+        });
+    </script>
+</body>
+</html>

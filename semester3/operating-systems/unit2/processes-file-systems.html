@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Processes and File Systems</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Operating Systems</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 2: Processes and File Systems</h1>
+            <p class="subtitle">Process Management, CPU Scheduling, and File System Organization</p>
+        </header>
+
+        <section id="processes-intro">
+            <h2>1. Understanding Processes</h2>
+            
+            <h3>What is a Process?</h3>
+            <p>A <strong>process</strong> is a program in execution. When you double-click on an application icon, the operating system creates a process to run that program. Think of it as bringing a recipe (program) to life by actually cooking the dish (process).</p>
+
+            <div class="example-detailed">
+                <h4>Restaurant Kitchen Analogy</h4>
+                <p><strong>Program = Recipe Book:</strong> Contains instructions for making a dish</p>
+                <p><strong>Process = Actually Cooking:</strong> Chef following recipe to prepare meal</p>
+                
+                <h5>Key Differences:</h5>
+                <ul>
+                    <li><strong>Program (Static):</strong> Just instructions stored on disk</li>
+                    <li><strong>Process (Dynamic):</strong> Active execution using CPU, memory, and resources</li>
+                    <li><strong>Multiple Processes:</strong> Same program can run multiple times (multiple chrome tabs)</li>
+                </ul>
+            </div>
+
+            <h3>Process in Memory</h3>
+            <p>When a process is created, the operating system allocates memory space for it. This memory is organized in a specific structure:</p>
+
+            <div class="visual-diagram">
+                <h4>Process Memory Layout</h4>
+                <div class="diagram-text">
+                    <pre>
+        ┌─────────────────────────────────┐ ← High Memory Address
+        │                                 │
+        │          STACK                  │ ← Local variables, function calls
+        │    (grows downward)             │   (expands during execution)
+        │           ↓                     │
+        │                                 │
+        │                                 │
+        │       FREE SPACE                │ ← Available memory
+        │                                 │
+        │                                 │
+        │           ↑                     │
+        │    (grows upward)               │
+        │          HEAP                   │ ← Dynamic memory allocation
+        │                                 │   (malloc, new objects)
+        ├─────────────────────────────────┤
+        │                                 │
+        │          DATA                   │ ← Global variables
+        │    (initialized data)           │   Initialized global/static vars
+        │                                 │
+        ├─────────────────────────────────┤
+        │                                 │
+        │          TEXT                   │ ← Program instructions
+        │     (program code)              │   Executable code
+        │                                 │
+        └─────────────────────────────────┘ ← Low Memory Address
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Process Memory Sections Explained</h3>
+
+            <h4>1. Text Section (Code)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Contains the actual program instructions (machine code)</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Read-Only:</strong> Program instructions don't change during execution</li>
+                    <li><strong>Shared:</strong> Multiple processes can share same text section</li>
+                    <li><strong>Fixed Size:</strong> Size determined when program is compiled</li>
+                </ul>
+                <h5>Example:</h5>
+                <p>If you open two calculator programs, they share the same text section (same code) but have separate data sections (different calculations).</p>
+            </div>
+
+            <h4>2. Data Section</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Stores global variables and static data that have initial values</p>
+                <h5>Types:</h5>
+                <ul>
+                    <li><strong>Initialized Data:</strong> Global variables with assigned values</li>
+                    <li><strong>Uninitialized Data (BSS):</strong> Global variables without initial values</li>
+                </ul>
+            </div>
+
+            <h4>3. Heap Section</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Dynamic memory allocation during program execution</p>
+                <h5>Usage:</h5>
+                <ul>
+                    <li><strong>Runtime Allocation:</strong> Memory requested during program execution</li>
+                    <li><strong>Variable Size:</strong> Can grow or shrink as needed</li>
+                    <li><strong>Manual Management:</strong> Programmer must allocate and free memory</li>
+                </ul>
+                <h5>Example:</h5>
+                <p>When you load a large image in photo editor, it requests heap memory to store the image data.</p>
+            </div>
+
+            <h4>4. Stack Section</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Stores local variables, function parameters, and return addresses</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>LIFO Structure:</strong> Last In, First Out (like stack of plates)</li>
+                    <li><strong>Automatic Management:</strong> OS manages allocation and deallocation</li>
+                    <li><strong>Function Calls:</strong> Each function call adds new frame to stack</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="process-states">
+            <h2>2. Process States and Lifecycle</h2>
+
+            <h3>Process State Model</h3>
+            <p>A process goes through different states during its lifecycle, similar to how a person goes through different activities during the day.</p>
+
+            <div class="visual-diagram">
+                <h4>Process State Transition Diagram</h4>
+                <div class="diagram-text">
+                    <pre>
+                        NEW (created)
+                           │
+                           │ admit
+                           ▼
+                ┌─────────READY─────────┐
+                │     (waiting for      │
+                │      CPU time)        │
+                │                       │
+     interrupt  │                       │ dispatch
+        ┌───────┘                       └────────┐
+        │                                        │
+        ▼                                        ▼
+    WAITING/BLOCKED                           RUNNING
+   (waiting for I/O,                     (using CPU)
+    resources, events)                        │
+        │                                     │
+        │ I/O completion,                     │ exit
+        │ event occurs                       ▼
+        └──────────────────────────────→ TERMINATED
+                                         (finished)
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Understanding Each Process State</h3>
+
+            <h4>1. NEW State</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>Process is being created but not yet ready to execute</p>
+                <h5>Activities:</h5>
+                <ul>
+                    <li><strong>Memory Allocation:</strong> OS assigns memory space for process</li>
+                    <li><strong>PCB Creation:</strong> Process Control Block is created</li>
+                    <li><strong>Resource Setup:</strong> Initial resources are allocated</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>Like a new employee's first day - paperwork being processed, desk being assigned, but not yet working.</p>
+            </div>
+
+            <h4>2. READY State</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>Process is prepared to execute but waiting for CPU availability</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>All Resources Available:</strong> Has everything needed except CPU</li>
+                    <li><strong>In Ready Queue:</strong> Waiting in line for processor time</li>
+                    <li><strong>Can Be Selected:</strong> Eligible for CPU scheduling</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>Like customers in a bank queue - they're ready to be served, just waiting for the next available teller (CPU).</p>
+            </div>
+
+            <h4>3. RUNNING State</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>Process is currently using the CPU and executing instructions</p>
+                <h5>Important Notes:</h5>
+                <ul>
+                    <li><strong>Only One Process:</strong> Only one process can run on a CPU core at any time</li>
+                    <li><strong>Time Limited:</strong> Gets CPU for a time slice, then may be preempted</li>
+                    <li><strong>Active Execution:</strong> Instructions are being fetched and executed</li>
+                </ul>
+            </div>
+
+            <h4>4. WAITING/BLOCKED State</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>Process is waiting for some event to occur (I/O completion, user input, etc.)</p>
+                <h5>Common Wait Reasons:</h5>
+                <ul>
+                    <li><strong>I/O Operations:</strong> Reading from disk, waiting for user input</li>
+                    <li><strong>Resource Availability:</strong> Waiting for printer, network connection</li>
+                    <li><strong>Process Communication:</strong> Waiting for data from another process</li>
+                </ul>
+                <h5>Real-World Analogy:</h5>
+                <p>Like a chef waiting for ingredients to arrive before continuing to cook.</p>
+            </div>
+
+            <h4>5. TERMINATED State</h4>
+            <div class="concept">
+                <h5>Definition:</h5>
+                <p>Process has finished execution and is being cleaned up</p>
+                <h5>Cleanup Activities:</h5>
+                <ul>
+                    <li><strong>Resource Deallocation:</strong> Return memory and other resources</li>
+                    <li><strong>PCB Removal:</strong> Delete process control block</li>
+                    <li><strong>Exit Status:</strong> Report success or error code</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="pcb">
+            <h2>3. Process Control Block (PCB)</h2>
+
+            <h3>What is a Process Control Block?</h3>
+            <p>The PCB is like an employee's personnel file - it contains all important information the operating system needs to manage a process.</p>
+
+            <div class="example-detailed">
+                <h4>Employee Record Analogy</h4>
+                <p>Just like HR department keeps detailed records for each employee, OS keeps detailed records (PCB) for each process:</p>
+                
+                <h5>Employee Record Contains:</h5>
+                <ul>
+                    <li><strong>Employee ID:</strong> Unique identifier</li>
+                    <li><strong>Job Description:</strong> What work they do</li>
+                    <li><strong>Current Status:</strong> Working, on break, sick leave</li>
+                    <li><strong>Resources Assigned:</strong> Office, computer, access cards</li>
+                    <li><strong>Performance Data:</strong> Hours worked, projects completed</li>
+                </ul>
+
+                <h5>PCB Contains:</h5>
+                <ul>
+                    <li><strong>Process ID (PID):</strong> Unique process identifier</li>
+                    <li><strong>Program Counter:</strong> Next instruction to execute</li>
+                    <li><strong>Process State:</strong> NEW, READY, RUNNING, WAITING, TERMINATED</li>
+                    <li><strong>CPU Registers:</strong> Current values of processor registers</li>
+                    <li><strong>Memory Management:</strong> Memory allocation information</li>
+                    <li><strong>I/O Status:</strong> List of open files, devices allocated</li>
+                    <li><strong>Accounting Information:</strong> CPU time used, time limits</li>
+                </ul>
+            </div>
+
+            <h3>PCB Components in Detail</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PCB Component</th>
+                            <th>Purpose</th>
+                            <th>Example Information</th>
+                            <th>Why Important</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Process ID</strong></td>
+                            <td>Unique identification</td>
+                            <td>PID: 1234</td>
+                            <td>OS can distinguish between processes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Program Counter</strong></td>
+                            <td>Track execution progress</td>
+                            <td>Address: 0x4000A0</td>
+                            <td>Resume execution from correct location</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CPU Registers</strong></td>
+                            <td>Save processor state</td>
+                            <td>Register values during context switch</td>
+                            <td>Restore exact state when process resumes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory Info</strong></td>
+                            <td>Track memory usage</td>
+                            <td>Base: 1000, Limit: 5000</td>
+                            <td>Manage memory allocation and protection</td>
+                        </tr>
+                        <tr>
+                            <td><strong>I/O Status</strong></td>
+                            <td>Track open resources</td>
+                            <td>Files: doc1.txt, printer: HP_LaserJet</td>
+                            <td>Properly release resources when process ends</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Process State</strong></td>
+                            <td>Current process status</td>
+                            <td>READY, RUNNING, WAITING</td>
+                            <td>Scheduler knows how to handle process</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Context Switching</h3>
+            <div class="algorithm-steps">
+                <h4>What Happens During Context Switch</h4>
+                <p>Context switching is like a chef switching between cooking multiple dishes. They must save the current state of one dish before moving to another.</p>
+                
+                <ol>
+                    <li><strong>Save Current Process State</strong>
+                        <ul>
+                            <li>Store CPU register values in PCB</li>
+                            <li>Save program counter location</li>
+                            <li>Update process state to READY or WAITING</li>
+                        </ul>
+                    </li>
+                    <li><strong>Select Next Process</strong>
+                        <ul>
+                            <li>Scheduler chooses next process to run</li>
+                            <li>Consider process priority and scheduling algorithm</li>
+                        </ul>
+                    </li>
+                    <li><strong>Load Next Process State</strong>
+                        <ul>
+                            <li>Restore CPU registers from PCB</li>
+                            <li>Set program counter to correct location</li>
+                            <li>Update process state to RUNNING</li>
+                        </ul>
+                    </li>
+                    <li><strong>Resume Execution</strong>
+                        <ul>
+                            <li>Continue executing from where process left off</li>
+                            <li>Process doesn't know it was interrupted</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="process-scheduling">
+            <h2>4. Process Scheduling</h2>
+
+            <h3>Why Do We Need Process Scheduling?</h3>
+            <p>In a multitasking environment, multiple processes compete for CPU time. Process scheduling decides which process gets to use the CPU and for how long, ensuring fair and efficient resource utilization.</p>
+
+            <div class="example-detailed">
+                <h4>Airport Runway Analogy</h4>
+                <p><strong>Problem:</strong> Multiple airplanes (processes) want to use the runway (CPU), but only one can use it at a time.</p>
+                
+                <h5>Without Scheduling (Chaos):</h5>
+                <ul>
+                    <li>Planes might crash into each other</li>
+                    <li>Some planes wait forever while others use runway repeatedly</li>
+                    <li>Emergency flights can't land quickly</li>
+                </ul>
+
+                <h5>With Air Traffic Control (Scheduler):</h5>
+                <ul>
+                    <li><strong>Fair Access:</strong> All planes get their turn</li>
+                    <li><strong>Priority Handling:</strong> Emergency flights get priority</li>
+                    <li><strong>Efficiency:</strong> Runway used continuously without gaps</li>
+                    <li><strong>Safety:</strong> Controlled, organized access</li>
+                </ul>
+            </div>
+
+            <h3>Types of Schedulers</h3>
+
+            <h4>1. Long-Term Scheduler (Job Scheduler)</h4>
+            <div class="concept">
+                <h5>Role:</h5>
+                <p>Decides which programs should be brought into memory and converted to processes</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Less Frequent:</strong> Executes minutes or hours apart</li>
+                    <li><strong>Controls Multiprogramming:</strong> Determines how many processes in memory</li>
+                    <li><strong>Load Balancing:</strong> Mixes CPU-intensive and I/O-intensive processes</li>
+                </ul>
+                <h5>Analogy:</h5>
+                <p>Like university admissions officer deciding which students get admitted to maintain good balance of different types of students.</p>
+            </div>
+
+            <h4>2. Short-Term Scheduler (CPU Scheduler)</h4>
+            <div class="concept">
+                <h5>Role:</h5>
+                <p>Decides which ready process gets CPU next</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Very Frequent:</strong> Executes every few milliseconds</li>
+                    <li><strong>Fast Decision:</strong> Must be very efficient</li>
+                    <li><strong>Direct Impact:</strong> Affects system responsiveness</li>
+                </ul>
+                <h5>Analogy:</h5>
+                <p>Like traffic light controller deciding which direction of traffic gets to move next.</p>
+            </div>
+
+            <h4>3. Medium-Term Scheduler (Swapper)</h4>
+            <div class="concept">
+                <h5>Role:</h5>
+                <p>Decides which processes to temporarily remove from memory to disk (swapping)</p>
+                <h5>Purpose:</h5>
+                <ul>
+                    <li><strong>Memory Management:</strong> Free up memory when system is overloaded</li>
+                    <li><strong>Performance:</strong> Prevent system from slowing down due to memory shortage</li>
+                    <li><strong>Balance:</strong> Control degree of multiprogramming</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="scheduling-algorithms">
+            <h2>5. CPU Scheduling Algorithms</h2>
+
+            <h3>Scheduling Criteria</h3>
+            <p>Different scheduling algorithms optimize for different goals. Understanding these criteria helps choose the right algorithm for specific situations.</p>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterion</th>
+                            <th>Description</th>
+                            <th>Goal</th>
+                            <th>Important For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CPU Utilization</strong></td>
+                            <td>Percentage of time CPU is busy</td>
+                            <td>Maximize</td>
+                            <td>System efficiency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Throughput</strong></td>
+                            <td>Number of processes completed per unit time</td>
+                            <td>Maximize</td>
+                            <td>Overall productivity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Turnaround Time</strong></td>
+                            <td>Time from submission to completion</td>
+                            <td>Minimize</td>
+                            <td>User satisfaction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Waiting Time</strong></td>
+                            <td>Time spent waiting in ready queue</td>
+                            <td>Minimize</td>
+                            <td>Process efficiency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Response Time</strong></td>
+                            <td>Time from request to first response</td>
+                            <td>Minimize</td>
+                            <td>Interactive systems</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Common Scheduling Algorithms</h3>
+
+            <h4>1. First Come First Served (FCFS)</h4>
+            <div class="algorithm-steps">
+                <h5>How FCFS Works:</h5>
+                <p><strong>Simple Rule:</strong> Process that arrives first gets served first, like a queue at grocery store.</p>
+                
+                <h5>Algorithm Steps:</h5>
+                <ol>
+                    <li>Maintain queue of ready processes</li>
+                    <li>When CPU becomes free, give it to process at front of queue</li>
+                    <li>Process runs until completion (non-preemptive)</li>
+                    <li>Next process in queue gets CPU</li>
+                </ol>
+
+                <h5>Example Scenario:</h5>
+                <p><strong>Processes:</strong> P1 (24ms), P2 (3ms), P3 (3ms) arrive in this order</p>
+                <p><strong>Execution Order:</strong> P1 → P2 → P3</p>
+                <p><strong>Waiting Times:</strong> P1: 0ms, P2: 24ms, P3: 27ms</p>
+                <p><strong>Average Waiting Time:</strong> (0 + 24 + 27) ÷ 3 = 17ms</p>
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ FCFS Advantages</h4>
+                    <ul>
+                        <li><strong>Simple:</strong> Easy to understand and implement</li>
+                        <li><strong>Fair:</strong> No process is indefinitely postponed</li>
+                        <li><strong>No Starvation:</strong> Every process eventually gets executed</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ FCFS Disadvantages</h4>
+                    <ul>
+                        <li><strong>Convoy Effect:</strong> Short processes wait for long ones</li>
+                        <li><strong>Poor Response Time:</strong> Interactive users may wait long</li>
+                        <li><strong>Inefficient:</strong> CPU may be idle during I/O operations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4>2. Shortest Job First (SJF)</h4>
+            <div class="algorithm-steps">
+                <h5>How SJF Works:</h5>
+                <p><strong>Smart Rule:</strong> Always execute the process with the shortest execution time first.</p>
+
+                <h5>Algorithm Steps:</h5>
+                <ol>
+                    <li>Examine all ready processes</li>
+                    <li>Select process with minimum execution time</li>
+                    <li>Execute selected process to completion</li>
+                    <li>Repeat for remaining processes</li>
+                </ol>
+
+                <h5>Example Comparison:</h5>
+                <p><strong>Same Processes:</strong> P1 (24ms), P2 (3ms), P3 (3ms)</p>
+                <p><strong>SJF Order:</strong> P2 → P3 → P1</p>
+                <p><strong>Waiting Times:</strong> P1: 6ms, P2: 0ms, P3: 3ms</p>
+                <p><strong>Average Waiting Time:</strong> (6 + 0 + 3) ÷ 3 = 3ms (much better than FCFS!)</p>
+            </div>
+
+            <h4>3. Round Robin (RR)</h4>
+            <div class="algorithm-steps">
+                <h5>How Round Robin Works:</h5>
+                <p><strong>Fair Rule:</strong> Each process gets equal time slices in circular order.</p>
+
+                <h5>Key Concept - Time Quantum:</h5>
+                <ul>
+                    <li><strong>Time Quantum:</strong> Fixed time slice (e.g., 20ms) each process gets</li>
+                    <li><strong>Preemptive:</strong> Process is interrupted when time slice expires</li>
+                    <li><strong>Circular Queue:</strong> Processes rotate in circular fashion</li>
+                </ul>
+
+                <h5>Playground Analogy:</h5>
+                <p>Like children taking turns on a swing - each child gets exactly 5 minutes, then must give turn to next child in line.</p>
+
+                <h5>Algorithm Steps:</h5>
+                <ol>
+                    <li>Set time quantum (e.g., 20ms)</li>
+                    <li>Give CPU to first process in ready queue</li>
+                    <li>If process finishes within time quantum, move to next process</li>
+                    <li>If time quantum expires, preempt process and move to back of queue</li>
+                    <li>Repeat until all processes complete</li>
+                </ol>
+            </div>
+
+            <h4>4. Priority Scheduling</h4>
+            <div class="concept">
+                <h5>How Priority Scheduling Works:</h5>
+                <p>Each process is assigned a priority number. CPU is always allocated to the process with highest priority.</p>
+
+                <h5>Priority Assignment Examples:</h5>
+                <ul>
+                    <li><strong>System Processes:</strong> Highest priority (OS maintenance)</li>
+                    <li><strong>Interactive Processes:</strong> High priority (user interface responsiveness)</li>
+                    <li><strong>Background Processes:</strong> Lower priority (file indexing, backups)</li>
+                </ul>
+
+                <h5>Hospital Emergency Room Analogy:</h5>
+                <ul>
+                    <li><strong>Critical Patients:</strong> Highest priority (heart attack)</li>
+                    <li><strong>Urgent Cases:</strong> High priority (broken bone)</li>
+                    <li><strong>Routine Checkups:</strong> Normal priority</li>
+                    <li><strong>Rule:</strong> More critical cases are treated first, regardless of arrival time</li>
+                </ul>
+
+                <h5>Problem - Priority Inversion & Starvation:</h5>
+                <p><strong>Starvation:</strong> Low-priority processes may never execute if high-priority processes keep arriving</p>
+                <p><strong>Solution - Aging:</strong> Gradually increase priority of waiting processes over time</p>
+            </div>
+        </section>
+
+        <section id="inter-process-communication">
+            <h2>6. Inter-Process Communication (IPC)</h2>
+
+            <h3>Why Do Processes Need to Communicate?</h3>
+            <p>Sometimes processes need to work together to accomplish complex tasks. They need secure ways to share information and coordinate their activities.</p>
+
+            <div class="example-detailed">
+                <h4>Team Project Analogy</h4>
+                <p>Imagine a group project where team members work on different parts:</p>
+                
+                <h5>Communication Needs:</h5>
+                <ul>
+                    <li><strong>Share Progress:</strong> "I finished the introduction"</li>
+                    <li><strong>Pass Data:</strong> "Here's the research data you need"</li>
+                    <li><strong>Coordinate:</strong> "Wait for me to finish before you start"</li>
+                    <li><strong>Synchronize:</strong> "Let's all meet at 3 PM to review"</li>
+                </ul>
+            </div>
+
+            <h3>IPC Mechanisms</h3>
+
+            <h4>1. Shared Memory</h4>
+            <div class="concept">
+                <h5>How It Works:</h5>
+                <p>Processes share a common memory area where they can read and write data</p>
+                
+                <h5>Whiteboard Analogy:</h5>
+                <p>Like team members using a shared whiteboard - anyone can write information and others can read it</p>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Fast:</strong> Direct memory access, no OS intervention</li>
+                    <li><strong>Efficient:</strong> No copying data between processes</li>
+                </ul>
+
+                <h5>Challenges:</h5>
+                <ul>
+                    <li><strong>Synchronization:</strong> Must coordinate access to prevent conflicts</li>
+                    <li><strong>Protection:</strong> Processes can accidentally interfere with each other</li>
+                </ul>
+            </div>
+
+            <h4>2. Message Passing</h4>
+            <div class="concept">
+                <h5>How It Works:</h5>
+                <p>Processes send messages to each other through the operating system</p>
+
+                <h5>Email Analogy:</h5>
+                <p>Like sending emails - you write message, send through email system (OS), recipient receives in inbox</p>
+
+                <h5>Types:</h5>
+                <ul>
+                    <li><strong>Direct Communication:</strong> Send message directly to specific process</li>
+                    <li><strong>Indirect Communication:</strong> Send to mailbox/queue, recipient checks mailbox</li>
+                </ul>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Safe:</strong> OS handles all coordination and protection</li>
+                    <li><strong>Flexible:</strong> Works across network and different machines</li>
+                </ul>
+
+                <h5>Disadvantages:</h5>
+                <ul>
+                    <li><strong>Slower:</strong> OS involvement adds overhead</li>
+                    <li><strong>Limited Size:</strong> Messages typically have size limits</li>
+                </ul>
+            </div>
+
+            <h4>3. Pipes</h4>
+            <div class="example-detailed">
+                <h4>Understanding Pipes</h4>
+                <p>Pipes are like physical pipes that connect two processes, allowing data to flow from one to another.</p>
+
+                <h5>Types of Pipes:</h5>
+                <h4>Anonymous Pipes (Ordinary Pipes)</h4>
+                <ul>
+                    <li><strong>Parent-Child Only:</strong> Only related processes can communicate</li>
+                    <li><strong>Unidirectional:</strong> Data flows in one direction only</li>
+                    <li><strong>Example:</strong> command1 | command2 (output of command1 becomes input to command2)</li>
+                </ul>
+
+                <h4>Named Pipes (FIFOs)</h4>
+                <ul>
+                    <li><strong>Any Processes:</strong> Unrelated processes can communicate</li>
+                    <li><strong>File-like Interface:</strong> Appears as special file in file system</li>
+                    <li><strong>Persistent:</strong> Exists until explicitly deleted</li>
+                </ul>
+
+                <h5>Water Pipe Analogy:</h5>
+                <p>Like connecting two houses with a water pipe - one house can send water (data) and the other receives it.</p>
+            </div>
+        </section>
+
+        <section id="multithreading">
+            <h2>7. Multithreading Models</h2>
+
+            <h3>What are Threads?</h3>
+            <p>A <strong>thread</strong> is a lightweight process - a smaller unit of execution within a process. If a process is like a company, threads are like employees within that company.</p>
+
+            <div class="example-detailed">
+                <h4>Restaurant Kitchen Analogy</h4>
+                <p><strong>Process = Restaurant Kitchen:</strong> The entire kitchen operation</p>
+                <p><strong>Threads = Kitchen Staff:</strong> Different workers (chef, prep cook, dishwasher) within same kitchen</p>
+
+                <h5>Benefits of Multiple Workers (Threads):</h5>
+                <ul>
+                    <li><strong>Parallel Work:</strong> Chef cooks while prep cook chops vegetables</li>
+                    <li><strong>Shared Resources:</strong> All workers use same equipment and ingredients</li>
+                    <li><strong>Coordination:</strong> Workers communicate and coordinate tasks</li>
+                    <li><strong>Efficiency:</strong> More dishes prepared in same time</li>
+                </ul>
+
+                <h5>Thread Advantages in Computing:</h5>
+                <ul>
+                    <li><strong>Responsiveness:</strong> UI thread keeps interface responsive while background thread processes data</li>
+                    <li><strong>Resource Sharing:</strong> Threads share memory, files, and other process resources</li>
+                    <li><strong>Economy:</strong> Creating threads is faster and uses less memory than creating new processes</li>
+                    <li><strong>Scalability:</strong> Can utilize multiple CPU cores effectively</li>
+                </ul>
+            </div>
+
+            <h3>Multithreading Models</h3>
+
+            <h4>1. Many-to-One Model</h4>
+            <div class="concept">
+                <h5>Structure:</h5>
+                <p>Many user-level threads mapped to one kernel thread</p>
+
+                <h5>How It Works:</h5>
+                <ul>
+                    <li><strong>User-Level Threads:</strong> Managed by application, not OS</li>
+                    <li><strong>Single Kernel Thread:</strong> OS sees only one thread per process</li>
+                    <li><strong>Thread Library:</strong> Application manages thread switching</li>
+                </ul>
+
+                <h5>Classroom Analogy:</h5>
+                <p>Like a classroom where students work in groups, but teacher (OS) only sees the classroom as one unit.</p>
+
+                <h5>Pros and Cons:</h5>
+                <ul>
+                    <li><strong>✅ Fast Thread Operations:</strong> No OS involvement in thread management</li>
+                    <li><strong>⚠️ No True Parallelism:</strong> Cannot use multiple CPU cores</li>
+                    <li><strong>⚠️ Blocking Issues:</strong> If one thread blocks, entire process blocks</li>
+                </ul>
+            </div>
+
+            <h4>2. One-to-One Model</h4>
+            <div class="concept">
+                <h5>Structure:</h5>
+                <p>Each user thread mapped to one kernel thread</p>
+
+                <h5>How It Works:</h5>
+                <ul>
+                    <li><strong>Kernel Threads:</strong> OS directly manages each thread</li>
+                    <li><strong>True Parallelism:</strong> Different threads can run on different CPU cores</li>
+                    <li><strong>Independent Scheduling:</strong> Each thread scheduled independently</li>
+                </ul>
+
+                <h5>Individual Contractor Analogy:</h5>
+                <p>Like hiring individual contractors for a project - each contractor (thread) is managed directly by project manager (OS).</p>
+
+                <h5>Pros and Cons:</h5>
+                <ul>
+                    <li><strong>✅ True Concurrency:</strong> Multiple threads can run simultaneously</li>
+                    <li><strong>✅ Better Blocking:</strong> One thread blocking doesn't affect others</li>
+                    <li><strong>⚠️ Higher Overhead:</strong> More system resources needed</li>
+                    <li><strong>⚠️ Limited Threads:</strong> System may limit number of threads</li>
+                </ul>
+            </div>
+
+            <h4>3. Many-to-Many Model</h4>
+            <div class="concept">
+                <h5>Structure:</h5>
+                <p>Many user threads multiplexed to smaller or equal number of kernel threads</p>
+
+                <h5>How It Works:</h5>
+                <ul>
+                    <li><strong>Flexible Mapping:</strong> OS can adjust kernel threads based on need</li>
+                    <li><strong>Hybrid Approach:</strong> Combines benefits of both previous models</li>
+                    <li><strong>Dynamic Allocation:</strong> Kernel threads created/destroyed as needed</li>
+                </ul>
+
+                <h5>Taxi Service Analogy:</h5>
+                <p>Like a taxi company with many customers (user threads) but fewer taxis (kernel threads). Company optimally assigns taxis based on demand.</p>
+            </div>
+
+            <h3>Thrashing</h3>
+            <div class="concept">
+                <h5>What is Thrashing?</h5>
+                <p>Thrashing occurs when system spends more time managing memory (swapping pages) than executing actual programs.</p>
+
+                <h5>Busy Restaurant Kitchen Analogy:</h5>
+                <p>Kitchen becomes so busy that chefs spend more time looking for ingredients and tools than actually cooking. Result: no food gets prepared despite lots of activity.</p>
+
+                <h5>Causes of Thrashing:</h5>
+                <ul>
+                    <li><strong>Too Many Processes:</strong> More processes than available memory</li>
+                    <li><strong>Poor Scheduling:</strong> Processes frequently request memory not currently loaded</li>
+                    <li><strong>Inadequate Memory:</strong> System doesn't have enough physical memory</li>
+                </ul>
+
+                <h5>Solutions:</h5>
+                <ul>
+                    <li><strong>Reduce Multiprogramming:</strong> Run fewer processes simultaneously</li>
+                    <li><strong>Add Memory:</strong> Increase physical memory</li>
+                    <li><strong>Better Algorithms:</strong> Improve page replacement strategies</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="file-systems">
+            <h2>8. File Systems</h2>
+
+            <h3>What is a File System?</h3>
+            <p>A file system is like the organizational system for a library - it determines how files are stored, organized, and retrieved on storage devices.</p>
+
+            <div class="concept">
+                <h4>File System Responsibilities:</h4>
+                <ul>
+                    <li><strong>Storage Organization:</strong> How files are physically stored on disk</li>
+                    <li><strong>Naming:</strong> How files are identified and named</li>
+                    <li><strong>Access Methods:</strong> How programs can read/write file data</li>
+                    <li><strong>Protection:</strong> Who can access which files</li>
+                    <li><strong>Reliability:</strong> Protecting data from loss or corruption</li>
+                </ul>
+            </div>
+
+            <h3>Types of Files</h3>
+
+            <h4>1. Regular Files (Data Files)</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Store user data and information</p>
+                <h5>Types:</h5>
+                <ul>
+                    <li><strong>Text Files:</strong> Human-readable text (.txt, .html, .csv)</li>
+                    <li><strong>Binary Files:</strong> Machine-readable data (.exe, .jpg, .mp3)</li>
+                    <li><strong>Database Files:</strong> Structured data storage</li>
+                    <li><strong>Multimedia Files:</strong> Images, videos, audio</li>
+                </ul>
+            </div>
+
+            <h4>2. Directory Files</h4>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Contain information about other files and subdirectories</p>
+                <h5>Function:</h5>
+                <ul>
+                    <li><strong>Organization:</strong> Group related files together</li>
+                    <li><strong>Navigation:</strong> Provide hierarchical structure</li>
+                    <li><strong>Metadata Storage:</strong> Store file attributes and properties</li>
+                </ul>
+            </div>
+
+            <h4>3. Special Files</h4>
+            <div class="concept">
+                <h5>Device Files:</h5>
+                <p>Represent hardware devices as files (Unix/Linux concept)</p>
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>/dev/disk0:</strong> Hard disk</li>
+                    <li><strong>/dev/printer:</strong> Printer device</li>
+                    <li><strong>/dev/null:</strong> Special file that discards all data</li>
+                </ul>
+            </div>
+
+            <h3>File Access Methods</h3>
+
+            <h4>1. Sequential Access</h4>
+            <div class="example-detailed">
+                <h5>How Sequential Access Works:</h5>
+                <p>Data is read/written in order from beginning to end, like reading a book page by page.</p>
+
+                <h5>Cassette Tape Analogy:</h5>
+                <ul>
+                    <li><strong>Linear Access:</strong> Must go through previous songs to reach desired song</li>
+                    <li><strong>No Skipping:</strong> Cannot directly jump to middle</li>
+                    <li><strong>Simple:</strong> Easy to implement and understand</li>
+                </ul>
+
+                <h5>Best For:</h5>
+                <ul>
+                    <li><strong>Log Files:</strong> Adding new entries at end</li>
+                    <li><strong>Backup Operations:</strong> Processing all data in order</li>
+                    <li><strong>Streaming:</strong> Video/audio playback</li>
+                </ul>
+            </div>
+
+            <h4>2. Random Access (Direct Access)</h4>
+            <div class="example-detailed">
+                <h5>How Random Access Works:</h5>
+                <p>Can jump directly to any part of file without reading previous parts</p>
+
+                <h5>CD/DVD Analogy:</h5>
+                <ul>
+                    <li><strong>Direct Jump:</strong> Can skip directly to any track</li>
+                    <li><strong>Address-Based:</strong> Specify exact location to read/write</li>
+                    <li><strong>Fast Access:</strong> No need to scan through unwanted data</li>
+                </ul>
+
+                <h5>Best For:</h5>
+                <ul>
+                    <li><strong>Database Files:</strong> Finding specific records quickly</li>
+                    <li><strong>Virtual Memory:</strong> Loading specific pages on demand</li>
+                    <li><strong>Large Files:</strong> Editing specific sections without loading entire file</li>
+                </ul>
+            </div>
+
+            <h4>3. Indexed Access</h4>
+            <div class="concept">
+                <h5>How Indexed Access Works:</h5>
+                <p>Uses an index (like book's table of contents) to quickly locate data</p>
+
+                <h5>Library Card Catalog Analogy:</h5>
+                <ul>
+                    <li><strong>Index Cards:</strong> Point to location of actual books</li>
+                    <li><strong>Quick Lookup:</strong> Find book location without searching entire library</li>
+                    <li><strong>Multiple Indexes:</strong> Search by author, title, subject</li>
+                </ul>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Fast Search:</strong> Quickly locate data without full scan</li>
+                    <li><strong>Flexible Queries:</strong> Support different search criteria</li>
+                </ul>
+            </div>
+
+            <h3>File Allocation Methods</h3>
+
+            <h4>1. Contiguous Allocation</h4>
+            <div class="algorithm-steps">
+                <h5>How Contiguous Allocation Works:</h5>
+                <p>Each file occupies a set of contiguous blocks on disk, like reserving consecutive seats in a theater.</p>
+
+                <h5>Process:</h5>
+                <ol>
+                    <li><strong>File Creation:</strong> Request specific number of consecutive blocks</li>
+                    <li><strong>Directory Entry:</strong> Store starting block and file length</li>
+                    <li><strong>File Access:</strong> Calculate block addresses using start + offset</li>
+                </ol>
+
+                <h5>Parking Lot Analogy:</h5>
+                <p>Like parking a long truck - need multiple consecutive parking spaces. Easy to find the truck later (know exact location), but hard to find enough consecutive spaces in busy lot.</p>
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Contiguous Advantages</h4>
+                    <ul>
+                        <li><strong>Simple:</strong> Easy to implement and calculate addresses</li>
+                        <li><strong>Fast Access:</strong> Excellent performance for sequential access</li>
+                        <li><strong>Minimal Overhead:</strong> Only need starting address and length</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Contiguous Disadvantages</h4>
+                    <ul>
+                        <li><strong>External Fragmentation:</strong> Hard to find large contiguous space</li>
+                        <li><strong>File Size Issues:</strong> Difficult to expand files</li>
+                        <li><strong>Waste:</strong> Must allocate worst-case size upfront</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4>2. Linked Allocation</h4>
+            <div class="algorithm-steps">
+                <h5>How Linked Allocation Works:</h5>
+                <p>File blocks are linked together like a chain, where each block points to the next block.</p>
+
+                <h5>Process:</h5>
+                <ol>
+                    <li><strong>File Creation:</strong> Allocate first block</li>
+                    <li><strong>Block Linking:</strong> Each block contains pointer to next block</li>
+                    <li><strong>Directory Entry:</strong> Store pointer to first block</li>
+                    <li><strong>File Access:</strong> Follow chain of pointers to read file</li>
+                </ol>
+
+                <h5>Treasure Hunt Analogy:</h5>
+                <p>Like a treasure hunt where each clue leads to next location. Start at first clue (directory entry), follow chain until you find all treasure (file data).</p>
+            </div>
+
+            <h4>3. Indexed Allocation</h4>
+            <div class="concept">
+                <h5>How Indexed Allocation Works:</h5>
+                <p>Each file has an index block that contains pointers to all blocks belonging to that file</p>
+
+                <h5>Phone Directory Analogy:</h5>
+                <ul>
+                    <li><strong>Phone Book = Index Block:</strong> Contains addresses (pointers) of all contacts</li>
+                    <li><strong>Contacts = File Blocks:</strong> Actual data stored at different locations</li>
+                    <li><strong>Quick Access:</strong> Look up any contact directly from phone book</li>
+                </ul>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Direct Access:</strong> Can jump to any part of file quickly</li>
+                    <li><strong>No External Fragmentation:</strong> Blocks can be anywhere on disk</li>
+                    <li><strong>Dynamic Size:</strong> Files can grow easily</li>
+                </ul>
+
+                <h5>Disadvantages:</h5>
+                <ul>
+                    <li><strong>Index Overhead:</strong> Need space for index blocks</li>
+                    <li><strong>Small File Waste:</strong> Small files still need full index block</li>
+                </ul>
+            </div>
+
+            <h3>Directory Structure</h3>
+
+            <h4>1. Single-Level Directory</h4>
+            <div class="concept">
+                <h5>Structure:</h5>
+                <p>All files in one directory - no subdirectories</p>
+                <h5>Simple Desktop Analogy:</h5>
+                <p>Like having all documents scattered on your desk - everything visible but hard to organize</p>
+                <h5>Problems:</h5>
+                <ul>
+                    <li><strong>Naming Conflicts:</strong> Cannot have files with same name</li>
+                    <li><strong>Hard to Organize:</strong> No grouping of related files</li>
+                    <li><strong>Scalability:</strong> Becomes unmanageable with many files</li>
+                </ul>
+            </div>
+
+            <h4>2. Two-Level Directory</h4>
+            <div class="concept">
+                <h5>Structure:</h5>
+                <p>Separate directory for each user</p>
+                <h5>Office Building Analogy:</h5>
+                <p>Like office building where each person has their own office (directory) - no conflicts between people's files</p>
+                <h5>Benefits:</h5>
+                <ul>
+                    <li><strong>User Isolation:</strong> Each user has private file space</li>
+                    <li><strong>Same Names OK:</strong> Different users can have files with same name</li>
+                </ul>
+                <h5>Limitations:</h5>
+                <ul>
+                    <li><strong>No Subdirectories:</strong> Cannot organize files within user directory</li>
+                    <li><strong>No Sharing:</strong> Difficult for users to share files</li>
+                </ul>
+            </div>
+
+            <h4>3. Hierarchical (Tree) Directory</h4>
+            <div class="example-detailed">
+                <h4>Modern Directory Structure</h4>
+                <p>Most modern operating systems use hierarchical directory structure, like organizing files in folders within folders.</p>
+
+                <h5>File Cabinet Analogy:</h5>
+                <ul>
+                    <li><strong>Filing Cabinet = Root Directory:</strong> Main container</li>
+                    <li><strong>Drawers = Main Folders:</strong> Documents, Pictures, Programs</li>
+                    <li><strong>Folders within Drawers = Subdirectories:</strong> 2024_Taxes, Vacation_Photos</li>
+                    <li><strong>Documents = Files:</strong> Individual documents within folders</li>
+                </ul>
+
+                <h5>Path Examples:</h5>
+                <ul>
+                    <li><strong>Absolute Path:</strong> /Users/John/Documents/Projects/Report.docx</li>
+                    <li><strong>Relative Path:</strong> ../Pictures/vacation.jpg (relative to current location)</li>
+                </ul>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Natural Organization:</strong> Groups related files logically</li>
+                    <li><strong>Scalable:</strong> Can handle millions of files efficiently</li>
+                    <li><strong>Security:</strong> Can set permissions at directory level</li>
+                    <li><strong>Navigation:</strong> Easy to browse and search</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>🎯 Unit 2 Summary: Processes and File Systems</h3>
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Concept</th>
+                            <th>Remember This</th>
+                        </tr>
+                        <tr>
+                            <td>Processes</td>
+                            <td>Programs in execution with memory layout</td>
+                            <td>Process = active program using resources</td>
+                        </tr>
+                        <tr>
+                            <td>Process States</td>
+                            <td>NEW → READY → RUNNING → WAITING/TERMINATED</td>
+                            <td>Processes transition through lifecycle states</td>
+                        </tr>
+                        <tr>
+                            <td>PCB</td>
+                            <td>Process Control Block stores all process info</td>
+                            <td>Like employee record for each process</td>
+                        </tr>
+                        <tr>
+                            <td>CPU Scheduling</td>
+                            <td>FCFS, SJF, Round Robin, Priority scheduling</td>
+                            <td>Different algorithms optimize for different goals</td>
+                        </tr>
+                        <tr>
+                            <td>IPC</td>
+                            <td>Shared memory, message passing, pipes</td>
+                            <td>Processes communicate for cooperation</td>
+                        </tr>
+                        <tr>
+                            <td>Multithreading</td>
+                            <td>Many-to-One, One-to-One, Many-to-Many models</td>
+                            <td>Threads enable parallel execution within process</td>
+                        </tr>
+                        <tr>
+                            <td>File Systems</td>
+                            <td>Contiguous, Linked, Indexed allocation</td>
+                            <td>Different methods for storing files on disk</td>
+                        </tr>
+                        <tr>
+                            <td>Directory Structure</td>
+                            <td>Single-level, Two-level, Hierarchical</td>
+                            <td>Evolution from simple to organized structure</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="checklist">
+                <h4>✅ Unit 2 Learning Objectives Achieved:</h4>
+                <ul>
+                    <li>Understand process concept, memory layout, and lifecycle</li>
+                    <li>Know process states and transitions</li>
+                    <li>Comprehend Process Control Block (PCB) structure and purpose</li>
+                    <li>Master CPU scheduling algorithms and their trade-offs</li>
+                    <li>Learn inter-process communication mechanisms</li>
+                    <li>Understand multithreading models and thrashing</li>
+                    <li>Know file types and access methods</li>
+                    <li>Understand file allocation methods and directory structures</li>
+                </ul>
+            </div>
+
+            <div class="exam-tips">
+                <h4>📝 15-Mark Question Strategy for Unit 2</h4>
+                <ul>
+                    <li><strong>Process Questions:</strong> Draw state diagrams + explain transitions with examples</li>
+                    <li><strong>Scheduling Algorithm Questions:</strong> Work through numerical examples step-by-step</li>
+                    <li><strong>IPC Questions:</strong> Compare mechanisms with advantages/disadvantages</li>
+                    <li><strong>File System Questions:</strong> Draw allocation structures + explain with examples</li>
+                    <li><strong>Always Show:</strong> Calculations, diagrams, real-world applications</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

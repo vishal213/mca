@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Bayesian Learning, KNN, and Support Vector Machines</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Machine Learning</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 4: Bayesian Learning, KNN, and Support Vector Machines</h1>
+            <p class="subtitle">Probabilistic Learning and Advanced Classification Techniques</p>
+        </header>
+
+        <section id="bayesian-intro">
+            <h2>1. Introduction to Bayesian Learning</h2>
+            
+            <h3>What is Bayesian Learning?</h3>
+            <p>Bayesian learning is a probabilistic approach to machine learning based on Bayes' theorem. Instead of giving definitive answers, it provides probabilities and updates beliefs as new evidence becomes available. Think of it as learning like a detective who starts with hunches and updates theories based on new clues.</p>
+            
+            <h4>The Bayesian Mindset</h4>
+            <div class="concept">
+                <h5>Everyday Bayesian Thinking:</h5>
+                <p><strong>Scenario:</strong> You hear your car making a strange noise</p>
+                <ul>
+                    <li><strong>Prior Belief:</strong> "Based on car age and maintenance, probably 60% chance it's minor, 40% chance major problem"</li>
+                    <li><strong>New Evidence:</strong> Noise gets worse when accelerating</li>
+                    <li><strong>Updated Belief:</strong> "Now 80% chance it's major engine problem, 20% chance minor issue"</li>
+                    <li><strong>More Evidence:</strong> Mechanic says engine oil is clean and full</li>
+                    <li><strong>Final Update:</strong> "Maybe 70% transmission, 30% other major issue"</li>
+                </ul>
+                
+                <p><strong>Key Insight:</strong> Probabilities change as we gather more information - this is the essence of Bayesian learning!</p>
+            </div>
+            
+            <h4>Why Bayesian Approaches Matter</h4>
+            <div class="example-detailed">
+                <h5>Advantages of Probabilistic Thinking:</h5>
+                <ul>
+                    <li><strong>Uncertainty Quantification:</strong> "I'm 85% confident this email is spam" vs "This email is spam"</li>
+                    <li><strong>Evidence Integration:</strong> Combines multiple pieces of evidence systematically</li>
+                    <li><strong>Prior Knowledge:</strong> Incorporates existing knowledge before seeing data</li>
+                    <li><strong>Incremental Learning:</strong> Updates beliefs as new data arrives</li>
+                    <li><strong>Decision Making:</strong> Helps make optimal decisions under uncertainty</li>
+                </ul>
+                
+                <h5>Real-World Applications:</h5>
+                <ul>
+                    <li><strong>Medical Diagnosis:</strong> "Given symptoms, what's probability of each disease?"</li>
+                    <li><strong>Spam Filtering:</strong> "Based on words and sender, what's spam probability?"</li>
+                    <li><strong>Fraud Detection:</strong> "How likely is this transaction fraudulent?"</li>
+                    <li><strong>Recommendation Systems:</strong> "What's probability user will like this movie?"</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="bayes-theorem">
+            <h2>2. Bayes' Theorem</h2>
+            
+            <h3>Understanding Bayes' Theorem Intuitively</h3>
+            <p>Bayes' theorem is a mathematical formula for updating probabilities when new information becomes available. It answers the question: "If I observe event B, what's the probability that event A caused it?"</p>
+            
+            <h4>The Formula (Explained Simply)</h4>
+            <div class="concept">
+                <p><strong>Bayes' Theorem:</strong> P(A|B) = P(B|A) × P(A) / P(B)</p>
+                
+                <h5>What Each Part Means:</h5>
+                <ul>
+                    <li><strong>P(A|B):</strong> Probability of A given that B happened (what we want to find)</li>
+                    <li><strong>P(B|A):</strong> Probability of B given that A is true (likelihood)</li>
+                    <li><strong>P(A):</strong> Prior probability of A (what we believed before seeing B)</li>
+                    <li><strong>P(B):</strong> Total probability of observing B</li>
+                </ul>
+                
+                <h5>In Plain English:</h5>
+                <p><strong>Posterior = (Likelihood × Prior) / Evidence</strong></p>
+                <ul>
+                    <li><strong>Posterior:</strong> Updated belief after seeing evidence</li>
+                    <li><strong>Likelihood:</strong> How well the evidence fits our hypothesis</li>
+                    <li><strong>Prior:</strong> What we believed before seeing evidence</li>
+                    <li><strong>Evidence:</strong> Normalizing factor (total probability of seeing the evidence)</li>
+                </ul>
+            </div>
+            
+            <h4>Complete Medical Diagnosis Example</h4>
+            <div class="example-detailed">
+                <p><strong>Scenario:</strong> Patient has persistent cough. What's the probability of having lung cancer?</p>
+                
+                <h4>Given Information:</h4>
+                <ul>
+                    <li><strong>Prior:</strong> P(Lung Cancer) = 0.001 (0.1% of population has lung cancer)</li>
+                    <li><strong>Likelihood:</strong> P(Cough | Lung Cancer) = 0.9 (90% of lung cancer patients have persistent cough)</li>
+                    <li><strong>Evidence:</strong> P(Cough) = 0.05 (5% of people have persistent cough from various causes)</li>
+                </ul>
+                
+                <h4>Calculation:</h4>
+                <ul>
+                    <li>P(Lung Cancer | Cough) = P(Cough | Lung Cancer) × P(Lung Cancer) / P(Cough)</li>
+                    <li>= 0.9 × 0.001 / 0.05</li>
+                    <li>= 0.0009 / 0.05 = 0.018</li>
+                </ul>
+                
+                <p><strong>Result:</strong> Only 1.8% probability of lung cancer despite the cough!</p>
+                
+                <p><strong>Why So Low?</strong> Even though cough is common in cancer patients, lung cancer itself is rare, and cough has many other causes (cold, allergies, etc.)</p>
+                
+                <h4>Adding More Evidence:</h4>
+                <p><strong>New Information:</strong> Patient is a heavy smoker</p>
+                <ul>
+                    <li><strong>Updated Prior:</strong> P(Lung Cancer | Smoker) = 0.02 (2% for smokers)</li>
+                    <li><strong>Recalculation:</strong> P(Lung Cancer | Cough + Smoker) = 0.9 × 0.02 / 0.05 = 0.36</li>
+                    <li><strong>New Result:</strong> 36% probability - much higher!</li>
+                </ul>
+                
+                <p><strong>Clinical Decision:</strong> 36% is high enough to warrant immediate medical investigation</p>
+            </div>
+            
+            <h3>Bayesian Reasoning in Everyday Life</h3>
+            <div class="example-detailed">
+                <h4>Example: Predicting Rain</h4>
+                <p><strong>Morning Decision:</strong> Should I carry an umbrella?</p>
+                
+                <p><strong>Prior Knowledge:</strong> It rains 20% of days in your city</p>
+                <p><strong>New Evidence:</strong> Weather app says 70% chance of rain</p>
+                
+                <p><strong>Bayesian Update:</strong></p>
+                <ul>
+                    <li>Start with 20% base rate</li>
+                    <li>Weather app is usually 80% accurate</li>
+                    <li>When app says rain, it actually rains 85% of the time</li>
+                    <li><strong>Decision:</strong> Carry umbrella!</li>
+                </ul>
+                
+                <h4>Example: Email Spam Detection</h4>
+                <p><strong>Prior:</strong> 30% of emails are spam</p>
+                <p><strong>Evidence:</strong> Email contains word "FREE"</p>
+                <ul>
+                    <li>P(Contains "FREE" | Spam) = 0.7 (70% of spam emails contain "FREE")</li>
+                    <li>P(Contains "FREE" | Legitimate) = 0.05 (5% of legitimate emails contain "FREE")</li>
+                    <li>P(Contains "FREE") = 0.7×0.3 + 0.05×0.7 = 0.245</li>
+                </ul>
+                <p><strong>Calculation:</strong> P(Spam | Contains "FREE") = 0.7 × 0.3 / 0.245 = 0.86</p>
+                <p><strong>Result:</strong> 86% probability of spam - likely spam!</p>
+            </div>
+        </section>
+
+        <section id="naive-bayes">
+            <h2>3. Naive Bayes Classifiers</h2>
+            
+            <h3>What is "Naive" About Naive Bayes?</h3>
+            <p>Naive Bayes makes a "naive" assumption that all features are independent of each other. This assumption is often wrong in real life, but surprisingly, the algorithm still works well in many practical applications.</p>
+            
+            <h4>The Independence Assumption</h4>
+            <div class="concept">
+                <h5>Example of the "Naive" Assumption:</h5>
+                <p><strong>Email Spam Detection Features:</strong></p>
+                <ul>
+                    <li>Contains word "FREE"</li>
+                    <li>Contains word "MONEY"</li>
+                    <li>Has many exclamation marks</li>
+                    <li>Sender not in address book</li>
+                </ul>
+                
+                <p><strong>Reality:</strong> These features are correlated - emails with "FREE" often also have "MONEY" and exclamation marks</p>
+                
+                <p><strong>Naive Bayes Assumption:</strong> Treats each feature as completely independent</p>
+                
+                <p><strong>Why It Still Works:</strong> Even with wrong assumptions, it often makes correct classifications because the overall pattern recognition is robust</p>
+            </div>
+            
+            <h3>Naive Bayes Algorithm</h3>
+            <div class="algorithm-steps">
+                <h4>Training Phase:</h4>
+                <ol>
+                    <li><strong>Calculate prior probabilities:</strong> P(Class) for each class</li>
+                    <li><strong>Calculate likelihoods:</strong> P(Feature | Class) for each feature-class combination</li>
+                    <li><strong>Store these probabilities</strong> for use in prediction</li>
+                </ol>
+                
+                <h4>Prediction Phase:</h4>
+                <ol>
+                    <li><strong>For each possible class:</strong> Calculate P(Class | All Features)</li>
+                    <li><strong>Use independence assumption:</strong> P(Features | Class) = P(F₁|Class) × P(F₂|Class) × ...</li>
+                    <li><strong>Apply Bayes' theorem:</strong> P(Class | Features) ∝ P(Features | Class) × P(Class)</li>
+                    <li><strong>Choose class</strong> with highest probability</li>
+                </ol>
+            </div>
+            
+            <h3>Complete Worked Example: Text Classification</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Classify news articles as "Sports" or "Politics" based on word content</p>
+                
+                <h4>Training Data:</h4>
+                <table class="data-table">
+                    <tr><th>Article</th><th>Contains "game"</th><th>Contains "team"</th><th>Contains "election"</th><th>Class</th></tr>
+                    <tr><td>1</td><td>Yes</td><td>Yes</td><td>No</td><td>Sports</td></tr>
+                    <tr><td>2</td><td>Yes</td><td>No</td><td>No</td><td>Sports</td></tr>
+                    <tr><td>3</td><td>No</td><td>Yes</td><td>No</td><td>Sports</td></tr>
+                    <tr><td>4</td><td>No</td><td>No</td><td>Yes</td><td>Politics</td></tr>
+                    <tr><td>5</td><td>No</td><td>No</td><td>Yes</td><td>Politics</td></tr>
+                    <tr><td>6</td><td>Yes</td><td>No</td><td>Yes</td><td>Politics</td></tr>
+                </table>
+                
+                <h4>Step 1: Calculate Prior Probabilities</h4>
+                <ul>
+                    <li>P(Sports) = 3/6 = 0.5</li>
+                    <li>P(Politics) = 3/6 = 0.5</li>
+                </ul>
+                
+                <h4>Step 2: Calculate Likelihoods</h4>
+                <p><strong>For Sports Articles:</strong></p>
+                <ul>
+                    <li>P("game" | Sports) = 2/3 = 0.67 (2 out of 3 sports articles contain "game")</li>
+                    <li>P("team" | Sports) = 2/3 = 0.67</li>
+                    <li>P("election" | Sports) = 0/3 = 0.0</li>
+                </ul>
+                
+                <p><strong>For Politics Articles:</strong></p>
+                <ul>
+                    <li>P("game" | Politics) = 1/3 = 0.33</li>
+                    <li>P("team" | Politics) = 0/3 = 0.0</li>
+                    <li>P("election" | Politics) = 3/3 = 1.0</li>
+                </ul>
+                
+                <h4>Step 3: Classify New Article</h4>
+                <p><strong>New Article:</strong> Contains "game"=Yes, "team"=No, "election"=No</p>
+                
+                <p><strong>Calculate P(Sports | Features):</strong></p>
+                <ul>
+                    <li>P(Features | Sports) = P("game"=Yes | Sports) × P("team"=No | Sports) × P("election"=No | Sports)</li>
+                    <li>= 0.67 × (1-0.67) × (1-0.0) = 0.67 × 0.33 × 1.0 = 0.22</li>
+                    <li>P(Sports | Features) ∝ 0.22 × 0.5 = 0.11</li>
+                </ul>
+                
+                <p><strong>Calculate P(Politics | Features):</strong></p>
+                <ul>
+                    <li>P(Features | Politics) = 0.33 × (1-0.0) × (1-1.0) = 0.33 × 1.0 × 0.0 = 0</li>
+                    <li>P(Politics | Features) ∝ 0 × 0.5 = 0</li>
+                </ul>
+                
+                <p><strong>Decision:</strong> Since 0.11 > 0, classify as Sports article!</p>
+            </div>
+            
+            <h3>Handling the Zero Probability Problem</h3>
+            <div class="concept">
+                <h4>The Problem:</h4>
+                <p>In our example, P("election" | Politics) = 0 made the entire probability 0. This happens when training data doesn't contain certain feature-class combinations.</p>
+                
+                <h4>Solution: Laplace Smoothing</h4>
+                <p>Add 1 to all counts to avoid zero probabilities:</p>
+                <ul>
+                    <li><strong>Original:</strong> P("team" | Politics) = 0/3 = 0</li>
+                    <li><strong>Smoothed:</strong> P("team" | Politics) = (0+1)/(3+2) = 1/5 = 0.2</li>
+                    <li><strong>Rationale:</strong> Assume we could observe at least one example of every possible combination</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="knn">
+            <h2>4. K-Nearest Neighbor Learning</h2>
+            
+            <h3>Introduction to Instance-Based Learning</h3>
+            <p>K-Nearest Neighbor (KNN) is called "lazy learning" because it doesn't build a model during training. Instead, it stores all training examples and makes predictions by finding the most similar examples when needed.</p>
+            
+            <h4>The Core Idea: Learning by Analogy</h4>
+            <div class="concept">
+                <h5>Human Analogy:</h5>
+                <p><strong>Scenario:</strong> You're choosing a restaurant in a new city</p>
+                <ul>
+                    <li><strong>KNN Approach:</strong> "Show me the 5 most similar restaurants to ones I liked before"</li>
+                    <li><strong>Similarity Factors:</strong> Cuisine type, price range, atmosphere, location</li>
+                    <li><strong>Decision:</strong> If 4 out of 5 similar restaurants were excellent, probably choose this one</li>
+                </ul>
+                
+                <h5>Medical Analogy:</h5>
+                <p><strong>Diagnosis by Similar Cases:</strong></p>
+                <ul>
+                    <li>Find 10 patients most similar to current patient</li>
+                    <li>Look at their diagnoses and outcomes</li>
+                    <li>If 8 out of 10 had condition X, current patient likely has condition X</li>
+                </ul>
+            </div>
+            
+            <h3>KNN Algorithm (Detailed)</h3>
+            <div class="algorithm-steps">
+                <h4>Training Phase (Almost Nothing!):</h4>
+                <ol>
+                    <li><strong>Store all training examples</strong> with their labels</li>
+                    <li><strong>Choose value of k</strong> (number of neighbors to consider)</li>
+                    <li><strong>Choose distance measure</strong> (usually Euclidean distance)</li>
+                </ol>
+                
+                <h4>Prediction Phase (Where the Work Happens):</h4>
+                <ol>
+                    <li><strong>Calculate distance</strong> from new example to all training examples</li>
+                    <li><strong>Sort examples</strong> by distance (closest first)</li>
+                    <li><strong>Select k closest</strong> neighbors</li>
+                    <li><strong>For classification:</strong> Vote - most common class among k neighbors wins</li>
+                    <li><strong>For regression:</strong> Average the target values of k neighbors</li>
+                </ol>
+            </div>
+            
+            <h3>Complete KNN Example: House Price Prediction</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Predict price of house based on size and location</p>
+                
+                <h4>Training Data:</h4>
+                <table class="data-table">
+                    <tr><th>House ID</th><th>Size (sq ft)</th><th>Distance to City (miles)</th><th>Price ($K)</th></tr>
+                    <tr><td>A</td><td>1200</td><td>5</td><td>300</td></tr>
+                    <tr><td>B</td><td>1500</td><td>8</td><td>350</td></tr>
+                    <tr><td>C</td><td>2000</td><td>3</td><td>500</td></tr>
+                    <tr><td>D</td><td>1800</td><td>12</td><td>400</td></tr>
+                    <tr><td>E</td><td>1000</td><td>15</td><td>250</td></tr>
+                    <tr><td>F</td><td>2200</td><td>2</td><td>550</td></tr>
+                </table>
+                
+                <h4>New House to Predict:</h4>
+                <p><strong>Features:</strong> 1600 sq ft, 6 miles from city</p>
+                
+                <h4>Step 1: Calculate Distances (k=3)</h4>
+                <p><strong>Using Euclidean Distance:</strong> √[(size₁-size₂)² + (distance₁-distance₂)²]</p>
+                
+                <ul>
+                    <li><strong>Distance to A:</strong> √[(1600-1200)² + (6-5)²] = √[160,000 + 1] = 400.0</li>
+                    <li><strong>Distance to B:</strong> √[(1600-1500)² + (6-8)²] = √[10,000 + 4] = 100.02</li>
+                    <li><strong>Distance to C:</strong> √[(1600-2000)² + (6-3)²] = √[160,000 + 9] = 400.01</li>
+                    <li><strong>Distance to D:</strong> √[(1600-1800)² + (6-12)²] = √[40,000 + 36] = 200.09</li>
+                    <li><strong>Distance to E:</strong> √[(1600-1000)² + (6-15)²] = √[360,000 + 81] = 600.07</li>
+                    <li><strong>Distance to F:</strong> √[(1600-2200)² + (6-2)²] = √[360,000 + 16] = 600.01</li>
+                </ul>
+                
+                <h4>Step 2: Select k=3 Nearest Neighbors</h4>
+                <ul>
+                    <li><strong>Closest:</strong> House B (distance: 100.02, price: $350K)</li>
+                    <li><strong>Second:</strong> House D (distance: 200.09, price: $400K)</li>
+                    <li><strong>Third:</strong> House A (distance: 400.0, price: $300K)</li>
+                </ul>
+                
+                <h4>Step 3: Make Prediction</h4>
+                <p><strong>Simple Average:</strong> (350 + 400 + 300) / 3 = $350K</p>
+                
+                <p><strong>Weighted Average (by inverse distance):</strong></p>
+                <ul>
+                    <li>Weight B: 1/100.02 = 0.010</li>
+                    <li>Weight D: 1/200.09 = 0.005</li>
+                    <li>Weight A: 1/400.0 = 0.0025</li>
+                    <li>Total weight: 0.0175</li>
+                    <li>Weighted prediction: (350×0.010 + 400×0.005 + 300×0.0025) / 0.0175 = $360K</li>
+                </ul>
+                
+                <p><strong>Final Prediction:</strong> $360K (weighted average gives more influence to closer neighbors)</p>
+            </div>
+            
+            <h3>Choosing the Right Value of k</h3>
+            <div class="concept">
+                <h4>Effect of Different k Values:</h4>
+                <ul>
+                    <li><strong>k = 1:</strong> Very sensitive to outliers, may overfit</li>
+                    <li><strong>k = 3:</strong> Good balance, reduces noise while maintaining specificity</li>
+                    <li><strong>k = 10:</strong> Smoother predictions, but may lose important local patterns</li>
+                    <li><strong>k = all data:</strong> Always predicts the most common class (underfitting)</li>
+                </ul>
+                
+                <h4>Rules of Thumb for Choosing k:</h4>
+                <ul>
+                    <li><strong>Start with k = √(number of training examples)</strong></li>
+                    <li><strong>Use odd numbers</strong> to avoid ties in classification</li>
+                    <li><strong>Cross-validation:</strong> Test different k values and choose best performing</li>
+                    <li><strong>Domain knowledge:</strong> Consider how many similar examples you need for confidence</li>
+                </ul>
+            </div>
+            
+            <h4>KNN Applications and Characteristics</h4>
+            <div class="ml-type">
+                <h5>Excellent Applications:</h5>
+                <ul>
+                    <li><strong>Recommendation Systems:</strong> "Users similar to you also liked..."</li>
+                    <li><strong>Medical Diagnosis:</strong> Find patients with similar symptoms and test results</li>
+                    <li><strong>Image Recognition:</strong> Find images with similar visual features</li>
+                    <li><strong>Anomaly Detection:</strong> Points with no close neighbors are outliers</li>
+                </ul>
+                
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Simple to understand:</strong> Intuitive "similarity" concept</li>
+                    <li><strong>No training period:</strong> Ready to make predictions immediately</li>
+                    <li><strong>Works with any distance measure:</strong> Can customize similarity definition</li>
+                    <li><strong>Naturally handles multi-class problems:</strong> No modification needed</li>
+                </ul>
+                
+                <h5>Disadvantages:</h5>
+                <ul>
+                    <li><strong>Computationally expensive:</strong> Must calculate distance to all training examples</li>
+                    <li><strong>Memory intensive:</strong> Must store entire training dataset</li>
+                    <li><strong>Sensitive to irrelevant features:</strong> All features affect distance calculation equally</li>
+                    <li><strong>Poor with high dimensions:</strong> Curse of dimensionality makes all points seem equally distant</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="svm">
+            <h2>5. Support Vector Machines (SVM)</h2>
+            
+            <h3>Introduction to Support Vector Machines</h3>
+            <p>Support Vector Machine is a powerful classification algorithm that finds the optimal boundary between different classes. Think of it as drawing the "best possible line" to separate two groups, where "best" means maximum margin between the groups.</p>
+            
+            <h4>The Core Concept: Maximum Margin</h4>
+            <div class="concept">
+                <h5>Margin Intuition:</h5>
+                <p><strong>Analogy:</strong> Imagine you're dividing a playground between two schools. You want to draw a line that gives the maximum "buffer zone" between the closest students from each school.</p>
+                
+                <ul>
+                    <li><strong>Bad Separation:</strong> Line very close to one group - small disturbance could cause misclassification</li>
+                    <li><strong>Good Separation:</strong> Line with large margins on both sides - robust against small changes</li>
+                    <li><strong>SVM Goal:</strong> Find the line with maximum margin (maximum safety buffer)</li>
+                </ul>
+            </div>
+            
+            <h4>Visual Understanding of SVM</h4>
+            <div class="visual-diagram">
+                <h5>Optimal Separation:</h5>
+                <div class="diagram-text">
+                    <pre>
+    Poor Separation:              Good Separation:             SVM Optimal:
+    
+    ○ ○ ○ |                      ○ ○     |                    ○ ○   |
+      ○   |                        ○     |                      ○   |
+    ○     | ● ●                  ○       |     ● ●            ○     |   ● ●
+          | ●                            |   ●                      |  ●
+    ○     |   ●                  ○       |     ●              ○     |   ●
+          |                              |                          |
+    
+    Line too close to ○           Better margin             Maximum margin
+    Not robust                   More robust               Most robust
+    
+    Support Vectors: ○ ○ and ● ● closest to decision boundary
+    These points determine the optimal line position
+                    </pre>
+                </div>
+            </div>
+            
+            <h3>Mathematical Foundation (Simplified)</h3>
+            <div class="concept">
+                <h4>Decision Boundary:</h4>
+                <p>SVM finds a hyperplane (line in 2D, plane in 3D, etc.) that separates classes with maximum margin.</p>
+                
+                <h5>Key Mathematical Concepts:</h5>
+                <ul>
+                    <li><strong>Decision Function:</strong> f(x) = w·x + b</li>
+                    <li><strong>Classification Rule:</strong> If f(x) > 0, class +1; if f(x) < 0, class -1</li>
+                    <li><strong>Margin:</strong> Distance between decision boundary and closest points from each class</li>
+                    <li><strong>Support Vectors:</strong> Training points closest to decision boundary (they "support" the decision)</li>
+                </ul>
+                
+                <p><strong>Why Support Vectors Matter:</strong> Only these closest points determine the decision boundary. You could remove all other points and get the same result!</p>
+            </div>
+            
+            <h3>Complete SVM Example: Customer Credit Rating</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Classify customers as "Good Credit" vs "Bad Credit" based on income and debt ratio</p>
+                
+                <h4>Training Data:</h4>
+                <table class="data-table">
+                    <tr><th>Customer</th><th>Income ($K)</th><th>Debt Ratio (%)</th><th>Credit Rating</th></tr>
+                    <tr><td>A</td><td>80</td><td>20</td><td>Good</td></tr>
+                    <tr><td>B</td><td>60</td><td>40</td><td>Good</td></tr>
+                    <tr><td>C</td><td>100</td><td>10</td><td>Good</td></tr>
+                    <tr><td>D</td><td>40</td><td>60</td><td>Bad</td></tr>
+                    <tr><td>E</td><td>30</td><td>80</td><td>Bad</td></tr>
+                    <tr><td>F</td><td>50</td><td>70</td><td>Bad</td></tr>
+                </table>
+                
+                <h4>SVM Process:</h4>
+                <ul>
+                    <li><strong>Data Visualization:</strong> Plot points on Income vs Debt Ratio graph</li>
+                    <li><strong>Pattern Recognition:</strong> Good credit customers generally have high income, low debt ratio</li>
+                    <li><strong>Boundary Search:</strong> Find line that separates groups with maximum margin</li>
+                    <li><strong>Support Vector Identification:</strong> Customer B (60, 40) and Customer F (50, 70) are closest to boundary</li>
+                    <li><strong>Decision Rule:</strong> New customer classification depends on which side of line they fall</li>
+                </ul>
+                
+                <h4>New Customer Prediction:</h4>
+                <p><strong>New Customer:</strong> Income $70K, Debt Ratio 35%</p>
+                <ul>
+                    <li><strong>Position:</strong> Plot point on graph</li>
+                    <li><strong>Decision:</strong> Point falls on "Good Credit" side of optimal boundary</li>
+                    <li><strong>Confidence:</strong> Distance from boundary indicates confidence level</li>
+                </ul>
+            </div>
+            
+            <h3>Handling Non-Linear Problems with Kernels</h3>
+            
+            <h4>The Kernel Trick</h4>
+            <p>When data isn't linearly separable, SVM uses "kernels" to transform the problem into a higher-dimensional space where it becomes linearly separable.</p>
+            
+            <div class="concept">
+                <h5>Simple Kernel Example:</h5>
+                <p><strong>Problem:</strong> Classify points inside vs outside a circle</p>
+                
+                <p><strong>Original 2D Space:</strong> No straight line can separate circular pattern</p>
+                <p><strong>Kernel Transformation:</strong> Map to 3D space where x₃ = x₁² + x₂²</p>
+                <p><strong>Result:</strong> In 3D space, a plane can separate the data perfectly!</p>
+                
+                <h5>Common Kernels:</h5>
+                <ul>
+                    <li><strong>Linear Kernel:</strong> No transformation (for linearly separable data)</li>
+                    <li><strong>Polynomial Kernel:</strong> Creates curved decision boundaries</li>
+                    <li><strong>RBF (Radial Basis Function):</strong> Creates complex, localized decision regions</li>
+                    <li><strong>Sigmoid Kernel:</strong> Neural network-like transformations</li>
+                </ul>
+            </div>
+            
+            <h4>Kernel Example: Social Media User Classification</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Classify social media users as "Influencer" vs "Regular User"</p>
+                
+                <p><strong>Features:</strong> Number of followers, number of posts per week</p>
+                
+                <h4>Linear SVM Limitation:</h4>
+                <ul>
+                    <li><strong>Issue:</strong> Some users with moderate followers but very high posting frequency are influencers</li>
+                    <li><strong>Issue:</strong> Some users with many followers but low posting are regular users</li>
+                    <li><strong>Problem:</strong> No straight line can separate these complex patterns</li>
+                </ul>
+                
+                <h4>Kernel Solution:</h4>
+                <ul>
+                    <li><strong>RBF Kernel:</strong> Creates circular decision boundaries around influencer clusters</li>
+                    <li><strong>Result:</strong> Can identify multiple types of influencers:</li>
+                    <ul>
+                        <li>"High follower, moderate posting" influencers</li>
+                        <li>"Moderate follower, high engagement" influencers</li>
+                        <li>"Niche expert" influencers with specific audience</li>
+                    </ul>
+                    <li><strong>Performance:</strong> 95% accuracy vs 75% with linear boundary</li>
+                </ul>
+            </div>
+            
+            <h3>SVM Extensions and Advanced Features</h3>
+            
+            <h4>Soft Margin SVM</h4>
+            <div class="concept">
+                <h5>The Problem with Hard Margins:</h5>
+                <p>Real data often has some misclassified points (outliers). Hard margin SVM fails if data isn't perfectly separable.</p>
+                
+                <h5>Soft Margin Solution:</h5>
+                <ul>
+                    <li><strong>Allow Some Errors:</strong> Permit some points to cross the margin or even be misclassified</li>
+                    <li><strong>Penalty Parameter (C):</strong> Controls trade-off between margin width and classification errors</li>
+                    <li><strong>High C:</strong> Fewer errors allowed, narrower margin (risk of overfitting)</li>
+                    <li><strong>Low C:</strong> More errors allowed, wider margin (more generalization)</li>
+                </ul>
+            </div>
+            
+            <h4>Multi-Class SVM</h4>
+            <div class="example-detailed">
+                <p><strong>Challenge:</strong> SVM naturally handles binary classification. How to handle multiple classes?</p>
+                
+                <h5>One-vs-All Strategy:</h5>
+                <ul>
+                    <li><strong>Problem:</strong> Classify images as Cat, Dog, or Bird</li>
+                    <li><strong>Solution:</strong> Train 3 binary SVMs:</li>
+                    <ul>
+                        <li>SVM 1: Cat vs (Dog + Bird)</li>
+                        <li>SVM 2: Dog vs (Cat + Bird)</li>
+                        <li>SVM 3: Bird vs (Cat + Dog)</li>
+                    </ul>
+                    <li><strong>Prediction:</strong> Run all 3 SVMs, choose class with highest confidence score</li>
+                </ul>
+                
+                <h5>One-vs-One Strategy:</h5>
+                <ul>
+                    <li><strong>Alternative:</strong> Train SVM for each pair of classes:</li>
+                    <ul>
+                        <li>SVM 1: Cat vs Dog</li>
+                        <li>SVM 2: Cat vs Bird</li>
+                        <li>SVM 3: Dog vs Bird</li>
+                    </ul>
+                    <li><strong>Prediction:</strong> Voting system - class winning most pairwise comparisons wins</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="algorithm-comparison">
+            <h2>6. Comparing All Algorithms</h2>
+            
+            <h3>Comprehensive Algorithm Comparison</h3>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr><th>Algorithm</th><th>Learning Type</th><th>Strengths</th><th>Weaknesses</th><th>Best Use Cases</th></tr>
+                    <tr>
+                        <td><strong>Naive Bayes</strong></td>
+                        <td>Probabilistic</td>
+                        <td>Fast, handles missing data, probabilistic output</td>
+                        <td>Strong independence assumption</td>
+                        <td>Text classification, spam detection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>KNN</strong></td>
+                        <td>Instance-based</td>
+                        <td>Simple, no assumptions, naturally multi-class</td>
+                        <td>Slow prediction, memory intensive</td>
+                        <td>Recommendation systems, local patterns</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SVM</strong></td>
+                        <td>Margin-based</td>
+                        <td>Robust, kernel flexibility, good generalization</td>
+                        <td>Hard to interpret, sensitive to feature scaling</td>
+                        <td>High-dimensional data, complex boundaries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decision Trees</strong></td>
+                        <td>Rule-based</td>
+                        <td>Highly interpretable, handles mixed data</td>
+                        <td>Prone to overfitting, unstable</td>
+                        <td>Medical diagnosis, rule discovery</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neural Networks</strong></td>
+                        <td>Connection-based</td>
+                        <td>Universal approximator, automatic feature learning</td>
+                        <td>Black box, needs large data, computationally intensive</td>
+                        <td>Image recognition, complex patterns</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>Algorithm Selection Guide</h3>
+            <div class="usage-guidelines">
+                <h4>Choose Based on Your Priorities:</h4>
+                
+                <h5>If You Need Speed:</h5>
+                <ul>
+                    <li><strong>Training Speed:</strong> Naive Bayes > KNN > Decision Trees > SVM > Neural Networks</li>
+                    <li><strong>Prediction Speed:</strong> Decision Trees > Naive Bayes > SVM > Neural Networks > KNN</li>
+                </ul>
+                
+                <h5>If You Need Interpretability:</h5>
+                <ul>
+                    <li><strong>Most Interpretable:</strong> Decision Trees (clear rules)</li>
+                    <li><strong>Moderately Interpretable:</strong> Naive Bayes (probabilities), KNN (similar examples)</li>
+                    <li><strong>Least Interpretable:</strong> SVM (complex boundaries), Neural Networks (black box)</li>
+                </ul>
+                
+                <h5>If You Have Limited Data:</h5>
+                <ul>
+                    <li><strong>Good:</strong> Naive Bayes, KNN, SVM</li>
+                    <li><strong>Problematic:</strong> Neural Networks (need thousands+ examples)</li>
+                </ul>
+                
+                <h5>If You Have Text Data:</h5>
+                <ul>
+                    <li><strong>Excellent:</strong> Naive Bayes (independence assumption works well for text)</li>
+                    <li><strong>Good:</strong> SVM (handles high-dimensional sparse features)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-prep-unit4">
+            <h2>7. Exam Preparation for Unit 4</h2>
+            
+            <h3>Key Concepts Mastery</h3>
+            <div class="exam-tips">
+                <h4>Bayesian Learning:</h4>
+                <ul>
+                    <li><strong>Bayes' Theorem:</strong> P(A|B) = P(B|A) × P(A) / P(B)</li>
+                    <li><strong>Components:</strong> Prior, likelihood, evidence, posterior</li>
+                    <li><strong>Naive Bayes:</strong> Assumes feature independence, works well despite "naive" assumption</li>
+                    <li><strong>Applications:</strong> Text classification, medical diagnosis, spam detection</li>
+                </ul>
+                
+                <h4>K-Nearest Neighbor:</h4>
+                <ul>
+                    <li><strong>Principle:</strong> Classify based on majority vote of k closest training examples</li>
+                    <li><strong>Distance Measures:</strong> Euclidean distance most common</li>
+                    <li><strong>Parameter k:</strong> Odd numbers preferred, √n rule of thumb</li>
+                    <li><strong>Characteristics:</strong> Lazy learning, instance-based, no explicit model</li>
+                </ul>
+                
+                <h4>Support Vector Machines:</h4>
+                <ul>
+                    <li><strong>Goal:</strong> Find maximum margin hyperplane separating classes</li>
+                    <li><strong>Support Vectors:</strong> Training points closest to decision boundary</li>
+                    <li><strong>Kernels:</strong> Transform non-linearly separable data to higher dimensions</li>
+                    <li><strong>Soft Margin:</strong> Allow some misclassification for better generalization</li>
+                </ul>
+            </div>
+            
+            <h3>Sample 15-Mark Questions and Model Answers</h3>
+            
+            <h4>Question 1: "Explain Naive Bayes classifier with Bayes' theorem. Solve a classification problem."</h4>
+            <div class="example-detailed">
+                <p><strong>[Bayes' Theorem - 4 marks]</strong> "Bayes' theorem calculates posterior probability P(Class|Features) = P(Features|Class) × P(Class) / P(Features). Updates prior beliefs with new evidence. Components: prior P(Class), likelihood P(Features|Class), evidence P(Features), posterior P(Class|Features)."</p>
+                
+                <p><strong>[Naive Bayes Algorithm - 5 marks]</strong> "Naive Bayes assumes feature independence: P(F₁,F₂|Class) = P(F₁|Class) × P(F₂|Class). Training: calculate prior probabilities and feature likelihoods. Prediction: compute posterior for each class, choose highest. 'Naive' assumption often violated but algorithm still effective."</p>
+                
+                <p><strong>[Example - 4 marks]</strong> "Email spam: P(Spam)=0.3, word 'FREE' appears in 70% spam, 5% legitimate emails. New email contains 'FREE': P(Spam|'FREE') = 0.7×0.3/0.245 = 0.86. Classify as spam."</p>
+                
+                <p><strong>[Applications - 2 marks]</strong> "Text classification, medical diagnosis, sentiment analysis. Fast training/prediction, handles missing data, provides probability estimates."</p>
+            </div>
+            
+            <h4>Question 2: "Compare KNN and SVM algorithms. When should each be used?"</h4>
+            <div class="example-detailed">
+                <p><strong>[KNN Description - 4 marks]</strong> "KNN is lazy learning algorithm storing all training data. Prediction: find k nearest neighbors, classify by majority vote. No explicit model building. Distance-based similarity using Euclidean or other metrics."</p>
+                
+                <p><strong>[SVM Description - 4 marks]</strong> "SVM finds optimal hyperplane with maximum margin between classes. Uses support vectors (closest points) to define boundary. Kernels enable non-linear classification by mapping to higher dimensions."</p>
+                
+                <p><strong>[Comparison - 4 marks]</strong> "KNN: simple, no training time, good for local patterns, but slow prediction and memory intensive. SVM: robust generalization, kernel flexibility, but complex interpretation and sensitive to scaling."</p>
+                
+                <p><strong>[Usage Guidelines - 3 marks]</strong> "Use KNN for: recommendation systems, irregular decision boundaries, when interpretability through examples matters. Use SVM for: high-dimensional data, when robust generalization needed, complex non-linear patterns with appropriate kernels."</p>
+            </div>
+            
+            <h3>Problem-Solving Strategies</h3>
+            <div class="concept">
+                <h4>For Numerical Calculations:</h4>
+                <ul>
+                    <li><strong>Bayes' Theorem:</strong> Always identify prior, likelihood, and evidence clearly</li>
+                    <li><strong>KNN Distance:</strong> Show distance calculation formula and work step-by-step</li>
+                    <li><strong>Probability Chains:</strong> Break complex calculations into simple steps</li>
+                </ul>
+                
+                <h4>For Algorithm Explanations:</h4>
+                <ul>
+                    <li><strong>Start with intuition</strong> before diving into technical details</li>
+                    <li><strong>Use concrete examples</strong> throughout explanation</li>
+                    <li><strong>Compare with simpler methods</strong> to highlight advantages</li>
+                    <li><strong>Mention practical applications</strong> to show real-world relevance</li>
+                </ul>
+            </div>
+            
+            <h3>Practice Problems</h3>
+            <div class="concept">
+                <h4>Try These Calculations:</h4>
+                <ol>
+                    <li><strong>Bayes' Theorem:</strong> Disease affects 1% of population. Test is 99% accurate. You test positive. What's probability you have disease?</li>
+                    <li><strong>Naive Bayes:</strong> Classify document as Sports/Politics based on words "game", "vote", "player"</li>
+                    <li><strong>KNN:</strong> Given 5 training points, classify new point using k=3</li>
+                    <li><strong>Conceptual:</strong> Explain why SVM uses only support vectors and ignores other training points</li>
+                </ol>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 4 Quick Reference</h3>
+                <table class="summary-table">
+                    <tr><th>Algorithm</th><th>Core Principle</th><th>Key Advantage</th><th>Best Application</th></tr>
+                    <tr>
+                        <td><strong>Naive Bayes</strong></td>
+                        <td>Probabilistic classification using independence assumption</td>
+                        <td>Fast, probabilistic output</td>
+                        <td>Text classification, spam detection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>K-Nearest Neighbor</strong></td>
+                        <td>Classify by similarity to closest examples</td>
+                        <td>Simple, no assumptions</td>
+                        <td>Recommendation systems, local patterns</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Support Vector Machine</strong></td>
+                        <td>Maximum margin separation with kernel flexibility</td>
+                        <td>Robust generalization</td>
+                        <td>High-dimensional data, complex boundaries</td>
+                    </tr>
+                </table>
+                
+                <div class="key-formulas">
+                    <h4>Essential Formulas:</h4>
+                    <ul>
+                        <li><strong>Bayes' Theorem:</strong> P(A|B) = P(B|A) × P(A) / P(B)</li>
+                        <li><strong>KNN Distance:</strong> d = √Σ(xᵢ - yᵢ)²</li>
+                        <li><strong>SVM Decision:</strong> f(x) = sign(w·x + b)</li>
+                        <li><strong>Naive Bayes:</strong> P(C|F₁,F₂,...) ∝ P(C) × ∏P(Fᵢ|C)</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keyTerms = document.querySelectorAll('strong');
+            keyTerms.forEach(term => {
+                term.addEventListener('click', function() {
+                    this.style.backgroundColor = this.style.backgroundColor ? '' : '#ffeb3b';
+                });
+            });
+            
+            const printButton = document.createElement('button');
+            printButton.textContent = 'Print Study Guide';
+            printButton.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 10px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+        });
+    </script>
+</body>
+</html>

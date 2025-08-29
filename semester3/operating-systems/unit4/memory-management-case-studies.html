@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Memory Management and Case Studies</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Operating Systems</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 4: Memory Management and Operating System Case Studies</h1>
+            <p class="subtitle">Memory Organization, Virtual Memory, and Comparative Analysis</p>
+        </header>
+
+        <section id="memory-basics">
+            <h2>1. Memory Management Basics</h2>
+            
+            <h3>Why is Memory Management Important?</h3>
+            <p>Memory management is like managing seating in a busy restaurant. You need to seat customers (processes) efficiently, handle waiting lists when full, and clean tables when customers leave. Poor management leads to wasted space and unhappy customers.</p>
+
+            <div class="concept">
+                <h4>Memory Management Goals:</h4>
+                <ul>
+                    <li><strong>Efficient Utilization:</strong> Use available memory space effectively</li>
+                    <li><strong>Fast Access:</strong> Provide quick access to stored data</li>
+                    <li><strong>Protection:</strong> Prevent processes from interfering with each other's memory</li>
+                    <li><strong>Sharing:</strong> Allow safe sharing of memory when beneficial</li>
+                    <li><strong>Transparency:</strong> Hide complexity from programs</li>
+                </ul>
+            </div>
+
+            <h3>Basic Memory Hardware</h3>
+            <p>Understanding memory hardware helps explain why certain memory management techniques are needed.</p>
+
+            <div class="visual-diagram">
+                <h4>Memory Hierarchy (Fast to Slow)</h4>
+                <div class="diagram-text">
+                    <pre>
+        ┌─────────────────┐  ←── CPU Registers (fastest, smallest)
+        │   CPU Registers │      - nanosecond access
+        └─────────────────┘      - store currently used values
+               │
+        ┌─────────────────┐  ←── Cache Memory (very fast, small)
+        │  Cache Memory   │      - few nanoseconds access
+        │   L1, L2, L3    │      - store frequently used data
+        └─────────────────┘
+               │
+        ┌─────────────────┐  ←── Main Memory/RAM (fast, medium)
+        │   Main Memory   │      - microseconds access
+        │     (RAM)       │      - store currently running programs
+        └─────────────────┘
+               │
+        ┌─────────────────┐  ←── Secondary Storage (slow, large)
+        │ Secondary Store │      - milliseconds access
+        │  (Hard Disk)    │      - store all programs and data
+        └─────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h4>Memory Hierarchy Explanation</h4>
+            <div class="example-detailed">
+                <h4>Library Analogy for Memory Hierarchy</h4>
+                
+                <h5>Your Study Setup:</h5>
+                <ul>
+                    <li><strong>Your Brain = CPU Registers:</strong> Information you're actively thinking about right now</li>
+                    <li><strong>Your Desk = Cache Memory:</strong> Books and notes for current study session</li>
+                    <li><strong>Your Room = Main Memory:</strong> All books and materials for today's subjects</li>
+                    <li><strong>Library = Secondary Storage:</strong> All available books and resources</li>
+                </ul>
+
+                <h5>Access Patterns:</h5>
+                <ul>
+                    <li><strong>Fastest Access:</strong> Information already in your brain (registers)</li>
+                    <li><strong>Quick Access:</strong> Materials on your desk (cache)</li>
+                    <li><strong>Medium Access:</strong> Walk to bookshelf in your room (RAM)</li>
+                    <li><strong>Slow Access:</strong> Trip to library to get new book (disk)</li>
+                </ul>
+
+                <p><strong>Principle:</strong> Keep frequently used items closer for faster access!</p>
+            </div>
+        </section>
+
+        <section id="address-binding">
+            <h2>2. Address Binding and Address Spaces</h2>
+
+            <h3>What is Address Binding?</h3>
+            <p>Address binding is the process of mapping program addresses to actual physical memory locations. It's like assigning specific seats to movie ticket holders.</p>
+
+            <div class="example-detailed">
+                <h4>Movie Theater Analogy</h4>
+                
+                <h5>The Address Binding Process:</h5>
+                <ul>
+                    <li><strong>Program Code:</strong> References like "variable X", "function Y" (symbolic addresses)</li>
+                    <li><strong>Compilation:</strong> Compiler converts to relative addresses like "address 100", "address 200"</li>
+                    <li><strong>Loading:</strong> OS assigns actual memory locations like "memory address 5000", "memory address 5100"</li>
+                </ul>
+
+                <h5>Movie Ticket Analogy:</h5>
+                <ul>
+                    <li><strong>Booking:</strong> "Two tickets for Avatar" (symbolic - just movie name)</li>
+                    <li><strong>Ticket Printing:</strong> "Row G, Seats 15-16" (logical addresses)</li>
+                    <li><strong>Theater Entry:</strong> Usher guides to actual physical seats (physical addresses)</li>
+                </ul>
+            </div>
+
+            <h3>Types of Address Binding</h3>
+
+            <h4>1. Compile Time Binding</h4>
+            <div class="concept">
+                <h5>When It Happens:</h5>
+                <p>Addresses determined when program is compiled</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Fixed Addresses:</strong> Program must always load at same memory location</li>
+                    <li><strong>Fast Loading:</strong> No address calculation needed during loading</li>
+                    <li><strong>Limited Flexibility:</strong> Cannot run multiple copies of same program</li>
+                </ul>
+                <h5>Example:</h5>
+                <p>Old MS-DOS programs that always loaded at specific memory addresses</p>
+            </div>
+
+            <h4>2. Load Time Binding</h4>
+            <div class="concept">
+                <h5>When It Happens:</h5>
+                <p>Addresses determined when program is loaded into memory</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Relocatable Code:</strong> Program can load at any available memory location</li>
+                    <li><strong>Loading Overhead:</strong> Must calculate addresses during loading</li>
+                    <li><strong>Multiple Instances:</strong> Can run multiple copies at different locations</li>
+                </ul>
+            </div>
+
+            <h4>3. Runtime Binding</h4>
+            <div class="concept">
+                <h5>When It Happens:</h5>
+                <p>Addresses can change during program execution</p>
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Maximum Flexibility:</strong> Program can move around in memory during execution</li>
+                    <li><strong>Hardware Support:</strong> Requires special hardware (MMU - Memory Management Unit)</li>
+                    <li><strong>Virtual Memory:</strong> Enables advanced memory management techniques</li>
+                </ul>
+            </div>
+
+            <h3>Logical vs Physical Address Space</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Logical Address</th>
+                            <th>Physical Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Definition</strong></td>
+                            <td>Address as seen by process</td>
+                            <td>Actual hardware memory location</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Generated By</strong></td>
+                            <td>Compiler and linker</td>
+                            <td>Memory Management Unit (MMU)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Range</strong></td>
+                            <td>Usually starts from 0</td>
+                            <td>Actual hardware memory addresses</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visibility</strong></td>
+                            <td>Visible to programmer</td>
+                            <td>Hidden from programmer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Also Called</strong></td>
+                            <td>Virtual address</td>
+                            <td>Real address</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Apartment Building Analogy</h4>
+                <h5>Logical Address (Apartment Numbers):</h5>
+                <ul>
+                    <li><strong>Resident's View:</strong> "I live in Apartment 3B"</li>
+                    <li><strong>Simple System:</strong> Apartments numbered 1A, 1B, 2A, 2B, etc.</li>
+                    <li><strong>Consistent:</strong> Apartment numbers don't change</li>
+                </ul>
+
+                <h5>Physical Address (GPS Coordinates):</h5>
+                <ul>
+                    <li><strong>Mail Carrier's View:</strong> "Building at 123 Oak Street, Floor 3, Unit B"</li>
+                    <li><strong>Actual Location:</strong> Real physical location in the world</li>
+                    <li><strong>Can Change:</strong> If building moves (hypothetically), GPS changes but apartment number stays same</li>
+                </ul>
+
+                <p><strong>Translation:</strong> Building manager (MMU) translates apartment numbers to actual locations.</p>
+            </div>
+        </section>
+
+        <section id="memory-allocation">
+            <h2>3. Memory Allocation Strategies</h2>
+
+            <h3>Contiguous Memory Allocation</h3>
+            <p>In contiguous allocation, each process is allocated a single continuous block of memory, like reserving a continuous row of seats in a theater.</p>
+
+            <h4>Fixed Partitioning</h4>
+            <div class="concept">
+                <h5>How It Works:</h5>
+                <p>Memory is divided into fixed-size partitions at system startup</p>
+                
+                <h5>Apartment Building Analogy:</h5>
+                <p>Like apartment building with pre-built apartments of fixed sizes - 1 bedroom, 2 bedroom, 3 bedroom units.</p>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Simple Implementation:</strong> Easy to manage and allocate</li>
+                    <li><strong>Fast Allocation:</strong> Just need to find free partition</li>
+                    <li><strong>No External Fragmentation:</strong> No scattered unused spaces</li>
+                </ul>
+
+                <h5>Disadvantages:</h5>
+                <ul>
+                    <li><strong>Internal Fragmentation:</strong> Wasted space within partitions</li>
+                    <li><strong>Limited Processes:</strong> Number of processes limited by number of partitions</li>
+                    <li><strong>Size Restrictions:</strong> Large programs may not fit in any partition</li>
+                </ul>
+            </div>
+
+            <h4>Variable Partitioning</h4>
+            <div class="concept">
+                <h5>How It Works:</h5>
+                <p>Memory partitions created dynamically based on process requirements</p>
+
+                <h5>Custom Construction Analogy:</h5>
+                <p>Like building custom-sized rooms in a warehouse based on tenant needs - each tenant gets exactly the space they require.</p>
+
+                <h5>Allocation Algorithms:</h5>
+                <ul>
+                    <li><strong>First Fit:</strong> Allocate first available block large enough</li>
+                    <li><strong>Best Fit:</strong> Allocate smallest block that's large enough</li>
+                    <li><strong>Worst Fit:</strong> Allocate largest available block</li>
+                </ul>
+            </div>
+
+            <h3>Fragmentation Problems</h3>
+
+            <h4>1. Internal Fragmentation</h4>
+            <div class="example-detailed">
+                <h5>What is Internal Fragmentation?</h5>
+                <p>Wasted space within allocated memory blocks</p>
+
+                <h5>Restaurant Table Analogy:</h5>
+                <ul>
+                    <li><strong>Scenario:</strong> Restaurant has only 6-seat tables</li>
+                    <li><strong>Customer Group:</strong> Family of 4 people</li>
+                    <li><strong>Allocation:</strong> Family gets 6-seat table</li>
+                    <li><strong>Internal Fragmentation:</strong> 2 empty seats at table (wasted space)</li>
+                    <li><strong>Problem:</strong> Wasted seats cannot be used by other customers</li>
+                </ul>
+
+                <h5>Memory Example:</h5>
+                <p>Process needs 3KB but gets allocated 4KB partition → 1KB internal fragmentation</p>
+            </div>
+
+            <h4>2. External Fragmentation</h4>
+            <div class="example-detailed">
+                <h5>What is External Fragmentation?</h5>
+                <p>Free memory scattered in small, non-contiguous blocks</p>
+
+                <h5>Parking Lot Analogy:</h5>
+                <ul>
+                    <li><strong>Situation:</strong> Parking lot has many small gaps between parked cars</li>
+                    <li><strong>Problem:</strong> Bus needs continuous space but gaps are too small individually</li>
+                    <li><strong>Total Space:</strong> Enough total empty space for bus</li>
+                    <li><strong>External Fragmentation:</strong> Space scattered, not continuous</li>
+                </ul>
+
+                <h5>Solution - Compaction:</h5>
+                <p>Like asking all car owners to move their cars together, leaving one large empty area for the bus.</p>
+            </div>
+        </section>
+
+        <section id="paging">
+            <h2>4. Paging</h2>
+
+            <h3>What is Paging?</h3>
+            <p>Paging solves fragmentation by dividing memory into fixed-size blocks called pages (logical) and frames (physical). It's like breaking a large book into chapters that can be stored in different locations.</p>
+
+            <div class="example-detailed">
+                <h4>Library Book Storage Analogy</h4>
+                
+                <h5>Traditional Storage (Contiguous):</h5>
+                <ul>
+                    <li><strong>Whole Books:</strong> Each book must be stored completely on one shelf</li>
+                    <li><strong>Problem:</strong> Large books need long continuous shelf space</li>
+                    <li><strong>Fragmentation:</strong> Small gaps between books cannot hold large books</li>
+                </ul>
+
+                <h5>Paging Storage (Non-Contiguous):</h5>
+                <ul>
+                    <li><strong>Chapter System:</strong> Break books into chapters (pages)</li>
+                    <li><strong>Flexible Storage:</strong> Store chapters on any available shelf space</li>
+                    <li><strong>Index System:</strong> Maintain index showing where each chapter is stored</li>
+                    <li><strong>Reading:</strong> Use index to find chapters, read in correct order</li>
+                </ul>
+
+                <p><strong>Benefit:</strong> No wasted space - every shelf slot can be used efficiently!</p>
+            </div>
+
+            <h3>How Paging Works</h3>
+
+            <div class="visual-diagram">
+                <h4>Paging System Structure</h4>
+                <div class="diagram-text">
+                    <pre>
+    LOGICAL MEMORY (Process View)     PHYSICAL MEMORY (Hardware)
+    
+    ┌─────────────────────┐           ┌─────────────────────┐
+    │     Page 0          │           │     Frame 5         │
+    │   (Program Code)    │    ──────►│   (Page 0 Data)    │
+    ├─────────────────────┤           ├─────────────────────┤
+    │     Page 1          │           │     Frame 2         │
+    │   (Global Data)     │    ──────►│   (Page 2 Data)    │
+    ├─────────────────────┤           ├─────────────────────┤
+    │     Page 2          │           │     Frame 8         │
+    │  (Dynamic Data)     │    ──────►│   (Page 1 Data)    │
+    ├─────────────────────┤           ├─────────────────────┤
+    │     Page 3          │           │     Frame 1         │
+    │    (Stack)          │    ──────►│   (Page 3 Data)    │
+    └─────────────────────┘           └─────────────────────┘
+    
+            │                                  ▲
+            │          PAGE TABLE              │
+            └──────► ┌─────────────┐ ─────────┘
+                     │  Page 0 → 5 │
+                     │  Page 1 → 8 │ 
+                     │  Page 2 → 2 │
+                     │  Page 3 → 1 │
+                     └─────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Page Table</h3>
+            <div class="concept">
+                <h5>Purpose:</h5>
+                <p>Page table is like a directory that maps logical pages to physical frames</p>
+
+                <h5>Page Table Entry Contains:</h5>
+                <ul>
+                    <li><strong>Frame Number:</strong> Which physical frame contains this page</li>
+                    <li><strong>Valid Bit:</strong> Is this page currently in memory?</li>
+                    <li><strong>Protection Bits:</strong> Read/write/execute permissions</li>
+                    <li><strong>Reference Bit:</strong> Has page been accessed recently?</li>
+                    <li><strong>Dirty Bit:</strong> Has page been modified since loaded?</li>
+                </ul>
+            </div>
+
+            <h4>Translation Lookaside Buffer (TLB)</h4>
+            <div class="concept">
+                <h5>What is TLB?</h5>
+                <p>TLB is a high-speed cache that stores recent page table entries for fast address translation</p>
+
+                <h5>Phone Contact Analogy:</h5>
+                <ul>
+                    <li><strong>Phone Directory = Page Table:</strong> Contains all contacts</li>
+                    <li><strong>Recent Calls List = TLB:</strong> Quick access to frequently called numbers</li>
+                    <li><strong>Fast Lookup:</strong> Check recent list first, then full directory if needed</li>
+                </ul>
+
+                <h5>TLB Benefits:</h5>
+                <ul>
+                    <li><strong>Speed:</strong> Much faster than accessing page table in memory</li>
+                    <li><strong>Efficiency:</strong> Most memory accesses use recently translated addresses</li>
+                    <li><strong>Hit Rate:</strong> Typically 90-99% of translations found in TLB</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="segmentation">
+            <h2>5. Segmentation</h2>
+
+            <h3>What is Segmentation?</h3>
+            <p>Segmentation divides program into logical segments based on program structure (code, data, stack), rather than fixed-size pages. It's like organizing a book by chapters where each chapter has different length.</p>
+
+            <div class="example-detailed">
+                <h4>Office Building Analogy</h4>
+                
+                <h5>Paging (Fixed Office Sizes):</h5>
+                <ul>
+                    <li><strong>All Offices Same Size:</strong> Every department gets same amount of space</li>
+                    <li><strong>Problem:</strong> Accounting (small team) gets too much space, Engineering (large team) gets too little</li>
+                </ul>
+
+                <h5>Segmentation (Variable Office Sizes):</h5>
+                <ul>
+                    <li><strong>Variable Sizes:</strong> Each department gets space based on actual needs</li>
+                    <li><strong>Logical Organization:</strong> Related functions grouped together</li>
+                    <li><strong>Natural Boundaries:</strong> Departments don't interfere with each other</li>
+                </ul>
+            </div>
+
+            <h3>Segment Structure</h3>
+            <div class="concept">
+                <h4>Common Program Segments:</h4>
+                <ul>
+                    <li><strong>Code Segment:</strong> Program instructions (read-only, sharable)</li>
+                    <li><strong>Data Segment:</strong> Global variables (read-write, not sharable)</li>
+                    <li><strong>Stack Segment:</strong> Function calls and local variables (grows/shrinks)</li>
+                    <li><strong>Heap Segment:</strong> Dynamic memory allocation</li>
+                </ul>
+
+                <h4>Segment Benefits:</h4>
+                <ul>
+                    <li><strong>Protection:</strong> Different protection for different segment types</li>
+                    <li><strong>Sharing:</strong> Code segments can be shared between processes</li>
+                    <li><strong>Growth:</strong> Segments can grow independently</li>
+                </ul>
+            </div>
+
+            <h3>Paging vs Segmentation</h3>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>📄 Paging Advantages</h4>
+                    <ul>
+                        <li><strong>No External Fragmentation:</strong> All frames same size</li>
+                        <li><strong>Simple Allocation:</strong> Any free frame can be used</li>
+                        <li><strong>Efficient Memory Use:</strong> Memory utilized fully</li>
+                    </ul>
+                    <h4>📂 Segmentation Advantages</h4>
+                    <ul>
+                        <li><strong>Logical Organization:</strong> Matches program structure</li>
+                        <li><strong>Protection:</strong> Different segments have different permissions</li>
+                        <li><strong>Sharing:</strong> Easy to share logical units</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>📄 Paging Disadvantages</h4>
+                    <ul>
+                        <li><strong>No Logical Structure:</strong> Artificial division</li>
+                        <li><strong>Complex Sharing:</strong> Hard to share partial programs</li>
+                    </ul>
+                    <h4>📂 Segmentation Disadvantages</h4>
+                    <ul>
+                        <li><strong>External Fragmentation:</strong> Variable sizes create gaps</li>
+                        <li><strong>Complex Allocation:</strong> Must find suitable-sized free space</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="virtual-memory">
+            <h2>6. Virtual Memory</h2>
+
+            <h3>The Virtual Memory Concept</h3>
+            <p>Virtual memory allows execution of programs that are larger than physical memory by keeping only currently needed parts in memory and storing the rest on disk.</p>
+
+            <div class="example-detailed">
+                <h4>Magic Expandable Backpack Analogy</h4>
+                
+                <h5>The Problem:</h5>
+                <p>You're going on a hiking trip and need many items, but your backpack is small.</p>
+
+                <h5>Traditional Approach (Physical Memory Only):</h5>
+                <ul>
+                    <li><strong>Limitation:</strong> Can only carry items that fit in backpack</li>
+                    <li><strong>Choice:</strong> Either carry fewer items or get bigger backpack</li>
+                </ul>
+
+                <h5>Virtual Memory Approach (Magic Backpack):</h5>
+                <ul>
+                    <li><strong>Magic Property:</strong> Backpack appears larger than it actually is</li>
+                    <li><strong>Intelligent Swapping:</strong> Items you need right now are in backpack</li>
+                    <li><strong>Automatic Management:</strong> Items you don't need immediately are sent to base camp</li>
+                    <li><strong>Transparent:</strong> You always find what you need in backpack</li>
+                    <li><strong>On-Demand:</strong> When you need base camp item, it automatically appears in backpack</li>
+                </ul>
+
+                <p><strong>Result:</strong> You can carry unlimited items with small backpack!</p>
+            </div>
+
+            <h3>Demand Paging</h3>
+            <p>Demand paging is the most common virtual memory implementation. Pages are loaded into memory only when accessed (on-demand).</p>
+
+            <div class="algorithm-steps">
+                <h4>Demand Paging Process</h4>
+                <ol>
+                    <li><strong>Program Starts:</strong>
+                        <ul>
+                            <li>No pages loaded initially</li>
+                            <li>Page table entries marked as "not in memory"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Page Access Attempt:</strong>
+                        <ul>
+                            <li>Process tries to access a page</li>
+                            <li>MMU checks page table</li>
+                        </ul>
+                    </li>
+                    <li><strong>Page Fault Occurs:</strong>
+                        <ul>
+                            <li>Hardware generates page fault interrupt</li>
+                            <li>Control transfers to OS page fault handler</li>
+                        </ul>
+                    </li>
+                    <li><strong>OS Handles Page Fault:</strong>
+                        <ul>
+                            <li>Find free frame in memory</li>
+                            <li>Load page from disk into frame</li>
+                            <li>Update page table with new mapping</li>
+                            <li>Restart interrupted instruction</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h4>Page Fault Handling</h4>
+            <div class="concept">
+                <h5>What is a Page Fault?</h5>
+                <p>Page fault occurs when process tries to access a page not currently in memory - it's not an error, but normal operation in virtual memory system</p>
+
+                <h5>Library Book Request Analogy:</h5>
+                <ul>
+                    <li><strong>Student Request:</strong> "I need Chapter 5 of Advanced Physics"</li>
+                    <li><strong>Librarian Check:</strong> "That book is currently in storage"</li>
+                    <li><strong>Fetch Process:</strong> Librarian goes to storage to get the book</li>
+                    <li><strong>Delivery:</strong> Book brought to student's desk</li>
+                    <li><strong>Continue Work:</strong> Student can now read Chapter 5</li>
+                </ul>
+
+                <p><strong>Key Insight:</strong> Student doesn't know book wasn't immediately available - the delay is hidden by library system (like OS handling page faults).</p>
+            </div>
+        </section>
+
+        <section id="page-replacement">
+            <h2>7. Page Replacement Algorithms</h2>
+
+            <h3>Why Do We Need Page Replacement?</h3>
+            <p>When physical memory is full and a page fault occurs, system must choose which existing page to remove to make room for new page. This decision affects system performance.</p>
+
+            <h4>1. First In First Out (FIFO)</h4>
+            <div class="algorithm-steps">
+                <h5>How FIFO Works:</h5>
+                <p><strong>Rule:</strong> Replace the page that has been in memory longest</p>
+
+                <h5>Grocery Store Analogy:</h5>
+                <p>Like grocery store rotating stock - oldest milk bottles are sold first to prevent expiration.</p>
+
+                <h5>Algorithm Steps:</h5>
+                <ol>
+                    <li>Maintain queue of pages in order they were loaded</li>
+                    <li>When replacement needed, remove page at front of queue</li>
+                    <li>Add newly loaded page to back of queue</li>
+                </ol>
+
+                <h5>Example:</h5>
+                <p><strong>Memory Frames:</strong> [1, 2, 3], <strong>Reference String:</strong> 4, 1, 2, 5, 1</p>
+                <ul>
+                    <li>Access 4: Replace oldest (1) → [4, 2, 3]</li>
+                    <li>Access 1: Replace oldest (2) → [1, 4, 3]</li>
+                    <li>Access 2: Replace oldest (3) → [2, 1, 4]</li>
+                </ul>
+
+                <h5>Advantages:</h5>
+                <ul>
+                    <li><strong>Simple:</strong> Easy to implement and understand</li>
+                    <li><strong>Fair:</strong> All pages get equal treatment</li>
+                </ul>
+
+                <h5>Disadvantages:</h5>
+                <ul>
+                    <li><strong>Belady's Anomaly:</strong> More frames might result in more page faults</li>
+                    <li><strong>Ignores Usage:</strong> Might remove frequently used pages</li>
+                </ul>
+            </div>
+
+            <h4>2. Least Recently Used (LRU)</h4>
+            <div class="concept">
+                <h5>How LRU Works:</h5>
+                <p><strong>Rule:</strong> Replace the page that hasn't been used for longest time</p>
+
+                <h5>Desk Organization Analogy:</h5>
+                <p>Like organizing papers on your desk - papers you haven't used recently go to bottom of pile, recently used papers stay on top.</p>
+
+                <h5>Implementation Challenges:</h5>
+                <ul>
+                    <li><strong>Time Tracking:</strong> Must track last access time for each page</li>
+                    <li><strong>Hardware Support:</strong> Requires hardware assistance for efficiency</li>
+                    <li><strong>Overhead:</strong> Additional memory and processing for tracking</li>
+                </ul>
+
+                <h5>Why LRU Works Well:</h5>
+                <ul>
+                    <li><strong>Locality of Reference:</strong> Programs tend to access same pages repeatedly</li>
+                    <li><strong>Temporal Locality:</strong> Recently accessed pages likely to be accessed again soon</li>
+                </ul>
+            </div>
+
+            <h4>3. Optimal Algorithm (Theoretical)</h4>
+            <div class="concept">
+                <h5>How Optimal Algorithm Works:</h5>
+                <p><strong>Rule:</strong> Replace page that will not be used for longest time in future</p>
+
+                <h5>Crystal Ball Analogy:</h5>
+                <p>Like having crystal ball that shows future - you remove items you won't need for longest time.</p>
+
+                <h5>Why It's Theoretical:</h5>
+                <ul>
+                    <li><strong>Future Knowledge:</strong> Impossible to predict future page accesses</li>
+                    <li><strong>Benchmark:</strong> Used to compare performance of practical algorithms</li>
+                    <li><strong>Lower Bound:</strong> No algorithm can perform better than optimal</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="case-studies">
+            <h2>8. Operating System Case Studies</h2>
+
+            <h3>Windows Operating System</h3>
+
+            <h4>Windows Architecture Overview</h4>
+            <div class="concept">
+                <h5>Key Characteristics:</h5>
+                <ul>
+                    <li><strong>Hybrid Kernel:</strong> Combines microkernel and monolithic approaches</li>
+                    <li><strong>Layered Architecture:</strong> HAL, Kernel, Executive Services, Subsystems</li>
+                    <li><strong>Object-Oriented Design:</strong> Everything represented as objects</li>
+                    <li><strong>Multiple Subsystems:</strong> Support for different programming environments</li>
+                </ul>
+
+                <h5>Memory Management:</h5>
+                <ul>
+                    <li><strong>Virtual Memory:</strong> 32-bit or 64-bit virtual address space</li>
+                    <li><strong>Paging:</strong> Uses paging with clustering for performance</li>
+                    <li><strong>Working Set:</strong> Tracks pages actually being used by process</li>
+                </ul>
+
+                <h5>Process Management:</h5>
+                <ul>
+                    <li><strong>Threads:</strong> Primary unit of execution (not processes)</li>
+                    <li><strong>Scheduling:</strong> Priority-based preemptive scheduling</li>
+                    <li><strong>Symmetric Multiprocessing:</strong> Support for multiple processors</li>
+                </ul>
+            </div>
+
+            <h4>Windows Strengths and Weaknesses</h4>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Windows Strengths</h4>
+                    <ul>
+                        <li><strong>User-Friendly:</strong> Intuitive graphical interface</li>
+                        <li><strong>Software Compatibility:</strong> Largest software ecosystem</li>
+                        <li><strong>Hardware Support:</strong> Supports widest range of hardware</li>
+                        <li><strong>Enterprise Features:</strong> Active Directory, Group Policy</li>
+                        <li><strong>Gaming:</strong> Best gaming support and performance</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Windows Weaknesses</h4>
+                    <ul>
+                        <li><strong>Security Vulnerabilities:</strong> Popular target for malware</li>
+                        <li><strong>Resource Heavy:</strong> Requires more system resources</li>
+                        <li><strong>Cost:</strong> Licensing fees for commercial use</li>
+                        <li><strong>Closed Source:</strong> Cannot modify or customize kernel</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Unix Operating System</h3>
+
+            <h4>Unix Philosophy and Design</h4>
+            <div class="concept">
+                <h5>Core Unix Principles:</h5>
+                <ul>
+                    <li><strong>"Everything is a File":</strong> Devices, processes, communication channels represented as files</li>
+                    <li><strong>"Do One Thing Well":</strong> Programs should have single, well-defined purpose</li>
+                    <li><strong>Text-Based:</strong> Configuration and communication through text</li>
+                    <li><strong>Pipes and Filters:</strong> Combine simple programs to create complex functionality</li>
+                </ul>
+
+                <h5>Architecture:</h5>
+                <ul>
+                    <li><strong>Monolithic Kernel:</strong> Single large kernel with all OS services</li>
+                    <li><strong>Shell:</strong> Command-line interface for user interaction</li>
+                    <li><strong>Utilities:</strong> Small programs that do specific tasks</li>
+                    <li><strong>File System:</strong> Hierarchical tree structure</li>
+                </ul>
+            </div>
+
+            <h4>Unix Features</h4>
+            <div class="example-detailed">
+                <h5>Multi-User Environment:</h5>
+                <ul>
+                    <li><strong>User Accounts:</strong> Each user has unique ID and home directory</li>
+                    <li><strong>File Permissions:</strong> Owner, group, others with read/write/execute</li>
+                    <li><strong>Process Ownership:</strong> Each process belongs to specific user</li>
+                </ul>
+
+                <h5>Process Management:</h5>
+                <ul>
+                    <li><strong>Fork System Call:</strong> Creates new process by copying current process</li>
+                    <li><strong>Exec System Call:</strong> Replaces current process with new program</li>
+                    <li><strong>Process Hierarchy:</strong> Parent-child relationships between processes</li>
+                </ul>
+
+                <h5>File System:</h5>
+                <ul>
+                    <li><strong>Inodes:</strong> Data structures that store file metadata</li>
+                    <li><strong>Links:</strong> Hard links and symbolic links to files</li>
+                    <li><strong>Mount Points:</strong> Attach different file systems to directory tree</li>
+                </ul>
+            </div>
+
+            <h3>Linux Operating System</h3>
+
+            <h4>Linux vs Unix</h4>
+            <div class="concept">
+                <h5>Linux Background:</h5>
+                <p>Linux is Unix-like operating system created by Linus Torvalds, designed to be free and open-source alternative to Unix.</p>
+
+                <h5>Key Differences from Traditional Unix:</h5>
+                <ul>
+                    <li><strong>Open Source:</strong> Source code freely available and modifiable</li>
+                    <li><strong>Free:</strong> No licensing costs</li>
+                    <li><strong>Modern Features:</strong> Built with modern hardware and networks in mind</li>
+                    <li><strong>Community Development:</strong> Developed by global community</li>
+                </ul>
+
+                <h5>Linux Distributions:</h5>
+                <ul>
+                    <li><strong>Ubuntu:</strong> User-friendly desktop Linux</li>
+                    <li><strong>CentOS/RHEL:</strong> Enterprise server Linux</li>
+                    <li><strong>Debian:</strong> Stable, community-driven</li>
+                    <li><strong>Android:</strong> Linux-based mobile operating system</li>
+                </ul>
+            </div>
+
+            <h4>Linux Advantages</h4>
+            <div class="example-detailed">
+                <h5>Technical Advantages:</h5>
+                <ul>
+                    <li><strong>Stability:</strong> Can run for months/years without restart</li>
+                    <li><strong>Security:</strong> Built-in security model, less malware</li>
+                    <li><strong>Performance:</strong> Efficient resource usage</li>
+                    <li><strong>Customization:</strong> Can modify any part of system</li>
+                </ul>
+
+                <h5>Practical Advantages:</h5>
+                <ul>
+                    <li><strong>Cost:</strong> Free to use, no licensing fees</li>
+                    <li><strong>Server Dominance:</strong> Powers most web servers and cloud infrastructure</li>
+                    <li><strong>Development:</strong> Excellent environment for programming</li>
+                    <li><strong>Learning:</strong> Great for understanding OS concepts</li>
+                </ul>
+
+                <h5>When to Choose Linux:</h5>
+                <ul>
+                    <li><strong>Servers:</strong> Web servers, database servers, cloud computing</li>
+                    <li><strong>Development:</strong> Software development and programming</li>
+                    <li><strong>Learning:</strong> Computer science education</li>
+                    <li><strong>Embedded Systems:</strong> IoT devices, routers, smart appliances</li>
+                </ul>
+            </div>
+
+            <h3>Comparative Analysis</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Windows</th>
+                            <th>Unix</th>
+                            <th>Linux</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>User Interface</strong></td>
+                            <td>Primarily GUI</td>
+                            <td>Primarily CLI</td>
+                            <td>Both GUI and CLI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cost</strong></td>
+                            <td>Commercial license</td>
+                            <td>Commercial license</td>
+                            <td>Free and open source</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Source Code</strong></td>
+                            <td>Closed source</td>
+                            <td>Closed source</td>
+                            <td>Open source</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Vulnerable to malware</td>
+                            <td>Strong security model</td>
+                            <td>Strong security model</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hardware Support</strong></td>
+                            <td>Excellent</td>
+                            <td>Good for servers</td>
+                            <td>Good and improving</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Learning Curve</strong></td>
+                            <td>Easy</td>
+                            <td>Steep</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best Use</strong></td>
+                            <td>Desktop, gaming, office</td>
+                            <td>Enterprise servers</td>
+                            <td>Servers, development, embedded</td>
+                        </tr>
+                        <tr>
+                            <td><strong>File System</strong></td>
+                            <td>NTFS, FAT32</td>
+                            <td>UFS, FFS</td>
+                            <td>ext4, Btrfs, XFS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multitasking</strong></td>
+                            <td>Preemptive multitasking</td>
+                            <td>Preemptive multitasking</td>
+                            <td>Preemptive multitasking</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory Management</strong></td>
+                            <td>Virtual memory with paging</td>
+                            <td>Virtual memory with paging</td>
+                            <td>Virtual memory with paging</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Choosing the Right Operating System</h3>
+            <div class="usage-guidelines">
+                <div>
+                    <h4>🏢 Business/Enterprise Use</h4>
+                    <ul>
+                        <li><strong>Windows:</strong> Office productivity, business applications</li>
+                        <li><strong>Linux:</strong> Servers, web hosting, database systems</li>
+                        <li><strong>Unix:</strong> High-reliability enterprise systems</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>👨‍💼 Personal Use</h4>
+                    <ul>
+                        <li><strong>Windows:</strong> Gaming, general computing, office work</li>
+                        <li><strong>Linux:</strong> Programming, learning, customization</li>
+                        <li><strong>macOS:</strong> Creative work, development</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>🎯 Unit 4 Summary: Memory Management and Case Studies</h3>
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Concept</th>
+                            <th>Remember This</th>
+                        </tr>
+                        <tr>
+                            <td>Memory Hardware</td>
+                            <td>Hierarchy from registers to storage</td>
+                            <td>Faster memory is smaller and more expensive</td>
+                        </tr>
+                        <tr>
+                            <td>Address Binding</td>
+                            <td>Mapping logical addresses to physical addresses</td>
+                            <td>Can happen at compile, load, or runtime</td>
+                        </tr>
+                        <tr>
+                            <td>Memory Allocation</td>
+                            <td>Contiguous vs non-contiguous allocation strategies</td>
+                            <td>Trade-off between simplicity and efficiency</td>
+                        </tr>
+                        <tr>
+                            <td>Fragmentation</td>
+                            <td>Internal (wasted space in blocks) vs External (scattered free space)</td>
+                            <td>Different allocation methods have different fragmentation</td>
+                        </tr>
+                        <tr>
+                            <td>Paging</td>
+                            <td>Fixed-size blocks eliminate external fragmentation</td>
+                            <td>Page table maps logical pages to physical frames</td>
+                        </tr>
+                        <tr>
+                            <td>Segmentation</td>
+                            <td>Variable-size logical units matching program structure</td>
+                            <td>Better for sharing and protection</td>
+                        </tr>
+                        <tr>
+                            <td>Virtual Memory</td>
+                            <td>Illusion of unlimited memory using disk storage</td>
+                            <td>Demand paging loads pages only when needed</td>
+                        </tr>
+                        <tr>
+                            <td>Page Replacement</td>
+                            <td>FIFO, LRU, Optimal algorithms for choosing victim pages</td>
+                            <td>LRU performs well due to locality of reference</td>
+                        </tr>
+                        <tr>
+                            <td>Windows</td>
+                            <td>User-friendly, commercial OS with broad compatibility</td>
+                            <td>Best for desktop and gaming</td>
+                        </tr>
+                        <tr>
+                            <td>Unix</td>
+                            <td>Multi-user, text-based, "everything is a file" philosophy</td>
+                            <td>Foundation for many modern systems</td>
+                        </tr>
+                        <tr>
+                            <td>Linux</td>
+                            <td>Open-source Unix-like system</td>
+                            <td>Dominates servers and embedded systems</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="checklist">
+                <h4>✅ Unit 4 Learning Objectives Achieved:</h4>
+                <ul>
+                    <li>Understand memory hierarchy and hardware organization</li>
+                    <li>Know address binding types and address space concepts</li>
+                    <li>Comprehend memory allocation strategies and fragmentation issues</li>
+                    <li>Master paging concepts including page tables and TLB</li>
+                    <li>Understand segmentation and its comparison with paging</li>
+                    <li>Learn virtual memory concepts and demand paging</li>
+                    <li>Know page replacement algorithms and their performance</li>
+                    <li>Compare Windows, Unix, and Linux operating systems</li>
+                    <li>Understand when to choose different operating systems</li>
+                </ul>
+            </div>
+
+            <div class="exam-tips">
+                <h4>📝 15-Mark Question Strategy for Unit 4</h4>
+                <ul>
+                    <li><strong>Memory Management:</strong> Draw memory layouts + explain allocation methods</li>
+                    <li><strong>Paging Questions:</strong> Work through address translation examples</li>
+                    <li><strong>Virtual Memory:</strong> Explain demand paging with page fault handling</li>
+                    <li><strong>Page Replacement:</strong> Compare algorithms with step-by-step examples</li>
+                    <li><strong>Case Study Questions:</strong> Use comparison tables + mention specific features</li>
+                    <li><strong>Always Include:</strong> Diagrams, numerical examples, pros/cons analysis</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

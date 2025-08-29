@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3: Distributed OS and Deadlocks</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Operating Systems</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 3: Distributed Operating Systems and Deadlocks</h1>
+            <p class="subtitle">Network Computing, Communication Protocols, and Deadlock Management</p>
+        </header>
+
+        <section id="distributed-os">
+            <h2>1. Distributed Operating Systems</h2>
+            
+            <h3>What is a Distributed Operating System?</h3>
+            <p>A distributed operating system manages a collection of separate computers and makes them appear as a single, unified computer system to users. It's like having a team of workers in different locations collaborating on a project as if they were in the same office.</p>
+
+            <div class="example-detailed">
+                <h4>Global Company Analogy</h4>
+                <p>Imagine a company with offices in different cities around the world:</p>
+                
+                <h5>Traditional Company (Single OS):</h5>
+                <ul>
+                    <li><strong>One Building:</strong> All employees work in same building</li>
+                    <li><strong>Shared Resources:</strong> Common conference rooms, printers, cafeteria</li>
+                    <li><strong>Direct Communication:</strong> Face-to-face meetings</li>
+                    <li><strong>Central Management:</strong> Single manager oversees everyone</li>
+                </ul>
+
+                <h5>Global Distributed Company (Distributed OS):</h5>
+                <ul>
+                    <li><strong>Multiple Offices:</strong> Employees in New York, London, Tokyo</li>
+                    <li><strong>Shared Virtual Resources:</strong> Video conferencing, shared documents, cloud storage</li>
+                    <li><strong>Network Communication:</strong> Email, video calls, instant messaging</li>
+                    <li><strong>Coordinated Management:</strong> Managers in each office coordinate to appear as one company</li>
+                </ul>
+
+                <p><strong>Key Insight:</strong> Customers interact with the company as if it's a single entity, even though work happens across multiple locations.</p>
+            </div>
+
+            <h3>Types of Distributed Operating Systems</h3>
+
+            <h4>1. Network Operating Systems (NOS)</h4>
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Separate OS:</strong> Each computer runs its own operating system</li>
+                    <li><strong>Network Awareness:</strong> OS knows about network and can communicate</li>
+                    <li><strong>Resource Sharing:</strong> Computers can share files, printers, applications</li>
+                    <li><strong>User Awareness:</strong> Users know they're working on a network</li>
+                </ul>
+
+                <h5>Office Network Analogy:</h5>
+                <p>Like an office where each employee has their own desk and computer, but they can share the office printer and access shared files on the server.</p>
+
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Windows Network:</strong> Multiple Windows PCs sharing resources</li>
+                    <li><strong>Unix/Linux Networks:</strong> NFS (Network File System) for file sharing</li>
+                    <li><strong>Peer-to-Peer Networks:</strong> BitTorrent, file sharing applications</li>
+                </ul>
+            </div>
+
+            <h4>2. Distributed Operating Systems (True DOS)</h4>
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Single System Image:</strong> Multiple computers appear as one system</li>
+                    <li><strong>Transparency:</strong> Users don't know their work is distributed across machines</li>
+                    <li><strong>Global Resource Management:</strong> Single OS manages all resources</li>
+                    <li><strong>Automatic Load Distribution:</strong> Work automatically spread across machines</li>
+                </ul>
+
+                <h5>Cloud Computing Analogy:</h5>
+                <p>Like using Google Docs - you just see one application, but your document might be processed on servers in different countries. The complexity is completely hidden.</p>
+
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Amoeba:</strong> Research distributed OS</li>
+                    <li><strong>Plan 9:</strong> Distributed OS from Bell Labs</li>
+                    <li><strong>Google's Infrastructure:</strong> Appears as single system to users</li>
+                </ul>
+            </div>
+
+            <h3>Network Topology in Distributed Systems</h3>
+
+            <h4>1. Star Topology</h4>
+            <div class="visual-diagram">
+                <h4>Star Network Configuration</h4>
+                <div class="diagram-text">
+                    <pre>
+                    Computer A
+                        │
+                        │
+        Computer D ─────┼───── Computer B
+                        │
+                        │
+                    Computer C
+                        
+            Central Hub/Switch in middle
+                    </pre>
+                </div>
+            </div>
+            
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Central Hub:</strong> All communication goes through central point</li>
+                    <li><strong>Simple Routing:</strong> Easy to manage and troubleshoot</li>
+                    <li><strong>Single Point of Failure:</strong> If hub fails, entire network fails</li>
+                </ul>
+                <h5>Real-World Example:</h5>
+                <p>Like a company where all communication goes through the CEO - efficient for decision making but risky if CEO is unavailable.</p>
+            </div>
+
+            <h4>2. Ring Topology</h4>
+            <div class="visual-diagram">
+                <h4>Ring Network Configuration</h4>
+                <div class="diagram-text">
+                    <pre>
+                Computer A
+                    │
+                    │
+        Computer D     Computer B
+                │         │
+                │         │
+                Computer C
+                
+        Computers connected in circle
+                    </pre>
+                </div>
+            </div>
+
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Circular Connection:</strong> Each computer connected to exactly two others</li>
+                    <li><strong>Token Passing:</strong> Data travels in one direction around ring</li>
+                    <li><strong>Equal Access:</strong> All computers have equal network access</li>
+                </ul>
+                <h5>Relay Race Analogy:</h5>
+                <p>Like relay race where baton (data) passes from runner to runner around the track until it reaches destination.</p>
+            </div>
+
+            <h4>3. Mesh Topology</h4>
+            <div class="concept">
+                <h5>Characteristics:</h5>
+                <ul>
+                    <li><strong>Multiple Paths:</strong> Several routes between any two computers</li>
+                    <li><strong>High Reliability:</strong> If one connection fails, others are available</li>
+                    <li><strong>Expensive:</strong> Requires many network connections</li>
+                </ul>
+                <h5>City Road System Analogy:</h5>
+                <p>Like a city with multiple roads between destinations - if one road is blocked, you can take alternative routes.</p>
+            </div>
+
+            <h3>Communication Protocols</h3>
+
+            <h4>What are Communication Protocols?</h4>
+            <p>Communication protocols are sets of rules that govern how computers communicate over a network. They're like languages and etiquette rules for computer conversations.</p>
+
+            <div class="example-detailed">
+                <h4>Human Communication Protocol Analogy</h4>
+                
+                <h5>Phone Call Protocol (Like Network Protocol):</h5>
+                <ol>
+                    <li><strong>Dial Number:</strong> Establish connection</li>
+                    <li><strong>Say "Hello":</strong> Initiate communication</li>
+                    <li><strong>Wait for Response:</strong> Confirm connection established</li>
+                    <li><strong>Take Turns Speaking:</strong> Avoid talking over each other</li>
+                    <li><strong>Confirm Understanding:</strong> "Did you get that?"</li>
+                    <li><strong>Say "Goodbye":</strong> Properly end conversation</li>
+                </ol>
+
+                <h5>Computer Communication Needs Similar Rules:</h5>
+                <ul>
+                    <li><strong>Connection Setup:</strong> How to establish communication</li>
+                    <li><strong>Data Format:</strong> How to structure messages</li>
+                    <li><strong>Error Handling:</strong> What to do when messages get lost</li>
+                    <li><strong>Flow Control:</strong> Prevent fast sender from overwhelming slow receiver</li>
+                    <li><strong>Connection Termination:</strong> How to properly end communication</li>
+                </ul>
+            </div>
+
+            <h4>Common Network Protocols</h4>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Protocol</th>
+                            <th>Purpose</th>
+                            <th>Example Usage</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TCP/IP</strong></td>
+                            <td>Reliable data transmission</td>
+                            <td>Web browsing, email, file transfer</td>
+                            <td>Error correction, guaranteed delivery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UDP</strong></td>
+                            <td>Fast data transmission</td>
+                            <td>Video streaming, online gaming</td>
+                            <td>Fast but no guarantee of delivery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP/HTTPS</strong></td>
+                            <td>Web page transmission</td>
+                            <td>Websites, web applications</td>
+                            <td>Request-response model</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FTP</strong></td>
+                            <td>File transfer</td>
+                            <td>Uploading/downloading files</td>
+                            <td>File management commands</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMTP</strong></td>
+                            <td>Email transmission</td>
+                            <td>Sending emails</td>
+                            <td>Store and forward mechanism</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Issues in Distributed Operating Systems</h3>
+
+            <h4>1. Transparency</h4>
+            <div class="concept">
+                <h5>Goal:</h5>
+                <p>Hide the complexity of distribution from users - make distributed system appear as single system</p>
+                
+                <h5>Types of Transparency:</h5>
+                <ul>
+                    <li><strong>Location Transparency:</strong> Users don't need to know where files are physically stored</li>
+                    <li><strong>Migration Transparency:</strong> Files/processes can move without user awareness</li>
+                    <li><strong>Replication Transparency:</strong> Multiple copies of data maintained automatically</li>
+                    <li><strong>Failure Transparency:</strong> System continues working despite some component failures</li>
+                </ul>
+
+                <h5>ATM Network Analogy:</h5>
+                <p>When you use any ATM, you don't know which bank's computer processes your transaction. The complexity is hidden - you just get your money.</p>
+            </div>
+
+            <h4>2. Scalability</h4>
+            <div class="concept">
+                <h5>Challenge:</h5>
+                <p>System should work well with small number of computers and also scale to handle thousands of computers</p>
+
+                <h5>Scalability Problems:</h5>
+                <ul>
+                    <li><strong>Communication Overhead:</strong> More computers = more communication needed</li>
+                    <li><strong>Centralized Services:</strong> Single points of failure and bottlenecks</li>
+                    <li><strong>Data Consistency:</strong> Harder to keep data synchronized across many machines</li>
+                </ul>
+
+                <h5>Solutions:</h5>
+                <ul>
+                    <li><strong>Hierarchical Design:</strong> Organize computers in tree structure</li>
+                    <li><strong>Distributed Services:</strong> Avoid single points of failure</li>
+                    <li><strong>Caching:</strong> Store frequently used data locally</li>
+                </ul>
+            </div>
+
+            <h4>3. Fault Tolerance</h4>
+            <div class="concept">
+                <h5>Challenge:</h5>
+                <p>System should continue working even when some computers fail</p>
+
+                <h5>Redundancy Strategies:</h5>
+                <ul>
+                    <li><strong>Data Replication:</strong> Store multiple copies of important data</li>
+                    <li><strong>Process Replication:</strong> Run critical processes on multiple machines</li>
+                    <li><strong>Checkpointing:</strong> Regularly save system state for recovery</li>
+                </ul>
+
+                <h5>Airline System Analogy:</h5>
+                <p>Airlines have backup planes, alternative routes, and redundant systems so that if one plane breaks down, passengers can still reach their destination.</p>
+            </div>
+        </section>
+
+        <section id="deadlocks">
+            <h2>2. Understanding Deadlocks</h2>
+
+            <h3>What is a Deadlock?</h3>
+            <p>A deadlock is a situation where two or more processes are permanently blocked, each waiting for the other to release resources. It's like a traffic jam where no vehicle can move because everyone is blocking everyone else.</p>
+
+            <div class="example-detailed">
+                <h4>Classic Four-Way Intersection Deadlock</h4>
+                <p>Imagine a four-way intersection where traffic lights are broken:</p>
+                
+                <h5>The Situation:</h5>
+                <ul>
+                    <li><strong>Car A (North):</strong> Wants to go East, waiting for Car B to move</li>
+                    <li><strong>Car B (East):</strong> Wants to go South, waiting for Car C to move</li>
+                    <li><strong>Car C (South):</strong> Wants to go West, waiting for Car D to move</li>
+                    <li><strong>Car D (West):</strong> Wants to go North, waiting for Car A to move</li>
+                </ul>
+
+                <p><strong>Result:</strong> Nobody can move because everyone is waiting for someone else. This is deadlock!</p>
+
+                <h5>Computer Deadlock Example:</h5>
+                <ul>
+                    <li><strong>Process A:</strong> Has printer, needs scanner</li>
+                    <li><strong>Process B:</strong> Has scanner, needs printer</li>
+                    <li><strong>Both Wait Forever:</strong> A won't release printer until it gets scanner, B won't release scanner until it gets printer</li>
+                </ul>
+            </div>
+
+            <h3>Deadlock Characterization</h3>
+            <p>For deadlock to occur, four conditions must be present simultaneously. These are called the <strong>Coffman Conditions</strong>.</p>
+
+            <h4>The Four Necessary Conditions</h4>
+
+            <div class="algorithm-steps">
+                <h5>1. Mutual Exclusion</h5>
+                <ul>
+                    <li><strong>Definition:</strong> Only one process can use a resource at a time</li>
+                    <li><strong>Example:</strong> Only one person can use the printer at once</li>
+                    <li><strong>Why Necessary:</strong> If resources could be shared freely, no blocking would occur</li>
+                </ul>
+
+                <h5>2. Hold and Wait</h5>
+                <ul>
+                    <li><strong>Definition:</strong> A process holds at least one resource while waiting for another</li>
+                    <li><strong>Example:</strong> Process keeps printer while waiting for scanner</li>
+                    <li><strong>Alternative:</strong> Process could release all resources before requesting new ones</li>
+                </ul>
+
+                <h5>3. No Preemption</h5>
+                <ul>
+                    <li><strong>Definition:</strong> Resources cannot be forcibly taken away from processes</li>
+                    <li><strong>Example:</strong> Cannot forcibly take printer away from a process using it</li>
+                    <li><strong>Reason:</strong> Some resources (like files being written) cannot safely be preempted</li>
+                </ul>
+
+                <h5>4. Circular Wait</h5>
+                <ul>
+                    <li><strong>Definition:</strong> Chain of processes, each waiting for resource held by next process</li>
+                    <li><strong>Example:</strong> P1 waits for P2's resource, P2 waits for P3's resource, P3 waits for P1's resource</li>
+                    <li><strong>Visual:</strong> Forms a circle when drawn as a diagram</li>
+                </ul>
+            </div>
+
+            <div class="visual-diagram">
+                <h4>Circular Wait Example</h4>
+                <div class="diagram-text">
+                    <pre>
+                    Process P1
+                    │ holds R1
+                    │ wants R2
+                    ▼
+                Process P2 ◄──── Process P3
+                │ holds R2         │ holds R3
+                │ wants R3         │ wants R1
+                ▼                  │
+                    └──────────────┘
+                    
+        P1 → P2 → P3 → P1 (Circular dependency!)
+                    </pre>
+                </div>
+            </div>
+
+            <h3>Methods for Handling Deadlocks</h3>
+
+            <h4>Overview of Approaches</h4>
+            <p>There are three main strategies for dealing with deadlocks, each with different trade-offs:</p>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Strategy</th>
+                            <th>When Applied</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Prevention</strong></td>
+                            <td>Ensure deadlock never occurs</td>
+                            <td>System design time</td>
+                            <td>High (restricts resource usage)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Avoidance</strong></td>
+                            <td>Dynamically avoid dangerous situations</td>
+                            <td>Runtime decision making</td>
+                            <td>Medium (requires resource prediction)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Detection & Recovery</strong></td>
+                            <td>Allow deadlock, then detect and fix</td>
+                            <td>After deadlock occurs</td>
+                            <td>Low during normal operation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ignorance</strong></td>
+                            <td>Ignore the problem completely</td>
+                            <td>Never (hope deadlock is rare)</td>
+                            <td>Very low (until deadlock occurs)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="deadlock-prevention">
+            <h2>3. Deadlock Prevention</h2>
+
+            <h3>Strategy: Break One of the Four Conditions</h3>
+            <p>Deadlock prevention works by ensuring that at least one of the four necessary conditions cannot occur.</p>
+
+            <h4>Method 1: Attack Mutual Exclusion</h4>
+            <div class="concept">
+                <h5>Approach:</h5>
+                <p>Make resources shareable when possible</p>
+                
+                <h5>Examples:</h5>
+                <ul>
+                    <li><strong>Read-Only Files:</strong> Multiple processes can read same file simultaneously</li>
+                    <li><strong>Spooling:</strong> Print jobs stored in queue, printer daemon handles printing</li>
+                </ul>
+
+                <h5>Library Book Analogy:</h5>
+                <p>Instead of lending physical books (mutual exclusion), library provides photocopies so multiple people can read same content.</p>
+
+                <h5>Limitations:</h5>
+                <ul>
+                    <li><strong>Not Always Possible:</strong> Some resources inherently cannot be shared (CPU, printers during writing)</li>
+                    <li><strong>Data Integrity:</strong> Shared writing can corrupt data</li>
+                </ul>
+            </div>
+
+            <h4>Method 2: Attack Hold and Wait</h4>
+            <div class="algorithm-steps">
+                <h5>Approach:</h5>
+                <p>Require processes to request all needed resources at once, before execution begins</p>
+
+                <h5>Implementation Options:</h5>
+                <ol>
+                    <li><strong>All-or-Nothing Allocation:</strong>
+                        <ul>
+                            <li>Process lists all resources it might need</li>
+                            <li>System allocates all resources or none</li>
+                            <li>Process only starts when all resources available</li>
+                        </ul>
+                    </li>
+                    <li><strong>Release Before Request:</strong>
+                        <ul>
+                            <li>Process must release all current resources before requesting new ones</li>
+                            <li>Reacquire old resources along with new ones if needed</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h5>Shopping Analogy:</h5>
+                <p>Like requiring shoppers to gather ALL items they need before going to checkout, rather than shopping gradually and returning for more items.</p>
+
+                <h5>Problems:</h5>
+                <ul>
+                    <li><strong>Resource Waste:</strong> Process may hold resources it doesn't immediately need</li>
+                    <li><strong>Starvation:</strong> Process needing many resources may wait indefinitely</li>
+                    <li><strong>Unpredictable Needs:</strong> Hard to predict all resources needed in advance</li>
+                </ul>
+            </div>
+
+            <h4>Method 3: Attack No Preemption</h4>
+            <div class="concept">
+                <h5>Approach:</h5>
+                <p>Allow system to forcibly take resources away from processes</p>
+
+                <h5>Implementation:</h5>
+                <ul>
+                    <li><strong>Preempt When Blocked:</strong> If process requests unavailable resource, take away all its resources</li>
+                    <li><strong>Priority-Based Preemption:</strong> Higher priority process can take resources from lower priority</li>
+                </ul>
+
+                <h5>Emergency Vehicle Analogy:</h5>
+                <p>Like emergency vehicles forcing regular traffic to move aside - higher priority needs can override current resource allocations.</p>
+
+                <h5>Applicable To:</h5>
+                <ul>
+                    <li><strong>CPU:</strong> Can preempt and reschedule</li>
+                    <li><strong>Memory:</strong> Can save state and reload later</li>
+                </ul>
+
+                <h5>Not Applicable To:</h5>
+                <ul>
+                    <li><strong>Printers:</strong> Cannot safely interrupt print job</li>
+                    <li><strong>Database Locks:</strong> Interruption could corrupt data</li>
+                </ul>
+            </div>
+
+            <h4>Method 4: Attack Circular Wait</h4>
+            <div class="concept">
+                <h5>Approach:</h5>
+                <p>Impose total ordering on resource types - always request resources in specific order</p>
+
+                <h5>Implementation:</h5>
+                <ol>
+                    <li><strong>Number Resources:</strong> Assign unique number to each resource type</li>
+                    <li><strong>Ordered Requests:</strong> Processes must request resources in increasing order</li>
+                    <li><strong>No Backward Requests:</strong> Cannot request lower-numbered resource if holding higher-numbered one</li>
+                </ol>
+
+                <h5>Building Elevator Analogy:</h5>
+                <p>Like elevator rule: "Always visit floors in ascending order" - prevents circular waiting patterns.</p>
+
+                <h5>Example:</h5>
+                <ul>
+                    <li><strong>Resource Numbering:</strong> Scanner = 1, Printer = 2, Network = 3</li>
+                    <li><strong>Valid Order:</strong> Request Scanner, then Printer, then Network</li>
+                    <li><strong>Invalid:</strong> Cannot request Scanner if already holding Printer</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="deadlock-avoidance">
+            <h2>4. Deadlock Avoidance</h2>
+
+            <h3>Banker's Algorithm</h3>
+            <p>The Banker's Algorithm is like a careful bank manager who only approves loans when certain the customer can repay, preventing bank from running out of money.</p>
+
+            <div class="example-detailed">
+                <h4>Bank Loan Analogy</h4>
+                
+                <h5>Bank Scenario:</h5>
+                <ul>
+                    <li><strong>Bank Has:</strong> $100 total cash</li>
+                    <li><strong>Customer A:</strong> Already borrowed $30, might need up to $80 total</li>
+                    <li><strong>Customer B:</strong> Already borrowed $20, might need up to $60 total</li>
+                    <li><strong>Customer C:</strong> Already borrowed $10, might need up to $50 total</li>
+                </ul>
+
+                <h5>Safe State Analysis:</h5>
+                <p><strong>Available Cash:</strong> $100 - $30 - $20 - $10 = $40</p>
+                
+                <p><strong>Customer Needs:</strong></p>
+                <ul>
+                    <li>Customer A needs $50 more ($80 - $30)</li>
+                    <li>Customer B needs $40 more ($60 - $20)</li>
+                    <li>Customer C needs $40 more ($50 - $10)</li>
+                </ul>
+
+                <p><strong>Safe Sequence:</strong> Serve B first ($40 available ≥ $40 needed), then when B repays, serve C, then A</p>
+            </div>
+
+            <h3>Banker's Algorithm Steps</h3>
+            <div class="algorithm-steps">
+                <h5>Algorithm Process:</h5>
+                <ol>
+                    <li><strong>Track System State:</strong>
+                        <ul>
+                            <li>Available resources in system</li>
+                            <li>Current allocation to each process</li>
+                            <li>Maximum need declared by each process</li>
+                        </ul>
+                    </li>
+                    <li><strong>Calculate Additional Need:</strong>
+                        <ul>
+                            <li>For each process: Need = Maximum - Currently Allocated</li>
+                        </ul>
+                    </li>
+                    <li><strong>Find Safe Sequence:</strong>
+                        <ul>
+                            <li>Look for process whose additional need ≤ available resources</li>
+                            <li>Simulate allocating resources to that process</li>
+                            <li>Assume process completes and returns all resources</li>
+                            <li>Repeat until all processes can complete</li>
+                        </ul>
+                    </li>
+                    <li><strong>Grant or Deny Request:</strong>
+                        <ul>
+                            <li>If safe sequence exists, grant resource request</li>
+                            <li>If no safe sequence, deny request (wait for resources to become available)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Safe vs Unsafe States</h3>
+            <div class="concept">
+                <h4>Safe State</h4>
+                <p><strong>Definition:</strong> A state where system can guarantee all processes will complete successfully</p>
+                <p><strong>Guarantee:</strong> There exists at least one sequence in which all processes can finish</p>
+
+                <h4>Unsafe State</h4>
+                <p><strong>Definition:</strong> A state where system cannot guarantee deadlock will not occur</p>
+                <p><strong>Important:</strong> Unsafe ≠ Deadlocked (deadlock might or might not occur)</p>
+
+                <h4>Relationship:</h4>
+                <ul>
+                    <li><strong>Safe State → No Deadlock:</strong> Always true</li>
+                    <li><strong>Unsafe State → Possible Deadlock:</strong> Deadlock may or may not occur</li>
+                    <li><strong>Deadlock → Unsafe State:</strong> Always true</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="deadlock-detection-recovery">
+            <h2>5. Deadlock Detection and Recovery</h2>
+
+            <h3>Detection Strategy</h3>
+            <p>Instead of preventing deadlocks, this approach allows them to occur but detects them quickly and takes corrective action.</p>
+
+            <h4>Wait-for Graph Method</h4>
+            <div class="concept">
+                <h5>How It Works:</h5>
+                <p>Create a graph where processes are nodes and edges represent "waiting for" relationships</p>
+
+                <h5>Detection Process:</h5>
+                <ul>
+                    <li><strong>Build Graph:</strong> Add edge from Pi to Pj if Pi is waiting for resource held by Pj</li>
+                    <li><strong>Check for Cycles:</strong> If graph contains cycle, deadlock exists</li>
+                    <li><strong>Identify Victims:</strong> Processes involved in cycle are deadlocked</li>
+                </ul>
+
+                <h5>Example Graph:</h5>
+                <p>P1 → P2 → P3 → P1 (cycle detected = deadlock!)</p>
+            </div>
+
+            <h3>Recovery Methods</h3>
+
+            <h4>1. Process Termination</h4>
+            <div class="concept">
+                <h5>Approach:</h5>
+                <p>Kill one or more processes to break deadlock cycle</p>
+
+                <h5>Termination Strategies:</h5>
+                <ul>
+                    <li><strong>Abort All Deadlocked Processes:</strong>
+                        <ul>
+                            <li>Simple and guarantees deadlock resolution</li>
+                            <li>Expensive - loses all progress made by processes</li>
+                        </ul>
+                    </li>
+                    <li><strong>Abort One Process at a Time:</strong>
+                        <ul>
+                            <li>Kill processes one by one until deadlock broken</li>
+                            <li>Check after each termination if deadlock still exists</li>
+                            <li>More efficient but requires repeated deadlock detection</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>Process Selection Criteria:</h5>
+                <ul>
+                    <li><strong>Priority:</strong> Terminate lower priority processes first</li>
+                    <li><strong>Execution Time:</strong> Prefer processes that have executed less time</li>
+                    <li><strong>Resource Usage:</strong> Consider how many resources process is using</li>
+                    <li><strong>Future Needs:</strong> Consider how much more work process needs to complete</li>
+                </ul>
+            </div>
+
+            <h4>2. Resource Preemption</h4>
+            <div name="concept">
+                <h5>Approach:</h5>
+                <p>Take resources away from some processes and give them to others</p>
+
+                <h5>Preemption Considerations:</h5>
+                <ul>
+                    <li><strong>Victim Selection:</strong> Choose process to preempt (similar criteria as termination)</li>
+                    <li><strong>Rollback:</strong> Return process to safe state before resource allocation</li>
+                    <li><strong>Starvation Prevention:</strong> Ensure same process isn't always chosen as victim</li>
+                </ul>
+
+                <h5>Parking Space Analogy:</h5>
+                <p>Like asking someone to move their car from parking space to resolve traffic jam - person must find alternative parking and might have to walk further.</p>
+            </div>
+
+            <h3>Prevention vs Avoidance vs Detection Comparison</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Prevention</th>
+                            <th>Avoidance</th>
+                            <th>Detection & Recovery</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>When Applied</strong></td>
+                            <td>System design phase</td>
+                            <td>Runtime resource allocation</td>
+                            <td>After deadlock occurs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Resource Utilization</strong></td>
+                            <td>Low (many restrictions)</td>
+                            <td>Medium (conservative allocation)</td>
+                            <td>High (maximum utilization)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>System Overhead</strong></td>
+                            <td>Low during execution</td>
+                            <td>Medium (algorithm overhead)</td>
+                            <td>Low normally, high during recovery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Guarantees</strong></td>
+                            <td>No deadlock possible</td>
+                            <td>No deadlock if algorithm followed</td>
+                            <td>Deadlock possible but resolved</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complexity</strong></td>
+                            <td>Simple implementation</td>
+                            <td>Complex algorithm</td>
+                            <td>Moderate complexity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Systems where deadlock very dangerous</td>
+                            <td>Interactive systems</td>
+                            <td>Systems where deadlock rare</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>🎯 Unit 3 Summary: Distributed OS and Deadlocks</h3>
+                <div class="summary-table">
+                    <table>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Key Concept</th>
+                            <th>Remember This</th>
+                        </tr>
+                        <tr>
+                            <td>Distributed OS</td>
+                            <td>Multiple computers appearing as single system</td>
+                            <td>Transparency hides complexity from users</td>
+                        </tr>
+                        <tr>
+                            <td>Network Topology</td>
+                            <td>Star, Ring, Mesh connection patterns</td>
+                            <td>Each has different reliability and cost trade-offs</td>
+                        </tr>
+                        <tr>
+                            <td>Communication Protocols</td>
+                            <td>Rules for computer communication (TCP/IP, HTTP)</td>
+                            <td>Like languages and etiquette for computers</td>
+                        </tr>
+                        <tr>
+                            <td>Distributed Issues</td>
+                            <td>Transparency, scalability, fault tolerance</td>
+                            <td>Complexity increases with distribution</td>
+                        </tr>
+                        <tr>
+                            <td>Deadlock</td>
+                            <td>Processes permanently blocked waiting for each other</td>
+                            <td>Four conditions must all be present</td>
+                        </tr>
+                        <tr>
+                            <td>Deadlock Prevention</td>
+                            <td>Break one of four necessary conditions</td>
+                            <td>Safe but may waste resources</td>
+                        </tr>
+                        <tr>
+                            <td>Deadlock Avoidance</td>
+                            <td>Banker's Algorithm for safe resource allocation</td>
+                            <td>Dynamic decision making during execution</td>
+                        </tr>
+                        <tr>
+                            <td>Deadlock Recovery</td>
+                            <td>Process termination or resource preemption</td>
+                            <td>Allow deadlock, then fix when detected</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="checklist">
+                <h4>✅ Unit 3 Learning Objectives Achieved:</h4>
+                <ul>
+                    <li>Understand distributed operating system concepts and benefits</li>
+                    <li>Know different types of distributed systems and network topologies</li>
+                    <li>Comprehend communication protocols and their purposes</li>
+                    <li>Identify major issues in distributed system design</li>
+                    <li>Understand deadlock concept and necessary conditions</li>
+                    <li>Master deadlock prevention techniques</li>
+                    <li>Learn Banker's Algorithm for deadlock avoidance</li>
+                    <li>Know deadlock detection and recovery methods</li>
+                </ul>
+            </div>
+
+            <div class="exam-tips">
+                <h4>📝 15-Mark Question Strategy for Unit 3</h4>
+                <ul>
+                    <li><strong>Distributed OS Questions:</strong> Compare with centralized systems + give real examples</li>
+                    <li><strong>Deadlock Questions:</strong> Always mention four conditions + provide concrete examples</li>
+                    <li><strong>Banker's Algorithm:</strong> Work through numerical examples step-by-step</li>
+                    <li><strong>Protocol Questions:</strong> Explain purpose + compare different protocols</li>
+                    <li><strong>Draw Diagrams:</strong> Network topologies, wait-for graphs, resource allocation</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

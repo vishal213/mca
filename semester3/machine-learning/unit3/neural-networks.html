@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3: Neural Networks and Deep Learning</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Machine Learning</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 3: Artificial Neural Networks and Deep Learning</h1>
+            <p class="subtitle">Understanding Brain-Inspired Computing and Modern AI</p>
+        </header>
+
+        <section id="ann-introduction">
+            <h2>1. Introduction to Artificial Neural Networks</h2>
+            
+            <h3>What is an Artificial Neural Network?</h3>
+            <p>An Artificial Neural Network (ANN) is a computing system inspired by biological neural networks (like animal brains). It consists of interconnected nodes (artificial neurons) that work together to learn patterns from data and make predictions or decisions.</p>
+            
+            <h4>The Big Picture: Why Neural Networks Matter</h4>
+            <p>Traditional programming requires us to write explicit rules for every situation. But what if the rules are too complex for humans to discover or write? Neural networks learn these complex rules automatically by studying examples, much like how a child learns to recognize faces without anyone explaining the rules of facial recognition.</p>
+            
+            <div class="concept">
+                <h5>What Makes Neural Networks Special:</h5>
+                <ul>
+                    <li><strong>Universal Approximators:</strong> Can learn almost any pattern if given enough data and neurons</li>
+                    <li><strong>Adaptive Learning:</strong> Automatically adjust to new patterns without explicit programming</li>
+                    <li><strong>Parallel Processing:</strong> Multiple neurons work simultaneously like brain cells</li>
+                    <li><strong>Feature Discovery:</strong> Can discover important features humans might miss</li>
+                    <li><strong>Non-linear Modeling:</strong> Handle complex relationships that linear models cannot</li>
+                </ul>
+            </div>
+            
+            <h4>Real-World Impact</h4>
+            <div class="example-detailed">
+                <p><strong>Revolutionary Applications:</strong></p>
+                <ul>
+                    <li><strong>Computer Vision:</strong> Recognizing objects in photos with 99%+ accuracy</li>
+                    <li><strong>Natural Language:</strong> Translating languages, understanding speech, generating text</li>
+                    <li><strong>Medical Diagnosis:</strong> Detecting cancer in X-rays better than human doctors</li>
+                    <li><strong>Autonomous Vehicles:</strong> Processing camera and sensor data for self-driving cars</li>
+                    <li><strong>Drug Discovery:</strong> Predicting molecular behavior for new medicine development</li>
+                    <li><strong>Climate Modeling:</strong> Analyzing complex weather patterns for better forecasting</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="biological-motivation">
+            <h2>2. Biological Motivation</h2>
+            
+            <h3>How the Human Brain Works (Simplified)</h3>
+            <p>Understanding biological neurons helps us appreciate why artificial neural networks are designed the way they are.</p>
+            
+            <h4>Biological Neuron Components</h4>
+            <div class="concept">
+                <ul>
+                    <li><strong>Cell Body (Soma):</strong> Main part containing nucleus, processes incoming information</li>
+                    <li><strong>Dendrites:</strong> Branch-like extensions that receive signals from other neurons</li>
+                    <li><strong>Axon:</strong> Long projection that sends signals to other neurons</li>
+                    <li><strong>Synapses:</strong> Connections between neurons where information transfers</li>
+                    <li><strong>Neurotransmitters:</strong> Chemical signals passed between neurons</li>
+                </ul>
+            </div>
+            
+            <h4>How Biological Learning Works</h4>
+            <div class="example-detailed">
+                <p><strong>Learning to Recognize Your Mother's Face:</strong></p>
+                
+                <ol>
+                    <li><strong>Initial State:</strong> Baby's brain has random neural connections</li>
+                    <li><strong>Exposure:</strong> Baby sees mother's face thousands of times</li>
+                    <li><strong>Pattern Recognition:</strong> Certain combinations of neurons consistently activate when seeing mother</li>
+                    <li><strong>Connection Strengthening:</strong> Synapses between these neurons become stronger (Hebbian learning: "neurons that fire together, wire together")</li>
+                    <li><strong>Result:</strong> Neural pathway specialized for recognizing mother's face</li>
+                </ol>
+                
+                <p><strong>Key Insight:</strong> The brain doesn't store a template of mother's face - instead, it develops a pattern of neural activity that represents "mother-ness"</p>
+            </div>
+            
+            <h3>From Biology to Artificial Networks</h3>
+            <div class="concept">
+                <table class="comparison-table">
+                    <tr><th>Biological Component</th><th>Artificial Equivalent</th><th>Function</th></tr>
+                    <tr>
+                        <td>Neuron Cell Body</td>
+                        <td>Artificial Neuron/Node</td>
+                        <td>Processes and combines inputs</td>
+                    </tr>
+                    <tr>
+                        <td>Dendrites</td>
+                        <td>Input Connections</td>
+                        <td>Receive signals from other neurons</td>
+                    </tr>
+                    <tr>
+                        <td>Synapse Strength</td>
+                        <td>Connection Weights</td>
+                        <td>Determines influence of one neuron on another</td>
+                    </tr>
+                    <tr>
+                        <td>Action Potential</td>
+                        <td>Activation Function</td>
+                        <td>Decides whether neuron "fires" or stays inactive</td>
+                    </tr>
+                    <tr>
+                        <td>Learning/Adaptation</td>
+                        <td>Weight Adjustment</td>
+                        <td>Strengthens useful connections, weakens others</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h4>Brain vs Computer Neural Networks</h4>
+            <div class="concept">
+                <h5>Similarities:</h5>
+                <ul>
+                    <li><strong>Parallel Processing:</strong> Many neurons work simultaneously</li>
+                    <li><strong>Learning Through Experience:</strong> Performance improves with exposure to examples</li>
+                    <li><strong>Pattern Recognition:</strong> Excel at recognizing complex patterns</li>
+                    <li><strong>Distributed Storage:</strong> Information stored across network, not in single location</li>
+                </ul>
+                
+                <h5>Key Differences:</h5>
+                <ul>
+                    <li><strong>Scale:</strong> Human brain has ~86 billion neurons; AI networks typically have thousands to millions</li>
+                    <li><strong>Speed:</strong> Biological neurons fire ~100 times/second; artificial neurons can process thousands of times faster</li>
+                    <li><strong>Learning:</strong> Brain learns continuously; AI networks typically learn in distinct training phases</li>
+                    <li><strong>Energy:</strong> Brain uses ~20 watts; large AI models can use megawatts</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="neural-network-representation">
+            <h2>3. Neural Network Representation</h2>
+            
+            <h3>Artificial Neuron Structure</h3>
+            
+            <h4>Components of an Artificial Neuron</h4>
+            <div class="visual-diagram">
+                <h5>Single Neuron Diagram:</h5>
+                <div class="diagram-text">
+                    <pre>
+    INPUTS    WEIGHTS    SUMMATION    ACTIVATION    OUTPUT
+    
+    x₁ ──────── w₁ ────┐
+                       │
+    x₂ ──────── w₂ ────┤     Σ      f(sum)     y
+                       ├─── (sum) ──────→ ────→
+    x₃ ──────── w₃ ────┤
+                       │
+    bias ────── w₀ ────┘
+    
+    Mathematical Representation:
+    sum = w₀×bias + w₁×x₁ + w₂×x₂ + w₃×x₃
+    output = f(sum)  where f is activation function
+                    </pre>
+                </div>
+            </div>
+            
+            <h4>Detailed Component Explanation</h4>
+            <div class="concept">
+                <h5>1. Inputs (x₁, x₂, x₃, ...):</h5>
+                <ul>
+                    <li><strong>What they are:</strong> Features or outputs from previous neurons</li>
+                    <li><strong>Example:</strong> For email spam detection: x₁=word count, x₂=sender reputation, x₃=subject line length</li>
+                    <li><strong>Range:</strong> Usually normalized to values between 0 and 1</li>
+                </ul>
+                
+                <h5>2. Weights (w₁, w₂, w₃, ...):</h5>
+                <ul>
+                    <li><strong>What they are:</strong> Learned parameters that determine input importance</li>
+                    <li><strong>Positive weights:</strong> Input has positive influence on output</li>
+                    <li><strong>Negative weights:</strong> Input has negative influence on output</li>
+                    <li><strong>Large absolute values:</strong> Input has strong influence</li>
+                    <li><strong>Learning:</strong> Training process adjusts weights to improve predictions</li>
+                </ul>
+                
+                <h5>3. Bias (w₀):</h5>
+                <ul>
+                    <li><strong>Purpose:</strong> Allows neuron to activate even when all inputs are zero</li>
+                    <li><strong>Analogy:</strong> Like a "baseline mood" - some people are naturally optimistic (positive bias) or pessimistic (negative bias)</li>
+                    <li><strong>Mathematical role:</strong> Shifts the activation function left or right</li>
+                </ul>
+                
+                <h5>4. Activation Function f():</h5>
+                <ul>
+                    <li><strong>Purpose:</strong> Introduces non-linearity, decides if neuron should "fire"</li>
+                    <li><strong>Common types:</strong> Sigmoid (smooth S-curve), ReLU (0 if negative, x if positive), Tanh (S-curve from -1 to +1)</li>
+                </ul>
+            </div>
+            
+            <h3>Network Architecture</h3>
+            
+            <h4>Types of Neural Network Layers</h4>
+            <div class="ml-type">
+                <h5>Input Layer:</h5>
+                <p><strong>Function:</strong> Receives external data and passes it to the network</p>
+                <p><strong>Example:</strong> For image recognition, input layer has one neuron per pixel (28×28 image = 784 input neurons)</p>
+                
+                <h5>Hidden Layer(s):</h5>
+                <p><strong>Function:</strong> Process and transform information between input and output</p>
+                <p><strong>Why "Hidden":</strong> Their values aren't directly visible - they represent intermediate computations</p>
+                <p><strong>Deep Learning:</strong> Networks with multiple hidden layers (2+ layers = "deep")</p>
+                
+                <h5>Output Layer:</h5>
+                <p><strong>Function:</strong> Produces final prediction or classification</p>
+                <p><strong>Size:</strong> Number of neurons equals number of output classes or 1 for regression</p>
+            </div>
+            
+            <h4>Complete Network Example: Email Spam Detection</h4>
+            <div class="visual-diagram">
+                <h5>3-Layer Neural Network:</h5>
+                <div class="diagram-text">
+                    <pre>
+    INPUT LAYER        HIDDEN LAYER       OUTPUT LAYER
+    
+    Word Count ○────────○
+                 \    ○  \
+    Sender Rep  ○──────○  ○─────○ Spam Score
+                 /    ○  /    (0-1)
+    Links Count ○────────○
+    
+    Features: 3        Neurons: 4       Output: 1
+    
+    Network Processing:
+    1. Input features (normalized): [0.8, 0.2, 0.9]
+    2. Hidden layer processes combinations of features
+    3. Output layer produces spam probability: 0.85 (85% likely spam)
+    
+    Decision Rule: If output > 0.5 → Classify as Spam
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="appropriate-nn-problems">
+            <h2>4. Appropriate Problems for Neural Networks</h2>
+            
+            <h3>When Neural Networks Excel</h3>
+            
+            <h4>Perfect Scenarios for Neural Networks:</h4>
+            <div class="ml-type">
+                <h5>1. Complex Pattern Recognition</h5>
+                <p><strong>Examples:</strong> Image recognition, speech recognition, handwriting analysis</p>
+                <p><strong>Why Neural Networks:</strong> Can detect subtle patterns humans might miss, like texture variations in medical images</p>
+                
+                <h5>2. High-Dimensional Data</h5>
+                <p><strong>Examples:</strong> Gene analysis (thousands of genes), text analysis (thousands of words), sensor data</p>
+                <p><strong>Why Neural Networks:</strong> Can handle thousands of input features without manual feature selection</p>
+                
+                <h5>3. Non-Linear Relationships</h5>
+                <p><strong>Examples:</strong> Weather prediction (complex interactions), financial markets, chemical reactions</p>
+                <p><strong>Why Neural Networks:</strong> Multiple layers can model complex, non-linear relationships</p>
+                
+                <h5>4. Large Amounts of Data</h5>
+                <p><strong>Examples:</strong> Social media analysis, e-commerce recommendations, sensor networks</p>
+                <p><strong>Why Neural Networks:</strong> Performance improves with more data, unlike many traditional algorithms</p>
+            </div>
+            
+            <h3>Detailed Case Study: Medical Image Analysis</h3>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Detecting skin cancer from smartphone photos to help people in remote areas without dermatologists</p>
+                
+                <h4>Why Traditional Programming Failed:</h4>
+                <ul>
+                    <li><strong>Rule Complexity:</strong> Impossible to write rules for all cancer variations</li>
+                    <li><strong>Subtle Patterns:</strong> Cancer signs often involve tiny color variations invisible to casual observation</li>
+                    <li><strong>Individual Differences:</strong> Skin tones, lighting conditions, photo quality vary enormously</li>
+                </ul>
+                
+                <h4>Neural Network Solution:</h4>
+                <ul>
+                    <li><strong>Training Data:</strong> 100,000+ photos labeled by expert dermatologists</li>
+                    <li><strong>Network Architecture:</strong> Deep network with millions of parameters</li>
+                    <li><strong>Learning Process:</strong> Network automatically discovers features like:</li>
+                    <ul>
+                        <li>Asymmetrical shapes (cancer often irregular)</li>
+                        <li>Color variations (multiple colors within same lesion)</li>
+                        <li>Border characteristics (fuzzy vs sharp edges)</li>
+                        <li>Texture patterns (smooth vs rough surfaces)</li>
+                    </ul>
+                    <li><strong>Performance:</strong> 95% accuracy, matching expert dermatologists</li>
+                    <li><strong>Impact:</strong> Deployed as smartphone app, screened 10 million people, detected thousands of early-stage cancers</li>
+                </ul>
+            </div>
+            
+            <h3>When NOT to Use Neural Networks</h3>
+            <div class="concept">
+                <h4>Problematic Scenarios:</h4>
+                <ul>
+                    <li><strong>Small Datasets:</strong> Need thousands or millions of examples to work well</li>
+                    <li><strong>Simple Linear Relationships:</strong> Overkill for problems solvable with linear regression</li>
+                    <li><strong>Interpretability Required:</strong> Black box nature makes explanation difficult</li>
+                    <li><strong>Real-time Constraints:</strong> Can be slow for prediction in time-critical applications</li>
+                    <li><strong>Limited Computing Resources:</strong> Training requires significant computational power</li>
+                </ul>
+                
+                <p><strong>Example:</strong> Predicting house prices based only on size - linear regression is simpler, faster, and more interpretable than a neural network.</p>
+            </div>
+        </section>
+
+        <section id="perceptron">
+            <h2>5. The Perceptron</h2>
+            
+            <h3>What is a Perceptron?</h3>
+            <p>The perceptron is the simplest type of artificial neural network, consisting of just a single neuron. It's the building block for more complex networks and historically was the first neural network model.</p>
+            
+            <h4>Perceptron Structure</h4>
+            <div class="visual-diagram">
+                <h5>Perceptron Diagram:</h5>
+                <div class="diagram-text">
+                    <pre>
+             INPUTS                PERCEPTRON                OUTPUT
+    
+    x₁ ────────── w₁ ────┐
+                          │
+    x₂ ────────── w₂ ────┤    ╭─────────╮
+                          ├───→│ Σ → f() │───→ y
+    x₃ ────────── w₃ ────┤    ╰─────────╯
+                          │
+     1 ────────── w₀ ────┘
+    (bias)            (threshold)
+    
+    Step 1: Calculate weighted sum = w₀ + w₁x₁ + w₂x₂ + w₃x₃
+    Step 2: Apply threshold function:
+            - If sum ≥ 0: output = 1
+            - If sum < 0: output = 0
+                    </pre>
+                </div>
+            </div>
+            
+            <h4>Simple Perceptron Example: AND Gate</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Create a perceptron that implements logical AND function</p>
+                
+                <p><strong>Truth Table for AND:</strong></p>
+                <table class="data-table">
+                    <tr><th>Input A</th><th>Input B</th><th>Output (A AND B)</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                </table>
+                
+                <p><strong>Perceptron Solution:</strong></p>
+                <ul>
+                    <li><strong>Inputs:</strong> x₁ = A, x₂ = B</li>
+                    <li><strong>Weights:</strong> w₁ = 1, w₂ = 1</li>
+                    <li><strong>Bias:</strong> w₀ = -1.5</li>
+                    <li><strong>Equation:</strong> output = f(-1.5 + 1×A + 1×B)</li>
+                    <li><strong>Threshold:</strong> If sum ≥ 0 then output=1, else output=0</li>
+                </ul>
+                
+                <p><strong>Testing:</strong></p>
+                <ul>
+                    <li><strong>A=0, B=0:</strong> sum = -1.5 + 0 + 0 = -1.5 < 0 → output = 0 ✓</li>
+                    <li><strong>A=0, B=1:</strong> sum = -1.5 + 0 + 1 = -0.5 < 0 → output = 0 ✓</li>
+                    <li><strong>A=1, B=0:</strong> sum = -1.5 + 1 + 0 = -0.5 < 0 → output = 0 ✓</li>
+                    <li><strong>A=1, B=1:</strong> sum = -1.5 + 1 + 1 = 0.5 ≥ 0 → output = 1 ✓</li>
+                </ul>
+            </div>
+            
+            <h3>Representation Power of Perceptron</h3>
+            
+            <h4>What Can a Single Perceptron Learn?</h4>
+            <div class="concept">
+                <h5>Linearly Separable Problems:</h5>
+                <p>A perceptron can only solve problems where you can draw a straight line (in 2D) or flat plane (in higher dimensions) to separate different classes.</p>
+                
+                <h5>Examples of What Perceptron CAN Learn:</h5>
+                <ul>
+                    <li><strong>AND function:</strong> Line separates (1,1) from other points</li>
+                    <li><strong>OR function:</strong> Line separates (0,0) from other points</li>
+                    <li><strong>Simple classification:</strong> "Tall AND heavy people play basketball"</li>
+                </ul>
+                
+                <h5>Famous Limitation - XOR Problem:</h5>
+                <p><strong>XOR Truth Table:</strong></p>
+                <table class="data-table">
+                    <tr><th>A</th><th>B</th><th>A XOR B</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </table>
+                
+                <p><strong>Why Perceptron Fails:</strong> No single straight line can separate the 1s from the 0s in XOR! This limitation led to the "AI winter" in the 1970s until multilayer networks were developed.</p>
+            </div>
+            
+            <div class="visual-diagram">
+                <h5>Linear Separability Visualization:</h5>
+                <div class="diagram-text">
+                    <pre>
+    AND Function (Learnable):        XOR Function (Not Learnable):
+    
+    B │                             B │
+    1 │ 0        1                  1 │ 0        1  
+      │          ✓                    │          ✗
+    0 │ 0        0                  0 │ 1        0
+      └─────────── A                  └─────────── A
+        0        1                      0        1
+    
+    Single line can separate         No single line can separate
+    ✓ from 0 (linearly separable)    ✗ from 0 (not linearly separable)
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="perceptron-training">
+            <h2>6. Perceptron Training Rule</h2>
+            
+            <h3>How Perceptrons Learn</h3>
+            <p>The perceptron learning rule is simple: adjust weights when the perceptron makes a mistake. If the prediction is correct, don't change anything. If it's wrong, modify weights to reduce the error.</p>
+            
+            <h4>Perceptron Learning Algorithm</h4>
+            <div class="algorithm-steps">
+                <ol>
+                    <li><strong>Initialize weights randomly</strong> (small values near zero)</li>
+                    <li><strong>For each training example:</strong>
+                        <ul>
+                            <li>Calculate predicted output using current weights</li>
+                            <li>Compare with actual target output</li>
+                            <li>If prediction is correct: do nothing</li>
+                            <li>If prediction is wrong: adjust weights</li>
+                        </ul>
+                    </li>
+                    <li><strong>Weight update rule:</strong> wᵢ(new) = wᵢ(old) + η × (target - predicted) × xᵢ</li>
+                    <li><strong>Repeat</strong> until all examples are classified correctly or max iterations reached</li>
+                </ol>
+            </div>
+            
+            <h4>Detailed Training Example: Learning OR Function</h4>
+            <div class="example-detailed">
+                <p><strong>Target:</strong> Learn OR function (output = 1 if either input is 1)</p>
+                
+                <p><strong>Training Data:</strong></p>
+                <table class="data-table">
+                    <tr><th>x₁</th><th>x₂</th><th>Target</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                </table>
+                
+                <p><strong>Initial Setup:</strong></p>
+                <ul>
+                    <li>Weights: w₀ = 0.1 (bias), w₁ = 0.2, w₂ = 0.3</li>
+                    <li>Learning rate: η = 0.5</li>
+                </ul>
+                
+                <h4>Training Iterations:</h4>
+                
+                <p><strong>Iteration 1 - Example (0,0):</strong></p>
+                <ul>
+                    <li>Sum = 0.1 + 0.2×0 + 0.3×0 = 0.1</li>
+                    <li>Predicted = f(0.1) = 1 (since 0.1 > 0)</li>
+                    <li>Target = 0</li>
+                    <li>Error = 0 - 1 = -1</li>
+                    <li><strong>Weight Updates:</strong>
+                        <ul>
+                            <li>w₀ = 0.1 + 0.5×(-1)×1 = -0.4</li>
+                            <li>w₁ = 0.2 + 0.5×(-1)×0 = 0.2</li>
+                            <li>w₂ = 0.3 + 0.5×(-1)×0 = 0.3</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p><strong>Iteration 1 - Example (0,1):</strong></p>
+                <ul>
+                    <li>Sum = -0.4 + 0.2×0 + 0.3×1 = -0.1</li>
+                    <li>Predicted = f(-0.1) = 0 (since -0.1 < 0)</li>
+                    <li>Target = 1</li>
+                    <li>Error = 1 - 0 = 1</li>
+                    <li><strong>Weight Updates:</strong>
+                        <ul>
+                            <li>w₀ = -0.4 + 0.5×1×1 = 0.1</li>
+                            <li>w₁ = 0.2 + 0.5×1×0 = 0.2</li>
+                            <li>w₂ = 0.3 + 0.5×1×1 = 0.8</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p><strong>Continue for all examples...</strong> After several iterations, weights converge to values that correctly classify all training examples.</p>
+                
+                <p><strong>Final Learned Weights:</strong> w₀ = -0.2, w₁ = 0.6, w₂ = 0.6</p>
+                <p><strong>Final Function:</strong> output = f(-0.2 + 0.6×x₁ + 0.6×x₂)</p>
+            </div>
+        </section>
+
+        <section id="gradient-descent">
+            <h2>7. Gradient Descent and Delta Rule</h2>
+            
+            <h3>Understanding Gradient Descent</h3>
+            <p>Gradient descent is like finding the bottom of a valley while blindfolded. You feel the slope of the ground and always step in the downhill direction until you reach the lowest point.</p>
+            
+            <h4>The Hill-Climbing Analogy</h4>
+            <div class="concept">
+                <h5>Real-World Analogy:</h5>
+                <ul>
+                    <li><strong>Goal:</strong> Find the lowest point in a landscape (minimize error)</li>
+                    <li><strong>Method:</strong> Feel the slope and take steps downhill</li>
+                    <li><strong>Step Size:</strong> Large steps for steep slopes, small steps near the bottom</li>
+                    <li><strong>Success:</strong> Reach the bottom where slope is zero (minimal error)</li>
+                </ul>
+                
+                <h5>Mathematical Translation:</h5>
+                <ul>
+                    <li><strong>Landscape:</strong> Error surface showing error for different weight values</li>
+                    <li><strong>Position:</strong> Current weight values</li>
+                    <li><strong>Slope:</strong> Gradient (rate of change of error with respect to weights)</li>
+                    <li><strong>Step:</strong> Weight update in direction of negative gradient</li>
+                </ul>
+            </div>
+            
+            <h4>Gradient Descent Algorithm</h4>
+            <div class="algorithm-steps">
+                <ol>
+                    <li><strong>Initialize weights</strong> with small random values</li>
+                    <li><strong>For each training example:</strong>
+                        <ul>
+                            <li>Calculate predicted output</li>
+                            <li>Calculate error = (target - predicted)</li>
+                            <li>Calculate gradient (direction of steepest increase in error)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Update weights:</strong> Move in opposite direction of gradient</li>
+                    <li><strong>Weight update formula:</strong> w = w - η × gradient</li>
+                    <li><strong>Repeat</strong> until convergence (error stops decreasing)</li>
+                </ol>
+            </div>
+            
+            <h3>Delta Rule (Gradient Descent for Perceptron)</h3>
+            <p>The delta rule is a specific application of gradient descent for training perceptrons with continuous activation functions (like sigmoid instead of step function).</p>
+            
+            <h4>Delta Rule Formula</h4>
+            <div class="concept">
+                <p><strong>Weight Update Rule:</strong></p>
+                <p>Δwᵢ = η × (target - output) × output × (1 - output) × xᵢ</p>
+                
+                <h5>Formula Components:</h5>
+                <ul>
+                    <li><strong>η (eta):</strong> Learning rate (how big steps to take)</li>
+                    <li><strong>(target - output):</strong> Prediction error</li>
+                    <li><strong>output × (1 - output):</strong> Sigmoid derivative (how sensitive output is to weight changes)</li>
+                    <li><strong>xᵢ:</strong> Input value for weight wᵢ</li>
+                </ul>
+            </div>
+            
+            <h4>Complete Delta Rule Example</h4>
+            <div class="example-detailed">
+                <p><strong>Problem:</strong> Train perceptron to predict if students pass (1) or fail (0) based on study hours</p>
+                
+                <p><strong>Training Data:</strong></p>
+                <table class="data-table">
+                    <tr><th>Study Hours</th><th>Pass/Fail</th></tr>
+                    <tr><td>2</td><td>0 (Fail)</td></tr>
+                    <tr><td>4</td><td>0 (Fail)</td></tr>
+                    <tr><td>6</td><td>1 (Pass)</td></tr>
+                    <tr><td>8</td><td>1 (Pass)</td></tr>
+                </table>
+                
+                <p><strong>Initial Setup:</strong></p>
+                <ul>
+                    <li>Weight: w₁ = 0.5, Bias: w₀ = 0.1</li>
+                    <li>Learning rate: η = 0.1</li>
+                    <li>Activation function: Sigmoid σ(x) = 1/(1 + e⁻ˣ)</li>
+                </ul>
+                
+                <h4>Training Step 1 - Student with 2 hours:</h4>
+                <ul>
+                    <li><strong>Input calculation:</strong> sum = 0.1 + 0.5×2 = 1.1</li>
+                    <li><strong>Output:</strong> σ(1.1) = 1/(1 + e⁻¹·¹) = 0.75</li>
+                    <li><strong>Target:</strong> 0 (should fail)</li>
+                    <li><strong>Error:</strong> 0 - 0.75 = -0.75</li>
+                    <li><strong>Weight updates:</strong>
+                        <ul>
+                            <li>Δw₁ = 0.1 × (-0.75) × 0.75 × (1-0.75) × 2 = -0.028</li>
+                            <li>Δw₀ = 0.1 × (-0.75) × 0.75 × (1-0.75) × 1 = -0.014</li>
+                            <li>New weights: w₁ = 0.5 - 0.028 = 0.472, w₀ = 0.1 - 0.014 = 0.086</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <p><strong>After Many Iterations:</strong> Perceptron learns that ~5 study hours is the decision boundary between pass/fail.</p>
+            </div>
+        </section>
+
+        <section id="multilayer-networks">
+            <h2>8. Multilayer Networks and Backpropagation</h2>
+            
+            <h3>Why We Need Multiple Layers</h3>
+            <p>Single perceptrons can only solve linearly separable problems. But most real-world problems are more complex - they require multiple layers to learn complex patterns.</p>
+            
+            <h4>The XOR Solution with Multiple Layers</h4>
+            <div class="visual-diagram">
+                <h5>Two-Layer Network for XOR:</h5>
+                <div class="diagram-text">
+                    <pre>
+    INPUT       HIDDEN LAYER      OUTPUT LAYER
+    
+    x₁ ○────────○ h₁
+        \      /│\              
+         \    / │ \             
+          \  /  │  ○ h₂ ────────○ y
+           \/   │ /       
+           /\   │/        
+          /  \  ○ h₃      
+         /    \ │         
+    x₂ ○────────○ h₄
+    
+    Strategy: Hidden layer creates new features that make XOR linearly separable
+    h₁ learns: x₁ AND NOT x₂
+    h₂ learns: NOT x₁ AND x₂  
+    Output learns: h₁ OR h₂ (which equals x₁ XOR x₂)
+                    </pre>
+                </div>
+            </div>
+            
+            <h3>Backpropagation Algorithm</h3>
+            <p>Backpropagation is the algorithm that trains multilayer neural networks. It's called "backpropagation" because it calculates errors starting from the output and propagates them backward through the network.</p>
+            
+            <h4>The Credit Assignment Problem</h4>
+            <div class="concept">
+                <p><strong>The Challenge:</strong> In a multilayer network, when the final output is wrong, which hidden neurons are responsible? How much should each weight be adjusted?</p>
+                
+                <p><strong>Backpropagation's Solution:</strong></p>
+                <ul>
+                    <li><strong>Forward Pass:</strong> Input flows forward to produce output</li>
+                    <li><strong>Error Calculation:</strong> Compare output with target</li>
+                    <li><strong>Backward Pass:</strong> Error flows backward, assigning blame to each neuron</li>
+                    <li><strong>Weight Updates:</strong> Adjust weights based on their contribution to error</li>
+                </ul>
+            </div>
+            
+            <h4>Backpropagation Steps (Detailed)</h4>
+            <div class="algorithm-steps">
+                <ol>
+                    <li><strong>Forward Propagation:</strong>
+                        <ul>
+                            <li>Input enters network at input layer</li>
+                            <li>Each hidden layer processes inputs from previous layer</li>
+                            <li>Output layer produces final prediction</li>
+                            <li>Store all intermediate values for later use</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Error Calculation:</strong>
+                        <ul>
+                            <li>Calculate error at output layer: error = target - predicted</li>
+                            <li>Use error function like Mean Squared Error</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Backward Propagation:</strong>
+                        <ul>
+                            <li>Calculate output layer gradients</li>
+                            <li>Propagate gradients backward to hidden layers</li>
+                            <li>Each layer calculates its gradients based on layers above it</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Weight Updates:</strong>
+                        <ul>
+                            <li>Update all weights simultaneously using calculated gradients</li>
+                            <li>Use learning rate to control update magnitude</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Iteration:</strong>
+                        <ul>
+                            <li>Repeat process for all training examples</li>
+                            <li>Continue until error converges or max epochs reached</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <h3>Simple Backpropagation Example</h3>
+            <div class="example-detailed">
+                <p><strong>Network:</strong> 2 inputs → 2 hidden neurons → 1 output (XOR problem)</p>
+                
+                <h4>Network Architecture:</h4>
+                <ul>
+                    <li><strong>Input Layer:</strong> x₁, x₂</li>
+                    <li><strong>Hidden Layer:</strong> h₁, h₂ (sigmoid activation)</li>
+                    <li><strong>Output Layer:</strong> y (sigmoid activation)</li>
+                </ul>
+                
+                <h4>Sample Forward Pass (x₁=1, x₂=0, target=1):</h4>
+                
+                <p><strong>Step 1: Hidden Layer Calculation</strong></p>
+                <ul>
+                    <li>h₁_input = w₁₁×1 + w₁₂×0 + bias₁ = 0.8×1 + 0.2×0 + (-0.3) = 0.5</li>
+                    <li>h₁_output = σ(0.5) = 0.62</li>
+                    <li>h₂_input = w₂₁×1 + w₂₂×0 + bias₂ = 0.4×1 + 0.9×0 + (-0.8) = -0.4</li>
+                    <li>h₂_output = σ(-0.4) = 0.40</li>
+                </ul>
+                
+                <p><strong>Step 2: Output Layer Calculation</strong></p>
+                <ul>
+                    <li>y_input = v₁×0.62 + v₂×0.40 + bias_out = 0.7×0.62 + (-0.5)×0.40 + 0.1 = 0.334</li>
+                    <li>y_output = σ(0.334) = 0.58</li>
+                    <li>Error = 1 - 0.58 = 0.42</li>
+                </ul>
+                
+                <p><strong>Step 3: Backward Pass (Error Propagation)</strong></p>
+                <ul>
+                    <li>Calculate output gradients and update output weights</li>
+                    <li>Calculate hidden layer gradients based on output error</li>
+                    <li>Update hidden layer weights</li>
+                    <li><em>(Detailed calculations omitted for brevity)</em></li>
+                </ul>
+                
+                <p><strong>Result:</strong> After thousands of iterations, network learns to solve XOR problem!</p>
+            </div>
+        </section>
+
+        <section id="deep-learning">
+            <h2>9. Deep Learning</h2>
+            
+            <h3>What Makes a Network "Deep"?</h3>
+            <p>Deep learning refers to neural networks with multiple hidden layers (typically 3 or more layers total). The "depth" allows networks to learn increasingly complex and abstract features.</p>
+            
+            <h4>Layer-by-Layer Feature Learning</h4>
+            <div class="concept">
+                <h5>Image Recognition Example:</h5>
+                <ul>
+                    <li><strong>Layer 1:</strong> Detects basic features (edges, corners, simple shapes)</li>
+                    <li><strong>Layer 2:</strong> Combines basic features (curves, textures, simple objects)</li>
+                    <li><strong>Layer 3:</strong> Recognizes object parts (eyes, wheels, handles)</li>
+                    <li><strong>Layer 4:</strong> Identifies complete objects (faces, cars, animals)</li>
+                    <li><strong>Output Layer:</strong> Makes final classification decision</li>
+                </ul>
+                
+                <p><strong>Analogy:</strong> Like learning to read - first you recognize lines and curves, then letters, then words, then sentences, finally understanding meaning.</p>
+            </div>
+            
+            <h3>Deep Learning Revolution</h3>
+            <div class="example-detailed">
+                <h4>What Changed Around 2012:</h4>
+                
+                <h5>Historical Context:</h5>
+                <ul>
+                    <li><strong>1980s-2000s:</strong> Neural networks worked but weren't competitive with other methods</li>
+                    <li><strong>Problems:</strong> Limited computing power, small datasets, vanishing gradient problem</li>
+                    <li><strong>AI Community:</strong> Focused on other approaches like support vector machines</li>
+                </ul>
+                
+                <h5>The Breakthrough:</h5>
+                <ul>
+                    <li><strong>Big Data:</strong> Internet provided millions of labeled images, text, and audio</li>
+                    <li><strong>GPU Computing:</strong> Graphics cards accelerated neural network training 100x</li>
+                    <li><strong>Algorithmic Improvements:</strong> Better activation functions, regularization techniques</li>
+                    <li><strong>ImageNet Competition (2012):</strong> Deep learning won by huge margin, shocked AI community</li>
+                </ul>
+                
+                <h5>Performance Leap:</h5>
+                <ul>
+                    <li><strong>Image Recognition:</strong> Error rates dropped from 25% to 3% in one year</li>
+                    <li><strong>Speech Recognition:</strong> Achieved human-level accuracy</li>
+                    <li><strong>Machine Translation:</strong> Quality improved dramatically</li>
+                    <li><strong>Game Playing:</strong> AlphaGo defeated world champion using deep neural networks</li>
+                </ul>
+            </div>
+            
+            <h3>Modern Deep Learning Applications</h3>
+            
+            <h4>Convolutional Neural Networks (CNNs)</h4>
+            <div class="example-detailed">
+                <p><strong>Specialized for:</strong> Image and video analysis</p>
+                <p><strong>Key Innovation:</strong> Neurons only look at small local regions, then combine information hierarchically</p>
+                
+                <p><strong>Applications:</strong></p>
+                <ul>
+                    <li><strong>Medical Imaging:</strong> Detecting tumors in MRI scans with radiologist-level accuracy</li>
+                    <li><strong>Autonomous Vehicles:</strong> Real-time object detection and tracking</li>
+                    <li><strong>Manufacturing:</strong> Quality control through visual inspection</li>
+                    <li><strong>Agriculture:</strong> Crop disease detection from drone imagery</li>
+                </ul>
+            </div>
+            
+            <h4>Recurrent Neural Networks (RNNs)</h4>
+            <div class="example-detailed">
+                <p><strong>Specialized for:</strong> Sequential data like text, speech, time series</p>
+                <p><strong>Key Innovation:</strong> Networks have memory - can remember previous inputs when processing current input</p>
+                
+                <p><strong>Applications:</strong></p>
+                <ul>
+                    <li><strong>Language Translation:</strong> Google Translate, DeepL</li>
+                    <li><strong>Speech Recognition:</strong> Siri, Alexa, voice assistants</li>
+                    <li><strong>Stock Prediction:</strong> Analyzing price patterns over time</li>
+                    <li><strong>Music Generation:</strong> Creating new songs in specific styles</li>
+                </ul>
+            </div>
+            
+            <h3>Convergence and Local Minima</h3>
+            
+            <h4>Training Challenges</h4>
+            <div class="concept">
+                <h5>Convergence Issues:</h5>
+                <ul>
+                    <li><strong>Local Minima:</strong> Algorithm gets stuck in suboptimal solution (like getting trapped in small valley instead of finding deepest valley)</li>
+                    <li><strong>Saddle Points:</strong> Points where gradient is zero but aren't actual minima</li>
+                    <li><strong>Vanishing Gradients:</strong> In deep networks, gradients become very small in early layers</li>
+                    <li><strong>Exploding Gradients:</strong> Gradients become very large, causing unstable training</li>
+                </ul>
+                
+                <h5>Modern Solutions:</h5>
+                <ul>
+                    <li><strong>Better Initialization:</strong> Smart starting weights prevent gradient problems</li>
+                    <li><strong>Adaptive Learning Rates:</strong> Algorithms like Adam adjust learning rate automatically</li>
+                    <li><strong>Regularization:</strong> Techniques like dropout prevent overfitting</li>
+                    <li><strong>Batch Normalization:</strong> Normalizes inputs to each layer for stable training</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-prep-unit3">
+            <h2>10. Exam Preparation for Unit 3</h2>
+            
+            <h3>Essential Concepts for Exams</h3>
+            <div class="exam-tips">
+                <h4>Neural Networks Fundamentals:</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Brain-inspired computing systems with interconnected artificial neurons</li>
+                    <li><strong>Components:</strong> Neurons (nodes), connections (weights), layers (input, hidden, output)</li>
+                    <li><strong>Learning:</strong> Adjusting weights based on training examples to minimize prediction error</li>
+                    <li><strong>Activation Functions:</strong> Sigmoid, ReLU, Tanh introduce non-linearity</li>
+                </ul>
+                
+                <h4>Perceptron:</h4>
+                <ul>
+                    <li><strong>Structure:</strong> Single neuron with weighted inputs and threshold function</li>
+                    <li><strong>Limitation:</strong> Only learns linearly separable problems</li>
+                    <li><strong>Training:</strong> Perceptron rule adjusts weights when predictions are wrong</li>
+                    <li><strong>Applications:</strong> Simple binary classification tasks</li>
+                </ul>
+                
+                <h4>Multilayer Networks:</h4>
+                <ul>
+                    <li><strong>Purpose:</strong> Solve non-linearly separable problems like XOR</li>
+                    <li><strong>Architecture:</strong> Input → Hidden Layer(s) → Output</li>
+                    <li><strong>Training:</strong> Backpropagation algorithm</li>
+                    <li><strong>Power:</strong> Universal function approximators</li>
+                </ul>
+                
+                <h4>Deep Learning:</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Neural networks with many hidden layers (3+ total layers)</li>
+                    <li><strong>Advantages:</strong> Learn hierarchical features, handle complex patterns</li>
+                    <li><strong>Applications:</strong> Computer vision, natural language processing, game playing</li>
+                    <li><strong>Requirements:</strong> Large datasets, significant computing power</li>
+                </ul>
+            </div>
+            
+            <h3>Sample Exam Questions</h3>
+            
+            <h4>Question 1 (15 marks): "Explain the structure and working of artificial neural networks. Compare with biological neurons."</h4>
+            <div class="example-detailed">
+                <p><strong>Answer Framework:</strong></p>
+                
+                <p><strong>[Structure - 4 marks]</strong> "ANN consists of artificial neurons organized in layers. Each neuron has inputs, weights, bias, and activation function. Networks have input layer (receives data), hidden layers (process information), output layer (makes predictions). Neurons connected by weighted links."</p>
+                
+                <p><strong>[Working - 4 marks]</strong> "Forward propagation: inputs multiply by weights, sum with bias, pass through activation function. Training: compare output with target, calculate error, adjust weights using backpropagation. Learning improves predictions through weight modifications."</p>
+                
+                <p><strong>[Biological Comparison - 4 marks]</strong> "Similarities: parallel processing, learning through experience, pattern recognition. Biological neuron has dendrites (inputs), cell body (processing), axon (output), synapses (weights). Both adapt connections based on experience."</p>
+                
+                <p><strong>[Applications - 3 marks]</strong> "Used for complex pattern recognition: image classification, speech recognition, medical diagnosis. Excel where traditional programming difficult due to pattern complexity."</p>
+            </div>
+            
+            <h4>Question 2 (15 marks): "Describe the perceptron model and its training algorithm. What are its limitations?"</h4>
+            <div class="example-detailed">
+                <p><strong>[Model Description - 4 marks]</strong> "Perceptron is simplest neural network with single neuron. Has weighted inputs, bias, and threshold activation function. Output = f(w₀ + w₁x₁ + w₂x₂ + ...) where f is step function (0 or 1)."</p>
+                
+                <p><strong>[Training Algorithm - 5 marks]</strong> "Perceptron learning rule: 1) Initialize random weights, 2) For each example, calculate prediction, 3) If correct, no change, 4) If wrong, update weights: wᵢ = wᵢ + η(target-predicted)xᵢ, 5) Repeat until convergence."</p>
+                
+                <p><strong>[Example - 3 marks]</strong> "Learning AND gate: inputs (0,0)→0, (0,1)→0, (1,0)→0, (1,1)→1. Algorithm finds weights that correctly classify all examples by drawing linear decision boundary."</p>
+                
+                <p><strong>[Limitations - 3 marks]</strong> "Cannot solve non-linearly separable problems like XOR. Limited to linear decision boundaries. Needs multilayer networks for complex patterns. Led to AI winter until backpropagation developed."</p>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 3 Quick Reference</h3>
+                <table class="summary-table">
+                    <tr><th>Concept</th><th>Key Point</th><th>Remember This</th></tr>
+                    <tr><td><strong>Neural Networks</strong></td><td>Brain-inspired computing systems</td><td>Neurons connected by weighted links</td></tr>
+                    <tr><td><strong>Perceptron</strong></td><td>Simplest neural network (single neuron)</td><td>Only solves linearly separable problems</td></tr>
+                    <tr><td><strong>Multilayer Networks</strong></td><td>Multiple layers solve complex problems</td><td>Hidden layers create new features</td></tr>
+                    <tr><td><strong>Backpropagation</strong></td><td>Training algorithm for multilayer networks</td><td>Error flows backward to update weights</td></tr>
+                    <tr><td><strong>Deep Learning</strong></td><td>Many-layer networks learn hierarchical features</td><td>Revolutionized AI since 2012</td></tr>
+                </table>
+                
+                <div class="key-formulas">
+                    <h4>Key Formulas:</h4>
+                    <ul>
+                        <li><strong>Neuron Output:</strong> y = f(w₀ + Σwᵢxᵢ)</li>
+                        <li><strong>Perceptron Update:</strong> wᵢ = wᵢ + η(target - predicted)xᵢ</li>
+                        <li><strong>Sigmoid Function:</strong> σ(x) = 1/(1 + e⁻ˣ)</li>
+                        <li><strong>Delta Rule:</strong> Δwᵢ = η × error × derivative × input</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keyTerms = document.querySelectorAll('strong');
+            keyTerms.forEach(term => {
+                term.addEventListener('click', function() {
+                    this.style.backgroundColor = this.style.backgroundColor ? '' : '#ffeb3b';
+                });
+            });
+            
+            const printButton = document.createElement('button');
+            printButton.textContent = 'Print Study Guide';
+            printButton.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 10px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+        });
+    </script>
+</body>
+</html>
