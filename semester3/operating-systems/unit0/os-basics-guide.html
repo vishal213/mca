@@ -600,7 +600,7 @@
                 </div>
 
                 <div class="exam-tips">
-                    <h4>📝 Exam Strategy for OS Basics (15-mark questions)</h4>
+                    <h4>📝 Exam Strategy for OS Basics</h4>
                     <ul>
                         <li><strong>Define Clearly:</strong> Start with simple definitions, then add details</li>
                         <li><strong>Use Analogies:</strong> Real-world examples make explanations clearer</li>
@@ -612,5 +612,103 @@
             </div>
         </footer>
     </div>
+
+    <script>
+        // Print-friendly mode toggle
+        const printButton = document.createElement('button');
+        printButton.innerHTML = '🖨️';
+
+        // Base styles
+        printButton.style.cssText = `
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            padding: 12px; 
+            background: #2980b9; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            z-index: 1000; 
+            font-size: 18px; 
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+
+        // Mobile responsive positioning
+        const updatePrintButtonPosition = () => {
+            if (window.innerWidth <= 768) {
+                printButton.style.cssText = `
+                    position: fixed; 
+                    bottom: 20px; 
+                    right: 20px; 
+                    top: auto;
+                    padding: 14px;
+                    background: #2980b9; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 50px;
+                    cursor: pointer; 
+                    z-index: 1000; 
+                    font-size: 20px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    transition: all 0.3s ease;
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+            } else {
+                printButton.style.cssText = `
+                    position: fixed; 
+                    top: 20px; 
+                    right: 20px; 
+                    padding: 12px; 
+                    background: #2980b9; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    z-index: 1000; 
+                    font-size: 18px; 
+                    font-weight: 500;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                    transition: all 0.3s ease;
+                    width: 44px;
+                    height: 44px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+            }
+        };
+
+        // Initial positioning
+        updatePrintButtonPosition();
+
+        // Update position on window resize
+        window.addEventListener('resize', updatePrintButtonPosition);
+
+        // Add hover effects
+        printButton.addEventListener('mouseenter', () => {
+            printButton.style.background = '#3498db';
+            printButton.style.transform = 'translateY(-2px)';
+        });
+
+        printButton.addEventListener('mouseleave', () => {
+            printButton.style.background = '#2980b9';
+            printButton.style.transform = 'translateY(0)';
+        });
+
+        printButton.onclick = () => window.print();
+        document.body.appendChild(printButton);
+    </script>
 </body>
 </html>

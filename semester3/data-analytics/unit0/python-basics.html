@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 0: Python Foundations for Data Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Data Analytics</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 0: Python Foundations for Data Analytics</h1>
+            <p class="subtitle">Your Journey from Zero to Python Hero Starts Here 🐍</p>
+        </header>
+
+        <section id="python-introduction">
+            <h2>1. What is Python and Why Use It for Data Analytics?</h2>
+            
+            <h3>Understanding Python</h3>
+            <p>Python is a high-level, interpreted programming language that reads almost like English. Created by Guido van Rossum in 1991, Python was designed with simplicity and readability in mind. Think of Python as the "Swiss Army knife" of programming languages - versatile, easy to learn, and powerful enough for complex data analysis.</p>
+
+            <div class="concept">
+                <h4>Why Python for Data Analytics?</h4>
+                <h5>1. Simplicity and Readability</h5>
+                <p><strong>English-like Syntax:</strong> Python code reads almost like English sentences</p>
+                <p><strong>Example:</strong> Instead of complex symbols, you write <code>if age > 18:</code></p>
+                <p><strong>Benefit:</strong> Focus on solving problems, not deciphering syntax</p>
+
+                <h5>2. Powerful Data Libraries</h5>
+                <p><strong>Rich Ecosystem:</strong> Thousands of pre-built tools for data work</p>
+                <p><strong>Key Libraries:</strong> pandas (data manipulation), matplotlib (plotting), scikit-learn (machine learning)</p>
+                <p><strong>Analogy:</strong> Like having a toolbox with specialized tools for every data task</p>
+
+                <h5>3. Industry Standard</h5>
+                <p><strong>Universal Adoption:</strong> Used by Google, Netflix, Instagram, NASA</p>
+                <p><strong>Career Advantage:</strong> Most data science jobs require Python knowledge</p>
+                <p><strong>Community Support:</strong> Millions of developers worldwide to help you</p>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Real-World Python in Action</h4>
+                
+                <h5>Netflix Recommendation System</h5>
+                <p><strong>Challenge:</strong> Recommend movies to 200+ million users</p>
+                <p><strong>Python's Role:</strong> Analyzes viewing patterns, ratings, and user behavior</p>
+                <p><strong>Result:</strong> 80% of content watched comes from recommendations</p>
+                
+                <h5>COVID-19 Data Analysis</h5>
+                <p><strong>Challenge:</strong> Track and visualize pandemic spread globally</p>
+                <p><strong>Python's Role:</strong> Process millions of data points, create interactive maps</p>
+                <p><strong>Impact:</strong> Helped governments make informed policy decisions</p>
+            </div>
+        </section>
+
+        <section id="python-installation">
+            <h2>2. Setting Up Your Python Environment</h2>
+            
+            <h3>Step-by-Step Python Installation</h3>
+            <p>Setting up Python properly is crucial for your data analytics journey. We'll install Python along with essential tools that make data work efficient and enjoyable.</p>
+
+            <div class="installation-guide">
+                <h4>Method 1: Anaconda Installation (Recommended for Beginners)</h4>
+                <p><strong>What is Anaconda?</strong> A complete Python package that includes Python, Jupyter notebooks, and 250+ data science libraries pre-installed.</p>
+                
+                <div class="step-by-step">
+                    <h5>Windows Installation:</h5>
+                    <ol>
+                        <li><strong>Download:</strong> Visit <code>anaconda.com/products/distribution</code></li>
+                        <li><strong>Choose Version:</strong> Select "Python 3.9" or later for Windows</li>
+                        <li><strong>Download Size:</strong> Approximately 500MB (worth the wait!)</li>
+                        <li><strong>Install:</strong> Run the installer, check "Add Anaconda to PATH" during installation</li>
+                        <li><strong>Verify:</strong> Open Command Prompt, type <code>python --version</code></li>
+                    </ol>
+                    
+                    <h5>Mac Installation:</h5>
+                    <ol>
+                        <li><strong>Download:</strong> Get macOS installer from anaconda.com</li>
+                        <li><strong>Install:</strong> Double-click the .pkg file and follow instructions</li>
+                        <li><strong>Verify:</strong> Open Terminal, type <code>python --version</code></li>
+                    </ol>
+                </div>
+
+                <div class="troubleshooting">
+                    <h5>Common Installation Issues & Solutions:</h5>
+                    <ul>
+                        <li><strong>"Python not recognized":</strong> Restart your computer after installation</li>
+                        <li><strong>"Permission denied":</strong> Right-click installer, select "Run as administrator"</li>
+                        <li><strong>"PATH issues":</strong> Reinstall Anaconda and check "Add to PATH" option</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Introduction to Jupyter Notebooks</h3>
+            <p>Jupyter Notebooks are interactive documents where you can write Python code, see results immediately, and add explanations. Think of them as "smart documents" that combine code, output, and documentation in one place.</p>
+
+            <div class="concept">
+                <h4>Why Jupyter Notebooks for Data Analytics?</h4>
+                
+                <h5>Interactive Development</h5>
+                <p><strong>Immediate Feedback:</strong> Write code, run it, see results instantly</p>
+                <p><strong>Experimentation:</strong> Try different approaches without losing your work</p>
+                <p><strong>Visual Output:</strong> Charts and graphs appear directly in the notebook</p>
+
+                <h5>Documentation Integration</h5>
+                <p><strong>Markdown Support:</strong> Add explanations, notes, and headings</p>
+                <p><strong>Storytelling:</strong> Create narrative around your analysis</p>
+                <p><strong>Sharing:</strong> Share complete analysis with code and explanations</p>
+
+                <h5>Industry Standard</h5>
+                <p><strong>Data Science Workflow:</strong> Standard tool for data exploration and analysis</p>
+                <p><strong>Collaboration:</strong> Easy to share with team members and stakeholders</p>
+                <p><strong>Portfolio Building:</strong> Create impressive project showcases</p>
+            </div>
+
+            <div class="hands-on">
+                <h4>🚀 Your First Jupyter Notebook</h4>
+                
+                <h5>Starting Jupyter:</h5>
+                <ol>
+                    <li><strong>Open Terminal/Command Prompt</strong></li>
+                    <li><strong>Type:</strong> <code>jupyter notebook</code></li>
+                    <li><strong>Result:</strong> Browser opens with Jupyter interface</li>
+                    <li><strong>Create New:</strong> Click "New" → "Python 3"</li>
+                </ol>
+
+                <h5>Your First Code Cell:</h5>
+                <div class="code-example">
+                    <pre><code># This is your first Python code!
+print("Hello, Data Analytics World!")
+
+# Let's do some simple math
+result = 10 + 5
+print(f"10 + 5 = {result}")
+
+# Create a simple list of numbers
+numbers = [1, 2, 3, 4, 5]
+print(f"My numbers: {numbers}")
+print(f"Sum of numbers: {sum(numbers)}")</code></pre>
+                </div>
+
+                <p><strong>Expected Output:</strong></p>
+                <div class="output-example">
+                    <pre>Hello, Data Analytics World!
+10 + 5 = 15
+My numbers: [1, 2, 3, 4, 5]
+Sum of numbers: 15</pre>
+                </div>
+
+                <div class="explanation">
+                    <h6>Understanding the Code:</h6>
+                    <ul>
+                        <li><strong># comments:</strong> Lines starting with # are notes (ignored by Python)</li>
+                        <li><strong>print():</strong> Displays text or results on screen</li>
+                        <li><strong>f"text {variable}":</strong> Modern way to insert variables into text</li>
+                        <li><strong>sum():</strong> Built-in function to add all numbers in a list</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="python-basics">
+            <h2>3. Python Programming Fundamentals</h2>
+            
+            <h3>Understanding Data Types</h3>
+            <p>Data types are the building blocks of programming. Just like in real life, we classify things (numbers, text, lists), Python classifies data into types. Understanding data types is crucial for data analytics because different types of data require different operations.</p>
+
+            <div class="concept">
+                <h4>Core Python Data Types</h4>
+                
+                <h5>1. Numbers (int and float)</h5>
+                <div class="code-example">
+                    <pre><code># Integers (whole numbers)
+age = 25
+student_count = 100
+year = 2024
+
+# Floats (decimal numbers)  
+height = 5.8
+gpa = 3.75
+temperature = 98.6
+
+# Check data type
+print(type(age))        # &lt;class 'int'&gt;
+print(type(height))     # &lt;class 'float'&gt;</code></pre>
+                </div>
+                
+                <p><strong>Real-World Usage:</strong> Ages, counts, measurements, prices, percentages</p>
+                <p><strong>Data Analytics Application:</strong> Numerical analysis, calculations, statistical measures</p>
+
+                <h5>2. Strings (Text Data)</h5>
+                <div class="code-example">
+                    <pre><code># Different ways to create strings
+name = "Alice Johnson"
+city = 'New York'
+description = """This is a long text
+that spans multiple lines"""
+
+# String operations
+full_name = "John" + " " + "Doe"  # Concatenation
+print(f"Hello, {name}!")          # String formatting
+print(len(name))                  # Length of string</code></pre>
+                </div>
+                
+                <p><strong>Real-World Usage:</strong> Names, addresses, descriptions, categories</p>
+                <p><strong>Data Analytics Application:</strong> Text analysis, data cleaning, categorical data</p>
+
+                <h5>3. Boolean (True/False)</h5>
+                <div class="code-example">
+                    <pre><code># Boolean values
+is_student = True
+has_scholarship = False
+
+# Boolean from comparisons
+is_adult = age >= 18
+is_passing_grade = gpa >= 2.0
+
+print(f"Is adult: {is_adult}")
+print(f"Passing grade: {is_passing_grade}")</code></pre>
+                </div>
+                
+                <p><strong>Real-World Usage:</strong> Yes/No questions, flags, conditions</p>
+                <p><strong>Data Analytics Application:</strong> Filtering data, conditional analysis, binary classification</p>
+            </div>
+
+            <h3>Working with Collections</h3>
+            <p>Collections allow you to store multiple pieces of data together. Think of them as containers - a list is like a shopping cart (ordered, allows duplicates), a dictionary is like a phonebook (key-value pairs).</p>
+
+            <div class="example-detailed">
+                <h4>Lists: Ordered Collections</h4>
+                
+                <div class="code-example">
+                    <pre><code># Creating lists
+student_grades = [85, 92, 78, 96, 88]
+student_names = ["Alice", "Bob", "Charlie", "Diana"]
+mixed_data = [25, "John", 3.75, True]
+
+# Accessing list items (indexing starts at 0)
+first_grade = student_grades[0]    # 85
+last_name = student_names[-1]      # "Diana" (negative indexing from end)
+
+# List operations
+student_grades.append(90)          # Add new grade
+average_grade = sum(student_grades) / len(student_grades)
+print(f"Average grade: {average_grade:.2f}")
+
+# List slicing (getting portions of list)
+top_three_grades = sorted(student_grades, reverse=True)[:3]
+print(f"Top 3 grades: {top_three_grades}")</code></pre>
+                </div>
+
+                <h5>Real-World List Example: Student Performance Analysis</h5>
+                <div class="code-example">
+                    <pre><code># Analyzing test scores
+test_scores = [78, 85, 92, 67, 88, 95, 72, 89, 83, 91]
+
+# Basic statistics
+total_students = len(test_scores)
+average_score = sum(test_scores) / total_students
+highest_score = max(test_scores)
+lowest_score = min(test_scores)
+
+print(f"Class Analysis:")
+print(f"Total Students: {total_students}")
+print(f"Average Score: {average_score:.1f}")
+print(f"Highest Score: {highest_score}")
+print(f"Lowest Score: {lowest_score}")
+
+# Grade distribution
+passing_scores = [score for score in test_scores if score >= 70]
+failing_scores = [score for score in test_scores if score < 70]
+
+print(f"Students Passing: {len(passing_scores)} ({len(passing_scores)/total_students*100:.1f}%)")
+print(f"Students Failing: {len(failing_scores)} ({len(failing_scores)/total_students*100:.1f}%)")</code></pre>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Dictionaries: Key-Value Data Storage</h4>
+                
+                <div class="code-example">
+                    <pre><code># Creating dictionaries
+student_info = {
+    "name": "Alice Johnson",
+    "age": 20,
+    "major": "Data Science",
+    "gpa": 3.8,
+    "courses": ["Math", "Statistics", "Python"]
+}
+
+# Accessing dictionary values
+student_name = student_info["name"]
+student_gpa = student_info.get("gpa", 0.0)  # Safe access with default
+
+# Adding/modifying values
+student_info["graduation_year"] = 2025
+student_info["gpa"] = 3.9  # Update existing value
+
+# Dictionary operations
+all_keys = student_info.keys()
+all_values = student_info.values()
+all_items = student_info.items()
+
+print(f"Student: {student_info['name']}")
+print(f"Courses: {', '.join(student_info['courses'])}")
+</code></pre>
+                </div>
+
+                <h5>Real-World Dictionary Example: Customer Database</h5>
+                <div class="code-example">
+                    <pre><code># Customer purchase analysis
+customers = {
+    "C001": {"name": "John Smith", "purchases": [120.50, 75.25, 200.00], "city": "New York"},
+    "C002": {"name": "Sarah Davis", "purchases": [450.75, 125.00], "city": "Los Angeles"},
+    "C003": {"name": "Mike Wilson", "purchases": [95.50, 180.25, 67.00], "city": "Chicago"}
+}
+
+# Analyze customer spending
+for customer_id, customer_data in customers.items():
+    total_spent = sum(customer_data["purchases"])
+    avg_purchase = total_spent / len(customer_data["purchases"])
+    
+    print(f"Customer: {customer_data['name']} ({customer_id})")
+    print(f"Total Spent: ${total_spent:.2f}")
+    print(f"Average Purchase: ${avg_purchase:.2f}")
+    print(f"City: {customer_data['city']}")
+    print("-" * 40)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="control-structures">
+            <h2>4. Control Structures: Making Decisions and Repeating Actions</h2>
+            
+            <h3>Conditional Statements (if, elif, else)</h3>
+            <p>Conditional statements allow your program to make decisions based on data. Just like in real life, we make decisions based on conditions: "If it's raining, take an umbrella. If it's sunny, wear sunglasses. Otherwise, just go as you are."</p>
+
+            <div class="concept">
+                <h4>Understanding Decision Making in Code</h4>
+                
+                <h5>Basic if Statement</h5>
+                <div class="code-example">
+                    <pre><code># Simple condition
+temperature = 75
+
+if temperature > 70:
+    print("It's warm outside!")
+    print("Perfect weather for a walk.")
+
+# The code here runs regardless of the condition
+print("Have a great day!")</code></pre>
+                </div>
+
+                <h5>if-else Statement</h5>
+                <div class="code-example">
+                    <pre><code># Two possible outcomes
+grade = 85
+
+if grade >= 70:
+    print("Congratulations! You passed.")
+    status = "Pass"
+else:
+    print("Keep studying. You can do better!")
+    status = "Fail"
+
+print(f"Final status: {status}")</code></pre>
+                </div>
+
+                <h5>if-elif-else Statement</h5>
+                <div class="code-example">
+                    <pre><code># Multiple conditions
+score = 87
+
+if score >= 90:
+    letter_grade = "A"
+    message = "Excellent work!"
+elif score >= 80:
+    letter_grade = "B" 
+    message = "Good job!"
+elif score >= 70:
+    letter_grade = "C"
+    message = "Satisfactory"
+elif score >= 60:
+    letter_grade = "D"
+    message = "Needs improvement"
+else:
+    letter_grade = "F"
+    message = "Please retake the course"
+
+print(f"Score: {score} = Grade {letter_grade}")
+print(message)</code></pre>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Real-World Example: Customer Discount Calculator</h4>
+                
+                <div class="code-example">
+                    <pre><code># E-commerce discount system
+purchase_amount = 250.00
+is_member = True
+years_as_member = 3
+
+# Determine discount percentage
+if is_member and years_as_member >= 5:
+    discount_rate = 0.20  # 20% for loyal members
+    discount_type = "Loyal Member"
+elif is_member and years_as_member >= 2:
+    discount_rate = 0.15  # 15% for regular members
+    discount_type = "Member"
+elif is_member:
+    discount_rate = 0.10  # 10% for new members
+    discount_type = "New Member"
+elif purchase_amount >= 200:
+    discount_rate = 0.05  # 5% for large purchases
+    discount_type = "Large Purchase"
+else:
+    discount_rate = 0.00  # No discount
+    discount_type = "Standard"
+
+# Calculate final price
+discount_amount = purchase_amount * discount_rate
+final_price = purchase_amount - discount_amount
+
+# Display results
+print(f"Purchase Summary:")
+print(f"Original Amount: ${purchase_amount:.2f}")
+print(f"Discount Type: {discount_type}")
+print(f"Discount Rate: {discount_rate*100:.0f}%")
+print(f"Discount Amount: ${discount_amount:.2f}")
+print(f"Final Price: ${final_price:.2f}")
+print(f"You saved: ${discount_amount:.2f}!")</code></pre>
+                </div>
+            </div>
+
+            <h3>Loops: Repeating Actions Efficiently</h3>
+            <p>Loops allow you to repeat actions without writing the same code multiple times. Imagine having to process data for 1000 customers - you wouldn't want to write the same code 1000 times!</p>
+
+            <div class="concept">
+                <h4>For Loops: When You Know How Many Times</h4>
+                
+                <h5>Basic for Loop with Lists</h5>
+                <div class="code-example">
+                    <pre><code># Process each item in a list
+student_names = ["Alice", "Bob", "Charlie", "Diana", "Eve"]
+
+print("Class Roll Call:")
+for name in student_names:
+    print(f"Present: {name}")
+
+print("That's everyone!")
+
+# Loop with numbers
+print("\nCounting down:")
+for number in range(5, 0, -1):  # Start at 5, stop before 0, step by -1
+    print(number)
+print("Blast off! 🚀")</code></pre>
+                </div>
+
+                <h5>For Loop with Dictionaries</h5>
+                <div class="code-example">
+                    <pre><code># Process dictionary data
+product_prices = {
+    "laptop": 999.99,
+    "mouse": 25.50,
+    "keyboard": 75.00,
+    "monitor": 299.99
+}
+
+total_value = 0
+print("Inventory Report:")
+
+for product, price in product_prices.items():
+    print(f"{product.title()}: ${price:.2f}")
+    total_value += price
+
+print(f"\nTotal Inventory Value: ${total_value:.2f}")</code></pre>
+                </div>
+            </div>
+
+            <div class="concept">
+                <h4>While Loops: When You Don't Know How Many Times</h4>
+                
+                <div class="code-example">
+                    <pre><code># Keep asking until valid input
+attempts = 0
+max_attempts = 3
+
+while attempts < max_attempts:
+    user_input = input("Enter a number between 1 and 10: ")
+    
+    try:
+        number = int(user_input)
+        if 1 <= number <= 10:
+            print(f"Great! You entered {number}")
+            break  # Exit the loop
+        else:
+            print("Number must be between 1 and 10")
+    except ValueError:
+        print("Please enter a valid number")
+    
+    attempts += 1
+    print(f"Attempts remaining: {max_attempts - attempts}")
+
+if attempts == max_attempts:
+    print("Too many invalid attempts. Exiting.")
+</code></pre>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Real-World Example: Sales Performance Analysis</h4>
+                
+                <div class="code-example">
+                    <pre><code># Analyze monthly sales data
+monthly_sales = [45000, 52000, 48000, 61000, 55000, 59000, 
+                 63000, 58000, 67000, 71000, 69000, 74000]
+
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+# Find best and worst performing months
+best_month_sales = 0
+worst_month_sales = float('inf')
+best_month_name = ""
+worst_month_name = ""
+total_sales = 0
+months_above_average = 0
+
+# First pass: calculate total
+for sales in monthly_sales:
+    total_sales += sales
+
+average_sales = total_sales / len(monthly_sales)
+
+print("📊 Annual Sales Performance Report")
+print("=" * 50)
+
+# Second pass: detailed analysis
+for i in range(len(monthly_sales)):
+    month = months[i]
+    sales = monthly_sales[i]
+    
+    # Track best and worst months
+    if sales > best_month_sales:
+        best_month_sales = sales
+        best_month_name = month
+    
+    if sales < worst_month_sales:
+        worst_month_sales = sales
+        worst_month_name = month
+    
+    # Count above-average months
+    if sales > average_sales:
+        months_above_average += 1
+        performance_indicator = "📈 Above Average"
+    else:
+        performance_indicator = "📉 Below Average"
+    
+    # Calculate percentage of average
+    percentage_of_avg = (sales / average_sales) * 100
+    
+    print(f"{month}: ${sales:,} ({percentage_of_avg:.1f}% of avg) {performance_indicator}")
+
+print("=" * 50)
+print(f"📈 Best Month: {best_month_name} (${best_month_sales:,})")
+print(f"📉 Worst Month: {worst_month_name} (${worst_month_sales:,})")
+print(f"📊 Average Monthly Sales: ${average_sales:,.0f}")
+print(f"🎯 Months Above Average: {months_above_average}/12")
+print(f"💰 Total Annual Sales: ${total_sales:,}")
+
+# Growth analysis
+growth_months = 0
+decline_months = 0
+
+for i in range(1, len(monthly_sales)):
+    if monthly_sales[i] > monthly_sales[i-1]:
+        growth_months += 1
+    elif monthly_sales[i] < monthly_sales[i-1]:
+        decline_months += 1
+
+print(f"📈 Growth Months: {growth_months}")
+print(f"📉 Decline Months: {decline_months}")
+print(f"➡️ Stable Months: {11 - growth_months - decline_months}")
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="functions">
+            <h2>5. Functions: Creating Reusable Code</h2>
+            
+            <h3>Understanding Functions</h3>
+            <p>Functions are like recipes in cooking or blueprints in construction. They define a set of instructions that you can use repeatedly. Instead of writing the same code multiple times, you create a function once and call it whenever needed.</p>
+
+            <div class="concept">
+                <h4>Why Functions Matter in Data Analytics</h4>
+                
+                <h5>Code Reusability</h5>
+                <p><strong>Write Once, Use Many:</strong> Create a function to calculate statistics once, use it for all datasets</p>
+                <p><strong>Example:</strong> A function to clean data can be used on multiple CSV files</p>
+                <p><strong>Benefit:</strong> Saves time and reduces errors</p>
+
+                <h5>Organization and Clarity</h5>
+                <p><strong>Modular Code:</strong> Break complex analysis into smaller, manageable pieces</p>
+                <p><strong>Readable Code:</strong> Function names describe what the code does</p>
+                <p><strong>Team Collaboration:</strong> Others can understand and use your functions</p>
+
+                <h5>Testing and Debugging</h5>
+                <p><strong>Isolated Testing:</strong> Test each function separately</p>
+                <p><strong>Error Location:</strong> Easier to find where problems occur</p>
+                <p><strong>Maintenance:</strong> Update logic in one place affects all uses</p>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Creating Your First Functions</h4>
+                
+                <h5>Basic Function Structure</h5>
+                <div class="code-example">
+                    <pre><code># Simple function with no parameters
+def greet_student():
+    print("Welcome to Data Analytics!")
+    print("Ready to learn Python?")
+
+# Call the function
+greet_student()
+
+# Function with parameters
+def greet_personal(student_name, course_name):
+    print(f"Hello, {student_name}!")
+    print(f"Welcome to {course_name}")
+    print("Let's start learning!")
+
+# Call with arguments
+greet_personal("Alice", "Data Analytics")
+greet_personal("Bob", "Python Programming")</code></pre>
+                </div>
+
+                <h5>Functions that Return Values</h5>
+                <div class="code-example">
+                    <pre><code># Function that calculates and returns a value
+def calculate_grade_average(grades):
+    """
+    Calculate the average of a list of grades.
+    
+    Args:
+        grades (list): List of numerical grades
+        
+    Returns:
+        float: Average grade rounded to 2 decimal places
+    """
+    if len(grades) == 0:
+        return 0.0
+    
+    total = sum(grades)
+    average = total / len(grades)
+    return round(average, 2)
+
+# Using the function
+student_grades = [85, 92, 78, 96, 88]
+avg_grade = calculate_grade_average(student_grades)
+print(f"Average grade: {avg_grade}")
+
+# Function with multiple return values
+def analyze_grades(grades):
+    """Analyze a list of grades and return multiple statistics."""
+    if not grades:
+        return 0, 0, 0, 0
+    
+    average = sum(grades) / len(grades)
+    highest = max(grades)
+    lowest = min(grades)
+    passing_count = len([g for g in grades if g >= 70])
+    
+    return average, highest, lowest, passing_count
+
+# Unpack multiple return values
+avg, high, low, passing = analyze_grades(student_grades)
+print(f"Statistics: Avg={avg:.1f}, High={high}, Low={low}, Passing={passing}")</code></pre>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h4>Real-World Functions for Data Analytics</h4>
+                
+                <div class="code-example">
+                    <pre><code># Customer analysis functions
+def calculate_customer_lifetime_value(monthly_revenue, months_active, retention_rate):
+    """
+    Calculate Customer Lifetime Value (CLV).
+    
+    Args:
+        monthly_revenue (float): Average monthly revenue per customer
+        months_active (int): Number of months customer has been active
+        retention_rate (float): Percentage of customers retained (0-1)
+    
+    Returns:
+        float: Estimated Customer Lifetime Value
+    """
+    if retention_rate <= 0 or retention_rate > 1:
+        return 0
+    
+    # Simple CLV formula: (Monthly Revenue × Months Active) / (1 - Retention Rate)
+    clv = (monthly_revenue * months_active) / (1 - retention_rate)
+    return round(clv, 2)
+
+def categorize_customer_value(clv):
+    """Categorize customers based on their lifetime value."""
+    if clv >= 1000:
+        return "High Value"
+    elif clv >= 500:
+        return "Medium Value"
+    elif clv >= 100:
+        return "Low Value"
+    else:
+        return "At Risk"
+
+def format_currency(amount):
+    """Format a number as currency."""
+    return f"${amount:,.2f}"
+
+# Using the functions together
+customers_data = [
+    {"name": "Alice Johnson", "monthly_revenue": 150, "months_active": 12, "retention": 0.8},
+    {"name": "Bob Smith", "monthly_revenue": 75, "months_active": 6, "retention": 0.6},
+    {"name": "Carol Davis", "monthly_revenue": 200, "months_active": 24, "retention": 0.9},
+]
+
+print("🏢 Customer Lifetime Value Analysis")
+print("=" * 60)
+
+total_clv = 0
+
+for customer in customers_data:
+    clv = calculate_customer_lifetime_value(
+        customer["monthly_revenue"], 
+        customer["months_active"], 
+        customer["retention"]
+    )
+    
+    category = categorize_customer_value(clv)
+    monthly_formatted = format_currency(customer["monthly_revenue"])
+    clv_formatted = format_currency(clv)
+    
+    print(f"Customer: {customer['name']}")
+    print(f"  Monthly Revenue: {monthly_formatted}")
+    print(f"  Months Active: {customer['months_active']}")
+    print(f"  Retention Rate: {customer['retention']*100:.0f}%")
+    print(f"  Lifetime Value: {clv_formatted}")
+    print(f"  Category: {category}")
+    print("-" * 40)
+    
+    total_clv += clv
+
+print(f"Total Portfolio Value: {format_currency(total_clv)}")
+print(f"Average CLV: {format_currency(total_clv / len(customers_data))}")</code></pre>
+                </div>
+
+                <h5>Data Cleaning Functions</h5>
+                <div class="code-example">
+                    <pre><code>def clean_phone_number(phone):
+    """
+    Clean and standardize phone number format.
+    
+    Args:
+        phone (str): Phone number in various formats
+        
+    Returns:
+        str: Standardized phone number (XXX) XXX-XXXX
+    """
+    # Remove all non-digit characters
+    digits_only = ''.join(filter(str.isdigit, phone))
+    
+    # Check if we have 10 or 11 digits
+    if len(digits_only) == 11 and digits_only.startswith('1'):
+        digits_only = digits_only[1:]  # Remove leading 1
+    
+    if len(digits_only) == 10:
+        # Format as (XXX) XXX-XXXX
+        return f"({digits_only[:3]}) {digits_only[3:6]}-{digits_only[6:]}"
+    else:
+        return "Invalid phone number"
+
+def validate_email(email):
+    """
+    Basic email validation.
+    
+    Args:
+        email (str): Email address to validate
+        
+    Returns:
+        bool: True if email appears valid, False otherwise
+    """
+    if '@' not in email:
+        return False
+    
+    parts = email.split('@')
+    if len(parts) != 2:
+        return False
+    
+    username, domain = parts
+    if len(username) == 0 or len(domain) == 0:
+        return False
+    
+    if '.' not in domain:
+        return False
+    
+    return True
+
+def clean_customer_data(customer_record):
+    """
+    Clean a customer data record.
+    
+    Args:
+        customer_record (dict): Raw customer data
+        
+    Returns:
+        dict: Cleaned customer data with validation flags
+    """
+    cleaned = customer_record.copy()
+    
+    # Clean phone number
+    if 'phone' in cleaned:
+        cleaned['phone'] = clean_phone_number(cleaned['phone'])
+        cleaned['phone_valid'] = cleaned['phone'] != "Invalid phone number"
+    
+    # Validate email
+    if 'email' in cleaned:
+        cleaned['email_valid'] = validate_email(cleaned['email'])
+    
+    # Clean name (title case)
+    if 'name' in cleaned:
+        cleaned['name'] = cleaned['name'].strip().title()
+    
+    # Clean city (title case)
+    if 'city' in cleaned:
+        cleaned['city'] = cleaned['city'].strip().title()
+    
+    return cleaned
+
+# Test the data cleaning functions
+raw_customer_data = [
+    {"name": "john smith", "phone": "555.123.4567", "email": "john@email.com", "city": "new york"},
+    {"name": "MARY JOHNSON", "phone": "(555) 987-6543", "email": "mary.johnson@company.com", "city": "los angeles"},
+    {"name": "bob davis", "phone": "5551234567", "email": "invalid-email", "city": "chicago"},
+]
+
+print("🧹 Data Cleaning Results")
+print("=" * 50)
+
+for i, customer in enumerate(raw_customer_data, 1):
+    print(f"Customer {i} - Before:")
+    for key, value in customer.items():
+        print(f"  {key}: {value}")
+    
+    cleaned = clean_customer_data(customer)
+    
+    print(f"Customer {i} - After:")
+    for key, value in cleaned.items():
+        if key.endswith('_valid'):
+            status = "✅" if value else "❌"
+            print(f"  {key}: {status}")
+        else:
+            print(f"  {key}: {value}")
+    print("-" * 30)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="essential-libraries">
+            <h2>6. Essential Python Libraries for Data Analytics</h2>
+            
+            <h3>Introduction to Python Libraries</h3>
+            <p>Python libraries are like toolboxes filled with specialized tools for specific jobs. Instead of building everything from scratch, you can use pre-built, tested, and optimized code written by experts. Think of libraries as "superpowers" that extend Python's capabilities.</p>
+
+            <div class="concept">
+                <h4>Core Data Analytics Libraries</h4>
+                
+                <h5>1. NumPy: Numerical Computing Foundation</h5>
+                <p><strong>What it does:</strong> Provides powerful arrays and mathematical functions</p>
+                <p><strong>Why important:</strong> Foundation for all other data science libraries</p>
+                <p><strong>Real-world use:</strong> Scientific computing, array operations, linear algebra</p>
+                
+                <div class="code-example">
+                    <pre><code># Installing: pip install numpy
+import numpy as np
+
+# Create arrays
+numbers = np.array([1, 2, 3, 4, 5])
+matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+# Mathematical operations (vectorized - very fast!)
+doubled = numbers * 2  # [2, 4, 6, 8, 10]
+squared = numbers ** 2  # [1, 4, 9, 16, 25]
+
+# Statistical functions
+mean_value = np.mean(numbers)  # 3.0
+std_dev = np.std(numbers)      # 1.41...
+
+print(f"Original: {numbers}")
+print(f"Doubled: {doubled}")
+print(f"Mean: {mean_value}")
+print(f"Standard Deviation: {std_dev:.2f}")</code></pre>
+                </div>
+
+                <h5>2. Pandas: Data Manipulation Powerhouse</h5>
+                <p><strong>What it does:</strong> Excel-like data manipulation in Python</p>
+                <p><strong>Why important:</strong> Primary tool for data cleaning and analysis</p>
+                <p><strong>Real-world use:</strong> Reading CSV files, cleaning data, grouping, merging datasets</p>
+                
+                <div class="code-example">
+                    <pre><code># Installing: pip install pandas
+import pandas as pd
+
+# Create a DataFrame (like a spreadsheet)
+sales_data = pd.DataFrame({
+    'Product': ['Laptop', 'Mouse', 'Keyboard', 'Monitor', 'Laptop', 'Mouse'],
+    'Price': [999.99, 25.50, 75.00, 299.99, 1199.99, 30.00],
+    'Quantity': [2, 5, 3, 1, 1, 8],
+    'Store': ['Online', 'Retail', 'Online', 'Retail', 'Retail', 'Online']
+})
+
+# Basic operations
+print("First 3 rows:")
+print(sales_data.head(3))
+
+# Calculate total sales
+sales_data['Total'] = sales_data['Price'] * sales_data['Quantity']
+
+# Group by product and sum
+product_summary = sales_data.groupby('Product').agg({
+    'Quantity': 'sum',
+    'Total': 'sum'
+}).round(2)
+
+print("\nProduct Summary:")
+print(product_summary)</code></pre>
+                </div>
+
+                <h5>3. Matplotlib: Data Visualization</h5>
+                <p><strong>What it does:</strong> Creates charts, graphs, and plots</p>
+                <p><strong>Why important:</strong> "A picture is worth a thousand words" - visualize your data</p>
+                <p><strong>Real-world use:</strong> Business reports, scientific papers, data exploration</p>
+                
+                <div class="code-example">
+                    <pre><code># Installing: pip install matplotlib
+import matplotlib.pyplot as plt
+
+# Sample data
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+sales = [45000, 52000, 48000, 61000, 55000, 59000]
+
+# Create a line plot
+plt.figure(figsize=(10, 6))
+plt.plot(months, sales, marker='o', linewidth=2, markersize=8)
+plt.title('Monthly Sales Performance', fontsize=16, fontweight='bold')
+plt.xlabel('Month', fontsize=12)
+plt.ylabel('Sales ($)', fontsize=12)
+plt.grid(True, alpha=0.3)
+
+# Add value labels on points
+for i, value in enumerate(sales):
+    plt.annotate(f'${value:,}', (i, value), textcoords="offset points", 
+                xytext=(0,10), ha='center')
+
+plt.tight_layout()
+plt.show()  # Display the plot</code></pre>
+                </div>
+            </div>
+
+            <div class="hands-on">
+                <h4>🚀 Your First Data Analytics Project</h4>
+                <p>Let's combine all libraries to analyze some real data!</p>
+                
+                <div class="code-example">
+                    <pre><code>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Create sample e-commerce data
+np.random.seed(42)  # For reproducible results
+
+# Generate sample customer data
+customers_count = 100
+customer_data = pd.DataFrame({
+    'CustomerID': range(1, customers_count + 1),
+    'Age': np.random.randint(18, 65, customers_count),
+    'MonthlySpend': np.random.normal(150, 50, customers_count),  # Normal distribution
+    'OrdersPerMonth': np.random.poisson(3, customers_count),  # Poisson distribution
+    'City': np.random.choice(['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'], customers_count)
+})
+
+# Clean the data
+customer_data['MonthlySpend'] = customer_data['MonthlySpend'].clip(lower=20)  # No negative spending
+customer_data['MonthlySpend'] = customer_data['MonthlySpend'].round(2)
+
+print("🛍️ E-commerce Customer Analysis")
+print("=" * 50)
+
+# Basic statistics
+print("Dataset Overview:")
+print(f"Total Customers: {len(customer_data)}")
+print(f"Age Range: {customer_data['Age'].min()} - {customer_data['Age'].max()}")
+print(f"Average Monthly Spend: ${customer_data['MonthlySpend'].mean():.2f}")
+print(f"Average Orders Per Month: {customer_data['OrdersPerMonth'].mean():.1f}")
+
+# Group analysis by city
+city_analysis = customer_data.groupby('City').agg({
+    'MonthlySpend': ['mean', 'sum', 'count'],
+    'OrdersPerMonth': 'mean',
+    'Age': 'mean'
+}).round(2)
+
+print("\n🏙️ Analysis by City:")
+print(city_analysis)
+
+# Age group analysis
+customer_data['AgeGroup'] = pd.cut(customer_data['Age'], 
+                                  bins=[0, 25, 35, 45, 55, 100], 
+                                  labels=['18-25', '26-35', '36-45', '46-55', '56+'])
+
+age_group_spending = customer_data.groupby('AgeGroup')['MonthlySpend'].mean().round(2)
+print("\n👥 Average Spending by Age Group:")
+print(age_group_spending)
+
+# Create visualizations
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
+
+# Plot 1: Monthly spend distribution
+ax1.hist(customer_data['MonthlySpend'], bins=20, alpha=0.7, color='skyblue', edgecolor='black')
+ax1.set_title('Distribution of Monthly Spending', fontweight='bold')
+ax1.set_xlabel('Monthly Spend ($)')
+ax1.set_ylabel('Number of Customers')
+
+# Plot 2: Spending by city
+city_spending = customer_data.groupby('City')['MonthlySpend'].mean().sort_values(ascending=False)
+bars = ax2.bar(city_spending.index, city_spending.values, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'])
+ax2.set_title('Average Monthly Spending by City', fontweight='bold')
+ax2.set_xlabel('City')
+ax2.set_ylabel('Average Monthly Spend ($)')
+ax2.tick_params(axis='x', rotation=45)
+
+# Add value labels on bars
+for bar in bars:
+    height = bar.get_height()
+    ax2.text(bar.get_x() + bar.get_width()/2., height + 1,
+             f'${height:.0f}', ha='center', va='bottom')
+
+# Plot 3: Age vs Spending scatter plot
+ax3.scatter(customer_data['Age'], customer_data['MonthlySpend'], alpha=0.6, color='coral')
+ax3.set_title('Age vs Monthly Spending', fontweight='bold')
+ax3.set_xlabel('Age')
+ax3.set_ylabel('Monthly Spend ($)')
+
+# Add trend line
+z = np.polyfit(customer_data['Age'], customer_data['MonthlySpend'], 1)
+p = np.poly1d(z)
+ax3.plot(customer_data['Age'], p(customer_data['Age']), "r--", alpha=0.8)
+
+# Plot 4: Age group spending
+age_group_spending.plot(kind='bar', ax=ax4, color='lightgreen', edgecolor='black')
+ax4.set_title('Average Spending by Age Group', fontweight='bold')
+ax4.set_xlabel('Age Group')
+ax4.set_ylabel('Average Monthly Spend ($)')
+ax4.tick_params(axis='x', rotation=0)
+
+plt.tight_layout()
+plt.show()
+
+# Find insights
+print("\n🔍 Key Insights:")
+
+# Highest spending customers
+top_spenders = customer_data.nlargest(5, 'MonthlySpend')[['CustomerID', 'Age', 'MonthlySpend', 'City']]
+print("\nTop 5 Spending Customers:")
+for _, customer in top_spenders.iterrows():
+    print(f"Customer {customer['CustomerID']}: Age {customer['Age']}, "
+          f"${customer['MonthlySpend']:.2f}/month, {customer['City']}")
+
+# City with highest total revenue
+city_revenue = customer_data.groupby('City')['MonthlySpend'].sum().sort_values(ascending=False)
+print(f"\nHighest Revenue City: {city_revenue.index[0]} (${city_revenue.iloc[0]:.2f} total)")
+
+# Most active age group
+most_active_age = customer_data.groupby('AgeGroup')['OrdersPerMonth'].mean().idxmax()
+print(f"Most Active Age Group: {most_active_age}")
+
+# Correlation between age and spending
+correlation = customer_data['Age'].corr(customer_data['MonthlySpend'])
+if correlation > 0.3:
+    relationship = "strong positive"
+elif correlation > 0.1:
+    relationship = "weak positive"
+elif correlation < -0.3:
+    relationship = "strong negative"
+elif correlation < -0.1:
+    relationship = "weak negative"
+else:
+    relationship = "no clear"
+    
+print(f"Age-Spending Relationship: {relationship} correlation ({correlation:.3f})")
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <footer class="summary-section">
+            <h2>🎯 Unit 0 Summary: Python Foundations Mastered</h2>
+            
+            <div class="achievement-grid">
+                <div class="achievement">
+                    <h4>✅ Python Installation & Setup</h4>
+                    <ul>
+                        <li>Anaconda installation completed</li>
+                        <li>Jupyter Notebooks configured</li>
+                        <li>Development environment ready</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement">
+                    <h4>✅ Programming Fundamentals</h4>
+                    <ul>
+                        <li>Data types mastered (int, float, string, boolean)</li>
+                        <li>Collections understood (lists, dictionaries)</li>
+                        <li>Variables and operations practiced</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement">
+                    <h4>✅ Control Structures</h4>
+                    <ul>
+                        <li>Conditional statements (if/elif/else)</li>
+                        <li>Loops (for and while) implemented</li>
+                        <li>Decision-making logic applied</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement">
+                    <h4>✅ Functions & Modularity</h4>
+                    <ul>
+                        <li>Function creation and usage</li>
+                        <li>Parameters and return values</li>
+                        <li>Code reusability principles</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement">
+                    <h4>✅ Data Analytics Libraries</h4>
+                    <ul>
+                        <li>NumPy for numerical computing</li>
+                        <li>Pandas for data manipulation</li>
+                        <li>Matplotlib for data visualization</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement">
+                    <h4>✅ Real-World Project</h4>
+                    <ul>
+                        <li>Complete customer analysis project</li>
+                        <li>Data cleaning and visualization</li>
+                        <li>Insights generation and reporting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>🚀 Ready for Unit 1: Data Science Fundamentals</h3>
+                <p>Congratulations! You now have solid Python foundations. In Unit 1, you'll learn:</p>
+                <ul>
+                    <li><strong>Statistical Foundations:</strong> Mean, median, mode, variance, standard deviation</li>
+                    <li><strong>Data Structures:</strong> Working with real datasets and data frames</li>
+                    <li><strong>Data Manipulation:</strong> Advanced pandas operations and data transformation</li>
+                    <li><strong>Statistical Analysis:</strong> Sample vs population, quantile-quantile plots</li>
+                </ul>
+            </div>
+
+            <div class="exam-preparation">
+                <h3>📝 Exam Preparation for Unit 0</h3>
+                
+                <h4>Key Question Categories to Master:</h4>
+                <div class="exam-topics">
+                    <div class="exam-topic">
+                        <h5>1. Python Setup and Environment</h5>
+                        <p><strong>Sample Question:</strong> "Explain the process of setting up Python for data analytics. Include installation of Anaconda, Jupyter notebook setup, and verification steps."</p>
+                        <p><strong>Answer Structure:</strong> Installation steps, verification commands, troubleshooting, benefits of Anaconda</p>
+                    </div>
+                    
+                    <div class="exam-topic">
+                        <h5>2. Data Types and Collections</h5>
+                        <p><strong>Sample Question:</strong> "Describe Python data types with examples. Demonstrate list and dictionary operations with practical examples."</p>
+                        <p><strong>Answer Structure:</strong> Each data type definition, examples, operations, real-world applications</p>
+                    </div>
+                    
+                    <div class="exam-topic">
+                        <h5>3. Control Structures Application</h5>
+                        <p><strong>Sample Question:</strong> "Write Python code to analyze student grades using conditional statements and loops. Include grade categorization and statistics calculation."</p>
+                        <p><strong>Answer Structure:</strong> Complete code solution, explanations, output examples, error handling</p>
+                    </div>
+                    
+                    <div class="exam-topic">
+                        <h5>4. Functions in Data Analytics</h5>
+                        <p><strong>Sample Question:</strong> "Create Python functions for customer data analysis. Include data cleaning, validation, and summary statistics functions."</p>
+                        <p><strong>Answer Structure:</strong> Multiple function definitions, documentation, usage examples, benefits explanation</p>
+                    </div>
+                    
+                    <div class="exam-topic">
+                        <h5>5. Libraries Integration</h5>
+                        <p><strong>Sample Question:</strong> "Demonstrate the use of NumPy, Pandas, and Matplotlib in a complete data analysis project."</p>
+                        <p><strong>Answer Structure:</strong> Complete project code, library explanations, visualization examples, insights generation</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Add interactive features for better learning
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click-to-highlight for key terms
+            const keyTerms = document.querySelectorAll('strong');
+            keyTerms.forEach(term => {
+                term.addEventListener('click', function() {
+                    this.style.backgroundColor = this.style.backgroundColor ? '' : '#ffeb3b';
+                });
+            });
+            
+            // Enhanced print button with Python icon
+            const printButton = document.createElement('button');
+            printButton.innerHTML = '🖨️';
+            
+            // Base styles
+            printButton.style.cssText = `
+                position: fixed; 
+                top: 20px; 
+                right: 20px; 
+                padding: 12px; 
+                background: #f39c12; 
+                color: white; 
+                border: none; 
+                border-radius: 8px; 
+                cursor: pointer; 
+                z-index: 1000; 
+                font-size: 18px; 
+                font-weight: 500;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            // Mobile responsive positioning
+            const updatePrintButtonPosition = () => {
+                if (window.innerWidth <= 768) {
+                    printButton.style.cssText = `
+                        position: fixed; 
+                        bottom: 20px; 
+                        right: 20px; 
+                        top: auto;
+                        padding: 14px;
+                        background: #f39c12; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 50px;
+                        cursor: pointer; 
+                        z-index: 1000; 
+                        font-size: 20px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                        width: 50px;
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
+                } else {
+                    printButton.style.cssText = `
+                        position: fixed; 
+                        top: 20px; 
+                        right: 20px; 
+                        padding: 12px; 
+                        background: #f39c12; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 8px; 
+                        cursor: pointer; 
+                        z-index: 1000; 
+                        font-size: 18px; 
+                        font-weight: 500;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                        transition: all 0.3s ease;
+                        width: 44px;
+                        height: 44px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
+                }
+            };
+            
+            // Initial positioning
+            updatePrintButtonPosition();
+            
+            // Update position on window resize
+            window.addEventListener('resize', updatePrintButtonPosition);
+            
+            // Add hover effects
+            printButton.addEventListener('mouseenter', () => {
+                printButton.style.background = '#e67e22';
+                printButton.style.transform = 'translateY(-2px)';
+            });
+            
+            printButton.addEventListener('mouseleave', () => {
+                printButton.style.background = '#f39c12';
+                printButton.style.transform = 'translateY(0)';
+            });
+            
+            printButton.onclick = () => window.print();
+            document.body.appendChild(printButton);
+        });
+    </script>
+</body>
+</html>
