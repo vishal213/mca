@@ -356,24 +356,147 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 10px;
+        max-width: 100%;
+        overflow-x: hidden;
     }
     
     .main-header {
-        padding: 30px 20px;
+        padding: 20px 15px;
+        margin-bottom: 30px;
+        border-radius: 10px;
     }
     
     .main-header h1 {
         font-size: 2.2em;
+        line-height: 1.2;
+        word-break: break-word;
+        hyphens: auto;
     }
     
     .main-header h2 {
         font-size: 1.3em;
+        line-height: 1.3;
     }
     
-    .subjects-grid {
+    .course-info {
+        font-size: 1em;
+    }
+    
+    .subjects-grid,
+    .units-grid {
         grid-template-columns: 1fr;
         gap: 20px;
+        margin-bottom: 40px;
+    }
+    
+    .subject-card,
+    .unit-card {
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .subject-header,
+    .unit-header {
+        padding: 20px 15px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .subject-header h3,
+    .unit-header h3 {
+        font-size: 1.4em;
+        margin-bottom: 5px;
+    }
+    
+    .subject-status,
+    .unit-status {
+        padding: 6px 12px;
+        font-size: 0.75em;
+        align-self: center;
+    }
+    
+    .subject-content,
+    .unit-content {
+        padding: 20px 15px;
+    }
+    
+    .subject-content h4,
+    .unit-content h4 {
+        font-size: 1.3em;
+        line-height: 1.3;
+        margin-bottom: 12px;
+    }
+    
+    .subject-description p {
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+    
+    .units-overview h5,
+    .topics-list h5 {
+        font-size: 1em;
+        margin-bottom: 12px;
+    }
+    
+    .unit-chips {
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .unit-chip {
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 0.8em;
+        word-break: break-word;
+    }
+    
+    .subject-features,
+    .unit-features {
+        justify-content: center;
+        gap: 6px;
+        margin: 15px 0;
+        padding: 15px 0;
+    }
+    
+    .feature {
+        padding: 5px 8px;
+        font-size: 0.75em;
+        text-align: center;
+    }
+    
+    .subject-actions,
+    .unit-actions {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 0.95em;
+        box-sizing: border-box;
+    }
+    
+    .estimated-time {
+        font-size: 0.85em;
+        text-align: center;
+    }
+    
+    .study-guide-info {
+        padding: 25px 15px;
+        margin-bottom: 30px;
+    }
+    
+    .study-guide-info h3 {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+        line-height: 1.2;
     }
     
     .info-grid,
@@ -382,9 +505,191 @@ body {
         gap: 15px;
     }
     
-    .subject-actions {
+    .info-card,
+    .tip {
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .info-card h4 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+    
+    .info-card p,
+    .tip p {
+        font-size: 0.9em;
+        line-height: 1.5;
+    }
+    
+    .tip h5 {
+        font-size: 0.95em;
+        margin-bottom: 8px;
+    }
+    
+    .main-footer {
+        padding: 30px 15px;
+    }
+    
+    .footer-content h4 {
+        font-size: 1.4em;
+        margin-bottom: 25px;
+        line-height: 1.2;
+    }
+    
+    .progress-tracker {
+        padding: 20px 15px;
+    }
+    
+    .progress-tracker h5 {
+        font-size: 1.1em;
+        margin-bottom: 12px;
+        line-height: 1.3;
+    }
+    
+    .course-stats {
         flex-direction: column;
-        gap: 10px;
+        gap: 20px;
+        padding: 25px 15px;
+    }
+    
+    .stat h3 {
+        font-size: 2em;
+    }
+    
+    .stat p {
+        font-size: 0.85em;
+    }
+    
+    .prep-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .prep-item,
+    .completion-card,
+    .prep-card {
+        padding: 20px 15px;
+    }
+    
+    .topics-list ul {
+        margin-left: 15px;
+    }
+    
+    .topics-list li {
+        font-size: 0.9em;
+        margin-bottom: 6px;
+    }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+    
+    .main-header {
+        padding: 15px 10px;
+        border-radius: 8px;
+    }
+    
+    .main-header h1 {
+        font-size: 1.8em;
+        line-height: 1.1;
+    }
+    
+    .main-header h2 {
+        font-size: 1.1em;
+    }
+    
+    .course-info {
+        font-size: 0.9em;
+    }
+    
+    .subject-card,
+    .unit-card {
+        border-radius: 10px;
+    }
+    
+    .subject-header,
+    .unit-header {
+        padding: 15px 10px;
+    }
+    
+    .subject-header h3,
+    .unit-header h3 {
+        font-size: 1.2em;
+    }
+    
+    .subject-content,
+    .unit-content {
+        padding: 15px 10px;
+    }
+    
+    .subject-content h4,
+    .unit-content h4 {
+        font-size: 1.2em;
+    }
+    
+    .unit-chips {
+        gap: 4px;
+    }
+    
+    .unit-chip {
+        padding: 4px 6px;
+        font-size: 0.75em;
+    }
+    
+    .subject-features,
+    .unit-features {
+        gap: 4px;
+    }
+    
+    .feature {
+        padding: 4px 6px;
+        font-size: 0.7em;
+    }
+    
+    .subject-actions,
+    .unit-actions {
+        padding: 15px 10px;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    
+    .study-guide-info,
+    .main-footer {
+        padding: 20px 10px;
+        border-radius: 8px;
+    }
+    
+    .study-guide-info h3,
+    .footer-content h4 {
+        font-size: 1.4em;
+    }
+    
+    .info-card,
+    .tip,
+    .prep-item,
+    .completion-card,
+    .prep-card {
+        padding: 15px 10px;
+    }
+    
+    .course-stats {
+        padding: 20px 10px;
+    }
+    
+    .stat h3 {
+        font-size: 1.6em;
+    }
+    
+    .topics-list ul {
+        margin-left: 10px;
     }
 }
 

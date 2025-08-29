@@ -398,45 +398,319 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 10px;
+        max-width: 100%;
+        overflow-x: hidden;
     }
     
     .main-header {
-        padding: 30px 25px;
+        padding: 20px 15px;
+        margin-bottom: 30px;
     }
     
     .main-header h1 {
-        font-size: 2.5em;
+        font-size: 2.2em;
+        line-height: 1.2;
+        word-break: break-word;
+        hyphens: auto;
     }
     
     .main-header h2 {
-        font-size: 1.4em;
+        font-size: 1.2em;
+        line-height: 1.3;
+    }
+    
+    .course-info {
+        font-size: 1em;
     }
     
     .semesters-grid {
         grid-template-columns: 1fr;
-        gap: 25px;
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    
+    .semester-card {
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .semester-header {
+        padding: 20px 15px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .semester-header h3 {
+        font-size: 1.6em;
+        margin-bottom: 5px;
+    }
+    
+    .semester-status {
+        padding: 8px 15px;
+        font-size: 0.8em;
+        align-self: center;
     }
     
     .semester-content {
-        padding: 25px;
+        padding: 20px 15px;
     }
     
-    .semester-actions {
+    .semester-content h4 {
+        font-size: 1.5em;
+        line-height: 1.3;
+        margin-bottom: 15px;
+    }
+    
+    .semester-description p {
+        font-size: 1em;
+        line-height: 1.6;
+    }
+    
+    .subjects-overview h5 {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+    }
+    
+    .subject-chips {
         flex-direction: column;
-        gap: 15px;
-        padding: 25px;
+        gap: 8px;
+        margin-bottom: 20px;
     }
     
-    .features-grid,
-    .tips-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .subject-chip {
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 0.85em;
+        word-break: break-word;
+    }
+    
+    .semester-features {
+        justify-content: center;
+        gap: 8px;
+        margin: 15px 0;
+        padding: 15px 0;
+    }
+    
+    .feature {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        text-align: center;
     }
     
     .semester-stats {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .stat-item {
+        padding: 15px 10px;
+        text-align: center;
+    }
+    
+    .stat-item strong {
+        font-size: 1.2em;
+    }
+    
+    .stat-item span {
+        font-size: 0.85em;
+    }
+    
+    .semester-actions {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1em;
+        box-sizing: border-box;
+    }
+    
+    .estimated-time {
+        font-size: 0.9em;
+        text-align: center;
+    }
+    
+    .about-materials {
+        margin-bottom: 30px;
+    }
+    
+    .about-card {
+        padding: 25px 15px;
+    }
+    
+    .about-card h3 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    .about-content h4 {
+        font-size: 1.3em;
+        margin-bottom: 20px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
         gap: 15px;
+    }
+    
+    .feature-item {
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .feature-item h5 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+    
+    .feature-item p {
+        font-size: 0.9em;
+        line-height: 1.5;
+    }
+    
+    .main-footer {
+        padding: 30px 15px;
+    }
+    
+    .footer-content h4 {
+        font-size: 1.6em;
+        margin-bottom: 25px;
+        line-height: 1.2;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .tip {
+        padding: 15px;
+        border-left: 3px solid #667eea;
+    }
+    
+    .tip h5 {
+        font-size: 1em;
+        margin-bottom: 8px;
+    }
+    
+    .tip p {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+    
+    .program-overview {
+        padding: 20px 15px;
+    }
+    
+    .program-overview h5 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+    
+    .progress-summary p {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+    
+    .main-header {
+        padding: 15px 10px;
+        border-radius: 10px;
+    }
+    
+    .main-header h1 {
+        font-size: 1.8em;
+        line-height: 1.1;
+    }
+    
+    .main-header h2 {
+        font-size: 1.1em;
+    }
+    
+    .course-info {
+        font-size: 0.9em;
+    }
+    
+    .semester-card {
+        border-radius: 10px;
+    }
+    
+    .semester-header {
+        padding: 15px 10px;
+    }
+    
+    .semester-header h3 {
+        font-size: 1.4em;
+    }
+    
+    .semester-content {
+        padding: 15px 10px;
+    }
+    
+    .semester-content h4 {
+        font-size: 1.3em;
+    }
+    
+    .subject-chips {
+        gap: 6px;
+    }
+    
+    .subject-chip {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+    
+    .semester-features {
+        gap: 6px;
+    }
+    
+    .feature {
+        padding: 5px 8px;
+        font-size: 0.75em;
+    }
+    
+    .semester-actions {
+        padding: 15px 10px;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+    
+    .about-card,
+    .main-footer {
+        padding: 20px 10px;
+        border-radius: 10px;
+    }
+    
+    .about-card h3,
+    .footer-content h4 {
+        font-size: 1.5em;
+    }
+    
+    .feature-item,
+    .tip {
+        padding: 15px 10px;
     }
 }
 
