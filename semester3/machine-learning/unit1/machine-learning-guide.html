@@ -1581,8 +1581,78 @@
             
             // Print-friendly mode toggle
             const printButton = document.createElement('button');
-            printButton.textContent = 'Print Study Guide';
-            printButton.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 10px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            printButton.innerHTML = '🖨️ Print Study Guide';
+            
+            // Base styles
+            printButton.style.cssText = `
+                position: fixed; 
+                top: 20px; 
+                right: 20px; 
+                padding: 10px 15px; 
+                background: #2980b9; 
+                color: white; 
+                border: none; 
+                border-radius: 8px; 
+                cursor: pointer; 
+                z-index: 1000; 
+                font-size: 14px; 
+                font-weight: 500;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+            `;
+            
+            // Mobile responsive positioning
+            const updatePrintButtonPosition = () => {
+                if (window.innerWidth <= 768) {
+                    printButton.style.cssText += `
+                        position: fixed; 
+                        bottom: 20px; 
+                        right: 20px; 
+                        top: auto;
+                        padding: 12px 16px;
+                        font-size: 16px;
+                        border-radius: 50px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    `;
+                    printButton.innerHTML = '🖨️';
+                } else {
+                    printButton.style.cssText = `
+                        position: fixed; 
+                        top: 20px; 
+                        right: 20px; 
+                        padding: 10px 15px; 
+                        background: #2980b9; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 8px; 
+                        cursor: pointer; 
+                        z-index: 1000; 
+                        font-size: 14px; 
+                        font-weight: 500;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                        transition: all 0.3s ease;
+                    `;
+                    printButton.innerHTML = '🖨️ Print Study Guide';
+                }
+            };
+            
+            // Initial positioning
+            updatePrintButtonPosition();
+            
+            // Update position on window resize
+            window.addEventListener('resize', updatePrintButtonPosition);
+            
+            // Add hover effects
+            printButton.addEventListener('mouseenter', () => {
+                printButton.style.background = '#3498db';
+                printButton.style.transform = 'translateY(-2px)';
+            });
+            
+            printButton.addEventListener('mouseleave', () => {
+                printButton.style.background = '#2980b9';
+                printButton.style.transform = 'translateY(0)';
+            });
+            
             printButton.onclick = () => window.print();
             document.body.appendChild(printButton);
         });
