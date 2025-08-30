@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Critical Infrastructure Protection - Cyber Security</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Cyber Security</a>
+                <a href="../../index.html" class="home-link">🏠 Semester 3</a>
+            </nav>
+            <h1>Unit 4: Protecting Critical Infrastructures</h1>
+            <p class="subtitle">National & Organizational Asset Protection</p>
+        </header>
+
+        <section id="unit-outline">
+            <h2>📋 Unit Overview & Concept Map</h2>
+            
+            <div class="concept">
+                <h3>Defending the Digital Backbone of Society</h3>
+                <p>This unit focuses on protecting the critical infrastructures that modern society depends upon. We'll explore how power grids, water systems, transportation networks, and financial services are interconnected and vulnerable to cyber attacks. You'll learn about the sophisticated threat landscape, understand how attacks can cascade through interconnected systems, and master the frameworks and strategies used to defend these vital assets.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Critical Infrastructure Protection Concept Map</h4>
+                    <div class="diagram-text">
+                        <pre>
+                Critical Infrastructure Protection
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+    Infrastructure    Threat Landscape   Protection Frameworks
+    Assets & Types   & Attack Methods   & Implementation
+        │                  │                  │
+    ├── Energy Sector      ├── Nation-State    ├── NIST Framework
+    ├── Transportation     ├── Cyber Weapons   ├── Defense-in-Depth
+    ├── Water Systems      ├── Social Media    ├── Risk Management
+    ├── Healthcare         ├── Supply Chain    ├── ICS/SCADA Security
+    ├── Financial Services ├── Insider Threats └── Zero Trust
+    ├── Telecom           └── Internet-based        │
+    └── Government         │   Attacks               │
+        │                  │                        │
+        └──────────────────┼────────────────────────┘
+                           │
+                    Interdependency Analysis
+                    (Cascade Effects & Resilience)
+                           │
+                    ├── Physical Dependencies
+                    ├── Cyber Dependencies
+                    ├── Geographic Dependencies
+                    ├── Logical Dependencies
+                    └── Recovery Strategies
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>What You'll Master:</h4>
+                <ul>
+                    <li><strong>Infrastructure Recognition:</strong> Identifying and classifying critical assets and their vulnerabilities</li>
+                    <li><strong>Threat Analysis:</strong> Understanding sophisticated attack methods targeting infrastructure</li>
+                    <li><strong>Interdependency Mapping:</strong> How infrastructure failures cascade through connected systems</li>
+                    <li><strong>Protection Strategies:</strong> Implementing comprehensive defense frameworks</li>
+                    <li><strong>International Cooperation:</strong> Working across borders to secure global infrastructure</li>
+                    <li><strong>Practical Implementation:</strong> Real-world protection strategies and case studies</li>
+                </ul>
+                
+                <h4>The Critical Nature of This Knowledge:</h4>
+                <p>Critical infrastructure attacks aren't just technical problems - they're national security issues that can:</p>
+                <ul>
+                    <li><strong>Threaten Lives:</strong> Hospital systems, water treatment, emergency services</li>
+                    <li><strong>Crash Economies:</strong> Financial systems, power grids, transportation</li>
+                    <li><strong>Undermine Democracy:</strong> Election systems, government communications</li>
+                    <li><strong>Create Chaos:</strong> Cascading failures across interconnected systems</li>
+                </ul>
+                
+                <p>As a cybersecurity professional, you may be called upon to defend infrastructure that millions depend on daily. This unit prepares you for that responsibility.</p>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Impact: Texas Winter Storm 2021</h4>
+                    <p><strong>The Cascade:</strong> Winter storm Uri demonstrated how infrastructure interdependencies can amplify disasters.</p>
+                    
+                    <h5>The Failure Chain:</h5>
+                    <ol>
+                        <li><strong>Weather Event:</strong> Extreme cold temperatures hit Texas</li>
+                        <li><strong>Power Grid Failure:</strong> Natural gas plants couldn't handle cold, wind turbines froze</li>
+                        <li><strong>Water System Collapse:</strong> Without power, water treatment plants failed</li>
+                        <li><strong>Communication Breakdown:</strong> Cell towers lost power, internet disrupted</li>
+                        <li><strong>Transportation Chaos:</strong> Traffic signals failed, fuel pumps stopped working</li>
+                        <li><strong>Healthcare Crisis:</strong> Hospitals on backup power, medical devices failing</li>
+                    </ol>
+                    
+                    <h5>Cyber Security Implications:</h5>
+                    <ul>
+                        <li>What if this had been a coordinated cyber attack instead of weather?</li>
+                        <li>How would defenders coordinate response without communications?</li>
+                        <li>Could attackers amplify the damage by targeting backup systems?</li>
+                    </ul>
+                    
+                    <p><strong>Lesson:</strong> Infrastructure protection requires understanding both technical vulnerabilities and systemic interdependencies.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="critical-infrastructure">
+            <h2>🏛️ Critical Infrastructures: Key Assets</h2>
+
+            <h3>What is Critical Infrastructure? - The Invisible Backbone of Modern Life</h3>
+            <div class="concept">
+                <h4>Understanding the Foundation of Digital Society</h4>
+                <p><strong>Critical Infrastructure</strong> is like the nervous system of modern civilization - usually invisible, but absolutely essential for everything to function. These are the systems that, if disrupted, would cause widespread suffering, economic collapse, or threaten national security within hours or days.</p>
+                
+                <div class="example-detailed">
+                    <h4>The "24-Hour Test" - What Happens When Infrastructure Fails?</h4>
+                    <p><strong>Thought Experiment:</strong> Imagine if these systems failed for just 24 hours in your city:</p>
+                    
+                    <h5>Hour 1: Power Grid Failure</h5>
+                    <ul>
+                        <li>Traffic lights go dark, causing traffic chaos</li>
+                        <li>ATMs stop working, preventing cash access</li>
+                        <li>Cell phone towers start failing as backup batteries drain</li>
+                        <li>Hospitals switch to emergency power</li>
+                    </ul>
+                    
+                    <h5>Hour 6: Water System Impacts</h5>
+                    <ul>
+                        <li>Water pressure drops as pumping stations fail</li>
+                        <li>Water treatment plants can't process sewage</li>
+                        <li>Food refrigeration begins failing in stores and homes</li>
+                        <li>Fuel pumps at gas stations stop working</li>
+                    </ul>
+                    
+                    <h5>Hour 12: Communication Breakdown</h5>
+                    <ul>
+                        <li>Internet services become unreliable</li>
+                        <li>Emergency services struggle to coordinate</li>
+                        <li>Financial transactions become impossible</li>
+                        <li>News and information flow stops</li>
+                    </ul>
+                    
+                    <h5>Hour 24: Systemic Collapse</h5>
+                    <ul>
+                        <li>Supply chains completely disrupted</li>
+                        <li>Public health emergencies begin</li>
+                        <li>Social order starts breaking down</li>
+                        <li>Economic losses reach billions</li>
+                    </ul>
+                    
+                    <p><strong>Reality Check:</strong> This isn't science fiction - variations of this scenario have occurred during major blackouts, hurricanes, and cyber attacks.</p>
+                </div>
+                
+                <h4>Critical Infrastructure Sectors:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sector</th>
+                                <th>Key Assets</th>
+                                <th>Cyber Vulnerabilities</th>
+                                <th>Impact of Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Energy</td>
+                                <td>Power plants, oil refineries, gas pipelines</td>
+                                <td>SCADA systems, smart grid</td>
+                                <td>Blackouts, economic disruption</td>
+                            </tr>
+                            <tr>
+                                <td>Transportation</td>
+                                <td>Airports, railways, highways, ports</td>
+                                <td>Traffic control, navigation systems</td>
+                                <td>Movement paralysis, safety risks</td>
+                            </tr>
+                            <tr>
+                                <td>Water Systems</td>
+                                <td>Water treatment, distribution networks</td>
+                                <td>Industrial control systems</td>
+                                <td>Public health crisis</td>
+                            </tr>
+                            <tr>
+                                <td>Healthcare</td>
+                                <td>Hospitals, emergency services</td>
+                                <td>Medical devices, patient records</td>
+                                <td>Life-threatening situations</td>
+                            </tr>
+                            <tr>
+                                <td>Financial Services</td>
+                                <td>Banks, payment systems, stock exchanges</td>
+                                <td>Trading platforms, ATM networks</td>
+                                <td>Economic collapse, loss of confidence</td>
+                            </tr>
+                            <tr>
+                                <td>Telecommunications</td>
+                                <td>Internet backbone, cellular networks</td>
+                                <td>Network infrastructure, switching systems</td>
+                                <td>Communication breakdown</td>
+                            </tr>
+                            <tr>
+                                <td>Government Services</td>
+                                <td>Defense systems, emergency response</td>
+                                <td>Command systems, databases</td>
+                                <td>National security compromise</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Asset Classification and Prioritization</h3>
+            <div class="concept">
+                <h4>Asset Classification Criteria:</h4>
+                <ul>
+                    <li><strong>Criticality Level:</strong> Essential, important, or supporting</li>
+                    <li><strong>Impact Scope:</strong> Local, regional, national, or international</li>
+                    <li><strong>Recovery Time:</strong> How quickly service can be restored</li>
+                    <li><strong>Dependencies:</strong> What other systems depend on this asset</li>
+                    <li><strong>Vulnerability Level:</strong> Exposure to cyber threats</li>
+                </ul>
+                
+                <div class="algorithm-steps">
+                    <h4>Asset Assessment Process:</h4>
+                    <ol>
+                        <li><strong>Inventory Creation:</strong> Catalog all critical assets and systems</li>
+                        <li><strong>Dependency Mapping:</strong> Identify interconnections and dependencies</li>
+                        <li><strong>Threat Assessment:</strong> Evaluate potential cyber threats</li>
+                        <li><strong>Vulnerability Analysis:</strong> Identify security weaknesses</li>
+                        <li><strong>Risk Calculation:</strong> Assess likelihood and impact</li>
+                        <li><strong>Prioritization:</strong> Rank assets by criticality and risk</li>
+                        <li><strong>Protection Planning:</strong> Develop targeted security measures</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="infrastructure-interdependencies">
+            <h2>🔗 Critical Infrastructure Interdependencies</h2>
+
+            <h3>Types of Interdependencies</h3>
+            <div class="concept">
+                <h4>Physical Interdependencies:</h4>
+                <p>Direct physical connections between infrastructure systems.</p>
+                <ul>
+                    <li><strong>Power Grid → Water Treatment:</strong> Water plants need electricity</li>
+                    <li><strong>Fuel Pipelines → Transportation:</strong> Vehicles need fuel</li>
+                    <li><strong>Telecommunications → Emergency Services:</strong> Emergency systems need communication</li>
+                </ul>
+                
+                <h4>Cyber Interdependencies:</h4>
+                <p>Electronic, informational, or other non-physical links between systems.</p>
+                <ul>
+                    <li><strong>SCADA Networks:</strong> Industrial control systems across sectors</li>
+                    <li><strong>Data Sharing:</strong> Information exchange between agencies</li>
+                    <li><strong>Cloud Services:</strong> Shared computing infrastructure</li>
+                </ul>
+                
+                <h4>Geographic Interdependencies:</h4>
+                <p>Infrastructure components located in the same geographic area.</p>
+                <ul>
+                    <li>Natural disaster impact on multiple systems</li>
+                    <li>Regional power grid failures</li>
+                    <li>Urban infrastructure concentration risks</li>
+                </ul>
+                
+                <h4>Logical Interdependencies:</h4>
+                <p>Coupling between infrastructure systems through human decisions.</p>
+                <ul>
+                    <li>Policy decisions affecting multiple sectors</li>
+                    <li>Shared governance and regulation</li>
+                    <li>Economic interdependencies</li>
+                </ul>
+                
+                <div class="visual-diagram">
+                    <h4>Infrastructure Interdependency Example</h4>
+                    <div class="diagram-text">
+                        <pre>
+                    Cyber Attack on Power Grid
+                            ↓
+                    Power Outage
+                    ↓                    ↓                    ↓
+            Water Treatment      Transportation       Telecommunications
+            System Failure       Signal Failure       Network Failure
+                    ↓                    ↓                    ↓
+            Public Health        Economic Activity    Emergency Services
+            Emergency           Disruption           Communication Loss
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Cascade Failure Analysis</h3>
+            <div class="concept">
+                <h4>Cascade Failure Characteristics:</h4>
+                <ul>
+                    <li><strong>Initial Trigger:</strong> Single point of failure starts cascade</li>
+                    <li><strong>Propagation:</strong> Failure spreads through interdependent systems</li>
+                    <li><strong>Amplification:</strong> Each failure creates additional stress</li>
+                    <li><strong>Non-linear Impact:</strong> Small initial failure causes large-scale disruption</li>
+                </ul>
+                
+                <div class="example-detailed">
+                    <h4>Case Study: 2003 Northeast Blackout</h4>
+                    <p><strong>Initial Cause:</strong> Software bug in alarm system + high electrical demand</p>
+                    
+                    <h5>Cascade Timeline:</h5>
+                    <ol>
+                        <li><strong>15:05:</strong> First transmission line trips offline</li>
+                        <li><strong>15:32:</strong> Second line fails due to tree contact</li>
+                        <li><strong>15:41:</strong> Third line fails, alarm system fails</li>
+                        <li><strong>16:09:</strong> Major transmission line overloads and trips</li>
+                        <li><strong>16:10:</strong> Cascade begins - multiple generators trip offline</li>
+                        <li><strong>16:11:</strong> 50 million people lose power across US and Canada</li>
+                    </ol>
+                    
+                    <h5>Multi-Sector Impact:</h5>
+                    <ul>
+                        <li><strong>Transportation:</strong> Airports closed, trains stopped, traffic signals failed</li>
+                        <li><strong>Communications:</strong> Cell towers failed, internet disrupted</li>
+                        <li><strong>Water:</strong> Some treatment plants shut down</li>
+                        <li><strong>Financial:</strong> NYSE and other exchanges closed early</li>
+                        <li><strong>Healthcare:</strong> Hospitals on emergency power</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="internet-social-media-attacks">
+            <h2>📱 Internet, Social Media and Cyber Attacks on Critical Infrastructures</h2>
+
+            <h3>Attack Vectors Through Internet</h3>
+            <div class="concept">
+                <h4>Internet-Based Attack Methods:</h4>
+                <ul>
+                    <li><strong>Remote Access Attacks:</strong> Exploiting internet-connected systems</li>
+                    <li><strong>Supply Chain Attacks:</strong> Compromising software/hardware suppliers</li>
+                    <li><strong>Watering Hole Attacks:</strong> Compromising websites visited by targets</li>
+                    <li><strong>Distributed Attacks:</strong> Using botnets for large-scale attacks</li>
+                    <li><strong>Zero-Day Exploits:</strong> Using unknown vulnerabilities</li>
+                </ul>
+                
+                <h4>Social Media as Attack Platform:</h4>
+                <ul>
+                    <li><strong>Social Engineering:</strong> Gathering intelligence on critical personnel</li>
+                    <li><strong>Recruitment:</strong> Finding insiders or creating fake personas</li>
+                    <li><strong>Disinformation:</strong> Spreading false information to create chaos</li>
+                    <li><strong>Coordination:</strong> Organizing distributed attacks</li>
+                    <li><strong>Psychological Operations:</strong> Influencing public opinion</li>
+                </ul>
+                
+                <div class="example-detailed">
+                    <h4>Case Study: Ukrainian Power Grid Attack (2015)</h4>
+                    <p><strong>Attack Method:</strong> Spear-phishing emails with malicious attachments</p>
+                    
+                    <h5>Attack Timeline:</h5>
+                    <ol>
+                        <li><strong>Initial Compromise:</strong> Spear-phishing emails to power company employees</li>
+                        <li><strong>Network Infiltration:</strong> BlackEnergy malware installed on corporate networks</li>
+                        <li><strong>Reconnaissance:</strong> Six months of network exploration and credential theft</li>
+                        <li><strong>HMI Compromise:</strong> Access to human-machine interfaces for power control</li>
+                        <li><strong>Coordinated Attack:</strong> Simultaneous attacks on multiple power companies</li>
+                        <li><strong>Manual Disruption:</strong> Remote operation of circuit breakers</li>
+                        <li><strong>Secondary Effects:</strong> UPS systems destroyed, recovery delayed</li>
+                    </ol>
+                    
+                    <h5>Impact:</h5>
+                    <ul>
+                        <li>230,000 people lost power for several hours</li>
+                        <li>First confirmed cyber attack on power grid</li>
+                        <li>Demonstrated vulnerability of critical infrastructure</li>
+                        <li>Led to improved security practices globally</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Social Media Threats to Infrastructure</h3>
+            <div class="concept">
+                <h4>Information Gathering Risks:</h4>
+                <ul>
+                    <li><strong>Employee Profiling:</strong> Identifying key personnel and their vulnerabilities</li>
+                    <li><strong>Operational Intelligence:</strong> Learning about systems and processes</li>
+                    <li><strong>Physical Security:</strong> Location information from photos and posts</li>
+                    <li><strong>Schedule Information:</strong> When facilities are staffed or empty</li>
+                    <li><strong>Technology Details:</strong> Equipment and software information</li>
+                </ul>
+                
+                <h4>Social Media Security Measures:</h4>
+                <ul>
+                    <li>Employee social media policies and training</li>
+                    <li>Monitoring of company mentions and employee posts</li>
+                    <li>Privacy settings guidance</li>
+                    <li>Fake profile detection</li>
+                    <li>Information sharing guidelines</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="cyber-threat-spectrum">
+            <h2>⚔️ Cyber Threat Spectrum - Cyberspace Attacks and Weapons</h2>
+
+            <h3>Cyber Threat Classification</h3>
+            <div class="concept">
+                <h4>Threat Actor Categories:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Threat Actor</th>
+                                <th>Motivation</th>
+                                <th>Capability Level</th>
+                                <th>Typical Targets</th>
+                                <th>Attack Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Script Kiddies</td>
+                                <td>Recognition, thrill</td>
+                                <td>Low</td>
+                                <td>Random systems</td>
+                                <td>Hours to days</td>
+                            </tr>
+                            <tr>
+                                <td>Organized Crime</td>
+                                <td>Financial gain</td>
+                                <td>Medium-High</td>
+                                <td>Financial institutions</td>
+                                <td>Weeks to months</td>
+                            </tr>
+                            <tr>
+                                <td>Hacktivists</td>
+                                <td>Political/social causes</td>
+                                <td>Medium</td>
+                                <td>Government, corporations</td>
+                                <td>Days to weeks</td>
+                            </tr>
+                            <tr>
+                                <td>Nation-State Actors</td>
+                                <td>Espionage, warfare</td>
+                                <td>Very High</td>
+                                <td>Critical infrastructure</td>
+                                <td>Months to years</td>
+                            </tr>
+                            <tr>
+                                <td>Terrorist Groups</td>
+                                <td>Disruption, fear</td>
+                                <td>Medium-High</td>
+                                <td>Public services</td>
+                                <td>Weeks to months</td>
+                            </tr>
+                            <tr>
+                                <td>Insider Threats</td>
+                                <td>Revenge, money</td>
+                                <td>High (privileged access)</td>
+                                <td>Own organization</td>
+                                <td>Variable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Cyber Weapons and Attack Tools</h3>
+            <div class="concept">
+                <h4>Categories of Cyber Weapons:</h4>
+                <ul>
+                    <li><strong>Disruption Weapons:</strong> DDoS tools, wiper malware</li>
+                    <li><strong>Espionage Tools:</strong> Advanced persistent threats, keyloggers</li>
+                    <li><strong>Sabotage Weapons:</strong> Industrial control system malware</li>
+                    <li><strong>Psychological Weapons:</strong> Disinformation, propaganda</li>
+                    <li><strong>Economic Weapons:</strong> Financial system attacks, cryptocurrency manipulation</li>
+                </ul>
+                
+                <h4>Notable Cyber Weapons:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Weapon/Tool</th>
+                                <th>Type</th>
+                                <th>Target</th>
+                                <th>Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stuxnet</td>
+                                <td>Industrial sabotage</td>
+                                <td>Iranian nuclear facilities</td>
+                                <td>Physical damage to centrifuges</td>
+                            </tr>
+                            <tr>
+                                <td>Flame</td>
+                                <td>Espionage platform</td>
+                                <td>Middle Eastern governments</td>
+                                <td>Data theft, surveillance</td>
+                            </tr>
+                            <tr>
+                                <td>BlackEnergy</td>
+                                <td>Infrastructure attack</td>
+                                <td>Ukrainian power grid</td>
+                                <td>Power outages, system damage</td>
+                            </tr>
+                            <tr>
+                                <td>NotPetya</td>
+                                <td>Destructive wiper</td>
+                                <td>Ukrainian organizations</td>
+                                <td>Global economic damage</td>
+                            </tr>
+                            <tr>
+                                <td>Triton/TRISIS</td>
+                                <td>Safety system attack</td>
+                                <td>Industrial safety systems</td>
+                                <td>Potential physical harm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Attack Methodologies</h3>
+            <div class="concept">
+                <h4>Infrastructure Attack Phases:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Reconnaissance:</strong>
+                            <ul>
+                                <li>Open source intelligence gathering</li>
+                                <li>Network scanning and enumeration</li>
+                                <li>Social media intelligence</li>
+                                <li>Physical surveillance</li>
+                            </ul>
+                        </li>
+                        <li><strong>Initial Access:</strong>
+                            <ul>
+                                <li>Spear-phishing targeted employees</li>
+                                <li>Exploiting internet-facing services</li>
+                                <li>Supply chain compromise</li>
+                                <li>Insider recruitment or compromise</li>
+                            </ul>
+                        </li>
+                        <li><strong>Establishment:</strong>
+                            <ul>
+                                <li>Install persistent backdoors</li>
+                                <li>Create command and control channels</li>
+                                <li>Escalate privileges</li>
+                                <li>Disable security tools</li>
+                            </ul>
+                        </li>
+                        <li><strong>Exploration:</strong>
+                            <ul>
+                                <li>Map network topology</li>
+                                <li>Identify critical systems</li>
+                                <li>Understand operational processes</li>
+                                <li>Locate high-value targets</li>
+                            </ul>
+                        </li>
+                        <li><strong>Attack Execution:</strong>
+                            <ul>
+                                <li>Deploy destructive payloads</li>
+                                <li>Manipulate industrial processes</li>
+                                <li>Exfiltrate sensitive data</li>
+                                <li>Coordinate multi-vector attacks</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="cybersecurity-frameworks">
+            <h2>📋 Framework for Improving Critical Infrastructure Cyber Security</h2>
+
+            <h3>NIST Cybersecurity Framework</h3>
+            <div class="concept">
+                <h4>Framework Core Functions:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Function</th>
+                                <th>Purpose</th>
+                                <th>Key Categories</th>
+                                <th>Example Activities</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Identify</td>
+                                <td>Understand business context and risks</td>
+                                <td>Asset Management, Business Environment</td>
+                                <td>Inventory assets, assess risks</td>
+                            </tr>
+                            <tr>
+                                <td>Protect</td>
+                                <td>Implement safeguards</td>
+                                <td>Access Control, Data Security</td>
+                                <td>Implement controls, train users</td>
+                            </tr>
+                            <tr>
+                                <td>Detect</td>
+                                <td>Identify cybersecurity events</td>
+                                <td>Anomaly Detection, Monitoring</td>
+                                <td>Deploy sensors, analyze logs</td>
+                            </tr>
+                            <tr>
+                                <td>Respond</td>
+                                <td>Take action on detected events</td>
+                                <td>Response Planning, Communication</td>
+                                <td>Execute response plan, coordinate</td>
+                            </tr>
+                            <tr>
+                                <td>Recover</td>
+                                <td>Restore capabilities and services</td>
+                                <td>Recovery Planning, Improvements</td>
+                                <td>Restore operations, learn lessons</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Implementation Tiers:</h4>
+                <ul>
+                    <li><strong>Tier 1 - Partial:</strong> Ad hoc, reactive approach</li>
+                    <li><strong>Tier 2 - Risk Informed:</strong> Some risk awareness, informal processes</li>
+                    <li><strong>Tier 3 - Repeatable:</strong> Formal policies and procedures</li>
+                    <li><strong>Tier 4 - Adaptive:</strong> Advanced, adaptive, risk-informed</li>
+                </ul>
+            </div>
+
+            <h3>Industry-Specific Frameworks</h3>
+            <div class="concept">
+                <h4>Sector-Specific Standards:</h4>
+                <ul>
+                    <li><strong>Energy Sector:</strong>
+                        <ul>
+                            <li>NERC CIP (North American Electric Reliability Corporation)</li>
+                            <li>IEC 62443 (Industrial Automation and Control Systems Security)</li>
+                            <li>NIST SP 800-82 (Guide to Industrial Control Systems Security)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Financial Services:</strong>
+                        <ul>
+                            <li>ISO 27001/27002 (Information Security Management)</li>
+                            <li>PCI DSS (Payment Card Industry Data Security Standard)</li>
+                            <li>Basel III (Banking regulation framework)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Healthcare:</strong>
+                        <ul>
+                            <li>HIPAA (Health Insurance Portability and Accountability Act)</li>
+                            <li>HITECH (Health Information Technology for Economic and Clinical Health)</li>
+                            <li>FDA Cybersecurity Guidelines for Medical Devices</li>
+                        </ul>
+                    </li>
+                    <li><strong>Transportation:</strong>
+                        <ul>
+                            <li>TSA Cybersecurity Directives</li>
+                            <li>Maritime Cybersecurity Guidelines</li>
+                            <li>Aviation Cybersecurity Standards</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Risk Management Approach</h3>
+            <div class="concept">
+                <h4>Risk Assessment Process:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Asset Identification:</strong> Catalog critical systems and data</li>
+                        <li><strong>Threat Modeling:</strong> Identify potential threat actors and methods</li>
+                        <li><strong>Vulnerability Assessment:</strong> Find weaknesses in systems</li>
+                        <li><strong>Impact Analysis:</strong> Determine consequences of successful attacks</li>
+                        <li><strong>Likelihood Estimation:</strong> Assess probability of attacks</li>
+                        <li><strong>Risk Calculation:</strong> Combine impact and likelihood</li>
+                        <li><strong>Risk Treatment:</strong> Accept, mitigate, transfer, or avoid risks</li>
+                        <li><strong>Monitoring and Review:</strong> Continuously assess and update</li>
+                    </ol>
+                </div>
+                
+                <h4>Risk Treatment Strategies:</h4>
+                <ul>
+                    <li><strong>Accept:</strong> Acknowledge risk but take no action (low risk)</li>
+                    <li><strong>Mitigate:</strong> Implement controls to reduce risk</li>
+                    <li><strong>Transfer:</strong> Shift risk to third parties (insurance, outsourcing)</li>
+                    <li><strong>Avoid:</strong> Eliminate the risk source or change processes</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="protection-strategies">
+            <h2>🛡️ Infrastructure Protection Strategies</h2>
+
+            <h3>Cybersecurity Architecture</h3>
+            <div class="concept">
+                <h4>Defense-in-Depth for Critical Infrastructure:</h4>
+                <div class="visual-diagram">
+                    <h4>Multi-Layer Security Architecture</h4>
+                    <div class="diagram-text">
+                        <pre>
+┌─────────────────────────────────────────────────────┐
+│ Physical Security (Facilities, Personnel)           │
+├─────────────────────────────────────────────────────┤
+│ Perimeter Defense (Firewalls, IDS/IPS)             │
+├─────────────────────────────────────────────────────┤
+│ Network Segmentation (VLANs, Air Gaps)             │
+├─────────────────────────────────────────────────────┤
+│ Endpoint Protection (Antivirus, EDR)               │
+├─────────────────────────────────────────────────────┤
+│ Application Security (Input Validation, WAF)       │
+├─────────────────────────────────────────────────────┤
+│ Data Protection (Encryption, Access Control)       │
+├─────────────────────────────────────────────────────┤
+│ Industrial Controls (SCADA Security)               │
+└─────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>Zero Trust Architecture:</h4>
+                <ul>
+                    <li><strong>Never Trust, Always Verify:</strong> Verify every access request</li>
+                    <li><strong>Least Privilege Access:</strong> Minimum necessary permissions</li>
+                    <li><strong>Assume Breach:</strong> Design for compromised environment</li>
+                    <li><strong>Micro-Segmentation:</strong> Limit lateral movement</li>
+                    <li><strong>Continuous Monitoring:</strong> Real-time security assessment</li>
+                </ul>
+            </div>
+
+            <h3>Industrial Control System Security</h3>
+            <div class="concept">
+                <h4>ICS/SCADA Security Challenges:</h4>
+                <ul>
+                    <li><strong>Legacy Systems:</strong> Old systems with poor security</li>
+                    <li><strong>Availability Priority:</strong> Uptime more important than security updates</li>
+                    <li><strong>Remote Access:</strong> Maintenance and monitoring requirements</li>
+                    <li><strong>Interconnectivity:</strong> Increasing connection to corporate networks</li>
+                    <li><strong>Lack of Encryption:</strong> Plain text protocols in industrial systems</li>
+                </ul>
+                
+                <h4>ICS Security Best Practices:</h4>
+                <ul>
+                    <li><strong>Network Segmentation:</strong> Separate OT from IT networks</li>
+                    <li><strong>Air Gaps:</strong> Physical isolation of critical systems</li>
+                    <li><strong>Patch Management:</strong> Controlled updates during maintenance windows</li>
+                    <li><strong>Monitoring:</strong> Specialized ICS security monitoring tools</li>
+                    <li><strong>Access Control:</strong> Strong authentication for system access</li>
+                    <li><strong>Incident Response:</strong> Specialized procedures for operational systems</li>
+                </ul>
+                
+                <div class="example-detailed">
+                    <h4>ICS Security Implementation Example</h4>
+                    <p><strong>Scenario:</strong> Securing a water treatment plant's control systems</p>
+                    
+                    <h5>Security Measures:</h5>
+                    <ol>
+                        <li><strong>Network Architecture:</strong>
+                            <ul>
+                                <li>Air-gapped control network</li>
+                                <li>DMZ for data historians</li>
+                                <li>VPN for authorized remote access</li>
+                            </ul>
+                        </li>
+                        <li><strong>Access Controls:</strong>
+                            <ul>
+                                <li>Role-based access to HMI systems</li>
+                                <li>Multi-factor authentication for operators</li>
+                                <li>Physical access controls to control rooms</li>
+                            </ul>
+                        </li>
+                        <li><strong>Monitoring:</strong>
+                            <ul>
+                                <li>ICS-specific intrusion detection</li>
+                                <li>Process monitoring for anomalies</li>
+                                <li>Security event correlation</li>
+                            </ul>
+                        </li>
+                        <li><strong>Incident Response:</strong>
+                            <ul>
+                                <li>Manual override procedures</li>
+                                <li>Emergency shutdown protocols</li>
+                                <li>Communication with authorities</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="international-cooperation">
+            <h2>🤝 International Cooperation and Standards</h2>
+
+            <h3>Global Cybersecurity Initiatives</h3>
+            <div class="concept">
+                <h4>International Organizations:</h4>
+                <ul>
+                    <li><strong>ITU (International Telecommunication Union):</strong> Global cybersecurity agenda</li>
+                    <li><strong>ENISA (European Network and Information Security Agency):</strong> EU cybersecurity coordination</li>
+                    <li><strong>NATO Cooperative Cyber Defence Centre:</strong> Military cybersecurity</li>
+                    <li><strong>UN Office on Drugs and Crime:</strong> Cybercrime prevention</li>
+                    <li><strong>FIRST (Forum of Incident Response Teams):</strong> Global incident response coordination</li>
+                </ul>
+                
+                <h4>Information Sharing Mechanisms:</h4>
+                <ul>
+                    <li><strong>Threat Intelligence Sharing:</strong> Real-time threat indicators</li>
+                    <li><strong>Best Practices Exchange:</strong> Security implementation guidance</li>
+                    <li><strong>Incident Coordination:</strong> Cross-border incident response</li>
+                    <li><strong>Joint Exercises:</strong> Coordinated security testing</li>
+                    <li><strong>Capacity Building:</strong> Training and technical assistance</li>
+                </ul>
+            </div>
+
+            <h3>National Cybersecurity Strategies</h3>
+            <div class="concept">
+                <h4>India's National Cyber Security Strategy:</h4>
+                <ul>
+                    <li><strong>Vision:</strong> Secure and resilient cyberspace for citizens, businesses, and government</li>
+                    <li><strong>Objectives:</strong>
+                        <ul>
+                            <li>Create secure cyber ecosystem</li>
+                            <li>Enhance cyber threat detection capabilities</li>
+                            <li>Strengthen cyber governance framework</li>
+                            <li>Build cybersecurity expertise</li>
+                            <li>Promote international cooperation</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h4>Key Indian Cybersecurity Organizations:</h4>
+                <ul>
+                    <li><strong>CERT-In:</strong> National computer emergency response team</li>
+                    <li><strong>NCIIPC:</strong> National Critical Information Infrastructure Protection Centre</li>
+                    <li><strong>CDAC:</strong> Centre for Development of Advanced Computing</li>
+                    <li><strong>DRDO:</strong> Defence Research and Development Organisation</li>
+                    <li><strong>NIC:</strong> National Informatics Centre</li>
+                </ul>
+                
+                <div class="algorithm-steps">
+                    <h4>National Incident Response Process:</h4>
+                    <ol>
+                        <li><strong>Detection:</strong> Monitoring systems identify potential incidents</li>
+                        <li><strong>Reporting:</strong> Incidents reported to CERT-In or sector authorities</li>
+                        <li><strong>Assessment:</strong> Determine scope and potential impact</li>
+                        <li><strong>Coordination:</strong> Activate appropriate response teams</li>
+                        <li><strong>Mitigation:</strong> Implement containment and recovery measures</li>
+                        <li><strong>Information Sharing:</strong> Share threat intelligence with stakeholders</li>
+                        <li><strong>Lessons Learned:</strong> Improve processes and defenses</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Public-Private Partnerships</h3>
+            <div class="concept">
+                <h4>Collaboration Models:</h4>
+                <ul>
+                    <li><strong>Information Sharing:</strong> Threat intelligence exchange programs</li>
+                    <li><strong>Joint Exercises:</strong> Coordinated cybersecurity drills</li>
+                    <li><strong>Standards Development:</strong> Collaborative security standard creation</li>
+                    <li><strong>Incident Response:</strong> Coordinated response to major incidents</li>
+                    <li><strong>Research and Development:</strong> Joint cybersecurity innovation</li>
+                </ul>
+                
+                <h4>Benefits of Cooperation:</h4>
+                <ul>
+                    <li>Faster threat detection and response</li>
+                    <li>Shared costs of cybersecurity investments</li>
+                    <li>Improved overall security posture</li>
+                    <li>Better understanding of threat landscape</li>
+                    <li>Coordinated policy development</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="practical-implementation">
+            <h2>🎯 Practical Infrastructure Protection Implementation</h2>
+
+            <div class="example-detailed">
+                <h3>Case Study: Smart Grid Cybersecurity</h3>
+                <h4>Challenge:</h4>
+                <p>Implement cybersecurity for a smart electrical grid that integrates renewable energy sources, energy storage, and two-way communication with consumers.</p>
+                
+                <h4>Security Implementation:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Network Architecture:</strong>
+                            <ul>
+                                <li>Segment control networks from business networks</li>
+                                <li>Implement secure communication protocols</li>
+                                <li>Deploy network monitoring at all levels</li>
+                                <li>Create secure remote access solutions</li>
+                            </ul>
+                        </li>
+                        <li><strong>Device Security:</strong>
+                            <ul>
+                                <li>Secure smart meters with encryption</li>
+                                <li>Implement device authentication</li>
+                                <li>Regular firmware updates</li>
+                                <li>Tamper detection mechanisms</li>
+                            </ul>
+                        </li>
+                        <li><strong>Data Protection:</strong>
+                            <ul>
+                                <li>Encrypt all communications</li>
+                                <li>Implement data integrity checks</li>
+                                <li>Secure data storage and backup</li>
+                                <li>Privacy protection for consumer data</li>
+                            </ul>
+                        </li>
+                        <li><strong>Operational Security:</strong>
+                            <ul>
+                                <li>Train operators on cybersecurity</li>
+                                <li>Implement change management processes</li>
+                                <li>Regular security assessments</li>
+                                <li>Incident response procedures</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h3>Case Study: Financial Services Infrastructure</h3>
+                <h4>Challenge:</h4>
+                <p>Protect a national payment processing system that handles millions of transactions daily.</p>
+                
+                <h4>Multi-Layer Protection Strategy:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Perimeter Security:</strong>
+                            <ul>
+                                <li>Advanced threat protection</li>
+                                <li>Web application firewalls</li>
+                                <li>DDoS protection services</li>
+                                <li>Network access control</li>
+                            </ul>
+                        </li>
+                        <li><strong>Transaction Security:</strong>
+                            <ul>
+                                <li>End-to-end encryption</li>
+                                <li>Real-time fraud detection</li>
+                                <li>Multi-factor authentication</li>
+                                <li>Transaction monitoring and alerting</li>
+                            </ul>
+                        </li>
+                        <li><strong>Infrastructure Resilience:</strong>
+                            <ul>
+                                <li>Redundant data centers</li>
+                                <li>Disaster recovery procedures</li>
+                                <li>Business continuity planning</li>
+                                <li>Regular backup and testing</li>
+                            </ul>
+                        </li>
+                        <li><strong>Compliance and Governance:</strong>
+                            <ul>
+                                <li>Regular security audits</li>
+                                <li>Compliance with banking regulations</li>
+                                <li>Risk management framework</li>
+                                <li>Security awareness training</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <div class="exam-tips">
+                <h3>💡 Unit 4 Exam Preparation</h3>
+                <div class="key-concepts">
+                    <h4>Critical Infrastructure Knowledge:</h4>
+                    <ul>
+                        <li><strong>Infrastructure Sectors:</strong> Know the major critical infrastructure sectors and their vulnerabilities</li>
+                        <li><strong>Interdependencies:</strong> Understand how infrastructure failures cascade</li>
+                        <li><strong>Threat Actors:</strong> Know different types of threats to infrastructure</li>
+                        <li><strong>Cyber Weapons:</strong> Understand notable cyber weapons and their impacts</li>
+                        <li><strong>Protection Frameworks:</strong> Know NIST Framework and industry-specific standards</li>
+                        <li><strong>Risk Management:</strong> Understand infrastructure risk assessment process</li>
+                    </ul>
+                </div>
+                
+                <div class="checklist">
+                    <h4>Infrastructure Protection Checklist:</h4>
+                    <ul>
+                        <li>Can I identify and classify critical infrastructure sectors?</li>
+                        <li>Do I understand the types of infrastructure interdependencies?</li>
+                        <li>Can I explain how cyber attacks spread through connected systems?</li>
+                        <li>Do I know the major cybersecurity frameworks for infrastructure?</li>
+                        <li>Can I describe defense-in-depth strategies for critical systems?</li>
+                        <li>Do I understand the role of public-private partnerships?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 4 Summary: Critical Infrastructure Protection</h3>
+                <div class="summary-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protection Area</th>
+                                <th>Key Concepts</th>
+                                <th>Implementation Strategies</th>
+                                <th>Success Metrics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Asset Protection</td>
+                                <td>Critical asset identification, prioritization</td>
+                                <td>Inventory, classification, risk assessment</td>
+                                <td>Asset visibility, risk reduction</td>
+                            </tr>
+                            <tr>
+                                <td>Interdependency Management</td>
+                                <td>System connections, cascade analysis</td>
+                                <td>Mapping, modeling, scenario planning</td>
+                                <td>Resilience improvement</td>
+                            </tr>
+                            <tr>
+                                <td>Threat Defense</td>
+                                <td>Multi-vector attacks, nation-state threats</td>
+                                <td>Defense-in-depth, zero trust</td>
+                                <td>Attack prevention, detection</td>
+                            </tr>
+                            <tr>
+                                <td>Framework Implementation</td>
+                                <td>NIST Framework, sector standards</td>
+                                <td>Maturity assessment, gap analysis</td>
+                                <td>Compliance, capability improvement</td>
+                            </tr>
+                            <tr>
+                                <td>ICS/SCADA Security</td>
+                                <td>Industrial control system protection</td>
+                                <td>Segmentation, monitoring, hardening</td>
+                                <td>Operational continuity, safety</td>
+                            </tr>
+                            <tr>
+                                <td>Cooperation & Sharing</td>
+                                <td>Public-private partnerships, intel sharing</td>
+                                <td>Information sharing, joint exercises</td>
+                                <td>Collective defense effectiveness</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Course Complete!</strong> You now have comprehensive knowledge of cybersecurity fundamentals, ethics, legal frameworks, and infrastructure protection strategies.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

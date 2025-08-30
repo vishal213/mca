@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Ethics & Cybercrime Tools - Cyber Security</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Cyber Security</a>
+                <a href="../../index.html" class="home-link">🏠 Semester 3</a>
+            </nav>
+            <h1>Unit 2: Ethics in Cyber Security</h1>
+            <p class="subtitle">Digital Ethics & Cybercrime Investigation Tools</p>
+        </header>
+
+        <section id="unit-outline">
+            <h2>📋 Unit Overview & Concept Map</h2>
+            
+            <div class="concept">
+                <h3>Learning Journey</h3>
+                <p>This unit explores the ethical dimensions of cybersecurity and the sophisticated tools used in cybercrime. We'll begin with fundamental ethical principles that guide cybersecurity professionals, then dive deep into digital forensics and evidence handling. Finally, we'll examine the dark side - understanding the tools and methods used by cybercriminals to better defend against them.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Ethics & Cybercrime Investigation Concept Map</h4>
+                    <div class="diagram-text">
+                        <pre>
+                    Ethics in Cyber Security
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+    Digital Ethics    Digital Forensics   Cybercrime Tools
+    Principles        & Evidence         & Techniques
+        │                  │                  │
+    ├── Privacy Rights     ├── Evidence       ├── Password Attacks
+    ├── IP Protection      │   Collection     ├── Malware & Spyware
+    ├── Professional       ├── Chain of       ├── Social Engineering
+    │   Standards          │   Custody        ├── Steganography
+    ├── Fair Use           ├── Forensic       └── Internet Fraud
+    └── Ethical Hacking    │   Technologies        │
+        │                  │                       │
+        └──────────────────┼───────────────────────┘
+                           │
+                    Practical Application
+                    (Case Studies & Examples)
+                           │
+                    ├── Investigation Scenarios
+                    ├── Legal Implications
+                    ├── Tool Demonstrations
+                    └── Preventive Measures
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>What You'll Master:</h4>
+                <ul>
+                    <li><strong>Ethical Foundation:</strong> Understanding the moral framework that guides cybersecurity professionals</li>
+                    <li><strong>Investigation Skills:</strong> Learning how digital evidence is collected and analyzed</li>
+                    <li><strong>Criminal Methods:</strong> Understanding how cybercriminals operate to better defend against them</li>
+                    <li><strong>Legal Awareness:</strong> Knowing the legal boundaries and responsibilities in cybersecurity</li>
+                </ul>
+                
+                <h4>Why This Unit Matters:</h4>
+                <p>Cybersecurity professionals wield enormous power - they can access private data, penetrate systems, and make decisions that affect millions of lives. This unit ensures you understand not just HOW to use these capabilities, but WHEN and WHY it's appropriate to do so. Additionally, by understanding criminal techniques, you'll be better equipped to defend against them.</p>
+            </div>
+        </section>
+
+        <section id="ethics-fundamentals">
+            <h2>⚖️ Ethics in Cyber Security</h2>
+
+            <h3>Digital Privacy - The Foundation of Trust</h3>
+            <div class="concept">
+                <h4>Understanding Digital Privacy in Our Connected World</h4>
+                <p><strong>Digital privacy</strong> is like having curtains on your windows - you decide what the outside world can see about your personal life. In the digital realm, this means controlling what information is collected about you, how it's used, and who can access it.</p>
+                
+                <p><strong>Why It Matters:</strong> Every day, you generate thousands of digital footprints - every click, search, purchase, and message creates data about you. This information, when combined, creates a detailed profile that can be more intimate than what your closest friends know about you.</p>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Example: The Cambridge Analytica Scandal</h4>
+                    <p><strong>What Happened:</strong> In 2018, it was revealed that Cambridge Analytica harvested personal data from millions of Facebook users without consent.</p>
+                    
+                    <h5>The Privacy Violation Process:</h5>
+                    <ol>
+                        <li><strong>Initial Data Collection:</strong> A quiz app collected data from 270,000 users who consented</li>
+                        <li><strong>Friend Network Exploitation:</strong> The app also collected data from these users' friends (50+ million people) WITHOUT their consent</li>
+                        <li><strong>Profile Building:</strong> This data was used to build psychological profiles of voters</li>
+                        <li><strong>Political Manipulation:</strong> These profiles were used to target political advertisements during elections</li>
+                    </ol>
+                    
+                    <p><strong>Impact:</strong> People's private information was used to influence their political beliefs and voting behavior, fundamentally undermining democratic processes.</p>
+                    
+                    <p><strong>Lessons Learned:</strong> This case showed how privacy violations can have far-reaching consequences beyond individual harm - they can affect entire societies.</p>
+                </div>
+                
+                <h4>The Six Pillars of Privacy Protection</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Data Minimization - "Collect Only What You Need"</h5>
+                    <p><strong>Principle:</strong> Organizations should only collect personal information that is necessary for their stated purpose.</p>
+                    <p><strong>Real Example:</strong> When you sign up for a weather app, it should only ask for your location (to provide weather data), not your contacts, photos, or browsing history.</p>
+                    
+                    <h6>How to Identify Violations:</h6>
+                    <ul>
+                        <li>Apps asking for permissions unrelated to their function</li>
+                        <li>Websites requiring excessive personal information for basic services</li>
+                        <li>Companies collecting data "just in case" they might need it later</li>
+                    </ul>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Purpose Limitation - "Use Data Only for What You Said"</h5>
+                    <p><strong>Principle:</strong> Data collected for one purpose shouldn't be used for another without explicit consent.</p>
+                    <p><strong>Real Example:</strong> If you provide your email to receive order confirmations, the company shouldn't use it to send marketing emails unless you specifically agreed to that.</p>
+                    
+                    <h6>Common Violations:</h6>
+                    <ul>
+                        <li>Using customer data for advertising when it was collected for service delivery</li>
+                        <li>Selling customer information to third parties without consent</li>
+                        <li>Repurposing data when business models change</li>
+                    </ul>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Transparency - "Tell People What You're Doing"</h5>
+                    <p><strong>Principle:</strong> Organizations must clearly explain their data practices in understandable language.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Good vs. Bad Privacy Policies</h6>
+                        
+                        <h6>❌ Bad Example (Vague and Confusing):</h6>
+                        <p>"We may collect various types of information to improve user experience and for legitimate business purposes. This information may be shared with partners for operational efficiency."</p>
+                        
+                        <h6>✅ Good Example (Clear and Specific):</h6>
+                        <p>"We collect your name and email when you create an account. We use your name to personalize your experience and your email to send order confirmations. We never share this information with advertisers or sell it to other companies."</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>4. User Control - "Let People Manage Their Data"</h5>
+                    <p><strong>Principle:</strong> Individuals should have control over their personal information.</p>
+                    
+                    <h6>Essential User Rights:</h6>
+                    <ul>
+                        <li><strong>Access:</strong> Right to see what data is collected</li>
+                        <li><strong>Correction:</strong> Right to fix incorrect information</li>
+                        <li><strong>Deletion:</strong> Right to have data deleted ("Right to be Forgotten")</li>
+                        <li><strong>Portability:</strong> Right to take your data to another service</li>
+                        <li><strong>Opt-out:</strong> Right to stop data collection</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Case Study: Google's Data Controls</h6>
+                        <p>Google provides users with comprehensive data controls through "My Activity" and "Data & Personalization" settings:</p>
+                        <ul>
+                            <li>Users can see every search query, YouTube video watched, and location visited</li>
+                            <li>They can delete individual items or entire categories of data</li>
+                            <li>They can turn off data collection for specific services</li>
+                            <li>They can download all their data in a portable format</li>
+                        </ul>
+                        <p><strong>Why This Works:</strong> It gives users genuine control while being transparent about data practices.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>5. Security - "Protect What You Collect"</h5>
+                    <p><strong>Principle:</strong> Personal data must be protected with appropriate technical and organizational measures.</p>
+                    
+                    <h6>Security Measures for Personal Data:</h6>
+                    <ul>
+                        <li><strong>Encryption:</strong> Data scrambled so unauthorized people can't read it</li>
+                        <li><strong>Access Controls:</strong> Only authorized personnel can access data</li>
+                        <li><strong>Audit Logs:</strong> Track who accessed what data when</li>
+                        <li><strong>Regular Security Updates:</strong> Keep systems patched and secure</li>
+                        <li><strong>Data Backups:</strong> Protect against data loss</li>
+                    </ul>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>6. Accountability - "Take Responsibility"</h5>
+                    <p><strong>Principle:</strong> Organizations must be able to demonstrate compliance with privacy principles.</p>
+                    
+                    <h6>Accountability Measures:</h6>
+                    <ul>
+                        <li>Regular privacy impact assessments</li>
+                        <li>Staff training on privacy practices</li>
+                        <li>Incident response procedures for data breaches</li>
+                        <li>Documentation of all privacy decisions and processes</li>
+                    </ul>
+                </div>
+                
+                <h4>Modern Privacy Threats - What Keeps Security Experts Awake at Night</h4>
+                
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Threat Type</th>
+                                <th>How It Works</th>
+                                <th>Real-World Example</th>
+                                <th>Prevention</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data Profiling</td>
+                                <td>Combining data from multiple sources to create detailed profiles</td>
+                                <td>Data brokers collecting info from social media, purchases, and public records</td>
+                                <td>Limit information sharing, use privacy settings</td>
+                            </tr>
+                            <tr>
+                                <td>Location Tracking</td>
+                                <td>Continuous monitoring of physical location through devices</td>
+                                <td>Apps tracking location even when not in use</td>
+                                <td>Review app permissions, turn off location when not needed</td>
+                            </tr>
+                            <tr>
+                                <td>Behavioral Analysis</td>
+                                <td>Studying online behavior to predict future actions</td>
+                                <td>E-commerce sites using browsing patterns to manipulate prices</td>
+                                <td>Use incognito browsing, clear cookies regularly</td>
+                            </tr>
+                            <tr>
+                                <td>Surveillance Capitalism</td>
+                                <td>Business model based on extracting data for advertising</td>
+                                <td>Free services that profit by selling user data to advertisers</td>
+                                <td>Read terms of service, consider paid alternatives</td>
+                            </tr>
+                            <tr>
+                                <td>IoT Spying</td>
+                                <td>Internet-connected devices collecting unexpected data</td>
+                                <td>Smart TVs listening to conversations, smart doorbells recording neighbors</td>
+                                <td>Review IoT device settings, regular firmware updates</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="example-detailed">
+                    <h4>The Privacy Paradox - Why People Share Despite Risks</h4>
+                    <p><strong>The Contradiction:</strong> Surveys show people value privacy highly, yet they continue sharing personal information online.</p>
+                    
+                    <h5>Why This Happens:</h5>
+                    <ul>
+                        <li><strong>Immediate Benefits:</strong> Convenience and social connection outweigh abstract privacy risks</li>
+                        <li><strong>Complexity:</strong> Privacy policies are too complex to understand</li>
+                        <li><strong>Invisibility:</strong> Data collection happens in the background</li>
+                        <li><strong>Social Pressure:</strong> Fear of missing out if not participating</li>
+                        <li><strong>Learned Helplessness:</strong> Feeling that privacy is already lost</li>
+                    </ul>
+                    
+                    <h5>How to Address This:</h5>
+                    <ul>
+                        <li>Design privacy-friendly defaults in systems</li>
+                        <li>Use clear, simple language in privacy notices</li>
+                        <li>Provide meaningful choices to users</li>
+                        <li>Make privacy benefits visible and tangible</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Intellectual Property in Cyberspace - Protecting Digital Creativity</h3>
+            <div class="concept">
+                <h4>Understanding Intellectual Property in the Digital Age</h4>
+                <p><strong>Intellectual Property (IP)</strong> is like a legal fence around creative and innovative work. Just as you wouldn't want someone to steal your physical possessions, creators need protection for their ideas, inventions, and creative expressions in the digital world.</p>
+                
+                <p><strong>The Digital Challenge:</strong> The internet makes it incredibly easy to copy, distribute, and modify digital content. A single click can duplicate a file millions of times, making IP protection both more important and more difficult than ever before.</p>
+                
+                <div class="comparison-table">
+                    <h4>The Four Pillars of Intellectual Property Protection:</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>IP Type</th>
+                                <th>What It Protects</th>
+                                <th>Digital Examples</th>
+                                <th>Protection Period</th>
+                                <th>Key Requirements</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Copyright</strong></td>
+                                <td>Original creative expressions</td>
+                                <td>Software code, websites, digital art, music, videos, blogs</td>
+                                <td>Life + 60 years (India)<br>Life + 70 years (US/EU)</td>
+                                <td>Must be original and fixed in tangible form</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Patents</strong></td>
+                                <td>Inventions and technical processes</td>
+                                <td>Software algorithms, mobile app features, tech innovations</td>
+                                <td>20 years from filing</td>
+                                <td>Must be novel, non-obvious, and useful</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trademarks</strong></td>
+                                <td>Brand identifiers and commercial symbols</td>
+                                <td>Domain names, app icons, company logos, brand names</td>
+                                <td>Renewable indefinitely</td>
+                                <td>Must be used in commerce and distinctive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trade Secrets</strong></td>
+                                <td>Confidential business information</td>
+                                <td>Source code, algorithms, customer databases, business strategies</td>
+                                <td>Until publicly disclosed</td>
+                                <td>Must be kept secret and provide competitive advantage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Case Study: Oracle vs. Google (Copyright)</h4>
+                    <p><strong>The Dispute:</strong> Oracle sued Google for using Java API code in Android, claiming copyright infringement.</p>
+                    
+                    <h5>The Technical Details:</h5>
+                    <ul>
+                        <li><strong>What Google Did:</strong> Used Java API structure and organization in Android</li>
+                        <li><strong>What Oracle Claimed:</strong> API structure is copyrightable expression</li>
+                        <li><strong>What Google Argued:</strong> APIs are functional and should be fair use</li>
+                    </ul>
+                    
+                    <h5>Legal Journey:</h5>
+                    <ol>
+                        <li><strong>2010:</strong> Oracle sues Google for $9 billion</li>
+                        <li><strong>2012:</strong> Court rules APIs not copyrightable</li>
+                        <li><strong>2014:</strong> Appeals court reverses - APIs can be copyrighted</li>
+                        <li><strong>2016:</strong> Jury finds Google's use was fair use</li>
+                        <li><strong>2018:</strong> Appeals court reverses again - not fair use</li>
+                        <li><strong>2021:</strong> Supreme Court rules in favor of Google - fair use</li>
+                    </ol>
+                    
+                    <p><strong>Impact:</strong> This case clarified that using APIs for interoperability can be fair use, protecting software innovation while respecting copyright.</p>
+                </div>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Case Study: Apple vs. Samsung (Patents)</h4>
+                    <p><strong>The Battle:</strong> Apple sued Samsung for patent infringement related to smartphone design and features.</p>
+                    
+                    <h5>Patents in Question:</h5>
+                    <ul>
+                        <li><strong>Design Patents:</strong> iPhone's rounded corners and home button layout</li>
+                        <li><strong>Utility Patents:</strong> Touch screen gestures and user interface elements</li>
+                        <li><strong>Trade Dress:</strong> Overall look and feel of the iPhone</li>
+                    </ul>
+                    
+                    <h5>Outcome:</h5>
+                    <ul>
+                        <li>Samsung ordered to pay over $500 million in damages</li>
+                        <li>Established precedent for design patent protection in tech</li>
+                        <li>Led to more distinctive product designs across the industry</li>
+                    </ul>
+                    
+                    <p><strong>Lesson:</strong> Even basic design elements can be valuable IP assets worth protecting.</p>
+                </div>
+                
+                <h4>Common IP Violations in Cyberspace - The Digital Crime Wave</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Software Piracy - The $46 Billion Problem</h5>
+                    <p><strong>What It Is:</strong> Unauthorized copying, distribution, or use of software.</p>
+                    
+                    <div class="comparison-table">
+                        <h6>Types of Software Piracy:</h6>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Piracy Type</th>
+                                    <th>Method</th>
+                                    <th>Common Examples</th>
+                                    <th>Detection Method</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>End-User Piracy</td>
+                                    <td>Installing software on more computers than licensed</td>
+                                    <td>One Office license used on multiple computers</td>
+                                    <td>License audits, activation checks</td>
+                                </tr>
+                                <tr>
+                                    <td>Internet Piracy</td>
+                                    <td>Downloading/sharing software online</td>
+                                    <td>BitTorrent downloads, warez sites</td>
+                                    <td>Traffic monitoring, DMCA takedowns</td>
+                                </tr>
+                                <tr>
+                                    <td>Counterfeiting</td>
+                                    <td>Creating fake copies with logos</td>
+                                    <td>Fake Windows installation discs</td>
+                                    <td>Authentication checks, holograms</td>
+                                </tr>
+                                <tr>
+                                    <td>Cracking</td>
+                                    <td>Removing copy protection</td>
+                                    <td>Modified software without licensing</td>
+                                    <td>Code analysis, behavior monitoring</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="example-detailed">
+                        <h6>Case Study: Microsoft's Anti-Piracy Efforts</h6>
+                        <p><strong>The Challenge:</strong> Windows was one of the most pirated software products globally.</p>
+                        
+                        <p><strong>Microsoft's Multi-Layered Response:</strong></p>
+                        <ul>
+                            <li><strong>Technical Measures:</strong> Windows Genuine Advantage (WGA) validation</li>
+                            <li><strong>Legal Action:</strong> Lawsuits against major counterfeiters</li>
+                            <li><strong>Reduced Pricing:</strong> Cheaper versions for emerging markets</li>
+                            <li><strong>Cloud Migration:</strong> Moving to subscription models (Office 365)</li>
+                        </ul>
+                        
+                        <p><strong>Result:</strong> Significantly reduced piracy rates while maintaining market dominance.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Digital Content Theft - The Creative Industry's Nightmare</h5>
+                    <p><strong>What It Is:</strong> Unauthorized copying and distribution of copyrighted digital content.</p>
+                    
+                    <h6>Most Targeted Content:</h6>
+                    <ul>
+                        <li><strong>Music:</strong> MP3 files, streaming content</li>
+                        <li><strong>Movies/TV:</strong> Video files, streaming service content</li>
+                        <li><strong>Books/Articles:</strong> E-books, academic papers</li>
+                        <li><strong>Images:</strong> Stock photos, artwork</li>
+                        <li><strong>Software:</strong> Mobile apps, games</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>The Rise and Fall of Napster</h6>
+                        <p><strong>What Happened:</strong> Napster enabled millions of users to share copyrighted music files for free.</p>
+                        
+                        <p><strong>Timeline:</strong></p>
+                        <ol>
+                            <li><strong>1999:</strong> Napster launched, quickly gained millions of users</li>
+                            <li><strong>2000:</strong> Record industry sued for copyright infringement</li>
+                            <li><strong>2001:</strong> Court ordered shutdown of file-sharing service</li>
+                        </ol>
+                        
+                        <p><strong>Impact:</strong> Led to development of legal music streaming services like Spotify and iTunes.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Trademark Infringement - Brand Identity Theft</h5>
+                    <p><strong>What It Is:</strong> Unauthorized use of trademarks that causes consumer confusion.</p>
+                    
+                    <h6>Digital Trademark Violations:</h6>
+                    <ul>
+                        <li><strong>Cybersquatting:</strong> Registering domain names with trademarked terms</li>
+                        <li><strong>Typosquatting:</strong> Using similar spellings to capture mistyped traffic</li>
+                        <li><strong>App Store Confusion:</strong> Creating apps with similar names/icons</li>
+                        <li><strong>Social Media Impersonation:</strong> Fake accounts using brand names</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Case Study: Amazon's Brand Protection Program</h6>
+                        <p><strong>The Problem:</strong> Counterfeit products and trademark infringement on Amazon's marketplace.</p>
+                        
+                        <p><strong>Amazon's Solution:</strong></p>
+                        <ul>
+                            <li><strong>Project Zero:</strong> Automated tools to detect fake products</li>
+                            <li><strong>Brand Registry:</strong> Verification system for legitimate brands</li>
+                            <li><strong>Counterfeit Crimes Unit:</strong> Works with law enforcement</li>
+                            <li><strong>Machine Learning:</strong> AI systems to identify suspicious listings</li>
+                        </ul>
+                        
+                        <p><strong>Results:</strong> 99.9% of pages viewed by customers never see a counterfeit.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>4. Trade Secret Theft - Corporate Espionage in the Digital Age</h5>
+                    <p><strong>What It Is:</strong> Stealing confidential business information that provides competitive advantage.</p>
+                    
+                    <h6>Common Targets:</h6>
+                    <ul>
+                        <li><strong>Source Code:</strong> Proprietary software and algorithms</li>
+                        <li><strong>Customer Data:</strong> Lists, preferences, behavior patterns</li>
+                        <li><strong>Financial Information:</strong> Pricing strategies, cost structures</li>
+                        <li><strong>R&D Data:</strong> Research findings, future product plans</li>
+                        <li><strong>Manufacturing Processes:</strong> Production techniques, quality procedures</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Case Study: Uber's Waymo Trade Secret Theft</h6>
+                        <p><strong>The Incident:</strong> Former Google engineer took trade secrets to Uber's self-driving car project.</p>
+                        
+                        <p><strong>What Was Stolen:</strong></p>
+                        <ul>
+                            <li>14,000 confidential documents</li>
+                            <li>LiDAR sensor designs and specifications</li>
+                            <li>Supplier information and manufacturing processes</li>
+                        </ul>
+                        
+                        <p><strong>Consequences:</strong></p>
+                        <ul>
+                            <li>Uber settled for $245 million in equity</li>
+                            <li>Engineer sentenced to 18 months in prison</li>
+                            <li>Uber delayed its self-driving car program</li>
+                        </ul>
+                        
+                        <p><strong>Lesson:</strong> Trade secrets are only as secure as the people who have access to them.</p>
+                    </div>
+                </div>
+                
+                <h4>Protecting Intellectual Property in the Digital Age</h4>
+                
+                <div class="algorithm-steps">
+                    <h5>IP Protection Strategy Framework:</h5>
+                    <ol>
+                        <li><strong>Identify and Catalog IP Assets</strong>
+                            <ul>
+                                <li>Conduct IP audit to identify all valuable assets</li>
+                                <li>Classify assets by type and importance</li>
+                                <li>Document creation dates and ownership</li>
+                            </ul>
+                        </li>
+                        <li><strong>Implement Legal Protection</strong>
+                            <ul>
+                                <li>File appropriate registrations (copyrights, patents, trademarks)</li>
+                                <li>Use proper legal notices and markings</li>
+                                <li>Create clear licensing agreements</li>
+                            </ul>
+                        </li>
+                        <li><strong>Deploy Technical Safeguards</strong>
+                            <ul>
+                                <li>Digital rights management (DRM) systems</li>
+                                <li>Access controls and authentication</li>
+                                <li>Watermarking and fingerprinting</li>
+                                <li>Encryption for sensitive data</li>
+                            </ul>
+                        </li>
+                        <li><strong>Monitor for Infringement</strong>
+                            <ul>
+                                <li>Automated web crawling for unauthorized use</li>
+                                <li>App store monitoring</li>
+                                <li>Domain name watching services</li>
+                                <li>Employee monitoring for data theft</li>
+                            </ul>
+                        </li>
+                        <li><strong>Enforce Rights When Necessary</strong>
+                            <ul>
+                                <li>DMCA takedown notices</li>
+                                <li>Cease and desist letters</li>
+                                <li>Legal action for significant infringement</li>
+                                <li>International enforcement coordination</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Professional Ethics - The Moral Compass of Cybersecurity</h3>
+            <div class="concept">
+                <h4>The Six Pillars of Cybersecurity Ethics</h4>
+                <p>Cybersecurity professionals have access to sensitive information and powerful tools that can impact millions of lives. These ethical principles serve as guidelines for making difficult decisions in morally ambiguous situations.</p>
+                
+                <div class="key-concepts">
+                    <h5>1. Integrity - "Do the Right Thing, Even When No One is Watching"</h5>
+                    <p><strong>Principle:</strong> Act honestly and uphold professional standards in all situations.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Scenario: The Insider Threat Discovery</h6>
+                        <p><strong>Situation:</strong> You discover that a colleague is stealing sensitive customer data.</p>
+                        <p><strong>Ethical Dilemma:</strong> The colleague is your friend and mentor who helped you get the job.</p>
+                        <p><strong>Integrity Response:</strong> Report the violation immediately, regardless of personal relationships.</p>
+                        <p><strong>Why This Matters:</strong> Personal loyalty cannot override professional responsibility to protect customers.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Objectivity - "Facts Over Feelings"</h5>
+                    <p><strong>Principle:</strong> Make decisions based on evidence and facts, not personal bias or emotions.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Scenario: Vendor Selection Bias</h6>
+                        <p><strong>Situation:</strong> Choosing security software vendor, one offers you a job if they win.</p>
+                        <p><strong>Ethical Dilemma:</strong> Personal gain vs. best technical solution for organization.</p>
+                        <p><strong>Objectivity Response:</strong> Disclose the conflict of interest and recuse yourself from the decision.</p>
+                        <p><strong>Why This Matters:</strong> Biased decisions can lead to inferior security and put the organization at risk.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Professional Competence - "Never Stop Learning"</h5>
+                    <p><strong>Principle:</strong> Continuously maintain and improve your skills and knowledge.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>The Evolving Threat Landscape</h6>
+                        <p><strong>Challenge:</strong> Cyber threats evolve daily - yesterday's best practices may be today's vulnerabilities.</p>
+                        <p><strong>Competence Requirements:</strong></p>
+                        <ul>
+                            <li>Stay current with latest threats and countermeasures</li>
+                            <li>Pursue continuing education and certifications</li>
+                            <li>Practice hands-on skills in safe environments</li>
+                            <li>Acknowledge limitations and seek help when needed</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h4>Real-World Ethical Dilemmas - When Right and Wrong Aren't Clear</h4>
+                
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ethical Dilemma</th>
+                                <th>Competing Interests</th>
+                                <th>Considerations</th>
+                                <th>Ethical Approach</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Zero-day vulnerability discovered</td>
+                                <td>Public safety vs. National security</td>
+                                <td>Disclosure timeline, impact assessment</td>
+                                <td>Coordinated disclosure with affected parties</td>
+                            </tr>
+                            <tr>
+                                <td>Government surveillance request</td>
+                                <td>Law enforcement vs. Privacy rights</td>
+                                <td>Legal requirements, proportionality</td>
+                                <td>Comply with legal orders while protecting privacy</td>
+                            </tr>
+                            <tr>
+                                <td>Employee monitoring implementation</td>
+                                <td>Security vs. Privacy and trust</td>
+                                <td>Transparency, necessity, proportionality</td>
+                                <td>Implement minimum necessary with clear policies</td>
+                            </tr>
+                            <tr>
+                                <td>Whistleblowing unsafe practices</td>
+                                <td>Loyalty vs. Public interest</td>
+                                <td>Severity of risk, internal options exhausted</td>
+                                <td>Follow proper channels, document everything</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Freedom of Speech and Fair Use</h3>
+            <div class="concept">
+                <h4>Digital Freedom of Speech:</h4>
+                <p>The right to express opinions freely online, balanced against:</p>
+                <ul>
+                    <li>Hate speech and harassment laws</li>
+                    <li>Defamation and libel protections</li>
+                    <li>National security concerns</li>
+                    <li>Platform terms of service</li>
+                    <li>Cultural and legal differences globally</li>
+                </ul>
+                
+                <h4>Fair Use in Digital Context:</h4>
+                <ul>
+                    <li><strong>Educational Use:</strong> Using copyrighted material for teaching</li>
+                    <li><strong>Commentary and Criticism:</strong> Quoting for analysis</li>
+                    <li><strong>Parody and Satire:</strong> Transformative creative works</li>
+                    <li><strong>Research:</strong> Academic and journalistic use</li>
+                </ul>
+                
+                <h4>Factors Determining Fair Use:</h4>
+                <ul>
+                    <li>Purpose and character of use (commercial vs. educational)</li>
+                    <li>Nature of copyrighted work</li>
+                    <li>Amount and substantiality of portion used</li>
+                    <li>Effect on market value of original work</li>
+                </ul>
+            </div>
+
+            <h3>Ethical Hacking</h3>
+            <div class="concept">
+                <h4>What is Ethical Hacking?</h4>
+                <p><strong>Ethical hacking</strong> (also called penetration testing or white-hat hacking) is the practice of intentionally probing systems for vulnerabilities in a legal, authorized manner to improve security.</p>
+                
+                <h4>Ethical Hacking Principles:</h4>
+                <ul>
+                    <li><strong>Authorization:</strong> Always obtain written permission before testing</li>
+                    <li><strong>Scope Definition:</strong> Stay within agreed-upon boundaries</li>
+                    <li><strong>Confidentiality:</strong> Protect discovered vulnerabilities</li>
+                    <li><strong>Responsible Disclosure:</strong> Report findings appropriately</li>
+                    <li><strong>No Harm:</strong> Avoid damaging systems or data</li>
+                    <li><strong>Documentation:</strong> Maintain detailed records of activities</li>
+                </ul>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Ethical Hacking Benefits</h4>
+                        <ul>
+                            <li>Identifies vulnerabilities before attackers</li>
+                            <li>Helps improve security posture</li>
+                            <li>Demonstrates security investment</li>
+                            <li>Builds security awareness</li>
+                            <li>Meets compliance requirements</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Risks and Considerations</h4>
+                        <ul>
+                            <li>Potential system disruption</li>
+                            <li>False sense of security</li>
+                            <li>Requires skilled professionals</li>
+                            <li>Legal and liability issues</li>
+                            <li>Information disclosure risks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="digital-forensics">
+            <h2>🔍 Digital Forensics and Evidence Collection</h2>
+
+            <h3>Electronic Evidence</h3>
+            <div class="concept">
+                <h4>Types of Electronic Evidence:</h4>
+                <ul>
+                    <li><strong>Computer Data:</strong> Files, documents, databases</li>
+                    <li><strong>Network Traffic:</strong> Packets, logs, communications</li>
+                    <li><strong>Mobile Device Data:</strong> Calls, texts, location data</li>
+                    <li><strong>Cloud Data:</strong> Online storage, web services</li>
+                    <li><strong>IoT Device Data:</strong> Smart device logs and communications</li>
+                    <li><strong>Metadata:</strong> Information about data creation and modification</li>
+                </ul>
+                
+                <h4>Characteristics of Electronic Evidence:</h4>
+                <ul>
+                    <li><strong>Volatile:</strong> Can be easily altered or destroyed</li>
+                    <li><strong>Fragile:</strong> Minor changes can render evidence inadmissible</li>
+                    <li><strong>Anonymous:</strong> Difficult to attribute to specific individuals</li>
+                    <li><strong>Duplicable:</strong> Exact copies can be created</li>
+                    <li><strong>Searchable:</strong> Can be analyzed with automated tools</li>
+                </ul>
+            </div>
+
+            <h3>Forensic Technologies</h3>
+            <div class="concept">
+                <h4>Digital Forensic Process:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Identification:</strong> Recognize potential evidence sources</li>
+                        <li><strong>Preservation:</strong> Protect evidence from alteration</li>
+                        <li><strong>Collection:</strong> Gather evidence using proper procedures</li>
+                        <li><strong>Examination:</strong> Process and extract relevant information</li>
+                        <li><strong>Analysis:</strong> Interpret findings and draw conclusions</li>
+                        <li><strong>Presentation:</strong> Report findings in legal format</li>
+                    </ol>
+                </div>
+                
+                <h4>Forensic Tools and Techniques:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool Category</th>
+                                <th>Purpose</th>
+                                <th>Examples</th>
+                                <th>Key Features</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Imaging Tools</td>
+                                <td>Create bit-by-bit copies of storage</td>
+                                <td>dd, FTK Imager, EnCase</td>
+                                <td>Hash verification, write-blocking</td>
+                            </tr>
+                            <tr>
+                                <td>File Recovery</td>
+                                <td>Recover deleted or damaged files</td>
+                                <td>PhotoRec, Recuva, Scalpel</td>
+                                <td>Undelete, carving, signature analysis</td>
+                            </tr>
+                            <tr>
+                                <td>Timeline Analysis</td>
+                                <td>Reconstruct sequence of events</td>
+                                <td>Autopsy, Plaso, log2timeline</td>
+                                <td>Time correlation, event sequencing</td>
+                            </tr>
+                            <tr>
+                                <td>Network Forensics</td>
+                                <td>Analyze network traffic and logs</td>
+                                <td>Wireshark, NetworkMiner, Xplico</td>
+                                <td>Packet analysis, protocol reconstruction</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Analysis</td>
+                                <td>Examine system memory dumps</td>
+                                <td>Volatility, Rekall, YARA</td>
+                                <td>Process analysis, malware detection</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Chain of Custody</h3>
+            <div class="concept">
+                <h4>Maintaining Evidence Integrity:</h4>
+                <p>Chain of custody is the chronological documentation showing the seizure, custody, control, transfer, analysis, and disposition of evidence.</p>
+                
+                <h4>Chain of Custody Requirements:</h4>
+                <ul>
+                    <li><strong>Documentation:</strong> Record every person who handled evidence</li>
+                    <li><strong>Timestamps:</strong> Log when evidence was transferred</li>
+                    <li><strong>Purpose:</strong> Document why evidence was handled</li>
+                    <li><strong>Signatures:</strong> Verify identity of handlers</li>
+                    <li><strong>Secure Storage:</strong> Protect evidence from tampering</li>
+                </ul>
+                
+                <div class="algorithm-steps">
+                    <h4>Digital Evidence Handling Process:</h4>
+                    <ol>
+                        <li><strong>Scene Documentation:</strong> Photograph and document the scene</li>
+                        <li><strong>Evidence Identification:</strong> Tag and label all digital devices</li>
+                        <li><strong>Secure Transportation:</strong> Use anti-static bags, proper containers</li>
+                        <li><strong>Forensic Imaging:</strong> Create bit-by-bit copies with hash verification</li>
+                        <li><strong>Analysis on Copies:</strong> Never work on original evidence</li>
+                        <li><strong>Documentation:</strong> Maintain detailed logs of all activities</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="cybercrime-tools">
+            <h2>🔧 Tools and Methods Used in Cybercrime</h2>
+
+            <h3>Password Cracking</h3>
+            <div class="concept">
+                <h4>Password Attack Methods:</h4>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Attack Method</th>
+                                <th>Description</th>
+                                <th>Time Required</th>
+                                <th>Effectiveness</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dictionary Attack</td>
+                                <td>Uses common passwords from wordlists</td>
+                                <td>Minutes to Hours</td>
+                                <td>High for weak passwords</td>
+                            </tr>
+                            <tr>
+                                <td>Brute Force</td>
+                                <td>Tries every possible combination</td>
+                                <td>Days to Years</td>
+                                <td>Guaranteed but time-consuming</td>
+                            </tr>
+                            <tr>
+                                <td>Hybrid Attack</td>
+                                <td>Combines dictionary words with modifications</td>
+                                <td>Hours to Days</td>
+                                <td>Good against common variations</td>
+                            </tr>
+                            <tr>
+                                <td>Rainbow Tables</td>
+                                <td>Pre-computed hash lookup tables</td>
+                                <td>Minutes</td>
+                                <td>High if hashes not salted</td>
+                            </tr>
+                            <tr>
+                                <td>Social Engineering</td>
+                                <td>Tricks users into revealing passwords</td>
+                                <td>Variable</td>
+                                <td>High success rate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Password Protection Measures:</h4>
+                <ul>
+                    <li><strong>Strong Password Policies:</strong> Length, complexity, uniqueness requirements</li>
+                    <li><strong>Password Hashing:</strong> Store passwords as cryptographic hashes</li>
+                    <li><strong>Salt and Pepper:</strong> Add random data to prevent rainbow table attacks</li>
+                    <li><strong>Multi-Factor Authentication:</strong> Require additional verification methods</li>
+                    <li><strong>Account Lockout:</strong> Temporarily disable accounts after failed attempts</li>
+                </ul>
+            </div>
+
+            <h3>Keyloggers and Spyware</h3>
+            <div class="concept">
+                <h4>Keylogger Types:</h4>
+                <ul>
+                    <li><strong>Software Keyloggers:</strong> Programs that record keystrokes</li>
+                    <li><strong>Hardware Keyloggers:</strong> Physical devices intercepting keyboard signals</li>
+                    <li><strong>Kernel-Level Keyloggers:</strong> Operating system level monitoring</li>
+                    <li><strong>Browser-Based Keyloggers:</strong> JavaScript-based keystroke capture</li>
+                </ul>
+                
+                <h4>Spyware Categories:</h4>
+                <ul>
+                    <li><strong>Adware:</strong> Displays unwanted advertisements</li>
+                    <li><strong>Tracking Software:</strong> Monitors user behavior and preferences</li>
+                    <li><strong>Trojan Horses:</strong> Disguised malicious software</li>
+                    <li><strong>System Monitors:</strong> Comprehensive system activity recording</li>
+                </ul>
+                
+                <h4>Detection and Prevention:</h4>
+                <ul>
+                    <li>Anti-malware software with real-time scanning</li>
+                    <li>Regular system monitoring and auditing</li>
+                    <li>Virtual keyboards for sensitive input</li>
+                    <li>Encrypted communications</li>
+                    <li>User education and awareness</li>
+                </ul>
+            </div>
+
+            <h3>Viruses and Worms</h3>
+            <div class="concept">
+                <h4>Computer Viruses:</h4>
+                <p>Self-replicating programs that attach to other programs or files and spread when infected files are shared or executed.</p>
+                
+                <h4>Virus Types:</h4>
+                <ul>
+                    <li><strong>File Infector:</strong> Attaches to executable files</li>
+                    <li><strong>Boot Sector:</strong> Infects system boot sector</li>
+                    <li><strong>Macro Virus:</strong> Spreads through document macros</li>
+                    <li><strong>Polymorphic:</strong> Changes code to avoid detection</li>
+                    <li><strong>Stealth Virus:</strong> Hides from antivirus software</li>
+                </ul>
+                
+                <h4>Computer Worms:</h4>
+                <p>Self-propagating malware that spreads across networks without requiring host files.</p>
+                
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Characteristic</th>
+                                <th>Virus</th>
+                                <th>Worm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Host File Required</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>Self-Propagation</td>
+                                <td>Requires user action</td>
+                                <td>Automatic</td>
+                            </tr>
+                            <tr>
+                                <td>Network Spread</td>
+                                <td>Through infected files</td>
+                                <td>Direct network transmission</td>
+                            </tr>
+                            <tr>
+                                <td>Detection Difficulty</td>
+                                <td>Moderate</td>
+                                <td>Higher (rapid spread)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Phishing and Identity Theft</h3>
+            <div class="concept">
+                <h4>Phishing Attack Types:</h4>
+                <ul>
+                    <li><strong>Email Phishing:</strong> Fraudulent emails requesting credentials</li>
+                    <li><strong>Spear Phishing:</strong> Targeted attacks on specific individuals</li>
+                    <li><strong>Whaling:</strong> Attacks targeting high-profile executives</li>
+                    <li><strong>Vishing:</strong> Voice-based phishing through phone calls</li>
+                    <li><strong>Smishing:</strong> SMS-based phishing attacks</li>
+                    <li><strong>Pharming:</strong> Redirecting users to fake websites</li>
+                </ul>
+                
+                <div class="algorithm-steps">
+                    <h4>Typical Phishing Attack Process:</h4>
+                    <ol>
+                        <li><strong>Target Selection:</strong> Choose victims and gather information</li>
+                        <li><strong>Bait Creation:</strong> Design convincing fraudulent content</li>
+                        <li><strong>Delivery:</strong> Send phishing messages via email/SMS</li>
+                        <li><strong>Credential Harvesting:</strong> Capture entered information</li>
+                        <li><strong>Account Takeover:</strong> Use stolen credentials</li>
+                        <li><strong>Identity Exploitation:</strong> Financial fraud, data theft</li>
+                    </ol>
+                </div>
+                
+                <h4>Identity Theft Methods:</h4>
+                <ul>
+                    <li><strong>Financial Identity Theft:</strong> Credit cards, bank accounts</li>
+                    <li><strong>Medical Identity Theft:</strong> Using someone's medical information</li>
+                    <li><strong>Criminal Identity Theft:</strong> Using someone's identity to commit crimes</li>
+                    <li><strong>Synthetic Identity Theft:</strong> Creating fake identities using real data</li>
+                </ul>
+            </div>
+
+            <h3>Trojan Horses and Backdoors</h3>
+            <div class="concept">
+                <h4>Trojan Horse Characteristics:</h4>
+                <ul>
+                    <li>Disguised as legitimate software</li>
+                    <li>Requires user installation</li>
+                    <li>Does not self-replicate</li>
+                    <li>Provides unauthorized system access</li>
+                </ul>
+                
+                <h4>Common Trojan Types:</h4>
+                <ul>
+                    <li><strong>Remote Access Trojans (RATs):</strong> Provide remote control capabilities</li>
+                    <li><strong>Banking Trojans:</strong> Steal financial information</li>
+                    <li><strong>Information Stealers:</strong> Harvest sensitive data</li>
+                    <li><strong>Downloader Trojans:</strong> Install additional malware</li>
+                    <li><strong>Rootkit Trojans:</strong> Hide presence in system</li>
+                </ul>
+                
+                <h4>Backdoor Mechanisms:</h4>
+                <ul>
+                    <li><strong>Code Backdoors:</strong> Hidden access in software code</li>
+                    <li><strong>Cryptographic Backdoors:</strong> Weaknesses in encryption systems</li>
+                    <li><strong>Hardware Backdoors:</strong> Hidden functionality in hardware</li>
+                    <li><strong>Network Backdoors:</strong> Secret network access points</li>
+                </ul>
+            </div>
+
+            <h3>Steganography</h3>
+            <div class="concept">
+                <h4>What is Steganography?</h4>
+                <p><strong>Steganography</strong> is the practice of hiding information within other non-secret text or data. Unlike encryption, which makes data unreadable, steganography hides the existence of data entirely.</p>
+                
+                <h4>Steganography Techniques:</h4>
+                <ul>
+                    <li><strong>Image Steganography:</strong> Hiding data in image files (LSB method)</li>
+                    <li><strong>Audio Steganography:</strong> Concealing information in sound files</li>
+                    <li><strong>Video Steganography:</strong> Embedding data in video streams</li>
+                    <li><strong>Text Steganography:</strong> Hiding messages in text formatting</li>
+                    <li><strong>Network Steganography:</strong> Covert channels in network protocols</li>
+                </ul>
+                
+                <div class="example-detailed">
+                    <h4>Example: LSB Image Steganography</h4>
+                    <p><strong>Scenario:</strong> Hide text message "HELP" in an image using Least Significant Bit method.</p>
+                    
+                    <h5>Process:</h5>
+                    <ol>
+                        <li>Convert text to binary: "HELP" → 01001000 01000101 01001100 01010000</li>
+                        <li>Take image pixels (RGB values)</li>
+                        <li>Replace least significant bits of pixel values with message bits</li>
+                        <li>Modified image looks identical to human eye</li>
+                        <li>Secret message can be extracted by reading LSBs</li>
+                    </ol>
+                    
+                    <h5>Detection Methods:</h5>
+                    <ul>
+                        <li>Statistical analysis of pixel values</li>
+                        <li>Histogram analysis</li>
+                        <li>LSB extraction and pattern analysis</li>
+                        <li>File size and metadata examination</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="practical-examples">
+            <h2>🎯 Practical Cybercrime Investigation Examples</h2>
+
+            <div class="example-detailed">
+                <h3>Case Study 1: Email Phishing Investigation</h3>
+                <h4>Scenario:</h4>
+                <p>Employees received suspicious emails claiming to be from IT department asking for password updates. Several employees clicked the link and entered credentials.</p>
+                
+                <h4>Investigation Steps:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Preserve Evidence:</strong>
+                            <ul>
+                                <li>Save original email headers and content</li>
+                                <li>Capture screenshots of phishing website</li>
+                                <li>Preserve server logs and network traffic</li>
+                            </ul>
+                        </li>
+                        <li><strong>Analyze Email Headers:</strong>
+                            <ul>
+                                <li>Check sender IP address and routing</li>
+                                <li>Verify SPF, DKIM, and DMARC records</li>
+                                <li>Identify mail server path</li>
+                            </ul>
+                        </li>
+                        <li><strong>Website Analysis:</strong>
+                            <ul>
+                                <li>WHOIS lookup on phishing domain</li>
+                                <li>Check domain registration details</li>
+                                <li>Analyze website source code</li>
+                            </ul>
+                        </li>
+                        <li><strong>Impact Assessment:</strong>
+                            <ul>
+                                <li>Identify compromised accounts</li>
+                                <li>Check for unauthorized access</li>
+                                <li>Monitor for data exfiltration</li>
+                            </ul>
+                        </li>
+                        <li><strong>Containment and Recovery:</strong>
+                            <ul>
+                                <li>Reset compromised passwords</li>
+                                <li>Block malicious domains</li>
+                                <li>Notify affected users</li>
+                                <li>Implement additional email filtering</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="example-detailed">
+                <h3>Case Study 2: Malware Analysis</h3>
+                <h4>Scenario:</h4>
+                <p>A suspicious executable file was discovered on a corporate workstation. The file appears to be communicating with external servers.</p>
+                
+                <h4>Analysis Process:</h4>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Static Analysis:</strong>
+                            <ul>
+                                <li>Calculate file hash (MD5, SHA-256)</li>
+                                <li>Check against malware databases (VirusTotal)</li>
+                                <li>Examine file headers and metadata</li>
+                                <li>String analysis for URLs, IPs, function names</li>
+                            </ul>
+                        </li>
+                        <li><strong>Dynamic Analysis (Sandbox):</strong>
+                            <ul>
+                                <li>Execute in isolated virtual machine</li>
+                                <li>Monitor network connections</li>
+                                <li>Track file system changes</li>
+                                <li>Record registry modifications</li>
+                                <li>Capture memory dumps</li>
+                            </ul>
+                        </li>
+                        <li><strong>Network Analysis:</strong>
+                            <ul>
+                                <li>Identify C&C server communications</li>
+                                <li>Analyze traffic patterns and protocols</li>
+                                <li>Decode network payloads</li>
+                            </ul>
+                        </li>
+                        <li><strong>Report Findings:</strong>
+                            <ul>
+                                <li>Document malware behavior</li>
+                                <li>Identify indicators of compromise (IoCs)</li>
+                                <li>Recommend containment measures</li>
+                                <li>Share threat intelligence</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="internet-fraud">
+            <h2>💳 Internet Fraud</h2>
+
+            <h3>Types of Online Fraud</h3>
+            <div class="concept">
+                <h4>Financial Fraud:</h4>
+                <ul>
+                    <li><strong>Credit Card Fraud:</strong> Unauthorized use of payment cards</li>
+                    <li><strong>Online Banking Fraud:</strong> Unauthorized access to bank accounts</li>
+                    <li><strong>Investment Scams:</strong> Fraudulent investment opportunities</li>
+                    <li><strong>Auction Fraud:</strong> Deceptive online marketplace transactions</li>
+                    <li><strong>Cryptocurrency Scams:</strong> Fake exchanges and investment schemes</li>
+                </ul>
+                
+                <h4>Non-Financial Fraud:</h4>
+                <ul>
+                    <li><strong>Romance Scams:</strong> Fake relationships for money</li>
+                    <li><strong>Tech Support Scams:</strong> Fake technical assistance</li>
+                    <li><strong>Employment Scams:</strong> Fraudulent job opportunities</li>
+                    <li><strong>Charity Scams:</strong> Fake charitable organizations</li>
+                </ul>
+                
+                <h4>Fraud Prevention Measures:</h4>
+                <ul>
+                    <li>User education and awareness programs</li>
+                    <li>Transaction monitoring and anomaly detection</li>
+                    <li>Multi-factor authentication for financial transactions</li>
+                    <li>Secure payment gateways and encryption</li>
+                    <li>Regular security assessments</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <div class="exam-tips">
+                <h3>💡 Unit 2 Exam Preparation</h3>
+                <div class="key-concepts">
+                    <h4>Critical Topics for Exams:</h4>
+                    <ul>
+                        <li><strong>Ethics Principles:</strong> Know the six core principles of cybersecurity ethics</li>
+                        <li><strong>IP Protection:</strong> Understand different types of intellectual property and their digital protection</li>
+                        <li><strong>Password Security:</strong> Explain various password attack methods and countermeasures</li>
+                        <li><strong>Malware Classification:</strong> Distinguish between viruses, worms, trojans, and spyware</li>
+                        <li><strong>Digital Forensics:</strong> Know the forensic process and chain of custody requirements</li>
+                        <li><strong>Steganography:</strong> Understand hiding techniques and detection methods</li>
+                    </ul>
+                </div>
+                
+                <div class="checklist">
+                    <h4>Self-Assessment Questions:</h4>
+                    <ul>
+                        <li>Can I explain the difference between ethical and malicious hacking?</li>
+                        <li>Do I understand the legal implications of IP violations?</li>
+                        <li>Can I describe the digital forensics process step-by-step?</li>
+                        <li>Do I know how different types of malware spread and function?</li>
+                        <li>Can I identify and explain various fraud techniques?</li>
+                        <li>Do I understand steganography methods and detection?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 2 Summary: Ethics & Cybercrime Tools</h3>
+                <div class="summary-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Topic Area</th>
+                                <th>Key Concepts</th>
+                                <th>Tools/Methods</th>
+                                <th>Legal/Ethical Considerations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Digital Ethics</td>
+                                <td>Privacy, professional ethics, IP rights</td>
+                                <td>Privacy policies, ethics frameworks</td>
+                                <td>Respect for privacy, professional standards</td>
+                            </tr>
+                            <tr>
+                                <td>Forensic Investigation</td>
+                                <td>Evidence collection, chain of custody</td>
+                                <td>Imaging tools, analysis software</td>
+                                <td>Legal procedures, evidence integrity</td>
+                            </tr>
+                            <tr>
+                                <td>Password Attacks</td>
+                                <td>Cracking methods, protection measures</td>
+                                <td>Dictionary, brute force, rainbow tables</td>
+                                <td>Authorized testing only</td>
+                            </tr>
+                            <tr>
+                                <td>Malware Analysis</td>
+                                <td>Virus/worm behavior, detection</td>
+                                <td>Sandboxes, antivirus, behavioral analysis</td>
+                                <td>Responsible disclosure, containment</td>
+                            </tr>
+                            <tr>
+                                <td>Social Engineering</td>
+                                <td>Phishing, identity theft, fraud</td>
+                                <td>Awareness training, technical controls</td>
+                                <td>User protection, education ethics</td>
+                            </tr>
+                            <tr>
+                                <td>Steganography</td>
+                                <td>Information hiding, covert channels</td>
+                                <td>Embedding tools, detection software</td>
+                                <td>Legitimate vs. malicious use</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Next Unit:</strong> Cyber Laws & Legal Framework - Study the Indian IT Act, global cyber laws, and legal aspects of cybersecurity.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

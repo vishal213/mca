@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Data Exploration & Visualization - Data Analytics</title>
+    <link rel="stylesheet" href="../../home-styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Data Analytics</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 2: Data Exploration & Visualization</h1>
+            <h2>Exploratory Data Analysis & Visual Storytelling</h2>
+        </header>
+
+        <section class="unit-content">
+            <h3>1. Introduction to Exploratory Data Analysis (EDA)</h3>
+            
+            <div class="concept-box">
+                <h4>What is Exploratory Data Analysis?</h4>
+                <p>Exploratory Data Analysis (EDA) is the process of investigating datasets to discover patterns, spot anomalies, test hypotheses, and check assumptions using statistical summaries and graphical representations. It's like being a detective with data - you're looking for clues about what the data is telling you.</p>
+            </div>
+
+            <p><strong>EDA serves multiple critical purposes:</strong></p>
+            <ul>
+                <li><strong>Data Understanding:</strong> Get familiar with the structure, quality, and characteristics of your dataset</li>
+                <li><strong>Pattern Discovery:</strong> Identify trends, relationships, and interesting features in the data</li>
+                <li><strong>Quality Assessment:</strong> Find missing values, outliers, and data inconsistencies</li>
+                <li><strong>Assumption Checking:</strong> Verify if your data meets requirements for specific analysis methods</li>
+                <li><strong>Hypothesis Generation:</strong> Develop theories about relationships that can be tested further</li>
+            </ul>
+
+            <div class="example-box">
+                <h4>Real-World Example: Netflix Content Analysis</h4>
+                <p><strong>Scenario:</strong> Netflix data scientists analyzing their content library to make strategic decisions.</p>
+                
+                <h5>EDA Questions They Ask:</h5>
+                <ul>
+                    <li><strong>Content Distribution:</strong> How many movies vs TV shows do we have?</li>
+                    <li><strong>Geographic Patterns:</strong> Which countries produce the most content?</li>
+                    <li><strong>Genre Analysis:</strong> What are the most popular genres?</li>
+                    <li><strong>Temporal Trends:</strong> How has content production changed over time?</li>
+                    <li><strong>Quality Metrics:</strong> What's the relationship between content length and ratings?</li>
+                </ul>
+                
+                <h5>Business Impact:</h5>
+                <p>These insights help Netflix decide which types of content to produce, which regions to focus on, and how to personalize recommendations for users.</p>
+            </div>
+
+            <h3>2. Data Quality Assessment</h3>
+
+            <h4>2.1 Understanding Your Dataset Structure</h4>
+            <div class="concept-box">
+                <p>Before diving into analysis, you must understand what you're working with. This is like examining a new car before buying it - you need to know its condition, features, and any potential issues.</p>
+            </div>
+
+            <div class="code-block">
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load sample e-commerce dataset
+np.random.seed(42)
+n_records = 10000
+
+# Generate realistic e-commerce data
+ecommerce_data = {
+    'order_id': range(1, n_records + 1),
+    'customer_id': np.random.randint(1000, 9999, n_records),
+    'product_category': np.random.choice(['Electronics', 'Clothing', 'Books', 'Home', 'Sports'], 
+                                        n_records, p=[0.3, 0.25, 0.2, 0.15, 0.1]),
+    'order_amount': np.random.lognormal(7, 0.8, n_records),
+    'customer_age': np.random.normal(35, 12, n_records),
+    'order_date': pd.date_range('2023-01-01', periods=n_records, freq='H'),
+    'customer_satisfaction': np.random.choice([1, 2, 3, 4, 5], n_records, p=[0.05, 0.1, 0.15, 0.4, 0.3]),
+    'delivery_days': np.random.gamma(2, 2, n_records)
+}
+
+# Clean and prepare data
+ecommerce_data['customer_age'] = np.clip(ecommerce_data['customer_age'], 18, 80).astype(int)
+ecommerce_data['order_amount'] = np.clip(ecommerce_data['order_amount'], 50, 50000)
+ecommerce_data['delivery_days'] = np.clip(ecommerce_data['delivery_days'], 1, 30)
+
+df = pd.DataFrame(ecommerce_data)
+
+# Initial data exploration
+print("=== DATASET OVERVIEW ===")
+print(f"Dataset shape: {df.shape}")
+print(f"Memory usage: {df.memory_usage().sum() / 1024**2:.2f} MB")
+print(f"Date range: {df['order_date'].min()} to {df['order_date'].max()}")
+
+# Data types analysis
+print("\n=== DATA TYPES ===")
+print(df.dtypes)
+print(f"\nNumerical columns: {df.select_dtypes(include=[np.number]).columns.tolist()}")
+print(f"Categorical columns: {df.select_dtypes(include=[object]).columns.tolist()}")
+print(f"Datetime columns: {df.select_dtypes(include=[np.datetime64]).columns.tolist()}")
+            </div>
+
+            <h4>2.2 Missing Values Detection and Analysis</h4>
+            <div class="concept-box">
+                <p>Missing data is like having pieces missing from a puzzle. You need to understand how much is missing, why it's missing, and how it might affect your analysis.</p>
+            </div>
+
+            <div class="code-block">
+# Introduce some missing values for demonstration
+df_with_missing = df.copy()
+
+# Simulate realistic missing data patterns
+# Higher-income customers less likely to share age
+age_missing_mask = (df_with_missing['order_amount'] > df_with_missing['order_amount'].quantile(0.8)) & (np.random.random(len(df_with_missing)) < 0.15)
+df_with_missing.loc[age_missing_mask, 'customer_age'] = np.nan
+
+# Some satisfaction scores missing for very recent orders
+recent_orders_mask = df_with_missing['order_date'] > '2023-12-20'
+satisfaction_missing_mask = recent_orders_mask & (np.random.random(len(df_with_missing)) < 0.25)
+df_with_missing.loc[satisfaction_missing_mask, 'customer_satisfaction'] = np.nan
+
+print("=== MISSING DATA ANALYSIS ===")
+missing_summary = df_with_missing.isnull().sum()
+missing_percentage = (missing_summary / len(df_with_missing)) * 100
+
+print("Missing values by column:")
+for col in df_with_missing.columns:
+    if missing_summary[col] > 0:
+        print(f"{col}: {missing_summary[col]} ({missing_percentage[col]:.1f}%)")
+    else:
+        print(f"{col}: No missing values ✓")
+
+# Pattern analysis
+print(f"\nMissing data patterns:")
+print(f"Records with any missing data: {df_with_missing.isnull().any(axis=1).sum()}")
+print(f"Complete records: {df_with_missing.dropna().shape[0]}")
+
+# Analyze missingness patterns
+missing_age_stats = df_with_missing[df_with_missing['customer_age'].isnull()]['order_amount'].describe()
+print(f"\nOrder amounts for customers with missing age:")
+print(missing_age_stats)
+
+# Business interpretation
+print(f"\nBusiness Insight:")
+print(f"Missing age data is concentrated among high-value customers (>₹{df_with_missing['order_amount'].quantile(0.8):.0f})")
+print(f"This suggests privacy-conscious behavior among wealthy customers")
+            </div>
+
+            <h4>2.3 Outlier Detection Strategies</h4>
+            <div class="concept-box">
+                <p>Outliers are data points that are significantly different from other observations. They can be errors in data collection, or they might represent genuine extreme cases that provide valuable insights.</p>
+            </div>
+
+            <div class="code-block">
+# Multiple outlier detection methods
+print("=== OUTLIER DETECTION METHODS ===")
+
+# Method 1: Statistical approach (Z-Score)
+from scipy import stats
+
+z_scores = np.abs(stats.zscore(df['order_amount']))
+z_outliers = df[z_scores > 3]
+print(f"Z-Score outliers (|z| > 3): {len(z_outliers)} orders")
+print(f"Highest outlier: ₹{z_outliers['order_amount'].max():,.0f}")
+
+# Method 2: Interquartile Range (IQR)
+Q1 = df['order_amount'].quantile(0.25)
+Q3 = df['order_amount'].quantile(0.75)
+IQR = Q3 - Q1
+lower_fence = Q1 - 1.5 * IQR
+upper_fence = Q3 + 1.5 * IQR
+
+iqr_outliers = df[(df['order_amount'] < lower_fence) | (df['order_amount'] > upper_fence)]
+print(f"\nIQR outliers: {len(iqr_outliers)} orders")
+print(f"IQR bounds: ₹{lower_fence:.0f} to ₹{upper_fence:.0f}")
+
+# Method 3: Business logic approach
+business_outliers = df[df['order_amount'] > 25000]  # Unusually high orders
+print(f"\nBusiness logic outliers (>₹25K): {len(business_outliers)} orders")
+
+# Analyze outlier patterns
+print(f"\n=== OUTLIER ANALYSIS ===")
+outlier_categories = iqr_outliers['product_category'].value_counts()
+print(f"Outliers by category:")
+print(outlier_categories)
+
+outlier_satisfaction = iqr_outliers['customer_satisfaction'].value_counts()
+print(f"\nOutlier customer satisfaction:")
+print(outlier_satisfaction)
+
+# Decision framework for outlier treatment
+print(f"\n=== OUTLIER TREATMENT RECOMMENDATIONS ===")
+print(f"1. Investigate outliers >₹{upper_fence:.0f} manually")
+print(f"2. Consider separate analysis for high-value segment")
+print(f"3. Use robust statistics (median, IQR) for general analysis")
+print(f"4. Keep outliers if they represent valid business cases")
+            </div>
+
+            <h3>3. Data Visualization Fundamentals</h3>
+
+            <h4>3.1 Choosing the Right Visualization</h4>
+            <div class="concept-box">
+                <p>Data visualization is the art and science of presenting data in graphical form. The right visualization can reveal insights instantly, while the wrong one can hide important patterns or mislead your audience.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Visualization Decision Framework</h4>
+                <h5>1. What type of data do you have?</h5>
+                <ul>
+                    <li><strong>One numerical variable:</strong> Histogram, box plot, density plot</li>
+                    <li><strong>One categorical variable:</strong> Bar chart, pie chart</li>
+                    <li><strong>Two numerical variables:</strong> Scatter plot, line plot</li>
+                    <li><strong>One numerical + one categorical:</strong> Box plot, violin plot</li>
+                    <li><strong>Multiple variables:</strong> Heatmap, pair plot, parallel coordinates</li>
+                </ul>
+                
+                <h5>2. What story do you want to tell?</h5>
+                <ul>
+                    <li><strong>Distribution:</strong> How are values spread? → Histogram, box plot</li>
+                    <li><strong>Relationship:</strong> How do two variables relate? → Scatter plot</li>
+                    <li><strong>Comparison:</strong> Which group is higher? → Bar chart</li>
+                    <li><strong>Trend:</strong> How do values change over time? → Line plot</li>
+                    <li><strong>Composition:</strong> What parts make up the whole? → Pie chart, stacked bar</li>
+                </ul>
+            </div>
+
+            <h4>3.2 Univariate Analysis - Single Variable Exploration</h4>
+
+            <div class="concept-box">
+                <h5>Histograms - Understanding Data Distribution</h5>
+                <p>A histogram shows how frequently different values occur in your dataset. It's like taking a survey of your data and seeing which values are popular.</p>
+            </div>
+
+            <div class="code-block">
+# Histogram analysis - Order amounts
+print("=== HISTOGRAM ANALYSIS ===")
+
+# Create histogram for order amounts
+plt.figure(figsize=(12, 8))
+
+# Subplot 1: Basic histogram
+plt.subplot(2, 2, 1)
+plt.hist(df['order_amount'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
+plt.title('Distribution of Order Amounts')
+plt.xlabel('Order Amount (₹)')
+plt.ylabel('Frequency')
+
+# Add statistical lines
+mean_amount = df['order_amount'].mean()
+median_amount = df['order_amount'].median()
+plt.axvline(mean_amount, color='red', linestyle='--', label=f'Mean: ₹{mean_amount:.0f}')
+plt.axvline(median_amount, color='green', linestyle='--', label=f'Median: ₹{median_amount:.0f}')
+plt.legend()
+
+# Subplot 2: Different bin sizes
+plt.subplot(2, 2, 2)
+plt.hist(df['order_amount'], bins=20, alpha=0.7, color='lightcoral')
+plt.title('Same Data - Different Bin Size (20 bins)')
+plt.xlabel('Order Amount (₹)')
+plt.ylabel('Frequency')
+
+# Subplot 3: Log scale for skewed data
+plt.subplot(2, 2, 3)
+plt.hist(np.log(df['order_amount']), bins=30, alpha=0.7, color='lightgreen')
+plt.title('Log-transformed Order Amounts')
+plt.xlabel('Log(Order Amount)')
+plt.ylabel('Frequency')
+
+# Subplot 4: Cumulative distribution
+plt.subplot(2, 2, 4)
+plt.hist(df['order_amount'], bins=50, cumulative=True, alpha=0.7, color='gold')
+plt.title('Cumulative Distribution')
+plt.xlabel('Order Amount (₹)')
+plt.ylabel('Cumulative Frequency')
+
+plt.tight_layout()
+plt.show()
+
+# Statistical interpretation
+print(f"\nDistribution Analysis:")
+print(f"Mean: ₹{mean_amount:.0f}")
+print(f"Median: ₹{median_amount:.0f}")
+print(f"Skewness: {df['order_amount'].skew():.2f}")
+print(f"Kurtosis: {df['order_amount'].kurtosis():.2f}")
+
+if df['order_amount'].skew() > 1:
+    print("⚠️ Highly right-skewed distribution - consider log transformation")
+elif df['order_amount'].skew() > 0.5:
+    print("⚠️ Moderately right-skewed distribution")
+else:
+    print("✓ Approximately symmetric distribution")
+            </div>
+
+            <div class="concept-box">
+                <h5>Box Plots - Five-Number Summary Visualization</h5>
+                <p>Box plots show the five-number summary (minimum, Q1, median, Q3, maximum) and help identify outliers. They're especially useful for comparing distributions across groups.</p>
+            </div>
+
+            <div class="code-block">
+# Box plot analysis
+print("=== BOX PLOT ANALYSIS ===")
+
+plt.figure(figsize=(15, 10))
+
+# Subplot 1: Single box plot
+plt.subplot(2, 3, 1)
+box_plot = plt.boxplot(df['order_amount'], patch_artist=True)
+box_plot['boxes'][0].set_facecolor('lightblue')
+plt.title('Order Amount Distribution')
+plt.ylabel('Amount (₹)')
+
+# Add annotations
+five_num_summary = df['order_amount'].quantile([0, 0.25, 0.5, 0.75, 1])
+plt.text(1.1, five_num_summary[0.5], f'Median: ₹{five_num_summary[0.5]:.0f}', 
+         verticalalignment='center')
+
+# Subplot 2: Box plots by category
+plt.subplot(2, 3, 2)
+df.boxplot(column='order_amount', by='product_category', ax=plt.gca())
+plt.title('Order Amount by Product Category')
+plt.xlabel('Product Category')
+plt.ylabel('Order Amount (₹)')
+
+# Subplot 3: Box plots for customer age
+plt.subplot(2, 3, 3)
+plt.boxplot(df['customer_age'])
+plt.title('Customer Age Distribution')
+plt.ylabel('Age (years)')
+
+# Subplot 4: Multiple variables comparison
+plt.subplot(2, 3, 4)
+age_groups = pd.cut(df['customer_age'], bins=[0, 25, 35, 50, 100], 
+                    labels=['18-25', '26-35', '36-50', '50+'])
+df_temp = df.copy()
+df_temp['age_group'] = age_groups
+df_temp.boxplot(column='order_amount', by='age_group', ax=plt.gca())
+plt.title('Order Amount by Age Group')
+
+# Subplot 5: Satisfaction distribution
+plt.subplot(2, 3, 5)
+satisfaction_counts = df['customer_satisfaction'].value_counts().sort_index()
+plt.bar(satisfaction_counts.index, satisfaction_counts.values, color='orange', alpha=0.7)
+plt.title('Customer Satisfaction Distribution')
+plt.xlabel('Satisfaction Rating')
+plt.ylabel('Count')
+
+# Subplot 6: Delivery time analysis
+plt.subplot(2, 3, 6)
+plt.hist(df['delivery_days'], bins=30, alpha=0.7, color='purple')
+plt.title('Delivery Time Distribution')
+plt.xlabel('Delivery Days')
+plt.ylabel('Frequency')
+
+plt.tight_layout()
+plt.show()
+
+# Statistical summary by category
+print("\n=== CATEGORY-WISE STATISTICS ===")
+category_stats = df.groupby('product_category')['order_amount'].agg([
+    'count', 'mean', 'median', 'std', 'min', 'max'
+]).round(2)
+print(category_stats)
+
+# Outlier summary
+print(f"\n=== OUTLIER SUMMARY ===")
+for category in df['product_category'].unique():
+    cat_data = df[df['product_category'] == category]['order_amount']
+    q1, q3 = cat_data.quantile(0.25), cat_data.quantile(0.75)
+    iqr = q3 - q1
+    outliers = cat_data[(cat_data < q1 - 1.5*iqr) | (cat_data > q3 + 1.5*iqr)]
+    print(f"{category}: {len(outliers)} outliers ({len(outliers)/len(cat_data)*100:.1f}%)")
+            </div>
+
+            <h3>4. Bivariate Analysis - Exploring Relationships</h3>
+
+            <h4>4.1 Scatter Plots - Correlation and Relationships</h4>
+            <div class="concept-box">
+                <p>Scatter plots help you understand how two numerical variables relate to each other. They can reveal linear relationships, non-linear patterns, clusters, and outliers.</p>
+            </div>
+
+            <div class="code-block">
+# Scatter plot analysis
+print("=== SCATTER PLOT ANALYSIS ===")
+
+plt.figure(figsize=(15, 12))
+
+# Subplot 1: Basic scatter plot
+plt.subplot(3, 2, 1)
+plt.scatter(df['customer_age'], df['order_amount'], alpha=0.5, s=20)
+plt.title('Customer Age vs Order Amount')
+plt.xlabel('Customer Age')
+plt.ylabel('Order Amount (₹)')
+
+# Add trend line
+z = np.polyfit(df['customer_age'], df['order_amount'], 1)
+p = np.poly1d(z)
+plt.plot(df['customer_age'], p(df['customer_age']), "r--", alpha=0.8)
+
+# Calculate correlation
+correlation = df['customer_age'].corr(df['order_amount'])
+plt.text(0.05, 0.95, f'Correlation: {correlation:.3f}', transform=plt.gca().transAxes,
+         bbox=dict(boxstyle="round", facecolor='wheat', alpha=0.8))
+
+# Subplot 2: Colored by category
+plt.subplot(3, 2, 2)
+categories = df['product_category'].unique()
+colors = ['red', 'blue', 'green', 'orange', 'purple']
+for i, category in enumerate(categories):
+    cat_data = df[df['product_category'] == category]
+    plt.scatter(cat_data['customer_age'], cat_data['order_amount'], 
+               label=category, alpha=0.6, s=20, color=colors[i])
+plt.title('Age vs Order Amount by Category')
+plt.xlabel('Customer Age')
+plt.ylabel('Order Amount (₹)')
+plt.legend()
+
+# Subplot 3: Delivery time vs satisfaction
+plt.subplot(3, 2, 3)
+plt.scatter(df['delivery_days'], df['customer_satisfaction'], alpha=0.5, s=20)
+plt.title('Delivery Time vs Customer Satisfaction')
+plt.xlabel('Delivery Days')
+plt.ylabel('Customer Satisfaction (1-5)')
+
+# Add jitter to see overlapping points better
+jittered_satisfaction = df['customer_satisfaction'] + np.random.normal(0, 0.05, len(df))
+plt.scatter(df['delivery_days'], jittered_satisfaction, alpha=0.3, s=10, color='red')
+
+# Subplot 4: Hexbin plot for dense data
+plt.subplot(3, 2, 4)
+plt.hexbin(df['customer_age'], df['order_amount'], gridsize=20, cmap='Blues')
+plt.title('Age vs Order Amount (Density)')
+plt.xlabel('Customer Age')
+plt.ylabel('Order Amount (₹)')
+plt.colorbar(label='Count')
+
+# Subplot 5: Bubble chart (3 variables)
+plt.subplot(3, 2, 5)
+bubble_sizes = (df['delivery_days'] - df['delivery_days'].min() + 1) * 10
+plt.scatter(df['customer_age'], df['order_amount'], s=bubble_sizes, 
+           alpha=0.4, c=df['customer_satisfaction'], cmap='RdYlGn')
+plt.title('Age vs Amount vs Delivery (size) vs Satisfaction (color)')
+plt.xlabel('Customer Age')
+plt.ylabel('Order Amount (₹)')
+plt.colorbar(label='Satisfaction')
+
+# Subplot 6: Correlation matrix heatmap
+plt.subplot(3, 2, 6)
+numeric_cols = ['customer_age', 'order_amount', 'customer_satisfaction', 'delivery_days']
+correlation_matrix = df[numeric_cols].corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0, square=True)
+plt.title('Correlation Matrix')
+
+plt.tight_layout()
+plt.show()
+
+# Correlation interpretation
+print(f"\n=== CORRELATION ANALYSIS ===")
+for i, col1 in enumerate(numeric_cols):
+    for col2 in numeric_cols[i+1:]:
+        corr = df[col1].corr(df[col2])
+        if abs(corr) > 0.3:
+            strength = "Strong" if abs(corr) > 0.7 else "Moderate" if abs(corr) > 0.5 else "Weak"
+            direction = "Positive" if corr > 0 else "Negative"
+            print(f"{col1} vs {col2}: {corr:.3f} ({strength} {direction})")
+            
+            # Business interpretation
+            if col1 == 'delivery_days' and col2 == 'customer_satisfaction' and corr < -0.3:
+                print(f"  📊 Business Insight: Faster delivery leads to higher satisfaction")
+            elif col1 == 'customer_age' and col2 == 'order_amount' and corr > 0.3:
+                print(f"  📊 Business Insight: Older customers tend to spend more")
+            </div>
+
+            <h4>4.2 Advanced Visualization Techniques</h4>
+
+            <div class="concept-box">
+                <h5>Heatmaps - Pattern Recognition in Large Datasets</h5>
+                <p>Heatmaps use color intensity to represent values in a matrix format. They're excellent for showing patterns across multiple dimensions simultaneously.</p>
+            </div>
+
+            <div class="code-block">
+# Advanced heatmap analysis
+print("=== HEATMAP ANALYSIS ===")
+
+# Create pivot table for heatmap
+df['hour'] = df['order_date'].dt.hour
+df['day_of_week'] = df['order_date'].dt.day_name()
+df['month'] = df['order_date'].dt.month
+
+# Daily and hourly patterns
+hourly_orders = df.groupby(['day_of_week', 'hour']).size().unstack(fill_value=0)
+
+# Order days properly
+day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+hourly_orders = hourly_orders.reindex(day_order)
+
+plt.figure(figsize=(16, 10))
+
+# Subplot 1: Hourly patterns
+plt.subplot(2, 2, 1)
+sns.heatmap(hourly_orders, cmap='YlOrRd', annot=False, fmt='d', cbar_kws={'label': 'Order Count'})
+plt.title('Order Patterns: Day of Week vs Hour')
+plt.xlabel('Hour of Day')
+plt.ylabel('Day of Week')
+
+# Subplot 2: Category vs Month heatmap
+monthly_category = df.groupby(['month', 'product_category'])['order_amount'].sum().unstack(fill_value=0)
+plt.subplot(2, 2, 2)
+sns.heatmap(monthly_category, cmap='Blues', annot=True, fmt='.0f', cbar_kws={'label': 'Revenue (₹)'})
+plt.title('Revenue by Month and Category')
+plt.xlabel('Product Category')
+plt.ylabel('Month')
+
+# Subplot 3: Satisfaction by category and age group
+age_bins = pd.cut(df['customer_age'], bins=[0, 25, 35, 50, 100], labels=['18-25', '26-35', '36-50', '50+'])
+satisfaction_heatmap = df.groupby([age_bins, 'product_category'])['customer_satisfaction'].mean().unstack(fill_value=0)
+plt.subplot(2, 2, 3)
+sns.heatmap(satisfaction_heatmap, cmap='RdYlGn', annot=True, fmt='.2f', center=3)
+plt.title('Average Satisfaction by Age Group and Category')
+plt.xlabel('Product Category')
+plt.ylabel('Age Group')
+
+# Subplot 4: Revenue correlation matrix
+revenue_features = df.groupby('customer_id').agg({
+    'order_amount': ['sum', 'mean', 'count'],
+    'customer_satisfaction': 'mean',
+    'delivery_days': 'mean'
+}).round(2)
+revenue_features.columns = ['Total_Spent', 'Avg_Order', 'Order_Count', 'Avg_Satisfaction', 'Avg_Delivery']
+correlation_revenue = revenue_features.corr()
+
+plt.subplot(2, 2, 4)
+sns.heatmap(correlation_revenue, annot=True, cmap='coolwarm', center=0, square=True)
+plt.title('Customer Metrics Correlation')
+
+plt.tight_layout()
+plt.show()
+
+# Business insights from heatmaps
+print(f"\n=== HEATMAP INSIGHTS ===")
+peak_hour = hourly_orders.sum(axis=0).idxmax()
+peak_day = hourly_orders.sum(axis=1).idxmax()
+print(f"Peak ordering time: {peak_day} at {peak_hour}:00")
+
+best_category_month = monthly_category.max(axis=1).idxmax()
+best_month_category = monthly_category.max(axis=0).idxmax()
+print(f"Best month overall: Month {best_category_month}")
+print(f"Best category overall: {best_month_category}")
+
+# Age-category satisfaction insights
+best_age_category = satisfaction_heatmap.max().idxmax()
+best_category_age = satisfaction_heatmap.max(axis=1).idxmax()
+print(f"Highest satisfaction: {best_category_age} customers buying {best_age_category}")
+            </div>
+
+            <h3>5. Advanced Data Exploration Techniques</h3>
+
+            <h4>5.1 Handling Missing Values Strategically</h4>
+
+            <div class="concept-box">
+                <p>Missing data isn't just a technical problem - it's a business problem. The way you handle missing values can significantly impact your conclusions and business decisions.</p>
+            </div>
+
+            <div class="code-block">
+# Advanced missing data analysis
+print("=== ADVANCED MISSING DATA HANDLING ===")
+
+# Create more realistic missing data patterns
+df_missing = df.copy()
+
+# Pattern 1: MCAR (Missing Completely at Random)
+mcar_mask = np.random.random(len(df_missing)) < 0.05
+df_missing.loc[mcar_mask, 'delivery_days'] = np.nan
+
+# Pattern 2: MAR (Missing at Random) - satisfaction missing for quick deliveries
+mar_mask = (df_missing['delivery_days'] < 2) & (np.random.random(len(df_missing)) < 0.3)
+df_missing.loc[mar_mask, 'customer_satisfaction'] = np.nan
+
+# Pattern 3: MNAR (Missing Not at Random) - age missing for high spenders
+mnar_mask = (df_missing['order_amount'] > df_missing['order_amount'].quantile(0.9)) & (np.random.random(len(df_missing)) < 0.4)
+df_missing.loc[mnar_mask, 'customer_age'] = np.nan
+
+print("Missing data patterns created:")
+print(df_missing.isnull().sum())
+
+# Visualize missing data patterns
+plt.figure(figsize=(12, 8))
+
+# Missing data heatmap
+plt.subplot(2, 2, 1)
+sns.heatmap(df_missing.isnull(), cbar=True, yticklabels=False, cmap='viridis')
+plt.title('Missing Data Pattern')
+
+# Missing data correlation
+plt.subplot(2, 2, 2)
+missing_corr = df_missing.isnull().corr()
+sns.heatmap(missing_corr, annot=True, cmap='coolwarm', center=0)
+plt.title('Missing Data Correlations')
+
+# Before/after imputation comparison
+plt.subplot(2, 2, 3)
+# Simple imputation strategies
+df_imputed = df_missing.copy()
+
+# Mean imputation for numerical
+df_imputed['customer_age'].fillna(df_imputed['customer_age'].mean(), inplace=True)
+df_imputed['delivery_days'].fillna(df_imputed['delivery_days'].mean(), inplace=True)
+
+# Mode imputation for categorical
+satisfaction_mode = df_imputed['customer_satisfaction'].mode()[0]
+df_imputed['customer_satisfaction'].fillna(satisfaction_mode, inplace=True)
+
+# Compare distributions
+plt.hist(df['customer_age'], alpha=0.5, label='Original', bins=30)
+plt.hist(df_imputed['customer_age'], alpha=0.5, label='After Imputation', bins=30)
+plt.title('Age Distribution: Before vs After Imputation')
+plt.legend()
+
+# Advanced imputation: Group-based
+plt.subplot(2, 2, 4)
+df_advanced = df_missing.copy()
+
+# Group-based imputation for age
+age_by_category = df_advanced.groupby('product_category')['customer_age'].transform('mean')
+df_advanced['customer_age'].fillna(age_by_category, inplace=True)
+
+# Compare results
+plt.hist(df['customer_age'], alpha=0.5, label='Original', bins=30, color='blue')
+plt.hist(df_imputed['customer_age'], alpha=0.5, label='Simple Imputation', bins=30, color='red')
+plt.hist(df_advanced['customer_age'], alpha=0.5, label='Group Imputation', bins=30, color='green')
+plt.title('Comparison of Imputation Methods')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Imputation impact analysis
+print(f"\n=== IMPUTATION IMPACT ===")
+print(f"Original mean age: {df['customer_age'].mean():.1f}")
+print(f"Simple imputation mean: {df_imputed['customer_age'].mean():.1f}")
+print(f"Group imputation mean: {df_advanced['customer_age'].mean():.1f}")
+
+print(f"\nStandard deviation changes:")
+print(f"Original: {df['customer_age'].std():.2f}")
+print(f"Simple imputation: {df_imputed['customer_age'].std():.2f}")
+print(f"Group imputation: {df_advanced['customer_age'].std():.2f}")
+            </div>
+
+            <h4>5.2 Advanced Visualization with Matplotlib and Seaborn</h4>
+
+            <div class="concept-box">
+                <h5>Creating Publication-Ready Plots</h5>
+                <p>Professional data visualization requires attention to aesthetics, clarity, and storytelling. Your plots should be self-explanatory and actionable for business stakeholders.</p>
+            </div>
+
+            <div class="code-block">
+# Advanced visualization techniques
+print("=== ADVANCED VISUALIZATION TECHNIQUES ===")
+
+# Set up professional styling
+plt.style.use('seaborn-v0_8')
+sns.set_palette("husl")
+
+fig = plt.figure(figsize=(20, 15))
+
+# 1. Multi-panel histogram with statistical annotations
+plt.subplot(3, 3, 1)
+n, bins, patches = plt.hist(df['order_amount'], bins=50, alpha=0.7, color='skyblue', edgecolor='black')
+plt.axvline(df['order_amount'].mean(), color='red', linestyle='--', linewidth=2, label='Mean')
+plt.axvline(df['order_amount'].median(), color='green', linestyle='--', linewidth=2, label='Median')
+plt.xlabel('Order Amount (₹)')
+plt.ylabel('Frequency')
+plt.title('Order Amount Distribution with Central Tendencies')
+plt.legend()
+
+# Add statistical annotations
+plt.text(0.7, 0.9, f'Mean: ₹{df["order_amount"].mean():.0f}\nMedian: ₹{df["order_amount"].median():.0f}\nStd: ₹{df["order_amount"].std():.0f}', 
+         transform=plt.gca().transAxes, bbox=dict(boxstyle="round", facecolor='white', alpha=0.8))
+
+# 2. Violin plots - distribution shape comparison
+plt.subplot(3, 3, 2)
+sns.violinplot(data=df, x='product_category', y='order_amount')
+plt.xticks(rotation=45)
+plt.title('Order Amount Distribution by Category')
+plt.ylabel('Order Amount (₹)')
+
+# 3. Pair plot for multiple relationships
+plt.subplot(3, 3, 3)
+sample_data = df.sample(1000)  # Subset for clarity
+sns.scatterplot(data=sample_data, x='customer_age', y='order_amount', 
+                hue='product_category', size='customer_satisfaction')
+plt.title('Age vs Amount by Category and Satisfaction')
+
+# 4. Time series analysis
+plt.subplot(3, 3, 4)
+daily_revenue = df.groupby(df['order_date'].dt.date)['order_amount'].sum()
+plt.plot(daily_revenue.index, daily_revenue.values, linewidth=1, alpha=0.7)
+plt.plot(daily_revenue.rolling(window=7).mean(), linewidth=2, color='red', label='7-day MA')
+plt.title('Daily Revenue Trend')
+plt.xlabel('Date')
+plt.ylabel('Revenue (₹)')
+plt.xticks(rotation=45)
+plt.legend()
+
+# 5. Stacked area chart
+plt.subplot(3, 3, 5)
+monthly_category_revenue = df.groupby([df['order_date'].dt.to_period('M'), 'product_category'])['order_amount'].sum().unstack(fill_value=0)
+monthly_category_revenue.plot.area(ax=plt.gca(), alpha=0.7)
+plt.title('Monthly Revenue by Category (Stacked)')
+plt.xlabel('Month')
+plt.ylabel('Revenue (₹)')
+plt.legend(title='Category', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+# 6. Box plot with swarm overlay
+plt.subplot(3, 3, 6)
+sns.boxplot(data=df, x='product_category', y='customer_satisfaction', palette='Set2')
+sns.swarmplot(data=df.sample(500), x='product_category', y='customer_satisfaction', 
+              color='black', alpha=0.5, size=2)
+plt.xticks(rotation=45)
+plt.title('Satisfaction by Category (Box + Swarm)')
+
+# 7. Contour plot for density estimation
+plt.subplot(3, 3, 7)
+plt.tricontourf(df['customer_age'], df['order_amount'], df['customer_satisfaction'], levels=20, cmap='viridis')
+plt.colorbar(label='Satisfaction Level')
+plt.xlabel('Customer Age')
+plt.ylabel('Order Amount (₹)')
+plt.title('Satisfaction Contour Map')
+
+# 8. Faceted analysis
+plt.subplot(3, 3, 8)
+age_satisfaction = df.groupby(['customer_age', 'product_category'])['customer_satisfaction'].mean().reset_index()
+pivot_satisfaction = age_satisfaction.pivot(index='customer_age', columns='product_category', values='customer_satisfaction')
+sns.heatmap(pivot_satisfaction, cmap='RdYlGn', center=3, cbar_kws={'label': 'Avg Satisfaction'})
+plt.title('Satisfaction Heatmap: Age vs Category')
+
+# 9. Statistical distribution comparison
+plt.subplot(3, 3, 9)
+for category in df['product_category'].unique():
+    cat_data = df[df['product_category'] == category]['order_amount']
+    sns.kdeplot(cat_data, label=category, alpha=0.7)
+plt.xlabel('Order Amount (₹)')
+plt.ylabel('Density')
+plt.title('Order Amount Distributions by Category')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Advanced statistical insights
+print(f"\n=== ADVANCED INSIGHTS ===")
+
+# Seasonal analysis
+seasonal_analysis = df.groupby([df['order_date'].dt.quarter, 'product_category']).agg({
+    'order_amount': ['sum', 'mean', 'count']
+}).round(2)
+
+print("Quarterly performance by category:")
+print(seasonal_analysis)
+
+# Customer lifetime value estimation
+customer_ltv = df.groupby('customer_id').agg({
+    'order_amount': ['sum', 'count', 'mean'],
+    'order_date': ['min', 'max'],
+    'customer_satisfaction': 'mean'
+})
+
+customer_ltv.columns = ['Total_Spent', 'Order_Count', 'Avg_Order', 'First_Order', 'Last_Order', 'Avg_Satisfaction']
+customer_ltv['Days_Active'] = (customer_ltv['Last_Order'] - customer_ltv['First_Order']).dt.days
+customer_ltv['CLV_Score'] = customer_ltv['Total_Spent'] * customer_ltv['Avg_Satisfaction'] / 5
+
+top_customers = customer_ltv.nlargest(10, 'CLV_Score')
+print(f"\nTop 10 Customers by CLV Score:")
+print(top_customers[['Total_Spent', 'Order_Count', 'Avg_Satisfaction', 'CLV_Score']])
+            </div>
+
+            <h3>6. Interactive and Dynamic Visualizations</h3>
+
+            <div class="concept-box">
+                <h4>Beyond Static Plots - Creating Interactive Insights</h4>
+                <p>Modern data analysis often requires interactive visualizations that allow stakeholders to explore data themselves. Tools like Plotly enable creating web-ready, interactive charts.</p>
+            </div>
+
+            <div class="code-block">
+# Interactive visualization with Plotly
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+print("=== INTERACTIVE VISUALIZATION EXAMPLES ===")
+
+# 1. Interactive scatter plot
+fig1 = px.scatter(df.sample(2000), x='customer_age', y='order_amount', 
+                  color='product_category', size='customer_satisfaction',
+                  hover_data=['delivery_days'], 
+                  title='Interactive Customer Analysis')
+fig1.show()
+
+# 2. Time series with zoom capability
+daily_stats = df.groupby(df['order_date'].dt.date).agg({
+    'order_amount': ['sum', 'count', 'mean']
+}).round(2)
+daily_stats.columns = ['Revenue', 'Orders', 'Avg_Order']
+
+fig2 = go.Figure()
+fig2.add_trace(go.Scatter(x=daily_stats.index, y=daily_stats['Revenue'], 
+                         mode='lines', name='Daily Revenue'))
+fig2.add_trace(go.Scatter(x=daily_stats.index, y=daily_stats['Revenue'].rolling(7).mean(), 
+                         mode='lines', name='7-day Moving Average'))
+fig2.update_layout(title='Interactive Revenue Trend', xaxis_title='Date', yaxis_title='Revenue (₹)')
+fig2.show()
+
+# 3. Multi-dimensional analysis
+fig3 = px.parallel_coordinates(df.sample(500), 
+                              dimensions=['customer_age', 'order_amount', 'delivery_days', 'customer_satisfaction'],
+                              color='customer_satisfaction',
+                              title='Multi-dimensional Customer Analysis')
+fig3.show()
+
+# 4. Geographic analysis (if location data available)
+category_summary = df.groupby('product_category').agg({
+    'order_amount': ['sum', 'count', 'mean'],
+    'customer_satisfaction': 'mean'
+}).round(2)
+
+fig4 = px.treemap(values=category_summary[('order_amount', 'sum')].values,
+                  names=category_summary.index,
+                  title='Revenue by Product Category (Treemap)')
+fig4.show()
+
+print("Interactive plots generated - check your browser!")
+            </div>
+
+            <h3>7. Comprehensive EDA Workflow</h3>
+
+            <div class="example-box">
+                <h4>Complete EDA Process: Customer Churn Analysis</h4>
+                <p><strong>Business Problem:</strong> Telecom company wants to understand why customers are leaving and identify at-risk customers.</p>
+            </div>
+
+            <div class="code-block">
+# Complete EDA workflow implementation
+print("=== COMPREHENSIVE EDA WORKFLOW ===")
+
+# Step 1: Dataset Overview
+print("STEP 1: INITIAL DATA EXPLORATION")
+print(f"Dataset dimensions: {df.shape}")
+print(f"Memory usage: {df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(f"Unique customers: {df['customer_id'].nunique()}")
+print(f"Date range: {df['order_date'].dt.date.min()} to {df['order_date'].dt.date.max()}")
+
+# Step 2: Data Quality Assessment
+print(f"\nSTEP 2: DATA QUALITY ASSESSMENT")
+quality_report = pd.DataFrame({
+    'Column': df.columns,
+    'Data_Type': df.dtypes,
+    'Missing_Count': df.isnull().sum(),
+    'Missing_Percentage': (df.isnull().sum() / len(df)) * 100,
+    'Unique_Values': [df[col].nunique() for col in df.columns],
+    'Sample_Values': [str(df[col].dropna().iloc[:3].tolist()) for col in df.columns]
+})
+
+print(quality_report)
+
+# Step 3: Univariate Analysis
+print(f"\nSTEP 3: UNIVARIATE ANALYSIS")
+
+# Numerical variables
+numerical_summary = df.describe()
+print("Numerical variables summary:")
+print(numerical_summary)
+
+# Categorical variables
+print(f"\nCategorical variables analysis:")
+for col in ['product_category', 'customer_satisfaction']:
+    print(f"\n{col}:")
+    value_counts = df[col].value_counts()
+    print(value_counts)
+    print(f"Mode: {df[col].mode()[0]}")
+    print(f"Unique values: {df[col].nunique()}")
+
+# Step 4: Bivariate Analysis
+print(f"\nSTEP 4: BIVARIATE ANALYSIS")
+
+# Correlation analysis
+numerical_cols = ['customer_age', 'order_amount', 'customer_satisfaction', 'delivery_days']
+correlation_matrix = df[numerical_cols].corr()
+print("Correlation matrix:")
+print(correlation_matrix.round(3))
+
+# Strong correlations identification
+strong_correlations = []
+for i in range(len(correlation_matrix.columns)):
+    for j in range(i+1, len(correlation_matrix.columns)):
+        corr_value = correlation_matrix.iloc[i, j]
+        if abs(corr_value) > 0.3:
+            strong_correlations.append({
+                'Var1': correlation_matrix.columns[i],
+                'Var2': correlation_matrix.columns[j],
+                'Correlation': corr_value
+            })
+
+if strong_correlations:
+    print(f"\nStrong correlations found:")
+    for corr in strong_correlations:
+        print(f"{corr['Var1']} ↔ {corr['Var2']}: {corr['Correlation']:.3f}")
+
+# Step 5: Multivariate Analysis
+print(f"\nSTEP 5: MULTIVARIATE ANALYSIS")
+
+# Customer segmentation
+df['clv_score'] = df.groupby('customer_id')['order_amount'].transform('sum')
+df['order_frequency'] = df.groupby('customer_id')['order_id'].transform('count')
+
+# Create customer segments
+clv_quartiles = pd.qcut(df['clv_score'], q=4, labels=['Low', 'Medium', 'High', 'Premium'])
+frequency_quartiles = pd.qcut(df['order_frequency'], q=4, labels=['Infrequent', 'Occasional', 'Regular', 'Frequent'])
+
+segment_analysis = pd.crosstab(clv_quartiles, frequency_quartiles, normalize='index') * 100
+print("Customer segment distribution (%):")
+print(segment_analysis.round(1))
+
+# Step 6: Insights and Recommendations
+print(f"\nSTEP 6: KEY INSIGHTS AND RECOMMENDATIONS")
+
+insights = []
+
+# Revenue insights
+total_revenue = df['order_amount'].sum()
+top_category = df.groupby('product_category')['order_amount'].sum().idxmax()
+insights.append(f"1. {top_category} generates the highest revenue: ₹{df[df['product_category']==top_category]['order_amount'].sum():,.0f}")
+
+# Customer insights
+avg_satisfaction = df['customer_satisfaction'].mean()
+satisfied_customers = (df['customer_satisfaction'] >= 4).mean() * 100
+insights.append(f"2. {satisfied_customers:.1f}% of customers are satisfied (rating ≥4)")
+
+# Operational insights
+avg_delivery = df['delivery_days'].mean()
+fast_delivery_satisfaction = df[df['delivery_days'] <= 3]['customer_satisfaction'].mean()
+slow_delivery_satisfaction = df[df['delivery_days'] > 7]['customer_satisfaction'].mean()
+insights.append(f"3. Fast delivery (≤3 days) results in {fast_delivery_satisfaction:.1f} avg satisfaction vs {slow_delivery_satisfaction:.1f} for slow delivery")
+
+# Age insights
+high_value_age = df[df['order_amount'] > df['order_amount'].quantile(0.8)]['customer_age'].mean()
+insights.append(f"4. High-value customers average {high_value_age:.1f} years old")
+
+for insight in insights:
+    print(insight)
+
+print(f"\nACTIONABLE RECOMMENDATIONS:")
+print(f"📈 Marketing: Focus premium campaigns on {high_value_age:.0f}+ age group")
+print(f"🚚 Operations: Prioritize delivery speed to improve satisfaction")
+print(f"📦 Inventory: Expand {top_category} category inventory")
+print(f"🎯 Customer Service: Target improvement efforts for categories with lowest satisfaction")
+            </div>
+
+            <h3>8. Statistical Visualization Best Practices</h3>
+
+            <div class="concept-box">
+                <h4>Creating Meaningful and Honest Visualizations</h4>
+                <p>Good data visualization is about more than making pretty charts. It's about communicating truth clearly and enabling good decision-making.</p>
+            </div>
+
+            <h4>8.1 Common Visualization Mistakes and How to Avoid Them</h4>
+
+            <div class="warning-box">
+                <h5>Mistake 1: Misleading Scales</h5>
+                <div class="code-block">
+# Demonstrating misleading vs honest visualization
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Monthly revenue data
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+revenue = [100000, 102000, 101000, 105000, 103000]
+
+# Misleading version - truncated y-axis
+ax1.bar(months, revenue)
+ax1.set_ylim(99000, 106000)  # Makes small differences look huge
+ax1.set_title('Misleading: Truncated Y-axis')
+ax1.set_ylabel('Revenue (₹)')
+
+# Honest version - full scale
+ax2.bar(months, revenue)
+ax2.set_ylim(0, max(revenue) * 1.1)
+ax2.set_title('Honest: Full Scale')
+ax2.set_ylabel('Revenue (₹)')
+
+plt.tight_layout()
+plt.show()
+
+print("The same data tells very different stories depending on the scale!")
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h5>Mistake 2: Wrong Chart Type for Data</h5>
+                <div class="code-block">
+# Correct chart selection examples
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
+
+# Categorical data - use bar chart, not line chart
+categories = df['product_category'].value_counts()
+
+# Wrong: Line chart for categorical data
+ax1.plot(categories.index, categories.values, marker='o')
+ax1.set_title('❌ Wrong: Line Chart for Categories')
+ax1.tick_params(axis='x', rotation=45)
+
+# Right: Bar chart for categorical data
+ax2.bar(categories.index, categories.values, color='lightblue')
+ax2.set_title('✅ Right: Bar Chart for Categories')
+ax2.tick_params(axis='x', rotation=45)
+
+# Time series data
+daily_orders = df.groupby(df['order_date'].dt.date).size()
+
+# Wrong: Bar chart for time series
+ax3.bar(range(len(daily_orders)), daily_orders.values)
+ax3.set_title('❌ Wrong: Bar Chart for Time Series')
+ax3.set_xlabel('Day Index')
+
+# Right: Line chart for time series
+ax4.plot(daily_orders.index, daily_orders.values)
+ax4.set_title('✅ Right: Line Chart for Time Series')
+ax4.tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+
+            <h4>8.2 Professional Visualization Standards</h4>
+
+            <div class="code-block">
+# Professional visualization template
+def create_professional_plot():
+    """
+    Template for creating publication-ready visualizations
+    """
+    
+    # Set professional styling
+    plt.rcParams.update({
+        'font.size': 12,
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10,
+        'figure.titlesize': 16
+    })
+    
+    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+    
+    # 1. Revenue trend with confidence intervals
+    monthly_revenue = df.groupby(df['order_date'].dt.to_period('M'))['order_amount'].agg(['sum', 'std', 'count'])
+    monthly_revenue['se'] = monthly_revenue['std'] / np.sqrt(monthly_revenue['count'])
+    monthly_revenue['ci_lower'] = monthly_revenue['sum'] - 1.96 * monthly_revenue['se']
+    monthly_revenue['ci_upper'] = monthly_revenue['sum'] + 1.96 * monthly_revenue['se']
+    
+    axes[0,0].plot(monthly_revenue.index.astype(str), monthly_revenue['sum'], 
+                   marker='o', linewidth=2, markersize=6)
+    axes[0,0].fill_between(monthly_revenue.index.astype(str), 
+                          monthly_revenue['ci_lower'], monthly_revenue['ci_upper'], 
+                          alpha=0.2, label='95% Confidence Interval')
+    axes[0,0].set_title('Monthly Revenue Trend with Confidence Intervals')
+    axes[0,0].set_xlabel('Month')
+    axes[0,0].set_ylabel('Revenue (₹)')
+    axes[0,0].legend()
+    axes[0,0].grid(True, alpha=0.3)
+    
+    # 2. Category performance with error bars
+    category_stats = df.groupby('product_category').agg({
+        'order_amount': ['mean', 'std', 'count']
+    })
+    category_stats.columns = ['Mean', 'Std', 'Count']
+    category_stats['SE'] = category_stats['Std'] / np.sqrt(category_stats['Count'])
+    
+    bars = axes[0,1].bar(category_stats.index, category_stats['Mean'], 
+                        yerr=category_stats['SE'], capsize=5, 
+                        color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'])
+    axes[0,1].set_title('Average Order Amount by Category')
+    axes[0,1].set_xlabel('Product Category')
+    axes[0,1].set_ylabel('Average Order Amount (₹)')
+    axes[0,1].tick_params(axis='x', rotation=45)
+    
+    # Add value labels on bars
+    for bar in bars:
+        height = bar.get_height()
+        axes[0,1].text(bar.get_x() + bar.get_width()/2., height,
+                      f'₹{height:.0f}', ha='center', va='bottom')
+    
+    # 3. Distribution comparison with statistical test
+    electronics_amounts = df[df['product_category'] == 'Electronics']['order_amount']
+    clothing_amounts = df[df['product_category'] == 'Clothing']['order_amount']
+    
+    axes[1,0].hist(electronics_amounts, alpha=0.5, label='Electronics', bins=30, density=True)
+    axes[1,0].hist(clothing_amounts, alpha=0.5, label='Clothing', bins=30, density=True)
+    axes[1,0].set_title('Order Amount Distribution Comparison')
+    axes[1,0].set_xlabel('Order Amount (₹)')
+    axes[1,0].set_ylabel('Density')
+    axes[1,0].legend()
+    
+    # Add statistical test result
+    from scipy.stats import mannwhitneyu
+    statistic, p_value = mannwhitneyu(electronics_amounts, clothing_amounts)
+    axes[1,0].text(0.05, 0.95, f'Mann-Whitney U test\np-value: {p_value:.4f}', 
+                  transform=axes[1,0].transAxes, bbox=dict(boxstyle="round", facecolor='white', alpha=0.8))
+    
+    # 4. Advanced correlation heatmap with clustering
+    correlation_data = df[numerical_cols].corr()
+    mask = np.triu(np.ones_like(correlation_data, dtype=bool))
+    
+    sns.heatmap(correlation_data, mask=mask, annot=True, cmap='coolwarm', center=0,
+                square=True, ax=axes[1,1], cbar_kws={'label': 'Correlation Coefficient'})
+    axes[1,1].set_title('Correlation Matrix (Lower Triangle)')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return fig
+
+# Generate professional plot
+professional_fig = create_professional_plot()
+
+# Statistical significance testing
+print(f"\n=== STATISTICAL SIGNIFICANCE TESTING ===")
+
+# Compare order amounts across categories
+from scipy.stats import f_oneway
+
+category_groups = [df[df['product_category'] == cat]['order_amount'] for cat in df['product_category'].unique()]
+f_stat, p_value = f_oneway(*category_groups)
+
+print(f"ANOVA test for order amounts across categories:")
+print(f"F-statistic: {f_stat:.3f}")
+print(f"p-value: {p_value:.6f}")
+
+if p_value < 0.05:
+    print("✅ Significant differences between categories (p < 0.05)")
+    
+    # Post-hoc analysis
+    from scipy.stats import tukey_hsd
+    category_means = df.groupby('product_category')['order_amount'].mean().sort_values(ascending=False)
+    print(f"\nCategory rankings by average order amount:")
+    for i, (category, mean_amount) in enumerate(category_means.items(), 1):
+        print(f"{i}. {category}: ₹{mean_amount:.0f}")
+else:
+    print("❌ No significant differences between categories")
+            </div>
+
+            <h3>9. Advanced Visualization Techniques</h3>
+
+            <h4>9.1 Contour Plots and 3D Visualization</h4>
+
+            <div class="concept-box">
+                <p>Contour plots and 3D visualizations help you understand relationships between three or more variables simultaneously. They're like topographic maps for your data.</p>
+            </div>
+
+            <div class="code-block">
+# Advanced 3D and contour plotting
+print("=== ADVANCED 3D AND CONTOUR VISUALIZATION ===")
+
+# Create 3D surface plot
+fig = plt.figure(figsize=(15, 10))
+
+# 1. 3D scatter plot
+ax1 = fig.add_subplot(2, 2, 1, projection='3d')
+scatter = ax1.scatter(df['customer_age'], df['order_amount'], df['delivery_days'],
+                     c=df['customer_satisfaction'], cmap='RdYlGn', s=20, alpha=0.6)
+ax1.set_xlabel('Customer Age')
+ax1.set_ylabel('Order Amount (₹)')
+ax1.set_zlabel('Delivery Days')
+ax1.set_title('3D Customer Analysis')
+plt.colorbar(scatter, ax=ax1, label='Satisfaction')
+
+# 2. Contour plot - Customer age vs order amount vs satisfaction
+ax2 = fig.add_subplot(2, 2, 2)
+
+# Create a grid for contour plotting
+age_range = np.linspace(df['customer_age'].min(), df['customer_age'].max(), 20)
+amount_range = np.linspace(df['order_amount'].min(), df['order_amount'].max(), 20)
+Age_grid, Amount_grid = np.meshgrid(age_range, amount_range)
+
+# Calculate average satisfaction for each grid point
+satisfaction_grid = np.zeros_like(Age_grid)
+for i in range(len(age_range)):
+    for j in range(len(amount_range)):
+        age_mask = (df['customer_age'] >= Age_grid[j,i] - 2) & (df['customer_age'] <= Age_grid[j,i] + 2)
+        amount_mask = (df['order_amount'] >= Amount_grid[j,i] - 500) & (df['order_amount'] <= Amount_grid[j,i] + 500)
+        subset = df[age_mask & amount_mask]
+        satisfaction_grid[j,i] = subset['customer_satisfaction'].mean() if len(subset) > 0 else np.nan
+
+contour = ax2.contourf(Age_grid, Amount_grid, satisfaction_grid, levels=20, cmap='RdYlGn')
+ax2.set_xlabel('Customer Age')
+ax2.set_ylabel('Order Amount (₹)')
+ax2.set_title('Satisfaction Contour Map')
+plt.colorbar(contour, ax=ax2, label='Avg Satisfaction')
+
+# 3. Advanced heatmap with dendrograms
+ax3 = fig.add_subplot(2, 2, 3)
+
+# Customer behavior clustering
+customer_features = df.groupby('customer_id').agg({
+    'order_amount': ['sum', 'mean', 'count'],
+    'customer_satisfaction': 'mean',
+    'delivery_days': 'mean'
+}).round(2)
+
+customer_features.columns = ['Total_Spent', 'Avg_Order', 'Order_Count', 'Avg_Satisfaction', 'Avg_Delivery']
+customer_sample = customer_features.sample(50)  # Sample for visualization clarity
+
+sns.heatmap(customer_sample.T, cmap='viridis', ax=ax3, cbar_kws={'label': 'Standardized Value'})
+ax3.set_title('Customer Profile Heatmap')
+ax3.set_xlabel('Customers (Sample)')
+
+# 4. Multi-dimensional scaling visualization
+ax4 = fig.add_subplot(2, 2, 4)
+
+# Create feature matrix for dimensionality reduction
+from sklearn.preprocessing import StandardScaler
+from sklearn.manifold import TSNE
+
+features_for_tsne = customer_features.sample(500)  # Subset for computation
+scaler = StandardScaler()
+features_scaled = scaler.fit_transform(features_for_tsne)
+
+# t-SNE for 2D representation
+tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+tsne_result = tsne.fit_transform(features_scaled)
+
+scatter = ax4.scatter(tsne_result[:, 0], tsne_result[:, 1], 
+                     c=features_for_tsne['Total_Spent'], cmap='plasma', s=30, alpha=0.7)
+ax4.set_title('Customer Similarity Map (t-SNE)')
+ax4.set_xlabel('t-SNE Component 1')
+ax4.set_ylabel('t-SNE Component 2')
+plt.colorbar(scatter, ax=ax4, label='Total Spent (₹)')
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nVisualization Insights:")
+print(f"• 3D plot reveals customer satisfaction patterns across age and spending")
+print(f"• Contour map shows 'sweet spots' of high satisfaction")
+print(f"• Customer heatmap reveals distinct behavioral patterns")
+print(f"• t-SNE map identifies natural customer clusters")
+            </div>
+
+            <h3>10. Practical Data Exploration Project</h3>
+
+            <div class="example-box">
+                <h4>Complete Project: Restaurant Chain Performance Analysis</h4>
+                <p><strong>Business Challenge:</strong> Restaurant chain wants to optimize menu, improve customer satisfaction, and identify expansion opportunities.</p>
+            </div>
+
+            <div class="code-block">
+# Complete restaurant analysis project
+print("=== RESTAURANT CHAIN ANALYSIS PROJECT ===")
+
+# Generate realistic restaurant data
+np.random.seed(123)
+n_visits = 5000
+
+restaurant_data = {
+    'visit_id': range(1, n_visits + 1),
+    'restaurant_location': np.random.choice(['Mumbai Central', 'Delhi CP', 'Bangalore MG Road', 'Chennai T Nagar'], n_visits),
+    'meal_type': np.random.choice(['Breakfast', 'Lunch', 'Dinner'], n_visits, p=[0.2, 0.4, 0.4]),
+    'party_size': np.random.choice([1, 2, 3, 4, 5, 6], n_visits, p=[0.15, 0.35, 0.25, 0.15, 0.08, 0.02]),
+    'bill_amount': np.random.gamma(2, 400, n_visits),
+    'wait_time_minutes': np.random.exponential(15, n_visits),
+    'food_rating': np.random.choice([1, 2, 3, 4, 5], n_visits, p=[0.02, 0.08, 0.25, 0.45, 0.2]),
+    'service_rating': np.random.choice([1, 2, 3, 4, 5], n_visits, p=[0.03, 0.07, 0.2, 0.5, 0.2]),
+    'ambiance_rating': np.random.choice([1, 2, 3, 4, 5], n_visits, p=[0.02, 0.08, 0.3, 0.4, 0.2]),
+    'visit_date': pd.date_range('2023-01-01', periods=n_visits, freq='3H'),
+    'customer_age': np.random.normal(32, 15, n_visits)
+}
+
+# Data cleaning
+restaurant_data['bill_amount'] = np.clip(restaurant_data['bill_amount'], 200, 5000)
+restaurant_data['wait_time_minutes'] = np.clip(restaurant_data['wait_time_minutes'], 0, 60)
+restaurant_data['customer_age'] = np.clip(restaurant_data['customer_age'], 16, 80).astype(int)
+
+restaurant_df = pd.DataFrame(restaurant_data)
+
+# Calculate overall satisfaction
+restaurant_df['overall_satisfaction'] = (
+    restaurant_df['food_rating'] * 0.4 + 
+    restaurant_df['service_rating'] * 0.35 + 
+    restaurant_df['ambiance_rating'] * 0.25
+).round(2)
+
+print("Restaurant dataset created:")
+print(restaurant_df.head())
+print(f"Total visits analyzed: {len(restaurant_df)}")
+
+# Phase 1: Business Questions and Hypotheses
+print(f"\n=== PHASE 1: BUSINESS QUESTIONS ===")
+questions = [
+    "1. Which location generates highest revenue per customer?",
+    "2. Does wait time significantly impact customer satisfaction?",
+    "3. What's the optimal party size for profitability?",
+    "4. Which meal type has highest satisfaction ratings?",
+    "5. How do ratings correlate with bill amounts?"
+]
+
+for question in questions:
+    print(question)
+
+# Phase 2: Comprehensive Analysis
+print(f"\n=== PHASE 2: COMPREHENSIVE ANALYSIS ===")
+
+# Revenue analysis by location
+location_analysis = restaurant_df.groupby('restaurant_location').agg({
+    'bill_amount': ['sum', 'mean', 'count'],
+    'overall_satisfaction': 'mean',
+    'wait_time_minutes': 'mean',
+    'party_size': 'mean'
+}).round(2)
+
+location_analysis.columns = ['Total_Revenue', 'Avg_Bill', 'Visit_Count', 'Avg_Satisfaction', 'Avg_Wait', 'Avg_Party_Size']
+print("Location Performance Analysis:")
+print(location_analysis)
+
+# Wait time impact analysis
+wait_time_bins = pd.cut(restaurant_df['wait_time_minutes'], 
+                       bins=[0, 10, 20, 30, 60], 
+                       labels=['0-10min', '10-20min', '20-30min', '30+min'])
+wait_impact = restaurant_df.groupby(wait_time_bins)['overall_satisfaction'].agg(['mean', 'count']).round(2)
+print(f"\nWait Time Impact on Satisfaction:")
+print(wait_impact)
+
+# Party size profitability
+party_analysis = restaurant_df.groupby('party_size').agg({
+    'bill_amount': ['mean', 'sum'],
+    'overall_satisfaction': 'mean',
+    'visit_id': 'count'
+}).round(2)
+party_analysis.columns = ['Avg_Bill', 'Total_Revenue', 'Avg_Satisfaction', 'Visit_Count']
+party_analysis['Revenue_Per_Person'] = party_analysis['Avg_Bill'] / party_analysis.index
+print(f"\nParty Size Analysis:")
+print(party_analysis)
+
+# Meal type performance
+meal_performance = restaurant_df.groupby('meal_type').agg({
+    'bill_amount': ['mean', 'sum'],
+    'overall_satisfaction': 'mean',
+    'food_rating': 'mean',
+    'service_rating': 'mean'
+}).round(2)
+print(f"\nMeal Type Performance:")
+print(meal_performance)
+
+# Phase 3: Advanced Visualizations
+plt.figure(figsize=(16, 12))
+
+# 1. Revenue comparison by location
+plt.subplot(3, 2, 1)
+location_revenue = location_analysis['Total_Revenue'].sort_values(ascending=True)
+bars = plt.barh(location_revenue.index, location_revenue.values, color='lightcoral')
+plt.title('Total Revenue by Location')
+plt.xlabel('Revenue (₹)')
+for i, bar in enumerate(bars):
+    width = bar.get_width()
+    plt.text(width, bar.get_y() + bar.get_height()/2, f'₹{width:,.0f}', 
+            ha='left', va='center', fontweight='bold')
+
+# 2. Wait time vs satisfaction
+plt.subplot(3, 2, 2)
+wait_bins = ['0-10min', '10-20min', '20-30min', '30+min']
+satisfaction_by_wait = [wait_impact.loc[wait_bin, 'mean'] for wait_bin in wait_bins]
+colors = ['green', 'yellow', 'orange', 'red']
+bars = plt.bar(wait_bins, satisfaction_by_wait, color=colors, alpha=0.7)
+plt.title('Satisfaction vs Wait Time')
+plt.ylabel('Average Satisfaction')
+plt.xlabel('Wait Time')
+for bar, val in zip(bars, satisfaction_by_wait):
+    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05, 
+            f'{val:.2f}', ha='center', va='bottom')
+
+# 3. Party size profitability
+plt.subplot(3, 2, 3)
+party_sizes = party_analysis.index
+revenue_per_person = party_analysis['Revenue_Per_Person']
+plt.plot(party_sizes, revenue_per_person, marker='o', linewidth=2, markersize=8, color='blue')
+plt.title('Revenue per Person by Party Size')
+plt.xlabel('Party Size')
+plt.ylabel('Revenue per Person (₹)')
+plt.grid(True, alpha=0.3)
+
+# 4. Meal type comparison radar chart
+plt.subplot(3, 2, 4)
+meal_metrics = restaurant_df.groupby('meal_type')[['food_rating', 'service_rating', 'ambiance_rating']].mean()
+meal_types = meal_metrics.index
+width = 0.25
+x = np.arange(len(meal_types))
+
+plt.bar(x - width, meal_metrics['food_rating'], width, label='Food', alpha=0.8)
+plt.bar(x, meal_metrics['service_rating'], width, label='Service', alpha=0.8)
+plt.bar(x + width, meal_metrics['ambiance_rating'], width, label='Ambiance', alpha=0.8)
+plt.xlabel('Meal Type')
+plt.ylabel('Average Rating')
+plt.title('Rating Breakdown by Meal Type')
+plt.xticks(x, meal_types)
+plt.legend()
+
+# 5. Customer satisfaction distribution by location
+plt.subplot(3, 2, 5)
+satisfaction_by_location = [restaurant_df[restaurant_df['restaurant_location'] == loc]['overall_satisfaction'] 
+                           for loc in restaurant_df['restaurant_location'].unique()]
+plt.boxplot(satisfaction_by_location, labels=restaurant_df['restaurant_location'].unique())
+plt.title('Satisfaction Distribution by Location')
+plt.ylabel('Overall Satisfaction')
+plt.xticks(rotation=45)
+
+# 6. Time-based analysis
+plt.subplot(3, 2, 6)
+restaurant_df['hour'] = restaurant_df['visit_date'].dt.hour
+hourly_visits = restaurant_df.groupby('hour').size()
+plt.plot(hourly_visits.index, hourly_visits.values, marker='o', linewidth=2)
+plt.title('Visit Patterns by Hour')
+plt.xlabel('Hour of Day')
+plt.ylabel('Number of Visits')
+plt.grid(True, alpha=0.3)
+
+# Mark peak hours
+peak_hour = hourly_visits.idxmax()
+plt.axvline(peak_hour, color='red', linestyle='--', alpha=0.8, label=f'Peak: {peak_hour}:00')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Business recommendations
+print(f"\n=== BUSINESS RECOMMENDATIONS ===")
+
+best_location = location_analysis['Total_Revenue'].idxmax()
+worst_wait_satisfaction = wait_impact['mean'].idxmin()
+best_party_size = party_analysis['Revenue_Per_Person'].idxmax()
+best_meal_type = meal_performance[('overall_satisfaction', 'mean')].idxmax()
+
+recommendations = [
+    f"🏆 Expand operations in model of {best_location} (highest revenue generator)",
+    f"⏱️ Reduce wait times below 10 minutes to maintain satisfaction >4.0",
+    f"👥 Optimize for party size {best_party_size} (₹{party_analysis.loc[best_party_size, 'Revenue_Per_Person']:.0f} per person)",
+    f"🍽️ Promote {best_meal_type} service (highest satisfaction: {meal_performance.loc[best_meal_type, ('overall_satisfaction', 'mean')]:.2f})",
+    f"📊 Monitor correlation between bill amount and satisfaction (r={restaurant_df['bill_amount'].corr(restaurant_df['overall_satisfaction']):.3f})"
+]
+
+for rec in recommendations:
+    print(rec)
+            </div>
+
+            <h3>11. Data Storytelling and Communication</h3>
+
+            <div class="concept-box">
+                <h4>From Analysis to Action - Telling Data Stories</h4>
+                <p>The best data analysis is meaningless if you can't communicate your findings effectively. Data storytelling combines analytical rigor with compelling narrative to drive business decisions.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Executive Dashboard Creation</h4>
+                <p><strong>Scenario:</strong> Creating a monthly executive report for restaurant chain CEO.</p>
+                
+                <h5>Dashboard Components:</h5>
+                <ol>
+                    <li><strong>KPI Summary:</strong> Revenue, customer count, satisfaction scores</li>
+                    <li><strong>Trend Analysis:</strong> Month-over-month performance</li>
+                    <li><strong>Location Comparison:</strong> Performance benchmarking</li>
+                    <li><strong>Operational Metrics:</strong> Wait times, table turnover</li>
+                    <li><strong>Customer Insights:</strong> Satisfaction drivers, demographic patterns</li>
+                    <li><strong>Action Items:</strong> Specific recommendations with projected impact</li>
+                </ol>
+            </div>
+
+            <div class="code-block">
+# Executive dashboard creation
+print("=== EXECUTIVE DASHBOARD CREATION ===")
+
+# Create professional executive summary
+fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+
+# KPI Cards (simulated as bar charts)
+kpis = {
+    'Total Revenue': restaurant_df['bill_amount'].sum(),
+    'Avg Satisfaction': restaurant_df['overall_satisfaction'].mean(),
+    'Total Visits': len(restaurant_df),
+    'Avg Bill': restaurant_df['bill_amount'].mean()
+}
+
+ax = axes[0, 0]
+kpi_names = list(kpis.keys())
+kpi_values = list(kpis.values())
+bars = ax.bar(range(len(kpis)), [100, 4.2, 5000, 1400], color=['green', 'blue', 'orange', 'purple'])
+ax.set_xticks(range(len(kpis)))
+ax.set_xticklabels(kpi_names, rotation=45)
+ax.set_title('Key Performance Indicators')
+for i, (bar, value) in enumerate(zip(bars, kpi_values)):
+    if i == 0:  # Revenue
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f'₹{value:,.0f}', 
+               ha='center', va='center', fontweight='bold', fontsize=10)
+    elif i == 1:  # Satisfaction
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f'{value:.2f}/5', 
+               ha='center', va='center', fontweight='bold')
+    elif i == 2:  # Visits
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f'{value:,}', 
+               ha='center', va='center', fontweight='bold')
+    else:  # Avg Bill
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f'₹{value:.0f}', 
+               ha='center', va='center', fontweight='bold')
+
+# Revenue trend
+ax = axes[0, 1]
+daily_revenue = restaurant_df.groupby(restaurant_df['visit_date'].dt.date)['bill_amount'].sum()
+ax.plot(daily_revenue.index, daily_revenue.values, linewidth=1, alpha=0.7, color='blue')
+ax.plot(daily_revenue.rolling(7).mean(), linewidth=3, color='red', label='7-day average')
+ax.set_title('Daily Revenue Trend')
+ax.set_xlabel('Date')
+ax.set_ylabel('Revenue (₹)')
+ax.legend()
+ax.grid(True, alpha=0.3)
+
+# Location performance
+ax = axes[0, 2]
+location_perf = restaurant_df.groupby('restaurant_location')['bill_amount'].sum().sort_values()
+bars = ax.barh(location_perf.index, location_perf.values, color='lightgreen')
+ax.set_title('Revenue by Location')
+ax.set_xlabel('Total Revenue (₹)')
+for bar in bars:
+    width = bar.get_width()
+    ax.text(width, bar.get_y() + bar.get_height()/2, f'₹{width:,.0f}', 
+           ha='left', va='center', fontweight='bold')
+
+# Satisfaction analysis
+ax = axes[1, 0]
+satisfaction_metrics = restaurant_df[['food_rating', 'service_rating', 'ambiance_rating']].mean()
+bars = ax.bar(satisfaction_metrics.index, satisfaction_metrics.values, 
+             color=['tomato', 'skyblue', 'lightgreen'])
+ax.set_title('Average Ratings by Category')
+ax.set_ylabel('Rating (1-5)')
+ax.set_ylim(0, 5)
+for bar, value in zip(bars, satisfaction_metrics.values):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05, 
+           f'{value:.2f}', ha='center', va='bottom', fontweight='bold')
+
+# Wait time impact
+ax = axes[1, 1]
+wait_bins = pd.cut(restaurant_df['wait_time_minutes'], bins=[0, 10, 20, 30, 60], 
+                  labels=['<10min', '10-20min', '20-30min', '>30min'])
+wait_satisfaction = restaurant_df.groupby(wait_bins)['overall_satisfaction'].mean()
+colors = ['green', 'yellow', 'orange', 'red']
+bars = ax.bar(wait_satisfaction.index, wait_satisfaction.values, color=colors)
+ax.set_title('Satisfaction vs Wait Time')
+ax.set_ylabel('Average Satisfaction')
+ax.set_xlabel('Wait Time Category')
+for bar, value in zip(bars, wait_satisfaction.values):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.02, 
+           f'{value:.2f}', ha='center', va='bottom', fontweight='bold')
+
+# Party size analysis
+ax = axes[1, 2]
+party_revenue = restaurant_df.groupby('party_size')['bill_amount'].mean()
+party_satisfaction = restaurant_df.groupby('party_size')['overall_satisfaction'].mean()
+
+ax2 = ax.twinx()
+line1 = ax.plot(party_revenue.index, party_revenue.values, 'b-o', label='Avg Bill')
+line2 = ax2.plot(party_satisfaction.index, party_satisfaction.values, 'r-s', label='Satisfaction')
+ax.set_xlabel('Party Size')
+ax.set_ylabel('Average Bill (₹)', color='blue')
+ax2.set_ylabel('Satisfaction', color='red')
+ax.set_title('Party Size: Revenue vs Satisfaction')
+
+# Combine legends
+lines1, labels1 = ax.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+
+plt.tight_layout()
+plt.show()
+
+# Executive summary generation
+print(f"\n=== EXECUTIVE SUMMARY ===")
+total_revenue = restaurant_df['bill_amount'].sum()
+avg_satisfaction = restaurant_df['overall_satisfaction'].mean()
+total_customers = len(restaurant_df)
+
+print(f"📊 PERFORMANCE OVERVIEW")
+print(f"   Total Revenue: ₹{total_revenue:,.0f}")
+print(f"   Customer Visits: {total_customers:,}")
+print(f"   Average Satisfaction: {avg_satisfaction:.2f}/5.0")
+print(f"   Revenue per Visit: ₹{total_revenue/total_customers:.0f}")
+
+print(f"\n🎯 KEY FINDINGS")
+best_location = location_analysis['Total_Revenue'].idxmax()
+worst_wait_time = wait_satisfaction.idxmin()
+best_party_size = party_revenue.idxmax()
+
+print(f"   • {best_location} is top revenue generator")
+print(f"   • Wait times >{worst_wait_time} significantly reduce satisfaction")
+print(f"   • Party size {best_party_size} generates highest average bill")
+print(f"   • Food quality (rating: {restaurant_df['food_rating'].mean():.2f}) needs improvement")
+
+print(f"\n🚀 IMMEDIATE ACTIONS")
+print(f"   1. Replicate {best_location} best practices across all locations")
+print(f"   2. Implement wait time reduction measures (target: <10 minutes)")
+print(f"   3. Create party size {best_party_size} promotional packages")
+print(f"   4. Focus kitchen training on food quality improvement")
+print(f"   5. Monitor satisfaction weekly with target >4.2")
+            </div>
+
+            <h3>12. Summary and Next Steps</h3>
+
+            <div class="concept-box">
+                <h4>What You've Mastered</h4>
+                <ul>
+                    <li><strong>EDA Fundamentals:</strong> How to systematically explore and understand datasets</li>
+                    <li><strong>Data Quality:</strong> Detecting and handling missing values, outliers, and inconsistencies</li>
+                    <li><strong>Visualization Mastery:</strong> Creating effective plots for different data types and business questions</li>
+                    <li><strong>Statistical Insight:</strong> Using visualizations to generate and test hypotheses</li>
+                    <li><strong>Business Communication:</strong> Translating analytical findings into actionable business recommendations</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h4>Ready for Unit 3: Predictive Modeling</h4>
+                <p>You now have the skills to:</p>
+                <ul>
+                    <li>Thoroughly explore any dataset and understand its characteristics</li>
+                    <li>Create compelling visualizations that reveal hidden patterns</li>
+                    <li>Handle real-world data quality issues professionally</li>
+                    <li>Generate business insights and recommendations from data</li>
+                    <li>Move confidently into building predictive models</li>
+                </ul>
+            </div>
+        </section>
+
+        <nav class="unit-navigation">
+            <a href="../unit1/data-science-fundamentals.html" class="btn btn-secondary">← Unit 1: Fundamentals</a>
+            <a href="../unit3/predictive-modeling.html" class="btn btn-primary">Next: Predictive Modeling →</a>
+        </nav>
+
+        <footer class="unit-footer">
+            <p>Unit 2: Data Exploration & Visualization - Master the art of discovering insights through systematic data exploration and compelling visual storytelling.</p>
+        </footer>
+    </div>
+</body>
+</html>

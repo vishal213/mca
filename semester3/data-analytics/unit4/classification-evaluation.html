@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Classification & Model Evaluation - Data Analytics</title>
+    <link rel="stylesheet" href="../../home-styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Data Analytics</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 4: Classification & Model Evaluation</h1>
+            <h2>Advanced Classification Techniques & Performance Metrics</h2>
+        </header>
+
+        <section class="unit-content">
+            <h3>1. Classification Modeling Process</h3>
+            
+            <div class="concept-box">
+                <h4>Understanding Classification Problems</h4>
+                <p>Classification is the task of predicting which category or class an observation belongs to. Unlike regression which predicts continuous numbers, classification predicts discrete categories.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Real-World Classification Examples</h4>
+                <ul>
+                    <li><strong>Email Filtering:</strong> Spam vs Non-Spam</li>
+                    <li><strong>Medical Diagnosis:</strong> Disease vs Healthy</li>
+                    <li><strong>Customer Segmentation:</strong> High Value vs Medium Value vs Low Value</li>
+                    <li><strong>Fraud Detection:</strong> Fraudulent vs Legitimate transactions</li>
+                    <li><strong>Image Recognition:</strong> Cat vs Dog vs Bird</li>
+                </ul>
+            </div>
+
+            <div class="code-example">
+                <h4>Classification Process Implementation</h4>
+                <pre><code>import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Business scenario: Credit approval prediction
+np.random.seed(42)
+n_applications = 5000
+
+# Generate realistic credit application data
+credit_data = {
+    'age': np.random.normal(40, 15, n_applications),
+    'income': np.random.lognormal(11, 0.8, n_applications),
+    'credit_score': np.random.normal(650, 100, n_applications),
+    'employment_length': np.random.exponential(5, n_applications),
+    'debt_to_income': np.random.beta(2, 5, n_applications),
+    'previous_defaults': np.random.poisson(0.3, n_applications),
+    'loan_amount': np.random.uniform(50000, 2000000, n_applications)
+}
+
+# Clean data
+credit_data['age'] = np.clip(credit_data['age'], 18, 80)
+credit_data['income'] = np.clip(credit_data['income'], 200000, 5000000)
+credit_data['credit_score'] = np.clip(credit_data['credit_score'], 300, 850)
+credit_data['employment_length'] = np.clip(credit_data['employment_length'], 0, 30)
+credit_data['debt_to_income'] = np.clip(credit_data['debt_to_income'], 0, 0.8)
+credit_data['previous_defaults'] = np.clip(credit_data['previous_defaults'], 0, 5)
+
+# Create approval decision based on realistic criteria
+approval_score = (
+    (credit_data['credit_score'] - 600) * 0.01 +
+    np.log(credit_data['income']) * 0.5 +
+    (credit_data['employment_length'] * 0.1) +
+    (0.5 - credit_data['debt_to_income']) * 2 +
+    (-credit_data['previous_defaults'] * 0.5) +
+    (-np.log(credit_data['loan_amount']) * 0.2) +
+    np.random.normal(0, 0.5, n_applications)
+)
+
+credit_data['approved'] = (approval_score > 0).astype(int)
+
+credit_df = pd.DataFrame(credit_data)
+
+print("Credit approval dataset:")
+print(credit_df.head(10))
+print(f"Approval rate: {credit_df['approved'].mean()*100:.1f}%")
+print(f"Dataset shape: {credit_df.shape}")
+
+# Feature preparation
+features = ['age', 'income', 'credit_score', 'employment_length', 'debt_to_income', 'previous_defaults', 'loan_amount']
+X = credit_df[features]
+y = credit_df['approved']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+print(f"\nTraining set: {X_train.shape}")
+print(f"Test set: {X_test.shape}")
+print(f"Class distribution - Approved: {y_train.mean()*100:.1f}%, Rejected: {(1-y_train.mean())*100:.1f}%")</code></pre>
+            </div>
+
+            <h3>2. Decision Trees</h3>
+
+            <div class="concept-box">
+                <h4>Tree-Based Decision Making</h4>
+                <p>Decision trees make predictions by asking a series of yes/no questions about the features. They're like a flowchart that guides you to a decision based on the characteristics of your data.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Decision Tree Implementation</h4>
+                <pre><code># Decision Tree Classifier
+dt_model = DecisionTreeClassifier(random_state=42, max_depth=10, min_samples_split=50)
+dt_model.fit(X_train, y_train)
+
+# Predictions
+y_pred_dt = dt_model.predict(X_test)
+y_pred_proba_dt = dt_model.predict_proba(X_test)[:, 1]
+
+# Model evaluation
+dt_accuracy = dt_model.score(X_test, y_test)
+print(f"=== DECISION TREE RESULTS ===")
+print(f"Accuracy: {dt_accuracy:.3f}")
+
+# Feature importance
+feature_importance_dt = pd.DataFrame({
+    'Feature': features,
+    'Importance': dt_model.feature_importances_
+}).sort_values('Importance', ascending=False)
+
+print(f"\nFeature Importance:")
+print(feature_importance_dt.round(3))
+
+# Tree structure analysis
+print(f"\nTree Structure:")
+print(f"Tree depth: {dt_model.get_depth()}")
+print(f"Number of leaves: {dt_model.get_n_leaves()}")
+print(f"Number of nodes: {dt_model.tree_.node_count}")
+
+# Business interpretation
+print(f"\n=== BUSINESS INTERPRETATION ===")
+print(f"Decision tree created {dt_model.get_n_leaves()} different customer profiles")
+print(f"Most important factors for loan approval:")
+for _, row in feature_importance_dt.head(3).iterrows():
+    print(f"• {row['Feature']}: {row['Importance']:.3f} importance")
+
+# Example decision path
+sample_customer = X_test.iloc[0]
+decision_path = dt_model.decision_path(sample_customer.values.reshape(1, -1))
+print(f"\nSample customer decision path:")
+print(f"Customer profile: Age={sample_customer['age']:.0f}, Income=₹{sample_customer['income']:,.0f}, Credit={sample_customer['credit_score']:.0f}")
+prediction = dt_model.predict(sample_customer.values.reshape(1, -1))[0]
+probability = dt_model.predict_proba(sample_customer.values.reshape(1, -1))[0, 1]
+print(f"Decision: {'APPROVED' if prediction == 1 else 'REJECTED'} (Probability: {probability:.2f})")</code></pre>
+            </div>
+
+            <h3>3. Bayesian Classification</h3>
+
+            <div class="concept-box">
+                <h4>Probability-Based Classification</h4>
+                <p>Naive Bayes classifiers use Bayes' theorem to calculate the probability of each class given the features. Despite the "naive" assumption that features are independent, they often perform surprisingly well in practice.</p>
+            </div>
+
+            <div class="formula-box">
+                <h5>Bayes' Theorem</h5>
+                <p><strong>P(Class|Features) = P(Features|Class) × P(Class) / P(Features)</strong></p>
+                <ul>
+                    <li><strong>P(Class|Features):</strong> Probability of class given the features (what we want)</li>
+                    <li><strong>P(Features|Class):</strong> Probability of features given the class</li>
+                    <li><strong>P(Class):</strong> Prior probability of the class</li>
+                    <li><strong>P(Features):</strong> Probability of the features (normalization factor)</li>
+                </ul>
+            </div>
+
+            <div class="code-example">
+                <h4>Naive Bayes Implementation</h4>
+                <pre><code># Naive Bayes Classifier
+nb_model = GaussianNB()
+nb_model.fit(X_train_scaled, y_train)
+
+# Predictions
+y_pred_nb = nb_model.predict(X_test_scaled)
+y_pred_proba_nb = nb_model.predict_proba(X_test_scaled)[:, 1]
+
+# Model evaluation
+nb_accuracy = nb_model.score(X_test_scaled, y_test)
+print(f"=== NAIVE BAYES RESULTS ===")
+print(f"Accuracy: {nb_accuracy:.3f}")
+
+# Analyze class probabilities
+class_priors = nb_model.class_prior_
+print(f"\nClass prior probabilities:")
+print(f"Rejection probability: {class_priors[0]:.3f}")
+print(f"Approval probability: {class_priors[1]:.3f}")
+
+# Feature probability analysis
+print(f"\n=== FEATURE PROBABILITY ANALYSIS ===")
+# Calculate feature means for each class
+approved_features = X_train_scaled[y_train == 1]
+rejected_features = X_train_scaled[y_train == 0]
+
+feature_analysis = pd.DataFrame({
+    'Feature': features,
+    'Approved_Mean': approved_features.mean(axis=0),
+    'Rejected_Mean': rejected_features.mean(axis=0),
+    'Difference': approved_features.mean(axis=0) - rejected_features.mean(axis=0)
+})
+
+print("Feature characteristics by approval status:")
+print(feature_analysis.round(3))
+
+# Business insights
+print(f"\n=== BUSINESS INSIGHTS ===")
+top_discriminators = feature_analysis.reindex(feature_analysis['Difference'].abs().sort_values(ascending=False).index)
+print(f"Top discriminating features:")
+for _, row in top_discriminators.head(3).iterrows():
+    if row['Difference'] > 0:
+        print(f"• {row['Feature']}: Higher values favor approval")
+    else:
+        print(f"• {row['Feature']}: Lower values favor approval")
+
+# Probability calibration check
+print(f"\n=== PROBABILITY CALIBRATION ===")
+prob_bins = np.linspace(0, 1, 11)
+bin_centers = (prob_bins[:-1] + prob_bins[1:]) / 2
+bin_indices = np.digitize(y_pred_proba_nb, prob_bins) - 1
+
+calibration_data = []
+for i in range(len(bin_centers)):
+    mask = bin_indices == i
+    if mask.sum() > 0:
+        predicted_prob = bin_centers[i]
+        actual_freq = y_test[mask].mean()
+        count = mask.sum()
+        calibration_data.append({
+            'Predicted_Prob': predicted_prob,
+            'Actual_Freq': actual_freq,
+            'Count': count
+        })
+
+calibration_df = pd.DataFrame(calibration_data)
+print("Probability calibration:")
+print(calibration_df.round(3))</code></pre>
+            </div>
+
+            <h3>4. K-Nearest Neighbors (KNN)</h3>
+
+            <div class="concept-box">
+                <h4>Classification by Similarity</h4>
+                <p>KNN classifies new points based on the class of their nearest neighbors. It's based on the principle that similar things tend to be near each other in feature space.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>KNN Implementation and Optimization</h4>
+                <pre><code># K-Nearest Neighbors Classifier
+print("=== K-NEAREST NEIGHBORS ANALYSIS ===")
+
+# Test different values of k
+k_values = [3, 5, 7, 9, 11, 15, 21]
+knn_results = {}
+
+for k in k_values:
+    knn_model = KNeighborsClassifier(n_neighbors=k)
+    knn_model.fit(X_train_scaled, y_train)
+    
+    train_accuracy = knn_model.score(X_train_scaled, y_train)
+    test_accuracy = knn_model.score(X_test_scaled, y_test)
+    
+    knn_results[k] = {
+        'train_accuracy': train_accuracy,
+        'test_accuracy': test_accuracy,
+        'overfitting': train_accuracy - test_accuracy
+    }
+
+# Find optimal k
+knn_comparison = pd.DataFrame(knn_results).T
+print("KNN performance by k value:")
+print(knn_comparison.round(3))
+
+optimal_k = knn_comparison['test_accuracy'].idxmax()
+print(f"\nOptimal k: {optimal_k}")
+
+# Train final KNN model
+knn_final = KNeighborsClassifier(n_neighbors=optimal_k)
+knn_final.fit(X_train_scaled, y_train)
+y_pred_knn = knn_final.predict(X_test_scaled)
+y_pred_proba_knn = knn_final.predict_proba(X_test_scaled)[:, 1]
+
+print(f"Final KNN accuracy: {knn_final.score(X_test_scaled, y_test):.3f}")
+
+# Distance analysis
+print(f"\n=== NEIGHBOR ANALYSIS ===")
+sample_indices = [0, 1, 2]  # Analyze first few test samples
+distances, indices = knn_final.kneighbors(X_test_scaled[sample_indices])
+
+for i, sample_idx in enumerate(sample_indices):
+    print(f"\nSample {sample_idx + 1}:")
+    print(f"Actual class: {y_test.iloc[sample_idx]}")
+    print(f"Predicted class: {y_pred_knn[sample_idx]}")
+    print(f"Prediction probability: {y_pred_proba_knn[sample_idx]:.3f}")
+    
+    neighbor_classes = y_train.iloc[indices[i]]
+    print(f"Neighbor classes: {neighbor_classes.tolist()}")
+    print(f"Neighbor vote: {neighbor_classes.sum()}/{len(neighbor_classes)} for approval")
+
+# Feature scaling impact
+print(f"\n=== FEATURE SCALING IMPACT ===")
+knn_unscaled = KNeighborsClassifier(n_neighbors=optimal_k)
+knn_unscaled.fit(X_train, y_train)
+
+scaled_accuracy = knn_final.score(X_test_scaled, y_test)
+unscaled_accuracy = knn_unscaled.score(X_test, y_test)
+
+print(f"Accuracy with scaling: {scaled_accuracy:.3f}")
+print(f"Accuracy without scaling: {unscaled_accuracy:.3f}")
+print(f"Improvement from scaling: {(scaled_accuracy - unscaled_accuracy)*100:.1f} percentage points")
+
+if scaled_accuracy > unscaled_accuracy:
+    print("✅ Feature scaling improves KNN performance")
+else:
+    print("⚠️ Feature scaling doesn't improve performance")</code></pre>
+            </div>
+
+            <h3>5. Support Vector Machines (SVM)</h3>
+
+            <div class="concept-box">
+                <h4>Maximum Margin Classification</h4>
+                <p>Support Vector Machines find the optimal boundary between classes by maximizing the margin (distance) between the decision boundary and the nearest data points from each class.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>SVM Implementation and Kernel Analysis</h4>
+                <pre><code># Support Vector Machine Analysis
+print("=== SUPPORT VECTOR MACHINE ANALYSIS ===")
+
+# Test different SVM kernels
+svm_kernels = ['linear', 'rbf', 'poly']
+svm_results = {}
+
+for kernel in svm_kernels:
+    if kernel == 'poly':
+        svm_model = SVC(kernel=kernel, degree=3, probability=True, random_state=42)
+    else:
+        svm_model = SVC(kernel=kernel, probability=True, random_state=42)
+    
+    svm_model.fit(X_train_scaled, y_train)
+    
+    train_accuracy = svm_model.score(X_train_scaled, y_train)
+    test_accuracy = svm_model.score(X_test_scaled, y_test)
+    
+    svm_results[kernel] = {
+        'train_accuracy': train_accuracy,
+        'test_accuracy': test_accuracy,
+        'support_vectors': svm_model.n_support_,
+        'model': svm_model
+    }
+
+# SVM comparison
+svm_comparison = pd.DataFrame({
+    kernel: {
+        'Train_Accuracy': results['train_accuracy'],
+        'Test_Accuracy': results['test_accuracy'],
+        'Support_Vectors': results['support_vectors'].sum()
+    }
+    for kernel, results in svm_results.items()
+}).T
+
+print("SVM kernel comparison:")
+print(svm_comparison.round(3))
+
+# Select best SVM
+best_svm_kernel = svm_comparison['Test_Accuracy'].idxmax()
+best_svm_model = svm_results[best_svm_kernel]['model']
+print(f"\nBest SVM kernel: {best_svm_kernel}")
+
+# SVM predictions
+y_pred_svm = best_svm_model.predict(X_test_scaled)
+y_pred_proba_svm = best_svm_model.predict_proba(X_test_scaled)[:, 1]
+
+# Support vector analysis
+print(f"\n=== SUPPORT VECTOR ANALYSIS ===")
+n_support_vectors = best_svm_model.n_support_
+print(f"Support vectors: {n_support_vectors[0]} (rejected), {n_support_vectors[1]} (approved)")
+print(f"Total support vectors: {n_support_vectors.sum()} ({n_support_vectors.sum()/len(X_train)*100:.1f}% of training data)")
+
+# Margin analysis
+if best_svm_kernel == 'linear':
+    # For linear SVM, we can interpret coefficients
+    feature_weights = pd.DataFrame({
+        'Feature': features,
+        'Weight': best_svm_model.coef_[0]
+    }).sort_values('Weight', key=abs, ascending=False)
+    
+    print(f"\nLinear SVM feature weights:")
+    print(feature_weights.round(3))
+    
+    print(f"\nBusiness interpretation:")
+    for _, row in feature_weights.head(3).iterrows():
+        if row['Weight'] > 0:
+            print(f"• {row['Feature']}: Positive weight - higher values favor approval")
+        else:
+            print(f"• {row['Feature']}: Negative weight - higher values favor rejection")
+
+# Decision boundary confidence
+decision_scores = best_svm_model.decision_function(X_test_scaled)
+print(f"\nDecision boundary analysis:")
+print(f"Decision scores range: {decision_scores.min():.2f} to {decision_scores.max():.2f}")
+print(f"High confidence approvals (score > 1): {(decision_scores > 1).sum()}")
+print(f"High confidence rejections (score < -1): {(decision_scores < -1).sum()}")
+print(f"Borderline cases (|score| < 0.5): {(abs(decision_scores) < 0.5).sum()}")</code></pre>
+            </div>
+
+            <h3>6. Model Evaluation Metrics</h3>
+
+            <h4>6.1 Confusion Matrix Analysis</h4>
+
+            <div class="concept-box">
+                <h4>Understanding Classification Performance</h4>
+                <p>The confusion matrix shows exactly where your model makes correct and incorrect predictions. It's the foundation for calculating all other classification metrics.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Comprehensive Model Evaluation</h4>
+                <pre><code># Compare all models
+models = {
+    'Decision Tree': (y_pred_dt, y_pred_proba_dt),
+    'Naive Bayes': (y_pred_nb, y_pred_proba_nb),
+    'KNN': (y_pred_knn, y_pred_proba_knn),
+    'SVM': (y_pred_svm, y_pred_proba_svm)
+}
+
+print("=== COMPREHENSIVE MODEL COMPARISON ===")
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+model_performance = {}
+
+for model_name, (predictions, probabilities) in models.items():
+    # Calculate metrics
+    accuracy = accuracy_score(y_test, predictions)
+    precision = precision_score(y_test, predictions)
+    recall = recall_score(y_test, predictions)
+    f1 = f1_score(y_test, predictions)
+    auc = roc_auc_score(y_test, probabilities)
+    
+    # Confusion matrix
+    cm = confusion_matrix(y_test, predictions)
+    tn, fp, fn, tp = cm.ravel()
+    
+    # Business metrics
+    false_positive_rate = fp / (fp + tn)
+    false_negative_rate = fn / (fn + tp)
+    
+    model_performance[model_name] = {
+        'Accuracy': accuracy,
+        'Precision': precision,
+        'Recall': recall,
+        'F1_Score': f1,
+        'AUC': auc,
+        'False_Positive_Rate': false_positive_rate,
+        'False_Negative_Rate': false_negative_rate,
+        'True_Negatives': tn,
+        'False_Positives': fp,
+        'False_Negatives': fn,
+        'True_Positives': tp
+    }
+
+# Performance comparison table
+performance_df = pd.DataFrame(model_performance).T
+print("Model performance comparison:")
+print(performance_df.round(3))
+
+# Identify best model for different metrics
+best_accuracy = performance_df['Accuracy'].idxmax()
+best_precision = performance_df['Precision'].idxmax()
+best_recall = performance_df['Recall'].idxmax()
+best_auc = performance_df['AUC'].idxmax()
+
+print(f"\n=== BEST PERFORMERS ===")
+print(f"Best accuracy: {best_accuracy} ({performance_df.loc[best_accuracy, 'Accuracy']:.3f})")
+print(f"Best precision: {best_precision} ({performance_df.loc[best_precision, 'Precision']:.3f})")
+print(f"Best recall: {best_recall} ({performance_df.loc[best_recall, 'Recall']:.3f})")
+print(f"Best AUC: {best_auc} ({performance_df.loc[best_auc, 'AUC']:.3f})")
+
+# Business cost analysis
+cost_per_false_positive = 10000  # Cost of bad loan
+cost_per_false_negative = 50000   # Opportunity cost of rejected good customer
+
+print(f"\n=== BUSINESS COST ANALYSIS ===")
+for model_name in model_performance:
+    fp_cost = model_performance[model_name]['False_Positives'] * cost_per_false_positive
+    fn_cost = model_performance[model_name]['False_Negatives'] * cost_per_false_negative
+    total_cost = fp_cost + fn_cost
+    
+    print(f"{model_name}:")
+    print(f"  False Positive Cost: ₹{fp_cost:,}")
+    print(f"  False Negative Cost: ₹{fn_cost:,}")
+    print(f"  Total Cost: ₹{total_cost:,}")
+
+# Select business-optimal model
+business_costs = {name: (perf['False_Positives'] * cost_per_false_positive + 
+                        perf['False_Negatives'] * cost_per_false_negative)
+                 for name, perf in model_performance.items()}
+
+best_business_model = min(business_costs, key=business_costs.get)
+print(f"\n✅ Business-optimal model: {best_business_model}")
+print(f"   Lowest total cost: ₹{business_costs[best_business_model]:,}")</code></pre>
+            </div>
+
+            <h3>7. ROC Curves and AUC Analysis</h3>
+
+            <div class="concept-box">
+                <h4>Receiver Operating Characteristic Analysis</h4>
+                <p>ROC curves plot the trade-off between True Positive Rate (sensitivity) and False Positive Rate (1-specificity) at various threshold settings. AUC (Area Under Curve) summarizes the model's ability to distinguish between classes.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>ROC Curve Analysis</h4>
+                <pre><code># ROC Curve Analysis
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+
+print("=== ROC CURVE ANALYSIS ===")
+
+plt.figure(figsize=(15, 10))
+
+# Plot ROC curves for all models
+plt.subplot(2, 3, 1)
+for model_name, (predictions, probabilities) in models.items():
+    fpr, tpr, thresholds = roc_curve(y_test, probabilities)
+    roc_auc = auc(fpr, tpr)
+    
+    plt.plot(fpr, tpr, linewidth=2, label=f'{model_name} (AUC = {roc_auc:.3f})')
+
+plt.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Random Classifier')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curves Comparison')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Precision-Recall curves
+from sklearn.metrics import precision_recall_curve, average_precision_score
+
+plt.subplot(2, 3, 2)
+for model_name, (predictions, probabilities) in models.items():
+    precision_curve, recall_curve, pr_thresholds = precision_recall_curve(y_test, probabilities)
+    avg_precision = average_precision_score(y_test, probabilities)
+    
+    plt.plot(recall_curve, precision_curve, linewidth=2, 
+            label=f'{model_name} (AP = {avg_precision:.3f})')
+
+baseline_precision = y_test.mean()
+plt.axhline(y=baseline_precision, color='k', linestyle='--', 
+           label=f'Baseline ({baseline_precision:.3f})')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.title('Precision-Recall Curves')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Threshold analysis for best model
+best_model_name = performance_df['AUC'].idxmax()
+best_probabilities = models[best_model_name][1]
+
+plt.subplot(2, 3, 3)
+fpr_best, tpr_best, thresholds_best = roc_curve(y_test, best_probabilities)
+
+# Calculate Youden's J statistic for optimal threshold
+j_scores = tpr_best - fpr_best
+optimal_threshold_idx = np.argmax(j_scores)
+optimal_threshold = thresholds_best[optimal_threshold_idx]
+
+plt.plot(thresholds_best, tpr_best, label='True Positive Rate', linewidth=2)
+plt.plot(thresholds_best, fpr_best, label='False Positive Rate', linewidth=2)
+plt.plot(thresholds_best, j_scores, label="Youden's J", linewidth=2)
+plt.axvline(optimal_threshold, color='red', linestyle='--', 
+           label=f'Optimal Threshold: {optimal_threshold:.3f}')
+plt.xlabel('Threshold')
+plt.ylabel('Rate')
+plt.title(f'Threshold Analysis - {best_model_name}')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Classification metrics at different thresholds
+thresholds_test = [0.3, 0.4, 0.5, 0.6, 0.7]
+threshold_analysis = []
+
+for threshold in thresholds_test:
+    y_pred_threshold = (best_probabilities >= threshold).astype(int)
+    
+    accuracy = accuracy_score(y_test, y_pred_threshold)
+    precision = precision_score(y_test, y_pred_threshold)
+    recall = recall_score(y_test, y_pred_threshold)
+    f1 = f1_score(y_test, y_pred_threshold)
+    
+    threshold_analysis.append({
+        'Threshold': threshold,
+        'Accuracy': accuracy,
+        'Precision': precision,
+        'Recall': recall,
+        'F1_Score': f1
+    })
+
+threshold_df = pd.DataFrame(threshold_analysis)
+
+plt.subplot(2, 3, 4)
+plt.plot(threshold_df['Threshold'], threshold_df['Accuracy'], 'o-', label='Accuracy', linewidth=2)
+plt.plot(threshold_df['Threshold'], threshold_df['Precision'], 's-', label='Precision', linewidth=2)
+plt.plot(threshold_df['Threshold'], threshold_df['Recall'], '^-', label='Recall', linewidth=2)
+plt.plot(threshold_df['Threshold'], threshold_df['F1_Score'], 'd-', label='F1-Score', linewidth=2)
+plt.xlabel('Classification Threshold')
+plt.ylabel('Score')
+plt.title('Metrics vs Threshold')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Model complexity comparison
+plt.subplot(2, 3, 5)
+model_names = list(model_performance.keys())
+auc_scores = [model_performance[name]['AUC'] for name in model_names]
+colors = ['blue', 'green', 'orange', 'red']
+
+bars = plt.bar(model_names, auc_scores, color=colors, alpha=0.7)
+plt.title('Model AUC Comparison')
+plt.ylabel('AUC Score')
+plt.xticks(rotation=45)
+
+for bar, score in zip(bars, auc_scores):
+    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.005,
+            f'{score:.3f}', ha='center', va='bottom', fontweight='bold')
+
+# Business interpretation plot
+plt.subplot(2, 3, 6)
+# Plot cost vs threshold for business optimization
+threshold_costs = []
+for threshold in np.arange(0.1, 0.9, 0.05):
+    y_pred_cost = (best_probabilities >= threshold).astype(int)
+    cm_cost = confusion_matrix(y_test, y_pred_cost)
+    tn, fp, fn, tp = cm_cost.ravel()
+    
+    total_cost = fp * cost_per_false_positive + fn * cost_per_false_negative
+    threshold_costs.append(total_cost)
+
+optimal_cost_threshold = np.arange(0.1, 0.9, 0.05)[np.argmin(threshold_costs)]
+min_cost = min(threshold_costs)
+
+plt.plot(np.arange(0.1, 0.9, 0.05), threshold_costs, linewidth=2, color='red')
+plt.axvline(optimal_cost_threshold, color='green', linestyle='--', 
+           label=f'Optimal: {optimal_cost_threshold:.2f}')
+plt.xlabel('Classification Threshold')
+plt.ylabel('Business Cost (₹)')
+plt.title('Business Cost Optimization')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print(f"\n=== THRESHOLD OPTIMIZATION ===")
+print(f"Statistical optimal threshold: {optimal_threshold:.3f}")
+print(f"Business optimal threshold: {optimal_cost_threshold:.3f}")
+print(f"Minimum business cost: ₹{min_cost:,}")
+
+# Final model recommendation
+print(f"\n=== FINAL MODEL RECOMMENDATION ===")
+print(f"Recommended model: {best_model_name}")
+print(f"Recommended threshold: {optimal_cost_threshold:.3f}")
+print(f"Expected performance:")
+optimal_predictions = (models[best_model_name][1] >= optimal_cost_threshold).astype(int)
+optimal_accuracy = accuracy_score(y_test, optimal_predictions)
+optimal_precision = precision_score(y_test, optimal_predictions)
+optimal_recall = recall_score(y_test, optimal_predictions)
+print(f"• Accuracy: {optimal_accuracy:.3f}")
+print(f"• Precision: {optimal_precision:.3f}")
+print(f"• Recall: {optimal_recall:.3f}")</code></pre>
+            </div>
+
+            <h3>8. Cross-Validation and Bootstrap Methods</h3>
+
+            <div class="concept-box">
+                <h4>Robust Model Validation</h4>
+                <p>Cross-validation and bootstrap methods help you understand how stable and reliable your model performance is. They test your model on multiple different subsets of data to ensure consistent performance.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Advanced Validation Techniques</h4>
+                <pre><code># Cross-validation analysis
+from sklearn.model_selection import cross_val_score, StratifiedKFold, cross_validate
+
+print("=== CROSS-VALIDATION ANALYSIS ===")
+
+# Stratified K-Fold (maintains class proportions)
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+# Cross-validate all models
+cv_results = {}
+
+for model_name, (_, _) in models.items():
+    if model_name == 'Decision Tree':
+        model = DecisionTreeClassifier(random_state=42, max_depth=10, min_samples_split=50)
+    elif model_name == 'Naive Bayes':
+        model = GaussianNB()
+    elif model_name == 'KNN':
+        model = KNeighborsClassifier(n_neighbors=optimal_k)
+    else:  # SVM
+        model = SVC(kernel=best_svm_kernel, probability=True, random_state=42)
+    
+    # Multiple scoring metrics
+    scoring = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
+    cv_scores = cross_validate(model, X_train_scaled, y_train, cv=skf, scoring=scoring)
+    
+    cv_results[model_name] = {
+        'Accuracy': cv_scores['test_accuracy'],
+        'Precision': cv_scores['test_precision'],
+        'Recall': cv_scores['test_recall'],
+        'F1': cv_scores['test_f1'],
+        'AUC': cv_scores['test_roc_auc']
+    }
+
+# Cross-validation summary
+print("Cross-validation results (mean ± std):")
+for model_name, scores in cv_results.items():
+    print(f"\n{model_name}:")
+    for metric, values in scores.items():
+        print(f"  {metric}: {values.mean():.3f} ± {values.std():.3f}")
+
+# Model stability analysis
+print(f"\n=== MODEL STABILITY ANALYSIS ===")
+for model_name, scores in cv_results.items():
+    stability_score = np.mean([np.std(values) for values in scores.values()])
+    if stability_score < 0.02:
+        stability = "Very Stable"
+    elif stability_score < 0.05:
+        stability = "Stable"
+    else:
+        stability = "Unstable"
+    
+    print(f"{model_name}: {stability} (avg std: {stability_score:.4f})")
+
+# Bootstrap validation
+print(f"\n=== BOOTSTRAP VALIDATION ===")
+
+def bootstrap_metric(y_true, y_pred, metric_func, n_bootstrap=1000):
+    """Calculate bootstrap confidence intervals for a metric"""
+    bootstrap_scores = []
+    n_samples = len(y_true)
+    
+    for _ in range(n_bootstrap):
+        # Bootstrap sample
+        indices = np.random.choice(n_samples, n_samples, replace=True)
+        y_true_boot = y_true.iloc[indices]
+        y_pred_boot = y_pred[indices]
+        
+        # Calculate metric
+        score = metric_func(y_true_boot, y_pred_boot)
+        bootstrap_scores.append(score)
+    
+    return np.array(bootstrap_scores)
+
+# Bootstrap confidence intervals for best model
+best_model_predictions = models[best_model_name][0]
+
+accuracy_bootstrap = bootstrap_metric(y_test, best_model_predictions, accuracy_score)
+precision_bootstrap = bootstrap_metric(y_test, best_model_predictions, precision_score)
+recall_bootstrap = bootstrap_metric(y_test, best_model_predictions, recall_score)
+
+print(f"Bootstrap confidence intervals for {best_model_name}:")
+print(f"Accuracy: {accuracy_bootstrap.mean():.3f} [{np.percentile(accuracy_bootstrap, 2.5):.3f}, {np.percentile(accuracy_bootstrap, 97.5):.3f}]")
+print(f"Precision: {precision_bootstrap.mean():.3f} [{np.percentile(precision_bootstrap, 2.5):.3f}, {np.percentile(precision_bootstrap, 97.5):.3f}]")
+print(f"Recall: {recall_bootstrap.mean():.3f} [{np.percentile(recall_bootstrap, 2.5):.3f}, {np.percentile(recall_bootstrap, 97.5):.3f}]")
+
+# Learning curve analysis
+from sklearn.model_selection import learning_curve
+
+train_sizes, train_scores, val_scores = learning_curve(
+    best_svm_model, X_train_scaled, y_train, cv=5,
+    train_sizes=np.linspace(0.1, 1.0, 10), scoring='roc_auc'
+)
+
+print(f"\n=== LEARNING CURVE ANALYSIS ===")
+print(f"Training sizes tested: {train_sizes}")
+print(f"Final training score: {train_scores[-1].mean():.3f} ± {train_scores[-1].std():.3f}")
+print(f"Final validation score: {val_scores[-1].mean():.3f} ± {val_scores[-1].std():.3f}")
+
+if train_scores[-1].mean() - val_scores[-1].mean() > 0.05:
+    print("⚠️ Model shows signs of overfitting")
+else:
+    print("✅ Model generalizes well")
+
+# Feature importance across models
+print(f"\n=== FEATURE IMPORTANCE COMPARISON ===")
+
+# Get feature importance from different models
+if hasattr(dt_model, 'feature_importances_'):
+    dt_importance = dt_model.feature_importances_
+else:
+    dt_importance = np.zeros(len(features))
+
+# For linear SVM, use coefficient magnitudes
+if best_svm_kernel == 'linear':
+    svm_importance = abs(best_svm_model.coef_[0])
+else:
+    svm_importance = np.zeros(len(features))
+
+# Combine importance scores
+importance_comparison = pd.DataFrame({
+    'Feature': features,
+    'Decision_Tree': dt_importance,
+    'SVM_Linear': svm_importance / svm_importance.max() if svm_importance.max() > 0 else svm_importance
+})
+
+print("Feature importance comparison (normalized):")
+print(importance_comparison.round(3))
+
+# Consensus ranking
+importance_comparison['Average_Importance'] = importance_comparison[['Decision_Tree', 'SVM_Linear']].mean(axis=1)
+consensus_ranking = importance_comparison.sort_values('Average_Importance', ascending=False)
+
+print(f"\nConsensus feature ranking:")
+for i, (_, row) in enumerate(consensus_ranking.iterrows(), 1):
+    print(f"{i}. {row['Feature']}: {row['Average_Importance']:.3f}")</code></pre>
+            </div>
+
+            <h3>9. Advanced Model Evaluation</h3>
+
+            <div class="concept-box">
+                <h4>Beyond Basic Metrics</h4>
+                <p>Advanced evaluation techniques help you understand not just how well your model performs, but why it performs that way and how reliable those performance estimates are.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Statistical Significance and Model Comparison</h4>
+                <pre><code># Statistical significance testing
+print("=== STATISTICAL SIGNIFICANCE TESTING ===")
+
+from scipy.stats import chi2_contingency, mcnemar
+
+# McNemar's test for comparing two models
+def mcnemar_test(y_true, y_pred1, y_pred2):
+    """Perform McNemar's test to compare two models"""
+    # Create contingency table
+    correct1 = (y_pred1 == y_true)
+    correct2 = (y_pred2 == y_true)
+    
+    both_correct = sum(correct1 & correct2)
+    model1_only = sum(correct1 & ~correct2)
+    model2_only = sum(~correct1 & correct2)
+    both_wrong = sum(~correct1 & ~correct2)
+    
+    # McNemar's statistic
+    if model1_only + model2_only == 0:
+        return 0, 1.0  # No disagreement
+    
+    mcnemar_stat = (abs(model1_only - model2_only) - 1)**2 / (model1_only + model2_only)
+    p_value = 1 - chi2.cdf(mcnemar_stat, 1)
+    
+    return mcnemar_stat, p_value
+
+# Compare best two models
+model_names_list = list(models.keys())
+best_two_models = performance_df['AUC'].nlargest(2).index.tolist()
+
+model1_pred = models[best_two_models[0]][0]
+model2_pred = models[best_two_models[1]][0]
+
+mcnemar_stat, mcnemar_p = mcnemar_test(y_test, model1_pred, model2_pred)
+print(f"McNemar's test comparing {best_two_models[0]} vs {best_two_models[1]}:")
+print(f"Test statistic: {mcnemar_stat:.3f}")
+print(f"P-value: {mcnemar_p:.4f}")
+
+if mcnemar_p < 0.05:
+    print(f"✅ Significant difference between models (p < 0.05)")
+else:
+    print(f"❌ No significant difference between models (p ≥ 0.05)")
+
+# Confidence intervals for performance metrics
+from scipy import stats
+
+def calculate_ci(metric_values, confidence=0.95):
+    """Calculate confidence interval for a metric"""
+    alpha = 1 - confidence
+    n = len(metric_values)
+    mean = np.mean(metric_values)
+    std_err = stats.sem(metric_values)
+    t_value = stats.t.ppf(1 - alpha/2, n-1)
+    
+    ci_lower = mean - t_value * std_err
+    ci_upper = mean + t_value * std_err
+    
+    return mean, ci_lower, ci_upper
+
+print(f"\n=== CONFIDENCE INTERVALS ===")
+for model_name, scores in cv_results.items():
+    print(f"\n{model_name} 95% Confidence Intervals:")
+    for metric, values in scores.items():
+        mean, ci_lower, ci_upper = calculate_ci(values)
+        print(f"  {metric}: {mean:.3f} [{ci_lower:.3f}, {ci_upper:.3f}]")
+
+# Effect size analysis
+print(f"\n=== EFFECT SIZE ANALYSIS ===")
+# Cohen's d for practical significance
+best_auc = performance_df['AUC'].max()
+second_best_auc = performance_df['AUC'].nlargest(2).iloc[1]
+auc_difference = best_auc - second_best_auc
+
+print(f"AUC difference between best models: {auc_difference:.4f}")
+if auc_difference > 0.02:
+    print("✅ Practically significant improvement")
+elif auc_difference > 0.01:
+    print("⚠️ Marginal improvement")
+else:
+    print("❌ Negligible improvement")
+
+# Model ensemble voting
+print(f"\n=== ENSEMBLE MODEL ANALYSIS ===")
+# Simple voting ensemble
+ensemble_predictions = []
+for i in range(len(y_test)):
+    votes = [models[name][0][i] for name in models.keys()]
+    ensemble_pred = 1 if sum(votes) > len(votes) / 2 else 0
+    ensemble_predictions.append(ensemble_pred)
+
+ensemble_predictions = np.array(ensemble_predictions)
+ensemble_accuracy = accuracy_score(y_test, ensemble_predictions)
+ensemble_precision = precision_score(y_test, ensemble_predictions)
+ensemble_recall = recall_score(y_test, ensemble_predictions)
+
+print(f"Ensemble model performance:")
+print(f"Accuracy: {ensemble_accuracy:.3f}")
+print(f"Precision: {ensemble_precision:.3f}")
+print(f"Recall: {ensemble_recall:.3f}")
+
+# Compare with best individual model
+best_individual_accuracy = performance_df['Accuracy'].max()
+print(f"\nEnsemble vs Best Individual:")
+print(f"Ensemble: {ensemble_accuracy:.3f}")
+print(f"Best Individual: {best_individual_accuracy:.3f}")
+print(f"Improvement: {(ensemble_accuracy - best_individual_accuracy)*100:.1f} percentage points")
+
+if ensemble_accuracy > best_individual_accuracy:
+    print("✅ Ensemble outperforms individual models")
+else:
+    print("❌ Individual models perform better")</code></pre>
+            </div>
+
+            <h3>10. Production Model Implementation</h3>
+
+            <div class="example-box">
+                <h4>Deploying Models in Business Environment</h4>
+                <p><strong>Business Challenge:</strong> Bank needs to deploy the credit approval model in production with monitoring and updating capabilities.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Production-Ready Model Pipeline</h4>
+                <pre><code># Production model pipeline
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+import joblib
+import json
+
+print("=== PRODUCTION MODEL PIPELINE ===")
+
+# Create production pipeline
+production_pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', best_svm_model)
+])
+
+# Retrain on full dataset
+production_pipeline.fit(X, y)
+
+# Model performance on full dataset
+full_accuracy = production_pipeline.score(X, y)
+print(f"Full dataset accuracy: {full_accuracy:.3f}")
+
+# Save model and metadata
+model_metadata = {
+    'model_type': 'SVM',
+    'kernel': best_svm_kernel,
+    'features': features,
+    'training_accuracy': full_accuracy,
+    'optimal_threshold': optimal_cost_threshold,
+    'training_date': pd.Timestamp.now().strftime('%Y-%m-%d'),
+    'training_samples': len(X),
+    'feature_scaling': 'StandardScaler'
+}
+
+# Save model
+joblib.dump(production_pipeline, 'credit_approval_model.pkl')
+with open('model_metadata.json', 'w') as f:
+    json.dump(model_metadata, f, indent=2)
+
+print(f"✅ Model saved to production")
+print(f"Model metadata: {model_metadata}")
+
+# Create prediction function
+def predict_credit_approval(customer_data, return_probability=False):
+    """
+    Predict credit approval for new customer
+    
+    Parameters:
+    customer_data: dict with keys matching feature names
+    return_probability: if True, return probability instead of binary decision
+    
+    Returns:
+    prediction: 1 (approved) or 0 (rejected), or probability if return_probability=True
+    """
+    # Convert to DataFrame
+    customer_df = pd.DataFrame([customer_data])
+    
+    # Make prediction
+    if return_probability:
+        probability = production_pipeline.predict_proba(customer_df[features])[:, 1][0]
+        return probability
+    else:
+        prediction = production_pipeline.predict(customer_df[features])[0]
+        return prediction
+
+# Test prediction function
+test_customers = [
+    {
+        'age': 35,
+        'income': 800000,
+        'credit_score': 720,
+        'employment_length': 5,
+        'debt_to_income': 0.3,
+        'previous_defaults': 0,
+        'loan_amount': 500000
+    },
+    {
+        'age': 25,
+        'income': 400000,
+        'credit_score': 580,
+        'employment_length': 1,
+        'debt_to_income': 0.6,
+        'previous_defaults': 2,
+        'loan_amount': 800000
+    }
+]
+
+print(f"\n=== PRODUCTION TESTING ===")
+for i, customer in enumerate(test_customers, 1):
+    prediction = predict_credit_approval(customer)
+    probability = predict_credit_approval(customer, return_probability=True)
+    
+    print(f"\nCustomer {i}:")
+    print(f"Profile: Age={customer['age']}, Income=₹{customer['income']:,}, Credit={customer['credit_score']}")
+    print(f"Decision: {'APPROVED' if prediction == 1 else 'REJECTED'}")
+    print(f"Confidence: {probability:.3f}")
+    
+    if probability > 0.8:
+        confidence_level = "High"
+    elif probability > 0.6:
+        confidence_level = "Medium"
+    else:
+        confidence_level = "Low"
+    
+    print(f"Confidence Level: {confidence_level}")
+
+# Model monitoring setup
+print(f"\n=== MODEL MONITORING FRAMEWORK ===")
+
+def calculate_model_drift(new_data, training_data, threshold=0.1):
+    """Calculate data drift between new and training data"""
+    drift_scores = {}
+    
+    for feature in features:
+        # KS test for distribution drift
+        from scipy.stats import ks_2samp
+        ks_stat, ks_p = ks_2samp(training_data[feature], new_data[feature])
+        drift_scores[feature] = {
+            'ks_statistic': ks_stat,
+            'p_value': ks_p,
+            'drift_detected': ks_p < 0.05
+        }
+    
+    return drift_scores
+
+# Simulate new data for drift detection
+new_customer_data = pd.DataFrame({
+    'age': np.random.normal(42, 12, 200),  # Slightly older customers
+    'income': np.random.lognormal(11.2, 0.7, 200),  # Slightly higher income
+    'credit_score': np.random.normal(660, 90, 200),  # Slightly better credit
+    'employment_length': np.random.exponential(6, 200),
+    'debt_to_income': np.random.beta(1.8, 4.5, 200),
+    'previous_defaults': np.random.poisson(0.25, 200),
+    'loan_amount': np.random.uniform(60000, 1800000, 200)
+})
+
+drift_analysis = calculate_model_drift(new_customer_data, X)
+print(f"Data drift analysis:")
+for feature, drift_info in drift_analysis.items():
+    status = "🔴 DRIFT DETECTED" if drift_info['drift_detected'] else "✅ NO DRIFT"
+    print(f"{feature}: {status} (p-value: {drift_info['p_value']:.4f})")
+
+# Performance monitoring
+print(f"\n=== PERFORMANCE MONITORING ===")
+
+# Simulate production performance over time
+monitoring_periods = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+performance_over_time = []
+
+for period in monitoring_periods:
+    # Simulate weekly performance with slight degradation
+    week_accuracy = np.random.normal(0.85, 0.03, 1)[0]
+    week_precision = np.random.normal(0.82, 0.04, 1)[0]
+    week_recall = np.random.normal(0.78, 0.05, 1)[0]
+    
+    performance_over_time.append({
+        'Period': period,
+        'Accuracy': week_accuracy,
+        'Precision': week_precision,
+        'Recall': week_recall
+    })
+
+monitoring_df = pd.DataFrame(performance_over_time)
+print("Weekly performance monitoring:")
+print(monitoring_df.round(3))
+
+# Alert system
+baseline_accuracy = 0.85
+for _, week in monitoring_df.iterrows():
+    if week['Accuracy'] < baseline_accuracy - 0.05:
+        print(f"🚨 ALERT: {week['Period']} accuracy ({week['Accuracy']:.3f}) below threshold")
+    elif week['Accuracy'] < baseline_accuracy - 0.02:
+        print(f"⚠️ WARNING: {week['Period']} accuracy ({week['Accuracy']:.3f}) declining")
+    else:
+        print(f"✅ {week['Period']}: Performance within acceptable range")</code></pre>
+            </div>
+
+            <h3>11. Complete Classification Project</h3>
+
+            <div class="example-box">
+                <h4>End-to-End Classification Project: Customer Lifetime Value Prediction</h4>
+                <p><strong>Business Challenge:</strong> E-commerce company wants to identify high-value customers early to provide personalized service and targeted marketing.</p>
+            </div>
+
+            <div class="code-example">
+                <h4>Complete Implementation</h4>
+                <pre><code># Complete CLV classification project
+print("=== CUSTOMER LIFETIME VALUE CLASSIFICATION PROJECT ===")
+
+# Generate comprehensive customer dataset
+np.random.seed(42)
+n_customers = 3000
+
+clv_data = {
+    'customer_age': np.random.normal(35, 12, n_customers),
+    'signup_channel': np.random.choice(['Organic', 'Paid_Search', 'Social', 'Referral'], n_customers),
+    'first_purchase_amount': np.random.lognormal(6.5, 0.8, n_customers),
+    'days_to_first_purchase': np.random.exponential(7, n_customers),
+    'email_engagement': np.random.beta(2, 3, n_customers),
+    'website_sessions_first_month': np.random.poisson(8, n_customers),
+    'mobile_app_usage': np.random.choice([0, 1], n_customers, p=[0.4, 0.6]),
+    'customer_service_contacts': np.random.poisson(1.5, n_customers),
+    'geographic_region': np.random.choice(['Metro', 'Tier1', 'Tier2'], n_customers, p=[0.4, 0.35, 0.25])
+}
+
+# Clean data
+clv_data['customer_age'] = np.clip(clv_data['customer_age'], 18, 70)
+clv_data['first_purchase_amount'] = np.clip(clv_data['first_purchase_amount'], 100, 10000)
+clv_data['days_to_first_purchase'] = np.clip(clv_data['days_to_first_purchase'], 0, 30)
+clv_data['website_sessions_first_month'] = np.clip(clv_data['website_sessions_first_month'], 1, 50)
+
+# Create CLV target based on realistic business logic
+clv_score = (
+    clv_data['first_purchase_amount'] * 0.5 +
+    (30 - clv_data['days_to_first_purchase']) * 100 +
+    clv_data['email_engagement'] * 2000 +
+    clv_data['website_sessions_first_month'] * 200 +
+    clv_data['mobile_app_usage'] * 1500 +
+    (3 - clv_data['customer_service_contacts']) * 500 +
+    np.random.normal(0, 1000, n_customers)
+)
+
+# Define high-value customers (top 30%)
+clv_threshold = np.percentile(clv_score, 70)
+clv_data['high_value'] = (clv_score > clv_threshold).astype(int)
+
+clv_df = pd.DataFrame(clv_data)
+
+print("Customer Lifetime Value dataset:")
+print(clv_df.head(10))
+print(f"High-value customer rate: {clv_df['high_value'].mean()*100:.1f}%")
+
+# Feature engineering
+# Encode categorical variables
+label_encoders = {}
+categorical_features = ['signup_channel', 'geographic_region']
+
+for feature in categorical_features:
+    le = LabelEncoder()
+    clv_df[f'{feature}_encoded'] = le.fit_transform(clv_df[feature])
+    label_encoders[feature] = le
+
+# Create derived features
+clv_df['engagement_score'] = (
+    clv_df['email_engagement'] * 0.4 +
+    clv_df['website_sessions_first_month'] / 50 * 0.3 +
+    clv_df['mobile_app_usage'] * 0.3
+)
+
+clv_df['early_adopter_score'] = (
+    (30 - clv_df['days_to_first_purchase']) / 30 * 0.6 +
+    clv_df['first_purchase_amount'] / 10000 * 0.4
+)
+
+# Prepare features for modeling
+model_features = [
+    'customer_age', 'first_purchase_amount', 'days_to_first_purchase',
+    'email_engagement', 'website_sessions_first_month', 'mobile_app_usage',
+    'customer_service_contacts', 'signup_channel_encoded', 'geographic_region_encoded',
+    'engagement_score', 'early_adopter_score'
+]
+
+X_clv = clv_df[model_features]
+y_clv = clv_df['high_value']
+
+# Train-test split
+X_train_clv, X_test_clv, y_train_clv, y_test_clv = train_test_split(
+    X_clv, y_clv, test_size=0.2, random_state=42, stratify=y_clv
+)
+
+# Scale features
+scaler_clv = StandardScaler()
+X_train_clv_scaled = scaler_clv.fit_transform(X_train_clv)
+X_test_clv_scaled = scaler_clv.transform(X_test_clv)
+
+print(f"\nCLV dataset preparation complete:")
+print(f"Features: {len(model_features)}")
+print(f"Training samples: {len(X_train_clv)}")
+print(f"Test samples: {len(X_test_clv)}")
+
+# Train multiple models for CLV prediction
+clv_models = {
+    'Decision Tree': DecisionTreeClassifier(max_depth=15, min_samples_split=30, random_state=42),
+    'Naive Bayes': GaussianNB(),
+    'KNN': KNeighborsClassifier(n_neighbors=7),
+    'SVM': SVC(kernel='rbf', probability=True, random_state=42)
+}
+
+clv_results = {}
+
+for name, model in clv_models.items():
+    if name in ['Naive Bayes', 'KNN', 'SVM']:
+        model.fit(X_train_clv_scaled, y_train_clv)
+        predictions = model.predict(X_test_clv_scaled)
+        probabilities = model.predict_proba(X_test_clv_scaled)[:, 1]
+    else:
+        model.fit(X_train_clv, y_train_clv)
+        predictions = model.predict(X_test_clv)
+        probabilities = model.predict_proba(X_test_clv)[:, 1]
+    
+    # Calculate metrics
+    accuracy = accuracy_score(y_test_clv, predictions)
+    precision = precision_score(y_test_clv, predictions)
+    recall = recall_score(y_test_clv, predictions)
+    f1 = f1_score(y_test_clv, predictions)
+    auc = roc_auc_score(y_test_clv, probabilities)
+    
+    clv_results[name] = {
+        'Accuracy': accuracy,
+        'Precision': precision,
+        'Recall': recall,
+        'F1': f1,
+        'AUC': auc,
+        'Model': model,
+        'Predictions': predictions,
+        'Probabilities': probabilities
+    }
+
+# CLV model comparison
+clv_performance = pd.DataFrame({
+    name: {metric: results[metric] for metric in ['Accuracy', 'Precision', 'Recall', 'F1', 'AUC']}
+    for name, results in clv_results.items()
+}).T
+
+print("CLV model performance:")
+print(clv_performance.round(3))
+
+# Select best CLV model
+best_clv_model = clv_performance['AUC'].idxmax()
+print(f"\nBest CLV model: {best_clv_model}")
+
+# Business value calculation
+best_clv_predictions = clv_results[best_clv_model]['Predictions']
+best_clv_probabilities = clv_results[best_clv_model]['Probabilities']
+
+# Calculate business impact
+true_positives = ((y_test_clv == 1) & (best_clv_predictions == 1)).sum()
+false_positives = ((y_test_clv == 0) & (best_clv_predictions == 1)).sum()
+true_negatives = ((y_test_clv == 0) & (best_clv_predictions == 0)).sum()
+false_negatives = ((y_test_clv == 1) & (best_clv_predictions == 0)).sum()
+
+# Business metrics
+avg_high_value_clv = 50000  # Average CLV of high-value customers
+avg_low_value_clv = 5000    # Average CLV of low-value customers
+cost_of_premium_service = 2000  # Cost to provide premium service
+
+revenue_from_tp = true_positives * (avg_high_value_clv - cost_of_premium_service)
+cost_from_fp = false_positives * cost_of_premium_service
+missed_revenue_fn = false_negatives * (avg_high_value_clv - avg_low_value_clv)
+
+net_business_value = revenue_from_tp - cost_from_fp - missed_revenue_fn
+
+print(f"\n=== BUSINESS VALUE ANALYSIS ===")
+print(f"True Positives: {true_positives} (correctly identified high-value customers)")
+print(f"False Positives: {false_positives} (premium service to low-value customers)")
+print(f"False Negatives: {false_negatives} (missed high-value customers)")
+print(f"True Negatives: {true_negatives} (correctly identified low-value customers)")
+
+print(f"\nFinancial Impact:")
+print(f"Revenue from correct high-value identification: ₹{revenue_from_tp:,}")
+print(f"Cost from incorrect premium service: ₹{cost_from_fp:,}")
+print(f"Missed revenue from unidentified high-value: ₹{missed_revenue_fn:,}")
+print(f"Net business value: ₹{net_business_value:,}")
+
+if net_business_value > 0:
+    print("✅ Model generates positive business value")
+else:
+    print("❌ Model needs improvement to be profitable")
+
+# Feature importance for business strategy
+if best_clv_model == 'Decision Tree':
+    feature_importance_clv = pd.DataFrame({
+        'Feature': model_features,
+        'Importance': clv_results[best_clv_model]['Model'].feature_importances_
+    }).sort_values('Importance', ascending=False)
+    
+    print(f"\n=== CLV PREDICTION INSIGHTS ===")
+    print(f"Top predictive features:")
+    for _, row in feature_importance_clv.head(5).iterrows():
+        print(f"• {row['Feature']}: {row['Importance']:.3f}")
+    
+    print(f"\nBusiness actions based on insights:")
+    if 'engagement_score' in feature_importance_clv.head(3)['Feature'].values:
+        print("📧 Focus on email engagement campaigns")
+    if 'early_adopter_score' in feature_importance_clv.head(3)['Feature'].values:
+        print("🚀 Optimize onboarding process")
+    if 'first_purchase_amount' in feature_importance_clv.head(3)['Feature'].values:
+        print("💰 Encourage higher first purchase values")</code></pre>
+            </div>
+
+            <h3>12. Summary and Key Takeaways</h3>
+
+            <div class="concept-box">
+                <h4>What You've Mastered</h4>
+                <ul>
+                    <li><strong>Classification Algorithms:</strong> Decision trees, Naive Bayes, KNN, and SVM</li>
+                    <li><strong>Model Evaluation:</strong> Comprehensive metrics including confusion matrix, ROC curves, and business cost analysis</li>
+                    <li><strong>Cross-Validation:</strong> Robust validation techniques for reliable performance estimates</li>
+                    <li><strong>Bootstrap Methods:</strong> Confidence intervals and statistical significance testing</li>
+                    <li><strong>Production Deployment:</strong> Model pipelines, monitoring, and drift detection</li>
+                    <li><strong>Business Application:</strong> Translating model performance into business value</li>
+                </ul>
+            </div>
+
+            <div class="model-comparison">
+                <h4>Algorithm Selection Guide</h4>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #e2e8f0;">
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Algorithm</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Best For</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Strengths</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Limitations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Decision Trees</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Interpretable rules, mixed data types</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Easy to understand, handles missing values</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Prone to overfitting, unstable</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Naive Bayes</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Text classification, small datasets</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Fast training, probabilistic output</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Assumes feature independence</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>KNN</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Non-linear patterns, local decisions</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">No assumptions about data distribution</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Slow prediction, sensitive to scaling</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>SVM</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">High-dimensional data, complex boundaries</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Effective in high dimensions, memory efficient</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Slow training, requires feature scaling</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-box">
+                <h4>Course Completion Achievement</h4>
+                <p>🎉 <strong>Congratulations!</strong> You have successfully completed the Data Analytics course. You now have comprehensive skills in:</p>
+                <ul>
+                    <li>✅ <strong>Data Fundamentals:</strong> Understanding measurement scales and statistical foundations</li>
+                    <li>✅ <strong>Data Exploration:</strong> EDA techniques and advanced visualization</li>
+                    <li>✅ <strong>Predictive Modeling:</strong> Linear and logistic regression</li>
+                    <li>✅ <strong>Classification:</strong> Advanced algorithms and comprehensive evaluation</li>
+                </ul>
+                <p><strong>You're now ready to:</strong> Tackle real-world data science projects, contribute to business analytics teams, and continue with advanced machine learning topics.</p>
+            </div>
+        </section>
+
+        <nav class="unit-navigation">
+            <a href="../unit3/predictive-modeling.html" class="btn btn-secondary">← Unit 3: Predictive Modeling</a>
+            <a href="../index.html" class="btn btn-primary">Back to Course Home</a>
+        </nav>
+
+        <footer class="unit-footer">
+            <p>Unit 4: Classification & Model Evaluation - Master advanced classification algorithms and comprehensive model evaluation for production-ready data science solutions.</p>
+        </footer>
+    </div>
+</body>
+</html>

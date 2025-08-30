@@ -1,4 +1,4 @@
-/* Data Analytics Unit Styles - Enhanced for Python Code Display */
+/* Machine Learning Study Guide Styles */
 * {
     margin: 0;
     padding: 0;
@@ -545,206 +545,6 @@ h5 {
     }
 }
 
-/* Code and Programming Content Styles */
-.code-block, .code-example pre, .code-example code {
-    background-color: #2d3748;
-    color: #e2e8f0;
-    padding: 1.5rem;
-    border-radius: 8px;
-    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9em;
-    line-height: 1.6;
-    margin: 1.5rem 0;
-    overflow-x: auto;
-    border: 1px solid #4a5568;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-.code-example {
-    background-color: #f7fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1.5rem 0;
-}
-
-.code-example h4, .code-example h5 {
-    color: #2d3748;
-    margin-bottom: 1rem;
-}
-
-/* Python syntax highlighting simulation */
-.code-block .comment { color: #68d391; font-style: italic; }
-.code-block .keyword { color: #f6ad55; font-weight: bold; }
-.code-block .string { color: #fbb6ce; }
-.code-block .number { color: #90cdf4; }
-.code-block .function { color: #faf089; }
-
-/* Enhanced concept boxes */
-.concept-box {
-    background-color: #f7fafc;
-    border-left: 4px solid #4299e1;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.example-box {
-    background-color: #f0fff4;
-    border: 1px solid #68d391;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.warning-box {
-    background-color: #fef5e7;
-    border: 1px solid #f6ad55;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-    border-left: 4px solid #f6ad55;
-}
-
-.formula-box {
-    background-color: #fef5e7;
-    border: 2px solid #f6ad55;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(246, 173, 85, 0.1);
-}
-
-.model-comparison {
-    background-color: #e6fffa;
-    border: 1px solid #38b2ac;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-}
-
-/* Enhanced typography */
-.concept-box h4, .example-box h4, .warning-box h4 {
-    color: #2d3748;
-    font-size: 1.3em;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.concept-box h5, .example-box h5 {
-    color: #4a5568;
-    font-size: 1.1em;
-    margin: 1rem 0 0.5rem 0;
-    font-weight: 600;
-}
-
-/* Formula styling */
-.formula-box p {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #2d3748;
-    margin-bottom: 1rem;
-}
-
-.formula-box ul {
-    text-align: left;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Table enhancements */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-th {
-    background-color: #4a5568;
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9em;
-    letter-spacing: 0.5px;
-}
-
-tr:nth-child(even) {
-    background-color: #f7fafc;
-}
-
-tr:hover {
-    background-color: #edf2f7;
-    transition: background-color 0.2s ease;
-}
-
-/* Navigation styling */
-.unit-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 3rem 0 2rem 0;
-    padding: 1rem;
-    background-color: #f7fafc;
-    border-radius: 8px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background-color: #4299e1;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #3182ce;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
-}
-
-.btn-secondary {
-    background-color: #718096;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #4a5568;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(113, 128, 150, 0.4);
-}
-
-/* Footer styling */
-.unit-footer {
-    background-color: #2d3748;
-    color: #e2e8f0;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 2rem;
-    text-align: center;
-}
-
 /* Interactive elements */
 button {
     font-family: inherit;
@@ -757,17 +557,15 @@ button:hover {
 }
 
 strong {
-    color: #2d3748;
-    font-weight: 600;
+    cursor: pointer;
     transition: background-color 0.3s ease;
-    padding: 1px 3px;
-    border-radius: 3px;
+    padding: 1px 2px;
+    border-radius: 2px;
 }
 
 strong:hover {
-    background-color: #f6ad55;
+    background-color: #f39c12;
     color: white;
-    cursor: pointer;
 }
 
 /* Print optimization */

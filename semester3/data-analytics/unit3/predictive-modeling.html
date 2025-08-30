@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3: Predictive Modeling - Data Analytics</title>
+    <link rel="stylesheet" href="../../home-styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Data Analytics</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 3: Predictive Modeling</h1>
+            <h2>Linear & Logistic Regression Analysis</h2>
+        </header>
+
+        <section class="unit-content">
+            <h3>1. Introduction to Predictive Modeling</h3>
+            
+            <div class="concept-box">
+                <h4>What is Predictive Modeling?</h4>
+                <p>Predictive modeling is the process of creating mathematical models to predict future outcomes based on historical data. It's like teaching a computer to recognize patterns in past events so it can make educated guesses about what will happen next.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Real-World Predictive Modeling Examples</h4>
+                <ul>
+                    <li><strong>Netflix:</strong> Predicts which movies you'll enjoy based on your viewing history</li>
+                    <li><strong>Banks:</strong> Predict loan default risk before approving applications</li>
+                    <li><strong>Retailers:</strong> Predict product demand to optimize inventory</li>
+                    <li><strong>Healthcare:</strong> Predict disease progression based on patient symptoms</li>
+                    <li><strong>Transportation:</strong> Predict traffic patterns to optimize routes</li>
+                </ul>
+            </div>
+
+            <h4>1.1 The Predictive Modeling Process</h4>
+
+            <div class="concept-box">
+                <p><strong>Predictive modeling follows a systematic approach:</strong></p>
+                <ol>
+                    <li><strong>Problem Definition:</strong> What exactly are you trying to predict?</li>
+                    <li><strong>Data Collection:</strong> Gather relevant historical data</li>
+                    <li><strong>Data Preparation:</strong> Clean, transform, and feature engineer</li>
+                    <li><strong>Model Selection:</strong> Choose appropriate algorithm</li>
+                    <li><strong>Model Training:</strong> Teach the model using historical data</li>
+                    <li><strong>Model Evaluation:</strong> Test how well the model performs</li>
+                    <li><strong>Model Deployment:</strong> Use the model to make real predictions</li>
+                    <li><strong>Model Monitoring:</strong> Track performance and update as needed</li>
+                </ol>
+            </div>
+
+            <div class="code-block">
+# Predictive modeling workflow demonstration
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+print("=== PREDICTIVE MODELING WORKFLOW ===")
+
+# Step 1: Generate realistic business problem data
+# Scenario: Predicting house prices based on features
+np.random.seed(42)
+n_houses = 1000
+
+house_data = {
+    'area_sqft': np.random.normal(1800, 600, n_houses),
+    'bedrooms': np.random.randint(1, 6, n_houses),
+    'bathrooms': np.random.randint(1, 4, n_houses),
+    'age_years': np.random.randint(0, 50, n_houses),
+    'distance_to_city_km': np.random.exponential(15, n_houses),
+    'has_garage': np.random.choice([0, 1], n_houses, p=[0.3, 0.7]),
+    'neighborhood_rating': np.random.choice([1, 2, 3, 4, 5], n_houses, p=[0.1, 0.15, 0.3, 0.3, 0.15])
+}
+
+# Clean data
+house_data['area_sqft'] = np.clip(house_data['area_sqft'], 800, 4000)
+house_data['distance_to_city_km'] = np.clip(house_data['distance_to_city_km'], 1, 50)
+
+# Create realistic price based on features
+price = (
+    house_data['area_sqft'] * 3000 +  # ₹3000 per sqft
+    house_data['bedrooms'] * 200000 +  # ₹2L per bedroom
+    house_data['bathrooms'] * 150000 +  # ₹1.5L per bathroom
+    (50 - house_data['age_years']) * 10000 +  # Newer houses worth more
+    (50 - house_data['distance_to_city_km']) * 5000 +  # Closer to city worth more
+    house_data['has_garage'] * 300000 +  # Garage adds ₹3L
+    house_data['neighborhood_rating'] * 100000 +  # Better neighborhood adds ₹1L per rating point
+    np.random.normal(0, 500000, n_houses)  # Random noise
+)
+
+house_data['price'] = np.clip(price, 1000000, 15000000)  # ₹10L to ₹1.5Cr
+
+df_houses = pd.DataFrame(house_data)
+
+print("House price prediction dataset:")
+print(df_houses.head(10))
+print(f"\nDataset shape: {df_houses.shape}")
+print(f"Price range: ₹{df_houses['price'].min():,.0f} to ₹{df_houses['price'].max():,.0f}")
+
+# Step 2: Exploratory Data Analysis for Modeling
+print(f"\nEDA FOR PREDICTIVE MODELING:")
+
+# Target variable analysis
+print(f"Target variable (price) statistics:")
+print(df_houses['price'].describe())
+
+# Feature correlations with target
+correlations = df_houses.corr()['price'].sort_values(ascending=False)
+print(f"\nFeature correlations with price:")
+for feature, corr in correlations.items():
+    if feature != 'price':
+        print(f"{feature}: {corr:.3f}")
+
+# Identify strong predictors
+strong_predictors = correlations[abs(correlations) > 0.3].index.tolist()
+strong_predictors.remove('price')
+print(f"\nStrong predictors (|correlation| > 0.3): {strong_predictors}")
+            </div>
+
+            <h3>2. Model Accuracy vs Prediction Accuracy</h3>
+
+            <div class="concept-box">
+                <h4>Understanding the Trade-off</h4>
+                <p>This is a crucial concept that often confuses beginners. <strong>Model accuracy</strong> is how well your model fits the training data, while <strong>prediction accuracy</strong> is how well it performs on new, unseen data.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>The Student Exam Analogy</h4>
+                <p><strong>Model Accuracy = Memorizing Past Papers:</strong> A student who memorizes all previous years' exam questions might score 100% on those same questions (perfect model accuracy) but fail miserably on new questions with different wording.</p>
+                
+                <p><strong>Prediction Accuracy = Understanding Concepts:</strong> A student who understands underlying concepts might score 85% on past papers but consistently perform well on new, unseen questions.</p>
+                
+                <p><strong>Goal:</strong> Build models that understand concepts, not just memorize examples.</p>
+            </div>
+
+            <div class="code-block">
+# Demonstrating overfitting vs good generalization
+print("=== MODEL ACCURACY vs PREDICTION ACCURACY ===")
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import validation_curve
+
+# Create simple dataset for demonstration
+np.random.seed(42)
+X_simple = np.random.uniform(0, 10, 100).reshape(-1, 1)
+y_simple = 2 * X_simple.ravel() + 3 + np.random.normal(0, 2, 100)  # Linear relationship with noise
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X_simple, y_simple, test_size=0.3, random_state=42)
+
+# Test different model complexities
+degrees = [1, 2, 5, 10, 15]
+train_scores = []
+test_scores = []
+
+plt.figure(figsize=(15, 10))
+
+for i, degree in enumerate(degrees, 1):
+    plt.subplot(2, 3, i)
+    
+    # Create polynomial model
+    poly_model = Pipeline([
+        ('poly', PolynomialFeatures(degree=degree)),
+        ('linear', LinearRegression())
+    ])
+    
+    # Fit model
+    poly_model.fit(X_train, y_train)
+    
+    # Calculate scores
+    train_score = poly_model.score(X_train, y_train)
+    test_score = poly_model.score(X_test, y_test)
+    
+    train_scores.append(train_score)
+    test_scores.append(test_score)
+    
+    # Plot results
+    X_plot = np.linspace(0, 10, 100).reshape(-1, 1)
+    y_plot = poly_model.predict(X_plot)
+    
+    plt.scatter(X_train, y_train, alpha=0.5, label='Training Data')
+    plt.scatter(X_test, y_test, alpha=0.5, label='Test Data', color='red')
+    plt.plot(X_plot, y_plot, 'g-', label='Model Prediction')
+    plt.title(f'Degree {degree}: Train={train_score:.3f}, Test={test_score:.3f}')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+
+# Summary plot
+plt.subplot(2, 3, 6)
+plt.plot(degrees, train_scores, 'o-', label='Training Accuracy', linewidth=2)
+plt.plot(degrees, test_scores, 's-', label='Test Accuracy', linewidth=2)
+plt.xlabel('Model Complexity (Polynomial Degree)')
+plt.ylabel('R² Score')
+plt.title('Training vs Test Accuracy')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Mark optimal point
+optimal_degree = degrees[np.argmax(test_scores)]
+plt.axvline(optimal_degree, color='red', linestyle='--', alpha=0.7, label=f'Optimal: Degree {optimal_degree}')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Analysis
+print(f"\n=== OVERFITTING ANALYSIS ===")
+for degree, train_acc, test_acc in zip(degrees, train_scores, test_scores):
+    gap = train_acc - test_acc
+    if gap > 0.1:
+        status = "🔴 OVERFITTING"
+    elif gap > 0.05:
+        status = "🟡 SLIGHT OVERFITTING"
+    else:
+        status = "🟢 GOOD GENERALIZATION"
+    
+    print(f"Degree {degree:2d}: Train={train_acc:.3f}, Test={test_acc:.3f}, Gap={gap:.3f} {status}")
+
+best_degree = degrees[np.argmax(test_scores)]
+print(f"\n✅ Best model: Polynomial degree {best_degree} (highest test accuracy)")
+print(f"📊 Key Insight: Higher training accuracy doesn't always mean better predictions!")
+            </div>
+
+            <h3>3. Simple Linear Regression</h3>
+
+            <div class="concept-box">
+                <h4>Understanding Linear Relationships</h4>
+                <p>Simple linear regression models the relationship between one independent variable (predictor) and one dependent variable (target) using a straight line. It's the foundation of predictive modeling.</p>
+            </div>
+
+            <div class="formula-box">
+                <h5>Linear Regression Equation</h5>
+                <p><strong>y = β₀ + β₁x + ε</strong></p>
+                <ul>
+                    <li><strong>y:</strong> Dependent variable (what we're predicting)</li>
+                    <li><strong>x:</strong> Independent variable (what we're using to predict)</li>
+                    <li><strong>β₀:</strong> Y-intercept (value when x = 0)</li>
+                    <li><strong>β₁:</strong> Slope (change in y for unit change in x)</li>
+                    <li><strong>ε:</strong> Error term (randomness we can't explain)</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+# Simple Linear Regression Implementation
+print("=== SIMPLE LINEAR REGRESSION ===")
+
+# Business scenario: Predicting advertising effectiveness
+# Question: How does advertising spend affect sales revenue?
+
+# Generate realistic advertising data
+np.random.seed(42)
+n_campaigns = 200
+
+advertising_spend = np.random.uniform(10000, 100000, n_campaigns)  # ₹10K to ₹1L
+# Revenue increases with advertising but with diminishing returns and noise
+base_revenue = 50000  # Base revenue without advertising
+revenue_from_ads = 0.8 * advertising_spend + 0.000005 * advertising_spend**2
+noise = np.random.normal(0, 15000, n_campaigns)
+total_revenue = base_revenue + revenue_from_ads + noise
+
+ad_data = pd.DataFrame({
+    'advertising_spend': advertising_spend,
+    'revenue': total_revenue
+})
+
+print("Advertising effectiveness dataset:")
+print(ad_data.head(10))
+
+# Exploratory analysis
+print(f"\n=== DATA EXPLORATION ===")
+print(f"Advertising spend range: ₹{ad_data['advertising_spend'].min():,.0f} to ₹{ad_data['advertising_spend'].max():,.0f}")
+print(f"Revenue range: ₹{ad_data['revenue'].min():,.0f} to ₹{ad_data['revenue'].max():,.0f}")
+
+correlation = ad_data['advertising_spend'].corr(ad_data['revenue'])
+print(f"Correlation between advertising and revenue: {correlation:.3f}")
+
+# Fit simple linear regression
+X = ad_data[['advertising_spend']]
+y = ad_data['revenue']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Model parameters
+intercept = model.intercept_
+slope = model.coef_[0]
+
+print(f"\n=== MODEL RESULTS ===")
+print(f"Equation: Revenue = {intercept:,.0f} + {slope:.2f} × Advertising_Spend")
+print(f"Intercept (β₀): ₹{intercept:,.0f} (baseline revenue with no advertising)")
+print(f"Slope (β₁): {slope:.2f} (additional revenue per ₹1 advertising)")
+
+# Business interpretation
+print(f"\n=== BUSINESS INTERPRETATION ===")
+print(f"• For every ₹1 spent on advertising, revenue increases by ₹{slope:.2f}")
+print(f"• With zero advertising, expected revenue is ₹{intercept:,.0f}")
+print(f"• ROI = {(slope - 1) * 100:.1f}% (for every ₹1 ad spend, profit is ₹{slope:.2f})")
+
+# Predictions
+sample_ad_spends = [25000, 50000, 75000]
+print(f"\n=== PREDICTION EXAMPLES ===")
+for spend in sample_ad_spends:
+    predicted_revenue = model.predict([[spend]])[0]
+    roi = (predicted_revenue - intercept) / spend
+    print(f"₹{spend:,} advertising → ₹{predicted_revenue:,.0f} revenue (ROI: {roi:.2f}x)")
+            </div>
+
+            <div class="code-block">
+# Visualization and model evaluation
+plt.figure(figsize=(15, 10))
+
+# 1. Scatter plot with regression line
+plt.subplot(2, 3, 1)
+plt.scatter(X_train, y_train, alpha=0.6, label='Training Data', s=30)
+plt.scatter(X_test, y_test, alpha=0.6, label='Test Data', color='red', s=30)
+
+# Plot regression line
+X_range = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+y_pred_range = model.predict(X_range)
+plt.plot(X_range, y_pred_range, 'g-', linewidth=2, label='Regression Line')
+
+plt.xlabel('Advertising Spend (₹)')
+plt.ylabel('Revenue (₹)')
+plt.title('Linear Regression: Advertising vs Revenue')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 2. Residual analysis
+plt.subplot(2, 3, 2)
+y_pred_train = model.predict(X_train)
+residuals = y_train - y_pred_train
+
+plt.scatter(y_pred_train, residuals, alpha=0.6)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.xlabel('Predicted Revenue (₹)')
+plt.ylabel('Residuals (₹)')
+plt.title('Residual Plot')
+plt.grid(True, alpha=0.3)
+
+# 3. Q-Q plot for normality check
+from scipy import stats
+plt.subplot(2, 3, 3)
+stats.probplot(residuals, dist="norm", plot=plt)
+plt.title('Q-Q Plot: Residual Normality Check')
+plt.grid(True, alpha=0.3)
+
+# 4. Actual vs Predicted
+plt.subplot(2, 3, 4)
+y_pred_test = model.predict(X_test)
+plt.scatter(y_test, y_pred_test, alpha=0.6)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', linewidth=2)
+plt.xlabel('Actual Revenue (₹)')
+plt.ylabel('Predicted Revenue (₹)')
+plt.title('Actual vs Predicted')
+plt.grid(True, alpha=0.3)
+
+# 5. Model performance metrics
+plt.subplot(2, 3, 5)
+train_r2 = model.score(X_train, y_train)
+test_r2 = model.score(X_test, y_test)
+train_rmse = np.sqrt(mean_squared_error(y_train, y_pred_train))
+test_rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
+
+metrics = ['R² Score', 'RMSE (₹)']
+train_metrics = [train_r2, train_rmse]
+test_metrics = [test_r2, test_rmse]
+
+x_pos = np.arange(len(metrics))
+width = 0.35
+
+plt.bar(x_pos - width/2, [train_r2, train_rmse/100000], width, label='Training', alpha=0.8)
+plt.bar(x_pos + width/2, [test_r2, test_rmse/100000], width, label='Test', alpha=0.8)
+plt.xlabel('Metrics')
+plt.title('Model Performance Comparison')
+plt.xticks(x_pos, ['R² Score', 'RMSE (₹ Lakhs)'])
+plt.legend()
+
+# 6. Feature importance visualization
+plt.subplot(2, 3, 6)
+feature_importance = abs(slope)
+plt.bar(['Advertising Spend'], [feature_importance], color='skyblue')
+plt.title('Feature Importance')
+plt.ylabel('Coefficient Magnitude')
+
+plt.tight_layout()
+plt.show()
+
+# Model evaluation summary
+print(f"\n=== MODEL EVALUATION SUMMARY ===")
+print(f"Training R²: {train_r2:.3f} ({train_r2*100:.1f}% of variance explained)")
+print(f"Test R²: {test_r2:.3f} ({test_r2*100:.1f}% of variance explained)")
+print(f"Training RMSE: ₹{train_rmse:,.0f}")
+print(f"Test RMSE: ₹{test_rmse:,.0f}")
+
+generalization_gap = train_r2 - test_r2
+if generalization_gap < 0.05:
+    print(f"✅ Good generalization (gap: {generalization_gap:.3f})")
+elif generalization_gap < 0.1:
+    print(f"⚠️ Acceptable generalization (gap: {generalization_gap:.3f})")
+else:
+    print(f"❌ Poor generalization - overfitting (gap: {generalization_gap:.3f})")
+            </div>
+
+            <h3>4. Multiple Linear Regression</h3>
+
+            <div class="concept-box">
+                <h4>Using Multiple Predictors</h4>
+                <p>Multiple linear regression extends simple linear regression to use multiple independent variables. Instead of a line in 2D space, we fit a hyperplane in multi-dimensional space.</p>
+            </div>
+
+            <div class="formula-box">
+                <h5>Multiple Linear Regression Equation</h5>
+                <p><strong>y = β₀ + β₁x₁ + β₂x₂ + β₃x₃ + ... + βₙxₙ + ε</strong></p>
+                <p>Where each βᵢ represents the change in y for a unit change in xᵢ, holding all other variables constant.</p>
+            </div>
+
+            <div class="code-block">
+# Multiple Linear Regression Implementation
+print("=== MULTIPLE LINEAR REGRESSION ===")
+
+# Use the house price dataset with multiple features
+features = ['area_sqft', 'bedrooms', 'bathrooms', 'age_years', 'distance_to_city_km', 'has_garage', 'neighborhood_rating']
+X_multi = df_houses[features]
+y_multi = df_houses['price']
+
+print("Multiple regression features:")
+print(X_multi.head())
+
+# Check for multicollinearity
+print(f"\n=== MULTICOLLINEARITY CHECK ===")
+feature_correlations = X_multi.corr()
+print("Feature correlation matrix:")
+print(feature_correlations.round(3))
+
+# Identify highly correlated features
+high_corr_pairs = []
+for i in range(len(feature_correlations.columns)):
+    for j in range(i+1, len(feature_correlations.columns)):
+        corr_value = abs(feature_correlations.iloc[i, j])
+        if corr_value > 0.7:
+            high_corr_pairs.append({
+                'Feature1': feature_correlations.columns[i],
+                'Feature2': feature_correlations.columns[j],
+                'Correlation': corr_value
+            })
+
+if high_corr_pairs:
+    print(f"\n⚠️ High correlation detected:")
+    for pair in high_corr_pairs:
+        print(f"   {pair['Feature1']} ↔ {pair['Feature2']}: {pair['Correlation']:.3f}")
+else:
+    print("✅ No multicollinearity issues detected")
+
+# Split data for multiple regression
+X_train_multi, X_test_multi, y_train_multi, y_test_multi = train_test_split(
+    X_multi, y_multi, test_size=0.2, random_state=42
+)
+
+# Fit multiple linear regression
+multi_model = LinearRegression()
+multi_model.fit(X_train_multi, y_train_multi)
+
+# Model coefficients
+coefficients = pd.DataFrame({
+    'Feature': features,
+    'Coefficient': multi_model.coef_,
+    'Abs_Coefficient': abs(multi_model.coef_)
+}).sort_values('Abs_Coefficient', ascending=False)
+
+print(f"\n=== MODEL COEFFICIENTS ===")
+print(f"Intercept: ₹{multi_model.intercept_:,.0f}")
+print(f"\nFeature coefficients (sorted by importance):")
+print(coefficients)
+
+# Business interpretation of coefficients
+print(f"\n=== BUSINESS INTERPRETATION ===")
+for _, row in coefficients.head(5).iterrows():
+    feature = row['Feature']
+    coef = row['Coefficient']
+    
+    if feature == 'area_sqft':
+        print(f"• Each additional sq ft increases price by ₹{coef:.0f}")
+    elif feature == 'bedrooms':
+        print(f"• Each additional bedroom increases price by ₹{coef:,.0f}")
+    elif feature == 'age_years':
+        if coef < 0:
+            print(f"• Each year of age decreases price by ₹{abs(coef):,.0f}")
+        else:
+            print(f"• Each year of age increases price by ₹{coef:,.0f}")
+    elif feature == 'distance_to_city_km':
+        if coef < 0:
+            print(f"• Each km farther from city decreases price by ₹{abs(coef):,.0f}")
+    elif feature == 'has_garage':
+        print(f"• Having a garage increases price by ₹{coef:,.0f}")
+    elif feature == 'neighborhood_rating':
+        print(f"• Each point in neighborhood rating increases price by ₹{coef:,.0f}")
+
+# Model performance
+y_pred_train_multi = multi_model.predict(X_train_multi)
+y_pred_test_multi = multi_model.predict(X_test_multi)
+
+train_r2_multi = multi_model.score(X_train_multi, y_train_multi)
+test_r2_multi = multi_model.score(X_test_multi, y_test_multi)
+train_rmse_multi = np.sqrt(mean_squared_error(y_train_multi, y_pred_train_multi))
+test_rmse_multi = np.sqrt(mean_squared_error(y_test_multi, y_pred_test_multi))
+
+print(f"\n=== MULTIPLE REGRESSION PERFORMANCE ===")
+print(f"Training R²: {train_r2_multi:.3f} ({train_r2_multi*100:.1f}% variance explained)")
+print(f"Test R²: {test_r2_multi:.3f} ({test_r2_multi*100:.1f}% variance explained)")
+print(f"Training RMSE: ₹{train_rmse_multi:,.0f}")
+print(f"Test RMSE: ₹{test_rmse_multi:,.0f}")
+
+# Compare with simple regression (using only area)
+simple_model_area = LinearRegression()
+simple_model_area.fit(X_train_multi[['area_sqft']], y_train_multi)
+simple_r2 = simple_model_area.score(X_test_multi[['area_sqft']], y_test_multi)
+
+print(f"\n=== MODEL COMPARISON ===")
+print(f"Simple regression (area only) R²: {simple_r2:.3f}")
+print(f"Multiple regression R²: {test_r2_multi:.3f}")
+print(f"Improvement: {(test_r2_multi - simple_r2)*100:.1f} percentage points")
+
+if test_r2_multi > simple_r2:
+    print("✅ Multiple features improve prediction accuracy")
+else:
+    print("⚠️ Additional features don't improve predictions")
+            </div>
+
+            <div class="code-block">
+# Advanced multiple regression analysis
+print("=== ADVANCED MULTIPLE REGRESSION ANALYSIS ===")
+
+# Feature importance visualization
+plt.figure(figsize=(15, 10))
+
+# 1. Coefficient plot
+plt.subplot(2, 3, 1)
+coef_abs = abs(multi_model.coef_)
+sorted_idx = np.argsort(coef_abs)
+sorted_features = [features[i] for i in sorted_idx]
+sorted_coefs = multi_model.coef_[sorted_idx]
+
+colors = ['red' if coef < 0 else 'blue' for coef in sorted_coefs]
+bars = plt.barh(sorted_features, sorted_coefs, color=colors, alpha=0.7)
+plt.title('Feature Coefficients')
+plt.xlabel('Coefficient Value')
+plt.axvline(x=0, color='black', linestyle='-', alpha=0.3)
+
+# 2. Actual vs Predicted scatter
+plt.subplot(2, 3, 2)
+plt.scatter(y_test_multi, y_pred_test_multi, alpha=0.6, s=30)
+plt.plot([y_test_multi.min(), y_test_multi.max()], [y_test_multi.min(), y_test_multi.max()], 'r--', linewidth=2)
+plt.xlabel('Actual Price (₹)')
+plt.ylabel('Predicted Price (₹)')
+plt.title(f'Actual vs Predicted (R² = {test_r2_multi:.3f})')
+plt.grid(True, alpha=0.3)
+
+# Add perfect prediction line
+plt.text(0.05, 0.95, f'R² = {test_r2_multi:.3f}\nRMSE = ₹{test_rmse_multi:,.0f}', 
+         transform=plt.gca().transAxes, bbox=dict(boxstyle="round", facecolor='white', alpha=0.8))
+
+# 3. Residual plots
+plt.subplot(2, 3, 3)
+residuals_multi = y_test_multi - y_pred_test_multi
+plt.scatter(y_pred_test_multi, residuals_multi, alpha=0.6)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.xlabel('Predicted Price (₹)')
+plt.ylabel('Residuals (₹)')
+plt.title('Residual Plot')
+plt.grid(True, alpha=0.3)
+
+# 4. Feature correlation heatmap
+plt.subplot(2, 3, 4)
+import seaborn as sns
+correlation_matrix = X_multi.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0, square=True)
+plt.title('Feature Correlation Matrix')
+
+# 5. Prediction error distribution
+plt.subplot(2, 3, 5)
+plt.hist(residuals_multi, bins=30, alpha=0.7, color='orange', edgecolor='black')
+plt.xlabel('Prediction Error (₹)')
+plt.ylabel('Frequency')
+plt.title('Distribution of Prediction Errors')
+plt.axvline(residuals_multi.mean(), color='red', linestyle='--', label=f'Mean: ₹{residuals_multi.mean():,.0f}')
+plt.legend()
+
+# 6. Feature importance ranking
+plt.subplot(2, 3, 6)
+importance_df = coefficients.copy()
+plt.bar(range(len(importance_df)), importance_df['Abs_Coefficient'], 
+        color=['darkblue' if x > 0 else 'darkred' for x in importance_df['Coefficient']])
+plt.xticks(range(len(importance_df)), importance_df['Feature'], rotation=45)
+plt.title('Feature Importance (Absolute Coefficients)')
+plt.ylabel('Absolute Coefficient Value')
+
+plt.tight_layout()
+plt.show()
+
+# Statistical significance testing
+print(f"\n=== STATISTICAL SIGNIFICANCE ===")
+from scipy import stats
+
+# Calculate t-statistics for coefficients
+n = len(X_train_multi)
+p = len(features)
+mse = mean_squared_error(y_train_multi, y_pred_train_multi)
+var_beta = mse * np.linalg.inv(X_train_multi.T @ X_train_multi).diagonal()
+se_beta = np.sqrt(var_beta)
+t_stats = multi_model.coef_ / se_beta
+p_values = 2 * (1 - stats.t.cdf(abs(t_stats), df=n-p-1))
+
+significance_df = pd.DataFrame({
+    'Feature': features,
+    'Coefficient': multi_model.coef_,
+    'Std_Error': se_beta,
+    't_statistic': t_stats,
+    'p_value': p_values,
+    'Significant': p_values < 0.05
+})
+
+print("Coefficient significance test:")
+print(significance_df.round(4))
+
+significant_features = significance_df[significance_df['Significant']]['Feature'].tolist()
+print(f"\nStatistically significant features (p < 0.05): {significant_features}")
+            </div>
+
+            <h3>5. Logistic Regression for Classification</h3>
+
+            <div class="concept-box">
+                <h4>When the Outcome is Binary</h4>
+                <p>Logistic regression is used when you want to predict a binary outcome (Yes/No, Success/Failure, Buy/Don't Buy). Unlike linear regression which predicts continuous values, logistic regression predicts probabilities.</p>
+            </div>
+
+            <div class="formula-box">
+                <h5>Logistic Regression Equation</h5>
+                <p><strong>P(y=1) = 1 / (1 + e^(-(β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ)))</strong></p>
+                <ul>
+                    <li><strong>P(y=1):</strong> Probability of positive outcome</li>
+                    <li><strong>e:</strong> Euler's number (~2.718)</li>
+                    <li><strong>β coefficients:</strong> Log-odds ratios</li>
+                </ul>
+                <p><strong>Logit form:</strong> log(P/(1-P)) = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ</p>
+            </div>
+
+            <div class="code-block">
+# Logistic Regression Implementation
+print("=== LOGISTIC REGRESSION ===")
+
+# Business scenario: Customer churn prediction
+# Question: Which customers are likely to stop using our service?
+
+# Generate realistic customer churn data
+np.random.seed(42)
+n_customers = 2000
+
+customer_features = {
+    'customer_age': np.random.normal(35, 12, n_customers),
+    'account_length_months': np.random.uniform(1, 60, n_customers),
+    'monthly_spend': np.random.lognormal(7, 0.8, n_customers),
+    'support_calls': np.random.poisson(2, n_customers),
+    'contract_type': np.random.choice([0, 1], n_customers, p=[0.6, 0.4]),  # 0=Monthly, 1=Annual
+    'satisfaction_score': np.random.choice([1, 2, 3, 4, 5], n_customers, p=[0.1, 0.15, 0.25, 0.3, 0.2]),
+    'competitor_offers': np.random.choice([0, 1], n_customers, p=[0.7, 0.3])  # 0=No, 1=Yes
+}
+
+# Clean data
+customer_features['customer_age'] = np.clip(customer_features['customer_age'], 18, 80)
+customer_features['monthly_spend'] = np.clip(customer_features['monthly_spend'], 500, 15000)
+customer_features['support_calls'] = np.clip(customer_features['support_calls'], 0, 20)
+
+# Create realistic churn probability based on features
+churn_logit = (
+    -2.5 +  # Base log-odds
+    -0.02 * customer_features['customer_age'] +  # Older customers less likely to churn
+    -0.008 * customer_features['account_length_months'] +  # Longer tenure = loyalty
+    0.0002 * customer_features['monthly_spend'] +  # Higher spend = higher expectations
+    0.3 * customer_features['support_calls'] +  # More support calls = problems
+    -0.8 * customer_features['contract_type'] +  # Annual contracts = less churn
+    -0.5 * customer_features['satisfaction_score'] +  # Higher satisfaction = less churn
+    1.2 * customer_features['competitor_offers']  # Competitor offers = higher churn
+)
+
+churn_probability = 1 / (1 + np.exp(-churn_logit))
+customer_features['churned'] = np.random.binomial(1, churn_probability, n_customers)
+
+churn_df = pd.DataFrame(customer_features)
+
+print("Customer churn dataset:")
+print(churn_df.head(10))
+print(f"Churn rate: {churn_df['churned'].mean()*100:.1f}%")
+
+# Logistic regression modeling
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
+
+# Prepare features
+X_churn = churn_df.drop('churned', axis=1)
+y_churn = churn_df['churned']
+
+# Split data
+X_train_churn, X_test_churn, y_train_churn, y_test_churn = train_test_split(
+    X_churn, y_churn, test_size=0.2, random_state=42, stratify=y_churn
+)
+
+# Scale features for better interpretation
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train_churn)
+X_test_scaled = scaler.transform(X_test_churn)
+
+# Fit logistic regression
+log_model = LogisticRegression(random_state=42)
+log_model.fit(X_train_scaled, y_train_churn)
+
+# Predictions
+y_pred_churn = log_model.predict(X_test_scaled)
+y_pred_proba_churn = log_model.predict_proba(X_test_scaled)[:, 1]
+
+print(f"\n=== LOGISTIC REGRESSION RESULTS ===")
+
+# Model coefficients
+coef_df = pd.DataFrame({
+    'Feature': X_churn.columns,
+    'Coefficient': log_model.coef_[0],
+    'Odds_Ratio': np.exp(log_model.coef_[0])
+}).sort_values('Coefficient', key=abs, ascending=False)
+
+print("Logistic regression coefficients:")
+print(coef_df.round(3))
+
+# Business interpretation of odds ratios
+print(f"\n=== ODDS RATIO INTERPRETATION ===")
+for _, row in coef_df.iterrows():
+    feature = row['Feature']
+    odds_ratio = row['Odds_Ratio']
+    
+    if odds_ratio > 1.1:
+        effect = f"increases churn odds by {(odds_ratio-1)*100:.1f}%"
+    elif odds_ratio < 0.9:
+        effect = f"decreases churn odds by {(1-odds_ratio)*100:.1f}%"
+    else:
+        effect = "has minimal effect on churn"
+    
+    print(f"• {feature}: One unit increase {effect}")
+
+# Model evaluation
+print(f"\n=== MODEL EVALUATION ===")
+print(f"Accuracy: {log_model.score(X_test_scaled, y_test_churn):.3f}")
+print(f"AUC-ROC: {roc_auc_score(y_test_churn, y_pred_proba_churn):.3f}")
+
+print(f"\nConfusion Matrix:")
+cm = confusion_matrix(y_test_churn, y_pred_churn)
+print(cm)
+
+print(f"\nClassification Report:")
+print(classification_report(y_test_churn, y_pred_churn))
+            </div>
+
+            <div class="code-block">
+# Logistic regression visualization and validation
+plt.figure(figsize=(15, 12))
+
+# 1. ROC Curve
+plt.subplot(2, 3, 1)
+fpr, tpr, thresholds = roc_curve(y_test_churn, y_pred_proba_churn)
+auc_score = roc_auc_score(y_test_churn, y_pred_proba_churn)
+
+plt.plot(fpr, tpr, linewidth=2, label=f'ROC Curve (AUC = {auc_score:.3f})')
+plt.plot([0, 1], [0, 1], 'k--', label='Random Classifier')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 2. Probability distribution
+plt.subplot(2, 3, 2)
+churned_probs = y_pred_proba_churn[y_test_churn == 1]
+stayed_probs = y_pred_proba_churn[y_test_churn == 0]
+
+plt.hist(stayed_probs, bins=30, alpha=0.5, label='Stayed', density=True)
+plt.hist(churned_probs, bins=30, alpha=0.5, label='Churned', density=True)
+plt.xlabel('Predicted Churn Probability')
+plt.ylabel('Density')
+plt.title('Probability Distribution by Actual Outcome')
+plt.legend()
+
+# 3. Confusion matrix heatmap
+plt.subplot(2, 3, 3)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+           xticklabels=['Stayed', 'Churned'], yticklabels=['Stayed', 'Churned'])
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+
+# 4. Feature importance plot
+plt.subplot(2, 3, 4)
+importance_abs = abs(log_model.coef_[0])
+sorted_idx = np.argsort(importance_abs)
+sorted_features = [X_churn.columns[i] for i in sorted_idx]
+sorted_importance = importance_abs[sorted_idx]
+
+plt.barh(sorted_features, sorted_importance, color='skyblue')
+plt.title('Feature Importance (Absolute Coefficients)')
+plt.xlabel('Absolute Coefficient Value')
+
+# 5. Threshold analysis
+plt.subplot(2, 3, 5)
+thresholds_test = np.arange(0.1, 0.9, 0.05)
+precision_scores = []
+recall_scores = []
+f1_scores = []
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+for threshold in thresholds_test:
+    y_pred_threshold = (y_pred_proba_churn >= threshold).astype(int)
+    precision_scores.append(precision_score(y_test_churn, y_pred_threshold))
+    recall_scores.append(recall_score(y_test_churn, y_pred_threshold))
+    f1_scores.append(f1_score(y_test_churn, y_pred_threshold))
+
+plt.plot(thresholds_test, precision_scores, label='Precision', linewidth=2)
+plt.plot(thresholds_test, recall_scores, label='Recall', linewidth=2)
+plt.plot(thresholds_test, f1_scores, label='F1-Score', linewidth=2)
+plt.xlabel('Classification Threshold')
+plt.ylabel('Score')
+plt.title('Threshold Analysis')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 6. Business impact analysis
+plt.subplot(2, 3, 6)
+# Calculate potential revenue impact
+avg_customer_value = churn_df['monthly_spend'].mean() * 12  # Annual value
+total_customers = len(y_test_churn)
+predicted_churners = sum(y_pred_churn)
+actual_churners = sum(y_test_churn)
+
+prevention_scenarios = [0.1, 0.2, 0.3, 0.4, 0.5]  # Prevention success rates
+revenue_saved = [predicted_churners * avg_customer_value * rate for rate in prevention_scenarios]
+
+plt.bar(range(len(prevention_scenarios)), revenue_saved, color='green', alpha=0.7)
+plt.xlabel('Churn Prevention Success Rate')
+plt.ylabel('Revenue Saved (₹)')
+plt.title('Potential Revenue Impact')
+plt.xticks(range(len(prevention_scenarios)), [f'{rate:.0%}' for rate in prevention_scenarios])
+
+for i, revenue in enumerate(revenue_saved):
+    plt.text(i, revenue, f'₹{revenue:,.0f}', ha='center', va='bottom', fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+
+# Business insights and recommendations
+print(f"\n=== CHURN PREDICTION INSIGHTS ===")
+
+# Identify high-risk customers
+high_risk_customers = X_test_churn[y_pred_proba_churn > 0.7]
+print(f"High-risk customers identified: {len(high_risk_customers)} ({len(high_risk_customers)/len(X_test_churn)*100:.1f}%)")
+
+# Feature-based insights
+top_churn_drivers = coef_df.head(3)
+print(f"\nTop churn drivers:")
+for _, row in top_churn_drivers.iterrows():
+    print(f"• {row['Feature']}: {row['Odds_Ratio']:.2f}x odds ratio")
+
+# Risk segments
+risk_segments = pd.cut(y_pred_proba_churn, bins=[0, 0.3, 0.7, 1.0], 
+                      labels=['Low Risk', 'Medium Risk', 'High Risk'])
+segment_analysis = pd.DataFrame({
+    'Risk_Segment': risk_segments.value_counts().index,
+    'Customer_Count': risk_segments.value_counts().values,
+    'Percentage': risk_segments.value_counts().values / len(y_pred_proba_churn) * 100
+})
+
+print(f"\nRisk segmentation:")
+print(segment_analysis)
+
+# ROI calculation for intervention
+intervention_cost_per_customer = 500  # ₹500 to retain each customer
+retention_success_rate = 0.3  # 30% success rate
+revenue_per_retained_customer = avg_customer_value
+
+high_risk_count = len(high_risk_customers)
+intervention_cost = high_risk_count * intervention_cost_per_customer
+customers_retained = high_risk_count * retention_success_rate
+revenue_saved = customers_retained * revenue_per_retained_customer
+net_benefit = revenue_saved - intervention_cost
+
+print(f"\n=== INTERVENTION ROI ANALYSIS ===")
+print(f"High-risk customers: {high_risk_count}")
+print(f"Intervention cost: ₹{intervention_cost:,.0f}")
+print(f"Expected customers retained: {customers_retained:.0f}")
+print(f"Expected revenue saved: ₹{revenue_saved:,.0f}")
+print(f"Net benefit: ₹{net_benefit:,.0f}")
+print(f"ROI: {(net_benefit/intervention_cost)*100:.1f}%")
+
+if net_benefit > 0:
+    print("✅ Churn prevention campaign is financially viable")
+else:
+    print("❌ Churn prevention campaign needs optimization")
+            </div>
+
+            <h3>6. Model Evaluation and Interpretation</h3>
+
+            <div class="concept-box">
+                <h4>How Good is Your Model?</h4>
+                <p>Model evaluation goes beyond just checking if predictions are close to actual values. You need to understand when and why your model works, its limitations, and how confident you can be in its predictions.</p>
+            </div>
+
+            <h4>6.1 Regression Model Evaluation Metrics</h4>
+
+            <div class="code-block">
+# Comprehensive regression model evaluation
+print("=== REGRESSION MODEL EVALUATION ===")
+
+# Using our house price model for detailed evaluation
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Calculate comprehensive metrics
+y_pred_final = multi_model.predict(X_test_multi)
+
+# 1. R-squared (Coefficient of Determination)
+r2 = r2_score(y_test_multi, y_pred_final)
+print(f"R² Score: {r2:.3f}")
+print(f"Interpretation: Model explains {r2*100:.1f}% of price variance")
+
+# 2. Mean Absolute Error (MAE)
+mae = mean_absolute_error(y_test_multi, y_pred_final)
+print(f"\nMean Absolute Error: ₹{mae:,.0f}")
+print(f"Interpretation: On average, predictions are off by ₹{mae:,.0f}")
+
+# 3. Root Mean Squared Error (RMSE)
+rmse = np.sqrt(mean_squared_error(y_test_multi, y_pred_final))
+print(f"\nRoot Mean Squared Error: ₹{rmse:,.0f}")
+print(f"Interpretation: Standard deviation of prediction errors")
+
+# 4. Mean Absolute Percentage Error (MAPE)
+mape = np.mean(abs((y_test_multi - y_pred_final) / y_test_multi)) * 100
+print(f"\nMean Absolute Percentage Error: {mape:.2f}%")
+print(f"Interpretation: Predictions are typically {mape:.1f}% off from actual prices")
+
+# 5. Explained variance score
+from sklearn.metrics import explained_variance_score
+evs = explained_variance_score(y_test_multi, y_pred_final)
+print(f"\nExplained Variance Score: {evs:.3f}")
+
+# Model performance by price ranges
+print(f"\n=== PERFORMANCE BY PRICE RANGE ===")
+price_ranges = pd.cut(y_test_multi, bins=5, labels=['Budget', 'Economy', 'Mid-range', 'Premium', 'Luxury'])
+performance_by_range = pd.DataFrame({
+    'Price_Range': price_ranges.cat.categories,
+    'Count': price_ranges.value_counts().sort_index(),
+    'MAE': [mean_absolute_error(y_test_multi[price_ranges == category], 
+                               y_pred_final[price_ranges == category]) 
+            for category in price_ranges.cat.categories],
+    'MAPE': [np.mean(abs((y_test_multi[price_ranges == category] - y_pred_final[price_ranges == category]) / 
+                        y_test_multi[price_ranges == category])) * 100 
+            for category in price_ranges.cat.categories]
+})
+
+print(performance_by_range.round(2))
+
+# Identify where model performs best/worst
+best_range = performance_by_range.loc[performance_by_range['MAPE'].idxmin(), 'Price_Range']
+worst_range = performance_by_range.loc[performance_by_range['MAPE'].idxmax(), 'Price_Range']
+print(f"\nBest performance: {best_range} houses")
+print(f"Worst performance: {worst_range} houses")
+            </div>
+
+            <h4>6.2 Classification Model Evaluation Metrics</h4>
+
+            <div class="code-block">
+# Classification evaluation metrics explanation
+print("=== CLASSIFICATION MODEL EVALUATION ===")
+
+# Using our churn prediction model
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Basic metrics
+accuracy = accuracy_score(y_test_churn, y_pred_churn)
+precision = precision_score(y_test_churn, y_pred_churn)
+recall = recall_score(y_test_churn, y_pred_churn)
+f1 = f1_score(y_test_churn, y_pred_churn)
+
+print(f"=== CLASSIFICATION METRICS ===")
+print(f"Accuracy: {accuracy:.3f} ({accuracy*100:.1f}% correct predictions)")
+print(f"Precision: {precision:.3f} ({precision*100:.1f}% of predicted churners actually churn)")
+print(f"Recall: {recall:.3f} ({recall*100:.1f}% of actual churners correctly identified)")
+print(f"F1-Score: {f1:.3f} (harmonic mean of precision and recall)")
+
+# Confusion matrix detailed analysis
+tn, fp, fn, tp = confusion_matrix(y_test_churn, y_pred_churn).ravel()
+
+print(f"\n=== CONFUSION MATRIX BREAKDOWN ===")
+print(f"True Negatives (TN): {tn} - Correctly predicted to stay")
+print(f"False Positives (FP): {fp} - Incorrectly predicted to churn")
+print(f"False Negatives (FN): {fn} - Missed churners")
+print(f"True Positives (TP): {tp} - Correctly predicted churners")
+
+# Business cost analysis
+cost_per_false_positive = 500  # Cost to unnecessarily retain customer
+cost_per_false_negative = avg_customer_value  # Lost revenue from missed churner
+
+total_fp_cost = fp * cost_per_false_positive
+total_fn_cost = fn * cost_per_false_negative
+total_cost = total_fp_cost + total_fn_cost
+
+print(f"\n=== BUSINESS COST ANALYSIS ===")
+print(f"False Positive cost: ₹{total_fp_cost:,.0f} (unnecessary retention efforts)")
+print(f"False Negative cost: ₹{total_fn_cost:,.0f} (lost customers)")
+print(f"Total misclassification cost: ₹{total_cost:,.0f}")
+
+# Model improvement suggestions
+if precision < 0.7:
+    print(f"\n⚠️ Low precision ({precision:.2f}) - too many false alarms")
+    print("   Suggestion: Increase classification threshold")
+if recall < 0.7:
+    print(f"\n⚠️ Low recall ({recall:.2f}) - missing too many churners")
+    print("   Suggestion: Decrease classification threshold or improve features")
+            </div>
+
+            <h3>7. Advanced Regression Techniques</h3>
+
+            <h4>7.1 Polynomial Regression</h4>
+
+            <div class="concept-box">
+                <h4>Capturing Non-Linear Relationships</h4>
+                <p>Real-world relationships aren't always linear. Polynomial regression allows you to model curved relationships by adding polynomial terms (x², x³, etc.) to your linear model.</p>
+            </div>
+
+            <div class="code-block">
+# Polynomial regression implementation
+print("=== POLYNOMIAL REGRESSION ===")
+
+# Business scenario: Marketing campaign effectiveness
+# Hypothesis: Initial advertising has high impact, but effectiveness diminishes
+# as spending increases (diminishing returns)
+
+# Generate realistic marketing data with non-linear relationship
+np.random.seed(42)
+n_campaigns = 300
+
+marketing_spend = np.random.uniform(5000, 200000, n_campaigns)
+# Non-linear relationship: high initial returns, then diminishing
+base_response = 1000
+linear_effect = 0.5 * marketing_spend
+quadratic_effect = -0.000001 * marketing_spend**2  # Diminishing returns
+noise = np.random.normal(0, 5000, n_campaigns)
+
+campaign_response = base_response + linear_effect + quadratic_effect + noise
+campaign_response = np.clip(campaign_response, 0, None)  # Can't have negative response
+
+marketing_df = pd.DataFrame({
+    'marketing_spend': marketing_spend,
+    'campaign_response': campaign_response
+})
+
+print("Marketing campaign dataset:")
+print(marketing_df.head(10))
+
+# Compare linear vs polynomial models
+X_marketing = marketing_df[['marketing_spend']]
+y_marketing = marketing_df['campaign_response']
+
+X_train_mkt, X_test_mkt, y_train_mkt, y_test_mkt = train_test_split(
+    X_marketing, y_marketing, test_size=0.2, random_state=42
+)
+
+# Model comparison
+models = {
+    'Linear': Pipeline([('linear', LinearRegression())]),
+    'Quadratic': Pipeline([('poly', PolynomialFeatures(2)), ('linear', LinearRegression())]),
+    'Cubic': Pipeline([('poly', PolynomialFeatures(3)), ('linear', LinearRegression())])
+}
+
+model_results = {}
+
+plt.figure(figsize=(15, 10))
+
+for i, (model_name, model) in enumerate(models.items(), 1):
+    # Fit model
+    model.fit(X_train_mkt, y_train_mkt)
+    
+    # Predictions
+    y_pred_train_mkt = model.predict(X_train_mkt)
+    y_pred_test_mkt = model.predict(X_test_mkt)
+    
+    # Metrics
+    train_r2 = r2_score(y_train_mkt, y_pred_train_mkt)
+    test_r2 = r2_score(y_test_mkt, y_pred_test_mkt)
+    test_rmse = np.sqrt(mean_squared_error(y_test_mkt, y_pred_test_mkt))
+    
+    model_results[model_name] = {
+        'train_r2': train_r2,
+        'test_r2': test_r2,
+        'test_rmse': test_rmse,
+        'model': model
+    }
+    
+    # Visualization
+    plt.subplot(2, 3, i)
+    plt.scatter(X_train_mkt, y_train_mkt, alpha=0.5, label='Training', s=20)
+    plt.scatter(X_test_mkt, y_test_mkt, alpha=0.5, label='Test', color='red', s=20)
+    
+    # Plot model curve
+    X_range = np.linspace(X_marketing.min(), X_marketing.max(), 200).reshape(-1, 1)
+    y_range_pred = model.predict(X_range)
+    plt.plot(X_range, y_range_pred, 'g-', linewidth=2, label='Model')
+    
+    plt.xlabel('Marketing Spend (₹)')
+    plt.ylabel('Campaign Response')
+    plt.title(f'{model_name} Model (R² = {test_r2:.3f})')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+
+# Model comparison summary
+plt.subplot(2, 3, 4)
+model_names = list(model_results.keys())
+train_scores = [model_results[name]['train_r2'] for name in model_names]
+test_scores = [model_results[name]['test_r2'] for name in model_names]
+
+x_pos = np.arange(len(model_names))
+width = 0.35
+
+plt.bar(x_pos - width/2, train_scores, width, label='Training R²', alpha=0.8)
+plt.bar(x_pos + width/2, test_scores, width, label='Test R²', alpha=0.8)
+plt.xlabel('Model Type')
+plt.ylabel('R² Score')
+plt.title('Model Comparison')
+plt.xticks(x_pos, model_names)
+plt.legend()
+
+# Business insights plot
+plt.subplot(2, 3, 5)
+best_model = model_results['Quadratic']['model']
+spend_range = np.linspace(5000, 200000, 100).reshape(-1, 1)
+response_pred = best_model.predict(spend_range)
+
+plt.plot(spend_range, response_pred, linewidth=3, color='blue')
+plt.xlabel('Marketing Spend (₹)')
+plt.ylabel('Expected Response')
+plt.title('Optimal Marketing Spend Curve')
+plt.grid(True, alpha=0.3)
+
+# Find optimal spend (maximum ROI point)
+roi_curve = response_pred / spend_range.ravel()
+optimal_idx = np.argmax(roi_curve)
+optimal_spend = spend_range[optimal_idx][0]
+optimal_response = response_pred[optimal_idx]
+
+plt.axvline(optimal_spend, color='red', linestyle='--', alpha=0.8)
+plt.text(optimal_spend, optimal_response, f'Optimal: ₹{optimal_spend:,.0f}', 
+         rotation=90, verticalalignment='bottom')
+
+# Model selection summary
+plt.subplot(2, 3, 6)
+rmse_values = [model_results[name]['test_rmse'] for name in model_names]
+plt.bar(model_names, rmse_values, color='orange', alpha=0.7)
+plt.xlabel('Model Type')
+plt.ylabel('Test RMSE')
+plt.title('Model Error Comparison')
+
+plt.tight_layout()
+plt.show()
+
+# Final model comparison
+print(f"\n=== MODEL COMPARISON SUMMARY ===")
+comparison_df = pd.DataFrame({
+    'Model': model_names,
+    'Train_R2': [model_results[name]['train_r2'] for name in model_names],
+    'Test_R2': [model_results[name]['test_r2'] for name in model_names],
+    'Test_RMSE': [model_results[name]['test_rmse'] for name in model_names],
+    'Overfitting_Gap': [model_results[name]['train_r2'] - model_results[name]['test_r2'] for name in model_names]
+})
+
+print(comparison_df.round(3))
+
+# Select best model
+best_model_name = comparison_df.loc[comparison_df['Test_R2'].idxmax(), 'Model']
+print(f"\n✅ Best model: {best_model_name}")
+print(f"📊 Business recommendation: Use {best_model_name} regression for marketing spend optimization")
+print(f"💰 Optimal marketing spend: ₹{optimal_spend:,.0f} per campaign")
+            </div>
+
+            <h3>8. Advanced Model Validation Techniques</h3>
+
+            <h4>8.1 Cross-Validation</h4>
+
+            <div class="concept-box">
+                <h4>Testing Model Robustness</h4>
+                <p>Cross-validation tests how well your model performs across different subsets of your data. It's like testing a student with multiple different exams to see if they consistently understand the material.</p>
+            </div>
+
+            <div class="code-block">
+# Cross-validation implementation
+print("=== CROSS-VALIDATION ANALYSIS ===")
+
+from sklearn.model_selection import cross_val_score, KFold, StratifiedKFold
+from sklearn.model_selection import learning_curve
+
+# K-Fold cross-validation for regression
+print("REGRESSION MODEL CROSS-VALIDATION:")
+
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+cv_scores = cross_val_score(multi_model, X_multi, y_multi, cv=kfold, scoring='r2')
+
+print(f"5-Fold Cross-Validation R² Scores: {cv_scores}")
+print(f"Mean CV R²: {cv_scores.mean():.3f} (±{cv_scores.std():.3f})")
+print(f"Min CV R²: {cv_scores.min():.3f}")
+print(f"Max CV R²: {cv_scores.max():.3f}")
+
+# Stability assessment
+cv_stability = cv_scores.std()
+if cv_stability < 0.05:
+    print("✅ Model is very stable across folds")
+elif cv_stability < 0.1:
+    print("⚠️ Model has moderate variability")
+else:
+    print("❌ Model is unstable - investigate data quality")
+
+# Cross-validation for classification
+print(f"\n\nCLASSIFICATION MODEL CROSS-VALIDATION:")
+
+stratified_kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+cv_scores_class = cross_val_score(log_model, X_train_scaled, y_train_churn, 
+                                 cv=stratified_kfold, scoring='roc_auc')
+
+print(f"5-Fold Cross-Validation AUC Scores: {cv_scores_class}")
+print(f"Mean CV AUC: {cv_scores_class.mean():.3f} (±{cv_scores_class.std():.3f})")
+
+# Learning curves
+print(f"\n=== LEARNING CURVE ANALYSIS ===")
+
+# Generate learning curves
+train_sizes, train_scores_curve, test_scores_curve = learning_curve(
+    multi_model, X_multi, y_multi, cv=5, train_sizes=np.linspace(0.1, 1.0, 10),
+    scoring='r2', random_state=42
+)
+
+# Calculate mean and std
+train_mean = train_scores_curve.mean(axis=1)
+train_std = train_scores_curve.std(axis=1)
+test_mean = test_scores_curve.mean(axis=1)
+test_std = test_scores_curve.std(axis=1)
+
+# Plot learning curves
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 2, 1)
+plt.plot(train_sizes, train_mean, 'o-', label='Training Score', linewidth=2)
+plt.fill_between(train_sizes, train_mean - train_std, train_mean + train_std, alpha=0.1)
+plt.plot(train_sizes, test_mean, 's-', label='Validation Score', linewidth=2)
+plt.fill_between(train_sizes, test_mean - test_std, test_mean + test_std, alpha=0.1)
+plt.xlabel('Training Set Size')
+plt.ylabel('R² Score')
+plt.title('Learning Curves')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Validation curve (model complexity)
+plt.subplot(2, 2, 2)
+from sklearn.model_selection import validation_curve
+
+param_range = [1, 2, 3, 4, 5, 6, 7, 8]
+train_scores_val, test_scores_val = validation_curve(
+    Pipeline([('poly', PolynomialFeatures()), ('linear', LinearRegression())]),
+    X_marketing, y_marketing, param_name='poly__degree', param_range=param_range,
+    cv=5, scoring='r2'
+)
+
+train_mean_val = train_scores_val.mean(axis=1)
+test_mean_val = test_scores_val.mean(axis=1)
+
+plt.plot(param_range, train_mean_val, 'o-', label='Training', linewidth=2)
+plt.plot(param_range, test_mean_val, 's-', label='Validation', linewidth=2)
+plt.xlabel('Polynomial Degree')
+plt.ylabel('R² Score')
+plt.title('Validation Curve')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Cross-validation scores distribution
+plt.subplot(2, 2, 3)
+plt.boxplot([cv_scores], labels=['5-Fold CV'])
+plt.ylabel('R² Score')
+plt.title('Cross-Validation Score Distribution')
+plt.grid(True, alpha=0.3)
+
+# Feature stability across folds
+plt.subplot(2, 2, 4)
+from sklearn.model_selection import cross_validate
+
+# Get coefficients from each fold
+fold_coefficients = []
+for train_idx, val_idx in kfold.split(X_multi):
+    X_fold_train = X_multi.iloc[train_idx]
+    y_fold_train = y_multi.iloc[train_idx]
+    
+    fold_model = LinearRegression()
+    fold_model.fit(X_fold_train, y_fold_train)
+    fold_coefficients.append(fold_model.coef_)
+
+coef_df_cv = pd.DataFrame(fold_coefficients, columns=features)
+coef_mean = coef_df_cv.mean()
+coef_std = coef_df_cv.std()
+
+plt.bar(range(len(features)), coef_mean, yerr=coef_std, capsize=5, alpha=0.7)
+plt.xticks(range(len(features)), features, rotation=45)
+plt.title('Coefficient Stability Across Folds')
+plt.ylabel('Coefficient Value')
+
+plt.tight_layout()
+plt.show()
+
+# Coefficient stability analysis
+print(f"\n=== COEFFICIENT STABILITY ===")
+stability_df = pd.DataFrame({
+    'Feature': features,
+    'Mean_Coefficient': coef_mean,
+    'Std_Coefficient': coef_std,
+    'Coefficient_CV': abs(coef_std / coef_mean)
+}).sort_values('Coefficient_CV')
+
+print("Coefficient stability (lower CV = more stable):")
+print(stability_df.round(3))
+
+stable_features = stability_df[stability_df['Coefficient_CV'] < 0.2]['Feature'].tolist()
+unstable_features = stability_df[stability_df['Coefficient_CV'] > 0.5]['Feature'].tolist()
+
+print(f"\n✅ Stable features: {stable_features}")
+if unstable_features:
+    print(f"⚠️ Unstable features: {unstable_features}")
+    print("   Consider removing or transforming unstable features")
+            </div>
+
+            <h3>9. Model Assumptions and Diagnostics</h3>
+
+            <div class="concept-box">
+                <h4>When Linear Regression Works Best</h4>
+                <p>Linear regression makes several assumptions about your data. Violating these assumptions can make your model unreliable. It's important to check these assumptions and know what to do when they're violated.</p>
+            </div>
+
+            <h4>9.1 Linear Regression Assumptions</h4>
+
+            <div class="code-block">
+# Comprehensive assumption checking
+print("=== LINEAR REGRESSION ASSUMPTIONS CHECK ===")
+
+# Assumption 1: Linearity
+print("1. LINEARITY ASSUMPTION:")
+print("   Check: Scatter plots of features vs target should show linear patterns")
+
+# Assumption 2: Independence
+print("\n2. INDEPENDENCE ASSUMPTION:")
+print("   Check: No systematic patterns in residuals over time/order")
+
+# Assumption 3: Homoscedasticity (constant variance)
+print("\n3. HOMOSCEDASTICITY ASSUMPTION:")
+print("   Check: Residuals should have constant variance across all predicted values")
+
+# Assumption 4: Normality of residuals
+print("\n4. NORMALITY OF RESIDUALS:")
+print("   Check: Residuals should be approximately normally distributed")
+
+# Comprehensive diagnostic plots
+residuals_final = y_test_multi - y_pred_final
+
+plt.figure(figsize=(15, 12))
+
+# 1. Linearity check - Feature vs Target plots
+for i, feature in enumerate(['area_sqft', 'bedrooms', 'age_years'], 1):
+    plt.subplot(3, 4, i)
+    plt.scatter(df_houses[feature], df_houses['price'], alpha=0.5, s=20)
+    
+    # Add trend line
+    z = np.polyfit(df_houses[feature], df_houses['price'], 1)
+    p = np.poly1d(z)
+    plt.plot(df_houses[feature], p(df_houses[feature]), "r--", alpha=0.8)
+    
+    plt.xlabel(feature)
+    plt.ylabel('Price (₹)')
+    plt.title(f'Linearity: {feature} vs Price')
+
+# 2. Homoscedasticity check
+plt.subplot(3, 4, 4)
+plt.scatter(y_pred_final, residuals_final, alpha=0.6, s=20)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.xlabel('Predicted Price (₹)')
+plt.ylabel('Residuals (₹)')
+plt.title('Homoscedasticity Check')
+
+# Add reference lines for constant variance
+residual_std = residuals_final.std()
+plt.axhline(y=2*residual_std, color='orange', linestyle=':', alpha=0.7, label='±2σ')
+plt.axhline(y=-2*residual_std, color='orange', linestyle=':', alpha=0.7)
+plt.legend()
+
+# 3. Normality tests
+plt.subplot(3, 4, 5)
+plt.hist(residuals_final, bins=30, density=True, alpha=0.7, color='lightblue')
+plt.xlabel('Residuals (₹)')
+plt.ylabel('Density')
+plt.title('Residual Distribution')
+
+# Overlay normal distribution
+mu, sigma = residuals_final.mean(), residuals_final.std()
+x = np.linspace(residuals_final.min(), residuals_final.max(), 100)
+plt.plot(x, stats.norm.pdf(x, mu, sigma), 'r-', linewidth=2, label='Normal Distribution')
+plt.legend()
+
+# 4. Q-Q plot for normality
+plt.subplot(3, 4, 6)
+stats.probplot(residuals_final, dist="norm", plot=plt)
+plt.title('Q-Q Plot: Normality Check')
+
+# 5. Residuals vs features (check for patterns)
+plt.subplot(3, 4, 7)
+plt.scatter(df_houses.loc[X_test_multi.index, 'area_sqft'], residuals_final, alpha=0.6, s=20)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.xlabel('Area (sq ft)')
+plt.ylabel('Residuals (₹)')
+plt.title('Residuals vs Area')
+
+# 6. Cook's distance (influence points)
+plt.subplot(3, 4, 8)
+# Simplified Cook's distance calculation
+leverage = np.diag(X_test_multi @ np.linalg.inv(X_test_multi.T @ X_test_multi) @ X_test_multi.T)
+mse_full = mean_squared_error(y_test_multi, y_pred_final)
+cooks_d = (residuals_final**2 / (len(features) * mse_full)) * (leverage / (1 - leverage)**2)
+
+plt.scatter(range(len(cooks_d)), cooks_d, alpha=0.6, s=20)
+plt.axhline(y=4/len(X_test_multi), color='red', linestyle='--', label='Threshold')
+plt.xlabel('Observation Index')
+plt.ylabel("Cook's Distance")
+plt.title('Influential Points Detection')
+plt.legend()
+
+# 7. Scale-location plot
+plt.subplot(3, 4, 9)
+standardized_residuals = residuals_final / residuals_final.std()
+plt.scatter(y_pred_final, np.sqrt(abs(standardized_residuals)), alpha=0.6, s=20)
+plt.xlabel('Predicted Price (₹)')
+plt.ylabel('√|Standardized Residuals|')
+plt.title('Scale-Location Plot')
+
+# 8. Leverage vs residuals
+plt.subplot(3, 4, 10)
+plt.scatter(leverage, standardized_residuals, alpha=0.6, s=20)
+plt.xlabel('Leverage')
+plt.ylabel('Standardized Residuals')
+plt.title('Leverage vs Residuals')
+plt.axhline(y=0, color='red', linestyle='--')
+
+# 9. Actual vs fitted by feature
+plt.subplot(3, 4, 11)
+area_groups = pd.cut(df_houses.loc[X_test_multi.index, 'area_sqft'], 
+                    bins=5, labels=['Small', 'Compact', 'Medium', 'Large', 'Mansion'])
+for group in area_groups.cat.categories:
+    mask = area_groups == group
+    if mask.sum() > 0:
+        plt.scatter(y_test_multi[mask], y_pred_final[mask], label=group, alpha=0.6, s=20)
+
+plt.plot([y_test_multi.min(), y_test_multi.max()], [y_test_multi.min(), y_test_multi.max()], 'r--')
+plt.xlabel('Actual Price (₹)')
+plt.ylabel('Predicted Price (₹)')
+plt.title('Predictions by House Size')
+plt.legend()
+
+# 10. Prediction intervals
+plt.subplot(3, 4, 12)
+prediction_errors = abs(residuals_final)
+prediction_intervals = np.percentile(prediction_errors, [25, 50, 75, 90, 95])
+
+plt.bar(range(len(prediction_intervals)), prediction_intervals, 
+        color=['green', 'yellow', 'orange', 'red', 'darkred'], alpha=0.7)
+plt.xticks(range(len(prediction_intervals)), ['25%', '50%', '75%', '90%', '95%'])
+plt.xlabel('Confidence Level')
+plt.ylabel('Prediction Error (₹)')
+plt.title('Prediction Interval Analysis')
+
+plt.tight_layout()
+plt.show()
+
+# Assumption test results
+print(f"\n=== ASSUMPTION TEST RESULTS ===")
+
+# Normality test
+shapiro_stat, shapiro_p = stats.shapiro(residuals_final[:5000] if len(residuals_final) > 5000 else residuals_final)
+print(f"Shapiro-Wilk normality test: p-value = {shapiro_p:.6f}")
+if shapiro_p > 0.05:
+    print("✅ Residuals are approximately normal")
+else:
+    print("❌ Residuals are not normal - consider transformations")
+
+# Homoscedasticity test (Breusch-Pagan test approximation)
+from scipy.stats import pearsonr
+bp_corr, bp_p = pearsonr(y_pred_final, abs(residuals_final))
+print(f"\nHomoscedasticity test correlation: {bp_corr:.3f} (p = {bp_p:.3f})")
+if bp_p > 0.05:
+    print("✅ Constant variance assumption holds")
+else:
+    print("❌ Heteroscedasticity detected - consider weighted regression")
+
+# Durbin-Watson test for independence (simplified)
+residual_diff = np.diff(residuals_final)
+dw_stat = np.sum(residual_diff**2) / np.sum(residuals_final**2)
+print(f"\nDurbin-Watson statistic: {dw_stat:.3f}")
+if 1.5 < dw_stat < 2.5:
+    print("✅ No autocorrelation in residuals")
+else:
+    print("⚠️ Possible autocorrelation - check data ordering")
+
+# Overall model health
+assumption_violations = 0
+if shapiro_p <= 0.05:
+    assumption_violations += 1
+if bp_p <= 0.05:
+    assumption_violations += 1
+if not (1.5 < dw_stat < 2.5):
+    assumption_violations += 1
+
+print(f"\n=== MODEL HEALTH SUMMARY ===")
+if assumption_violations == 0:
+    print("🟢 All assumptions satisfied - model is reliable")
+elif assumption_violations == 1:
+    print("🟡 One assumption violated - model mostly reliable")
+else:
+    print("🔴 Multiple assumptions violated - consider model improvements")
+            </div>
+
+            <h3>10. Practical Model Implementation</h3>
+
+            <div class="example-box">
+                <h4>End-to-End Modeling Project: Sales Forecasting</h4>
+                <p><strong>Business Challenge:</strong> Retail company needs to predict next month's sales to optimize inventory and staffing.</p>
+            </div>
+
+            <div class="code-block">
+# Complete sales forecasting project
+print("=== SALES FORECASTING PROJECT ===")
+
+# Generate comprehensive sales dataset
+np.random.seed(42)
+months = pd.date_range('2020-01-01', periods=48, freq='M')  # 4 years of data
+n_months = len(months)
+
+# Business factors affecting sales
+economic_index = np.random.normal(100, 10, n_months)  # Economic indicator
+marketing_spend = np.random.uniform(50000, 200000, n_months)
+competitor_campaigns = np.random.poisson(3, n_months)
+seasonal_factor = np.sin(2 * np.pi * np.arange(n_months) / 12) * 0.3 + 1  # Seasonal pattern
+
+# Generate sales with realistic business relationships
+base_sales = 500000
+economic_effect = (economic_index - 100) * 2000
+marketing_effect = marketing_spend * 0.8
+competitor_effect = -competitor_campaigns * 15000
+seasonal_effect = (seasonal_factor - 1) * 300000
+trend_effect = np.arange(n_months) * 2000  # Growth trend
+noise = np.random.normal(0, 50000, n_months)
+
+monthly_sales = (base_sales + economic_effect + marketing_effect + 
+                competitor_effect + seasonal_effect + trend_effect + noise)
+monthly_sales = np.clip(monthly_sales, 200000, 2000000)
+
+sales_forecast_df = pd.DataFrame({
+    'month': months,
+    'sales': monthly_sales,
+    'economic_index': economic_index,
+    'marketing_spend': marketing_spend,
+    'competitor_campaigns': competitor_campaigns,
+    'month_number': range(1, n_months + 1)
+})
+
+# Add time-based features
+sales_forecast_df['month_of_year'] = sales_forecast_df['month'].dt.month
+sales_forecast_df['quarter'] = sales_forecast_df['month'].dt.quarter
+sales_forecast_df['year'] = sales_forecast_df['month'].dt.year
+
+# Lag features (previous month's performance)
+sales_forecast_df['sales_lag1'] = sales_forecast_df['sales'].shift(1)
+sales_forecast_df['marketing_lag1'] = sales_forecast_df['marketing_spend'].shift(1)
+
+# Moving averages
+sales_forecast_df['sales_ma3'] = sales_forecast_df['sales'].rolling(window=3).mean()
+sales_forecast_df['sales_ma6'] = sales_forecast_df['sales'].rolling(window=6).mean()
+
+# Drop rows with NaN due to lag/rolling operations
+sales_forecast_df = sales_forecast_df.dropna()
+
+print("Sales forecasting dataset:")
+print(sales_forecast_df.head(10))
+print(f"Dataset shape: {sales_forecast_df.shape}")
+
+# Feature engineering for time series
+print(f"\n=== TIME SERIES FEATURES ===")
+print(f"Date range: {sales_forecast_df['month'].min()} to {sales_forecast_df['month'].max()}")
+print(f"Sales range: ₹{sales_forecast_df['sales'].min():,.0f} to ₹{sales_forecast_df['sales'].max():,.0f}")
+
+# Correlation analysis
+forecast_features = ['economic_index', 'marketing_spend', 'competitor_campaigns', 
+                    'month_number', 'sales_lag1', 'sales_ma3']
+feature_correlations = sales_forecast_df[forecast_features + ['sales']].corr()['sales'].sort_values(ascending=False)
+print(f"\nFeature correlations with sales:")
+print(feature_correlations.round(3))
+
+# Time series split (important for forecasting)
+# Use first 80% for training, last 20% for testing
+split_point = int(len(sales_forecast_df) * 0.8)
+train_data = sales_forecast_df[:split_point]
+test_data = sales_forecast_df[split_point:]
+
+X_train_forecast = train_data[forecast_features]
+y_train_forecast = train_data['sales']
+X_test_forecast = test_data[forecast_features]
+y_test_forecast = test_data['sales']
+
+print(f"\nTime series split:")
+print(f"Training period: {train_data['month'].min()} to {train_data['month'].max()}")
+print(f"Testing period: {test_data['month'].min()} to {test_data['month'].max()}")
+
+# Build forecasting model
+forecast_model = LinearRegression()
+forecast_model.fit(X_train_forecast, y_train_forecast)
+
+# Generate forecasts
+y_pred_forecast = forecast_model.predict(X_test_forecast)
+
+# Evaluation
+forecast_r2 = r2_score(y_test_forecast, y_pred_forecast)
+forecast_mae = mean_absolute_error(y_test_forecast, y_pred_forecast)
+forecast_mape = np.mean(abs((y_test_forecast - y_pred_forecast) / y_test_forecast)) * 100
+
+print(f"\n=== FORECASTING PERFORMANCE ===")
+print(f"R² Score: {forecast_r2:.3f}")
+print(f"MAE: ₹{forecast_mae:,.0f}")
+print(f"MAPE: {forecast_mape:.2f}%")
+
+# Model coefficients interpretation
+forecast_coefs = pd.DataFrame({
+    'Feature': forecast_features,
+    'Coefficient': forecast_model.coef_
+}).sort_values('Coefficient', key=abs, ascending=False)
+
+print(f"\nForecasting model coefficients:")
+print(forecast_coefs.round(2))
+
+print(f"\n=== BUSINESS INTERPRETATION ===")
+for _, row in forecast_coefs.iterrows():
+    feature = row['Feature']
+    coef = row['Coefficient']
+    
+    if feature == 'marketing_spend':
+        print(f"• ₹1 increase in marketing spend → ₹{coef:.2f} increase in sales")
+    elif feature == 'economic_index':
+        print(f"• 1-point increase in economic index → ₹{coef:,.0f} increase in sales")
+    elif feature == 'sales_lag1':
+        print(f"• Sales momentum: {coef:.2f} correlation with previous month")
+    elif feature == 'competitor_campaigns':
+        print(f"• Each competitor campaign → ₹{coef:,.0f} sales impact")
+            </div>
+
+            <div class="code-block">
+# Forecasting visualization and business insights
+plt.figure(figsize=(16, 12))
+
+# 1. Actual vs predicted time series
+plt.subplot(3, 2, 1)
+plt.plot(train_data['month'], y_train_forecast, label='Training Actual', linewidth=2)
+plt.plot(test_data['month'], y_test_forecast, label='Test Actual', linewidth=2, color='blue')
+plt.plot(test_data['month'], y_pred_forecast, label='Predicted', linewidth=2, color='red', linestyle='--')
+plt.title('Sales Forecast vs Actual')
+plt.xlabel('Month')
+plt.ylabel('Sales (₹)')
+plt.legend()
+plt.xticks(rotation=45)
+
+# 2. Forecast accuracy by month
+plt.subplot(3, 2, 2)
+monthly_errors = abs(y_test_forecast.values - y_pred_forecast)
+monthly_mape = abs((y_test_forecast.values - y_pred_forecast) / y_test_forecast.values) * 100
+
+plt.bar(range(len(monthly_errors)), monthly_mape, color='orange', alpha=0.7)
+plt.xlabel('Test Month Index')
+plt.ylabel('MAPE (%)')
+plt.title('Monthly Forecast Accuracy')
+plt.axhline(y=mape, color='red', linestyle='--', label=f'Average MAPE: {mape:.1f}%')
+plt.legend()
+
+# 3. Feature contribution analysis
+plt.subplot(3, 2, 3)
+feature_contributions = X_test_forecast.multiply(forecast_model.coef_, axis=1)
+feature_contributions_mean = feature_contributions.mean()
+
+plt.bar(forecast_features, feature_contributions_mean, color='lightgreen', alpha=0.7)
+plt.xticks(rotation=45)
+plt.title('Average Feature Contribution to Sales')
+plt.ylabel('Contribution (₹)')
+
+# 4. Seasonal pattern analysis
+plt.subplot(3, 2, 4)
+monthly_avg = sales_forecast_df.groupby('month_of_year')['sales'].mean()
+plt.plot(monthly_avg.index, monthly_avg.values, marker='o', linewidth=2, markersize=8)
+plt.xlabel('Month of Year')
+plt.ylabel('Average Sales (₹)')
+plt.title('Seasonal Sales Pattern')
+plt.grid(True, alpha=0.3)
+
+# Mark peak and trough
+peak_month = monthly_avg.idxmax()
+trough_month = monthly_avg.idxmin()
+plt.axvline(peak_month, color='green', linestyle='--', alpha=0.7, label=f'Peak: Month {peak_month}')
+plt.axvline(trough_month, color='red', linestyle='--', alpha=0.7, label=f'Trough: Month {trough_month}')
+plt.legend()
+
+# 5. Marketing efficiency analysis
+plt.subplot(3, 2, 5)
+marketing_efficiency = sales_forecast_df['sales'] / sales_forecast_df['marketing_spend']
+plt.scatter(sales_forecast_df['marketing_spend'], marketing_efficiency, alpha=0.6)
+plt.xlabel('Marketing Spend (₹)')
+plt.ylabel('Sales per Marketing Rupee')
+plt.title('Marketing Efficiency Analysis')
+
+# Add trend line
+z = np.polyfit(sales_forecast_df['marketing_spend'], marketing_efficiency, 1)
+p = np.poly1d(z)
+plt.plot(sales_forecast_df['marketing_spend'], p(sales_forecast_df['marketing_spend']), "r--", alpha=0.8)
+
+# 6. Future forecasting scenario analysis
+plt.subplot(3, 2, 6)
+# Create scenarios for next month
+scenarios = {
+    'Conservative': {'marketing_spend': 80000, 'economic_index': 95, 'competitor_campaigns': 4},
+    'Optimistic': {'marketing_spend': 150000, 'economic_index': 105, 'competitor_campaigns': 2},
+    'Aggressive': {'marketing_spend': 200000, 'economic_index': 100, 'competitor_campaigns': 3}
+}
+
+scenario_predictions = []
+scenario_names = []
+
+for scenario_name, scenario_values in scenarios.items():
+    # Create feature vector for prediction
+    next_month_features = [
+        scenario_values['economic_index'],
+        scenario_values['marketing_spend'],
+        scenario_values['competitor_campaigns'],
+        len(sales_forecast_df) + 1,  # month_number
+        sales_forecast_df['sales'].iloc[-1],  # sales_lag1
+        sales_forecast_df['sales'].tail(3).mean()  # sales_ma3
+    ]
+    
+    predicted_sales = forecast_model.predict([next_month_features])[0]
+    scenario_predictions.append(predicted_sales)
+    scenario_names.append(scenario_name)
+
+plt.bar(scenario_names, scenario_predictions, color=['blue', 'green', 'red'], alpha=0.7)
+plt.title('Next Month Sales Scenarios')
+plt.ylabel('Predicted Sales (₹)')
+
+for i, (name, pred) in enumerate(zip(scenario_names, scenario_predictions)):
+    plt.text(i, pred, f'₹{pred:,.0f}', ha='center', va='bottom', fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+
+# Executive summary
+print(f"\n=== EXECUTIVE SUMMARY: SALES FORECASTING MODEL ===")
+print(f"📊 Model Performance:")
+print(f"   • Forecast accuracy: {100-mape:.1f}% (MAPE: {mape:.1f}%)")
+print(f"   • Variance explained: {forecast_r2*100:.1f}%")
+print(f"   • Average error: ₹{forecast_mae:,.0f}")
+
+print(f"\n🎯 Key Drivers:")
+top_drivers = forecast_coefs.head(3)
+for _, row in top_drivers.iterrows():
+    print(f"   • {row['Feature']}: {row['Coefficient']:.2f} impact coefficient")
+
+print(f"\n📈 Next Month Scenarios:")
+for name, pred in zip(scenario_names, scenario_predictions):
+    print(f"   • {name}: ₹{pred:,.0f}")
+
+print(f"\n💼 Business Recommendations:")
+print(f"   • Base prediction for next month: ₹{scenario_predictions[1]:,.0f}")
+print(f"   • Optimal marketing spend: ₹{scenarios['Optimistic']['marketing_spend']:,}")
+print(f"   • Monitor economic indicators closely")
+print(f"   • Plan inventory for {seasonal_factor[-1]*100:.0f}% seasonal adjustment")
+            </div>
+
+            <h3>11. Summary and Key Takeaways</h3>
+
+            <div class="concept-box">
+                <h4>What You've Mastered</h4>
+                <ul>
+                    <li><strong>Predictive Modeling Foundation:</strong> Understanding the difference between fitting data and predicting future outcomes</li>
+                    <li><strong>Linear Regression:</strong> Building models to predict continuous outcomes using one or multiple features</li>
+                    <li><strong>Logistic Regression:</strong> Predicting binary outcomes and understanding probability-based decisions</li>
+                    <li><strong>Model Evaluation:</strong> Comprehensive assessment of model performance using multiple metrics</li>
+                    <li><strong>Model Validation:</strong> Cross-validation and assumption checking for reliable models</li>
+                    <li><strong>Business Application:</strong> Translating model results into actionable business insights</li>
+                </ul>
+            </div>
+
+            <div class="model-comparison">
+                <h4>When to Use Each Model Type</h4>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #e2e8f0;">
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Model Type</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Best For</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Example Use Cases</th>
+                            <th style="padding: 10px; border: 1px solid #cbd5e0;">Key Advantages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Simple Linear</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">One predictor, linear relationship</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Advertising ROI, salary vs experience</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Easy interpretation, fast computation</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Multiple Linear</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Multiple predictors, linear relationships</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">House prices, sales forecasting</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Higher accuracy, feature importance</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Polynomial</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Non-linear, curved relationships</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Marketing diminishing returns</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Captures curves, flexible fitting</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;"><strong>Logistic</strong></td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Binary outcomes, probability prediction</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Churn prediction, fraud detection</td>
+                            <td style="padding: 10px; border: 1px solid #cbd5e0;">Probability outputs, classification</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-box">
+                <h4>Ready for Unit 4: Classification & Model Evaluation</h4>
+                <p>You now have the skills to:</p>
+                <ul>
+                    <li>Build and evaluate linear and logistic regression models</li>
+                    <li>Understand model assumptions and how to validate them</li>
+                    <li>Choose appropriate evaluation metrics for different business problems</li>
+                    <li>Create actionable business insights from model results</li>
+                    <li>Handle real-world challenges like non-linear relationships and time series data</li>
+                </ul>
+                <p><strong>Next:</strong> Advanced classification algorithms and comprehensive model evaluation techniques.</p>
+            </div>
+        </section>
+
+        <nav class="unit-navigation">
+            <a href="../unit2/data-visualization.html" class="btn btn-secondary">← Unit 2: Data Visualization</a>
+            <a href="../unit4/classification-evaluation.html" class="btn btn-primary">Next: Classification & Evaluation →</a>
+        </nav>
+
+        <footer class="unit-footer">
+            <p>Unit 3: Predictive Modeling - Master linear and logistic regression to build reliable predictive models for business decision-making.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Security Fundamentals - Cyber Security</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Cyber Security</a>
+                <a href="../../index.html" class="home-link">🏠 Semester 3</a>
+            </nav>
+            <h1>Unit 1: Cyber Security Fundamentals</h1>
+            <p class="subtitle">Network Security & Attack Techniques</p>
+        </header>
+
+        <section id="unit-outline">
+            <h2>📋 Unit Overview & Concept Map</h2>
+            
+            <div class="concept">
+                <h3>Learning Journey</h3>
+                <p>This unit builds your understanding of cybersecurity from the ground up. We'll start with fundamental security principles, then explore how networks are protected using firewalls and other technologies. Next, we'll understand how attackers think and operate, and finally learn how to defend against these threats.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Concept Relationship Map</h4>
+                    <div class="diagram-text">
+                        <pre>
+                    Cyber Security Fundamentals
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   Security          Network Security    Attack Methods
+   Principles         Technologies       & Motivations
+   (CIA Triad)        │                      │
+        │             ├── Firewalls          ├── Social Engineering
+        │             ├── Virtualization     ├── Technical Exploits
+        │             ├── DNS Security       ├── Malicious Code
+        │             └── RFID Security      └── Infrastructure
+        │                  │                      │
+        └──────────────────┼──────────────────────┘
+                           │
+                   Defense & Analysis
+                   (How we fight back)
+                           │
+                    ├── Defense in Depth
+                    ├── Incident Response
+                    ├── Monitoring & Detection
+                    └── Vulnerability Assessment
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>What You'll Master:</h4>
+                <ul>
+                    <li><strong>Foundation:</strong> Why security matters and core principles</li>
+                    <li><strong>Technology:</strong> How security tools actually work</li>
+                    <li><strong>Threats:</strong> Real attack methods used by cybercriminals</li>
+                    <li><strong>Defense:</strong> Practical strategies to protect systems</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="introduction">
+            <h2>🛡️ Introduction to Cyber Security</h2>
+            
+            <div class="concept">
+                <h3>What is Cyber Security?</h3>
+                <p><strong>Cyber Security</strong> is like having multiple locks, alarms, and guards protecting your digital house. Just as you wouldn't leave your front door open in a neighborhood with burglars, we can't leave our digital systems unprotected in a world full of cyber criminals.</p>
+                
+                <p>More formally, cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. These cyberattacks are usually aimed at accessing, changing, or destroying sensitive information; extorting money from users; or interrupting normal business processes.</p>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Example: Online Banking Security</h4>
+                    <p><strong>Scenario:</strong> When you log into your bank account online, multiple security layers protect your money:</p>
+                    
+                    <h5>Security Layers in Action:</h5>
+                    <ol>
+                        <li><strong>HTTPS Encryption:</strong> Your communication with the bank is scrambled so eavesdroppers can't read it</li>
+                        <li><strong>Username/Password:</strong> First verification of your identity</li>
+                        <li><strong>OTP (One-Time Password):</strong> Second verification via SMS or app</li>
+                        <li><strong>Session Timeout:</strong> Automatic logout after inactivity</li>
+                        <li><strong>Transaction Limits:</strong> Maximum amounts to limit damage if compromised</li>
+                        <li><strong>Fraud Detection:</strong> Unusual activity triggers alerts</li>
+                    </ol>
+                    
+                    <p><strong>Why This Matters:</strong> Without these protections, attackers could intercept your login, steal your credentials, and empty your account within minutes.</p>
+                </div>
+                
+                <h3>The CIA Triad - Foundation of Security</h3>
+                <p>All cybersecurity is built on three fundamental principles, known as the CIA Triad:</p>
+                
+                <div class="key-concepts">
+                    <h4>1. Confidentiality (The "C")</h4>
+                    <p><strong>Definition:</strong> Ensuring information is accessible only to authorized individuals.</p>
+                    <p><strong>Think of it like:</strong> Having a private diary with a lock - only you should be able to read it.</p>
+                    
+                    <h5>How Confidentiality is Broken:</h5>
+                    <ul>
+                        <li><strong>Data Breaches:</strong> Hackers steal customer databases from companies</li>
+                        <li><strong>Eavesdropping:</strong> Someone intercepts your phone calls or emails</li>
+                        <li><strong>Unauthorized Access:</strong> Someone logs into your account without permission</li>
+                    </ul>
+                    
+                    <h5>How We Protect Confidentiality:</h5>
+                    <ul>
+                        <li><strong>Encryption:</strong> Scrambling data so only authorized people can read it</li>
+                        <li><strong>Access Controls:</strong> Password protection, user permissions</li>
+                        <li><strong>Need-to-Know Basis:</strong> Only sharing information with people who need it</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h5>Example: WhatsApp End-to-End Encryption</h5>
+                        <p>When you send a WhatsApp message, it's encrypted on your phone before sending. Even if someone intercepts the message during transmission, they see gibberish like "X7$9mK@pL3" instead of "Meet me at 5 PM". Only the recipient's phone can decrypt and read the actual message.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h4>2. Integrity (The "I")</h4>
+                    <p><strong>Definition:</strong> Maintaining accuracy and completeness of data.</p>
+                    <p><strong>Think of it like:</strong> Ensuring that when you send a message saying "Transfer $100", it doesn't get changed to "Transfer $10,000" along the way.</p>
+                    
+                    <h5>How Integrity is Compromised:</h5>
+                    <ul>
+                        <li><strong>Data Tampering:</strong> Attackers modify files or databases</li>
+                        <li><strong>Man-in-the-Middle Attacks:</strong> Changing data during transmission</li>
+                        <li><strong>Unauthorized Modifications:</strong> Someone changes important documents</li>
+                    </ul>
+                    
+                    <h5>How We Protect Integrity:</h5>
+                    <ul>
+                        <li><strong>Digital Signatures:</strong> Cryptographic proof that data hasn't been changed</li>
+                        <li><strong>Checksums:</strong> Mathematical fingerprints of files</li>
+                        <li><strong>Version Control:</strong> Tracking all changes to documents</li>
+                        <li><strong>Access Logs:</strong> Recording who accessed what and when</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h5>Example: Software Updates</h5>
+                        <p>When you download an app update, your phone checks a digital signature to ensure the update really came from the app developer and hasn't been modified by hackers. If the signature doesn't match, your phone rejects the update to protect you from malicious software.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h4>3. Availability (The "A")</h4>
+                    <p><strong>Definition:</strong> Ensuring systems and data are accessible when needed.</p>
+                    <p><strong>Think of it like:</strong> Making sure the ATM works when you need cash, or that Google is accessible when you need to search for something.</p>
+                    
+                    <h5>How Availability is Attacked:</h5>
+                    <ul>
+                        <li><strong>DDoS Attacks:</strong> Overwhelming servers with fake traffic</li>
+                        <li><strong>Ransomware:</strong> Encrypting files and demanding payment</li>
+                        <li><strong>Physical Attacks:</strong> Destroying servers or cutting cables</li>
+                        <li><strong>Resource Exhaustion:</strong> Consuming all system memory or processing power</li>
+                    </ul>
+                    
+                    <h5>How We Protect Availability:</h5>
+                    <ul>
+                        <li><strong>Redundancy:</strong> Having backup systems ready</li>
+                        <li><strong>Load Balancing:</strong> Distributing traffic across multiple servers</li>
+                        <li><strong>DDoS Protection:</strong> Filtering out malicious traffic</li>
+                        <li><strong>Regular Backups:</strong> Keeping copies of important data</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h5>Example: Netflix Streaming</h5>
+                        <p>Netflix uses thousands of servers worldwide. If one server fails, your movie automatically switches to another server without interruption. They also keep multiple copies of each movie, so even if several servers fail, you can still watch your show. This is availability protection in action.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="network-security-concepts">
+            <h2>🌐 Network and Security Concepts</h2>
+
+            <h3>Firewalls - Your Digital Security Guards</h3>
+            <div class="concept">
+                <h4>What is a Firewall?</h4>
+                <p>Imagine your computer network as a gated community. A <strong>firewall</strong> is like the security guard at the gate who checks everyone coming in and going out. The guard has a list of rules about who to allow and who to block.</p>
+                
+                <p>Technically, a firewall is a network security device that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It establishes a barrier between trusted internal networks and untrusted external networks like the Internet.</p>
+                
+                <div class="visual-diagram">
+                    <h4>How a Firewall Works</h4>
+                    <div class="diagram-text">
+                        <pre>
+Internet (Untrusted)     Firewall (Security Guard)     Internal Network (Trusted)
+                                    │
+Hacker → Malicious Traffic → [BLOCKED] ✖ Firewall Rules
+User   → Legitimate Web    → [ALLOWED] ✓ Port 80/443 → Company Website
+Email  → Business Email   → [ALLOWED] ✓ Port 25/465  → Email Server
+                                    │
+                            Rules Database:
+                            • Allow HTTP (Port 80)
+                            • Allow HTTPS (Port 443)
+                            • Allow Email (Port 25, 465)
+                            • Block everything else
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>Detailed Firewall Types and How They Work:</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Packet-Filtering Firewalls (First Generation)</h5>
+                    <p><strong>How it works:</strong> Like a simple security guard who only checks ID cards. It looks at each packet of data and makes decisions based on basic information like source IP address, destination IP address, and port numbers.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Home Router Firewall</h6>
+                        <p><strong>Scenario:</strong> Your home WiFi router has a built-in packet-filtering firewall.</p>
+                        
+                        <h6>Rule Example:</h6>
+                        <ul>
+                            <li><strong>Rule 1:</strong> Allow traffic from internal network (192.168.1.0/24) to anywhere</li>
+                            <li><strong>Rule 2:</strong> Allow incoming traffic only if it's a response to outgoing traffic</li>
+                            <li><strong>Rule 3:</strong> Block all other incoming traffic</li>
+                        </ul>
+                        
+                        <h6>In Practice:</h6>
+                        <ul>
+                            <li>✅ You can browse websites (outgoing request, incoming response allowed)</li>
+                            <li>✅ You can check email (outgoing connection, incoming data allowed)</li>
+                            <li>❌ Hackers can't directly connect to your computer (no outgoing request = blocked)</li>
+                        </ul>
+                        
+                        <h6>Limitations:</h6>
+                        <p>This firewall can't tell if a website response contains a virus, or if an email attachment is malicious. It only knows "this traffic matches my rules" or "this doesn't match."</p>
+                    </div>
+                    
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li><strong>Speed:</strong> Very fast because it only looks at basic packet information</li>
+                        <li><strong>Simplicity:</strong> Easy to configure and understand</li>
+                        <li><strong>Low Cost:</strong> Minimal hardware requirements</li>
+                        <li><strong>Transparency:</strong> Doesn't interfere with applications</li>
+                    </ul>
+                    
+                    <h5>Disadvantages:</h5>
+                    <ul>
+                        <li><strong>No Application Awareness:</strong> Can't understand what applications are doing</li>
+                        <li><strong>Stateless:</strong> Doesn't remember previous connections</li>
+                        <li><strong>Limited Protection:</strong> Can't detect sophisticated attacks</li>
+                        <li><strong>Rule Complexity:</strong> Large rule sets become hard to manage</li>
+                    </ul>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Stateful Inspection Firewalls (Second Generation)</h5>
+                    <p><strong>How it works:</strong> Like a smarter security guard who remembers everyone who entered and keeps track of ongoing conversations. It maintains a table of active connections and makes decisions based on the context of the traffic.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Corporate Network Protection</h6>
+                        <p><strong>Scenario:</strong> An employee opens a web browser to visit a company website.</p>
+                        
+                        <h6>Stateful Inspection Process:</h6>
+                        <ol>
+                            <li><strong>Outgoing Request:</strong> Employee's computer sends HTTP request to website</li>
+                            <li><strong>State Table Entry:</strong> Firewall creates entry: "Employee IP → Website IP, Port 80, Status: Connecting"</li>
+                            <li><strong>Incoming Response:</strong> Website sends back web page data</li>
+                            <li><strong>State Check:</strong> Firewall checks: "Is this response related to an outgoing request?" Yes! Allow it.</li>
+                            <li><strong>Update State:</strong> Mark connection as "Established" and allow related traffic</li>
+                            <li><strong>Connection End:</strong> When session ends, remove entry from state table</li>
+                        </ol>
+                        
+                        <h6>Attack Prevention Example:</h6>
+                        <p>A hacker tries to send fake web page data to the employee's computer. The stateful firewall checks its state table and finds no outgoing request that would justify this incoming data. Result: Traffic blocked!</p>
+                    </div>
+                    
+                    <h5>State Table Example:</h5>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Source IP</th>
+                                    <th>Dest IP</th>
+                                    <th>Source Port</th>
+                                    <th>Dest Port</th>
+                                    <th>Protocol</th>
+                                    <th>State</th>
+                                    <th>Timeout</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>192.168.1.100</td>
+                                    <td>74.125.224.72</td>
+                                    <td>54321</td>
+                                    <td>443</td>
+                                    <td>TCP</td>
+                                    <td>ESTABLISHED</td>
+                                    <td>3600s</td>
+                                </tr>
+                                <tr>
+                                    <td>192.168.1.105</td>
+                                    <td>157.240.241.35</td>
+                                    <td>54322</td>
+                                    <td>443</td>
+                                    <td>TCP</td>
+                                    <td>SYN_SENT</td>
+                                    <td>30s</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Application Gateway Firewalls (Third Generation)</h5>
+                    <p><strong>How it works:</strong> Like a translator and inspector who understands different languages. Instead of just looking at addresses and ports, it actually understands what applications are saying to each other.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Email Security Gateway</h6>
+                        <p><strong>Scenario:</strong> A company uses an application gateway firewall to protect their email system.</p>
+                        
+                        <h6>Deep Inspection Process:</h6>
+                        <ol>
+                            <li><strong>Email Arrives:</strong> External email arrives at the firewall</li>
+                            <li><strong>Protocol Understanding:</strong> Firewall understands SMTP email protocol</li>
+                            <li><strong>Content Inspection:</strong> Firewall reads the email content, not just headers</li>
+                            <li><strong>Malware Scanning:</strong> Checks attachments for viruses</li>
+                            <li><strong>Spam Detection:</strong> Analyzes content for spam characteristics</li>
+                            <li><strong>Policy Enforcement:</strong> Blocks emails violating company policy</li>
+                            <li><strong>Clean Delivery:</strong> Safe emails delivered to internal mail server</li>
+                        </ol>
+                        
+                        <h6>What It Can Detect:</h6>
+                        <ul>
+                            <li>Email with malicious attachments</li>
+                            <li>Phishing emails trying to steal credentials</li>
+                            <li>Spam and unwanted marketing</li>
+                            <li>Emails containing confidential data being sent out</li>
+                            <li>Suspicious email patterns indicating attacks</li>
+                        </ul>
+                    </div>
+                    
+                    <h5>Proxy Operation:</h5>
+                    <p>Application gateways work as proxies - they don't just inspect traffic, they actually become the middleman in communications.</p>
+                    
+                    <div class="visual-diagram">
+                        <h6>Proxy Firewall Operation</h6>
+                        <div class="diagram-text">
+                            <pre>
+Internal User → Request → Application Gateway → Request → External Server
+              ← Response ← Application Gateway ← Response ←
+
+The firewall has TWO separate connections:
+1. User ↔ Firewall (Internal connection)
+2. Firewall ↔ Server (External connection)
+
+This means:
+- Firewall can completely analyze all data
+- External servers never directly touch internal network
+- Firewall can modify, block, or log everything
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>4. Next-Generation Firewalls (Modern Era)</h5>
+                    <p><strong>How it works:</strong> Like having a team of expert security guards who are also detectives, linguists, and behavior analysts all in one.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Modern Enterprise Protection</h6>
+                        <p><strong>Scenario:</strong> An employee tries to download a file from the internet.</p>
+                        
+                        <h6>Multi-Layer Analysis:</h6>
+                        <ol>
+                            <li><strong>Traditional Firewall Rules:</strong> Check IP addresses and ports</li>
+                            <li><strong>Application Identification:</strong> "This is HTTP traffic to a file-sharing website"</li>
+                            <li><strong>User Identity:</strong> "This is John from Marketing department"</li>
+                            <li><strong>Content Inspection:</strong> "This file is a PDF document"</li>
+                            <li><strong>Threat Intelligence:</strong> "This website was recently flagged for hosting malware"</li>
+                            <li><strong>Policy Check:</strong> "Marketing users are not allowed to download files from this type of website"</li>
+                            <li><strong>Decision:</strong> Block the download and log the attempt</li>
+                        </ol>
+                        
+                        <h6>Advanced Features:</h6>
+                        <ul>
+                            <li><strong>Intrusion Prevention:</strong> Automatically blocks detected attacks</li>
+                            <li><strong>SSL Inspection:</strong> Can decrypt and inspect HTTPS traffic</li>
+                            <li><strong>Sandboxing:</strong> Tests suspicious files in safe environment</li>
+                            <li><strong>Threat Intelligence:</strong> Updates with latest threat information</li>
+                            <li><strong>User Behavior Analytics:</strong> Detects unusual user activities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Virtualization Security - Protecting Virtual Worlds</h3>
+            <div class="concept">
+                <h4>Understanding Virtualization</h4>
+                <p><strong>Virtualization</strong> is like having multiple apartments in the same building. Each apartment (virtual machine) has its own space, but they all share the same physical building (physical server). The building manager (hypervisor) makes sure each tenant stays in their own apartment.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Virtual Machine Architecture</h4>
+                    <div class="diagram-text">
+                        <pre>
+┌─────────────────────────────────────────────────────┐
+│                Physical Server                      │
+├─────────────────────────────────────────────────────┤
+│                   Hypervisor                       │
+│              (Building Manager)                     │
+├───────────────┬───────────────┬───────────────────┤
+│    VM 1       │     VM 2      │      VM 3         │
+│ (Web Server)  │ (Database)    │ (Email Server)    │
+│   Windows     │   Linux       │    Linux          │
+│   Apache      │   MySQL       │   Postfix         │
+└───────────────┴───────────────┴───────────────────┘
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>Why Virtualization Creates Security Challenges:</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Hypervisor Attacks - Attacking the Building Manager</h5>
+                    <p><strong>The Problem:</strong> If attackers can compromise the hypervisor, they control the entire physical server and all virtual machines running on it.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real Attack Example: VENOM Vulnerability (2015)</h6>
+                        <p><strong>What Happened:</strong> A bug in the virtual floppy disk controller allowed attackers to escape from a virtual machine and take control of the hypervisor.</p>
+                        
+                        <h6>Attack Process:</h6>
+                        <ol>
+                            <li>Attacker gains access to any virtual machine on the server</li>
+                            <li>Exploits the VENOM vulnerability in virtual hardware</li>
+                            <li>Breaks out of virtual machine isolation</li>
+                            <li>Gains control of hypervisor</li>
+                            <li>Can now access ALL virtual machines on that server</li>
+                            <li>Steal data from multiple companies/departments</li>
+                        </ol>
+                        
+                        <h6>Impact:</h6>
+                        <p>One compromised VM led to access to dozens of other VMs, potentially affecting multiple customers in cloud environments.</p>
+                    </div>
+                    
+                    <h5>Protection Measures:</h5>
+                    <ul>
+                        <li><strong>Hypervisor Hardening:</strong> Remove unnecessary features, apply security patches</li>
+                        <li><strong>Access Control:</strong> Strict authentication for hypervisor management</li>
+                        <li><strong>Regular Updates:</strong> Keep hypervisor software current</li>
+                        <li><strong>Monitoring:</strong> Watch for unusual hypervisor activities</li>
+                    </ul>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. VM Escape - Breaking Out of the Apartment</h5>
+                    <p><strong>The Problem:</strong> Sometimes, software bugs allow a program running inside a virtual machine to "escape" and run on the physical server or access other VMs.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Shared Cloud Server Attack</h6>
+                        <p><strong>Scenario:</strong> Multiple companies rent virtual machines on the same physical cloud server.</p>
+                        
+                        <h6>Attack Scenario:</h6>
+                        <ol>
+                            <li><strong>Target Selection:</strong> Attacker rents a VM on same server as target company</li>
+                            <li><strong>Vulnerability Discovery:</strong> Finds a bug in shared hardware emulation</li>
+                            <li><strong>Escape Attempt:</strong> Exploits bug to break out of their VM</li>
+                            <li><strong>Lateral Access:</strong> Gains access to target company's VM</li>
+                            <li><strong>Data Theft:</strong> Steals confidential business data</li>
+                        </ol>
+                        
+                        <h6>Real-World Impact:</h6>
+                        <p>Company A's trade secrets could be stolen by Company B simply because they happened to share the same physical server in the cloud.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Inter-VM Attacks - Apartment-to-Apartment Attacks</h5>
+                    <p><strong>The Problem:</strong> Virtual machines on the same physical server often share network infrastructure, creating opportunities for lateral movement.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Virtual Network Sniffing</h6>
+                        <p><strong>Setup:</strong> Three VMs on one server: Web Server, Database Server, and Email Server.</p>
+                        
+                        <h6>Attack Process:</h6>
+                        <ol>
+                            <li><strong>Initial Compromise:</strong> Attacker gains access to Email Server VM</li>
+                            <li><strong>Network Discovery:</strong> Scans virtual network to find other VMs</li>
+                            <li><strong>Traffic Interception:</strong> Sets up packet sniffing to monitor VM communications</li>
+                            <li><strong>Credential Harvesting:</strong> Captures database passwords from web server traffic</li>
+                            <li><strong>Lateral Movement:</strong> Uses stolen credentials to access Database Server</li>
+                            <li><strong>Data Exfiltration:</strong> Steals entire customer database</li>
+                        </ol>
+                        
+                        <h6>Why This Works:</h6>
+                        <p>Virtual machines often communicate through shared virtual switches, making traffic interception possible if one VM is compromised.</p>
+                    </div>
+                </div>
+                
+                <h4>Comprehensive Virtualization Security Strategy:</h4>
+                <ul>
+                    <li><strong>Hypervisor Security:</strong> Keep updated, minimize attack surface</li>
+                    <li><strong>VM Isolation:</strong> Ensure strong separation between VMs</li>
+                    <li><strong>Network Segmentation:</strong> Use virtual firewalls between VMs</li>
+                    <li><strong>Resource Monitoring:</strong> Track resource usage for anomalies</li>
+                    <li><strong>Security Tools:</strong> Deploy virtual-aware security solutions</li>
+                </ul>
+            </div>
+
+            <h3>DNS Security - Protecting the Internet's Phone Book</h3>
+            <div class="concept">
+                <h4>What is DNS and Why Does It Matter?</h4>
+                <p><strong>DNS (Domain Name System)</strong> is like the phone book of the internet. When you type "google.com" in your browser, DNS translates that human-readable name to the actual IP address (like 172.217.12.14) where Google's servers are located.</p>
+                
+                <div class="visual-diagram">
+                    <h4>How DNS Works</h4>
+                    <div class="diagram-text">
+                        <pre>
+You type: "www.bank.com"
+     ↓
+Your Computer → Local DNS Server: "What's the IP for www.bank.com?"
+                      ↓
+Local DNS → Root Server: "Who handles .com domains?"
+                      ↓
+Root Server → ".com authority handles .com domains"
+                      ↓
+Local DNS → .com Server: "What's the IP for www.bank.com?"
+                      ↓
+.com Server → Bank's DNS Server: "Ask bank.com's DNS server"
+                      ↓
+Local DNS → Bank's DNS: "What's the IP for www.bank.com?"
+                      ↓
+Bank's DNS → "www.bank.com is at 203.192.221.101"
+                      ↓
+Your Computer connects to 203.192.221.101 (Bank's actual server)
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>DNS Security Threats Explained:</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. DNS Poisoning - Corrupting the Phone Book</h5>
+                    <p><strong>What it is:</strong> Attackers insert false information into DNS caches, causing users to be directed to malicious websites instead of legitimate ones.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: Banking Fraud</h6>
+                        <p><strong>Scenario:</strong> Criminals want to steal banking credentials.</p>
+                        
+                        <h6>DNS Poisoning Attack:</h6>
+                        <ol>
+                            <li><strong>Target Identification:</strong> Attacker identifies vulnerable DNS server</li>
+                            <li><strong>Fake Response Creation:</strong> Creates fake DNS response saying "mybank.com = 192.168.100.50" (attacker's server)</li>
+                            <li><strong>Cache Poisoning:</strong> Tricks DNS server into caching this false information</li>
+                            <li><strong>User Impact:</strong> When users type "mybank.com", they're sent to attacker's fake website</li>
+                            <li><strong>Credential Theft:</strong> Fake banking site captures usernames and passwords</li>
+                            <li><strong>Account Takeover:</strong> Criminals use stolen credentials on real banking site</li>
+                        </ol>
+                        
+                        <h6>User Experience:</h6>
+                        <p>Victims see a perfect copy of their bank's website and enter their credentials, having no idea they're not on the real site. The URL even shows "mybank.com" correctly!</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. DNS Hijacking - Redirecting the Phone Book</h5>
+                    <p><strong>What it is:</strong> Attackers take control of DNS servers or domain registrations to redirect traffic to malicious sites.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: News Website Hijacking</h6>
+                        <p><strong>Scenario:</strong> Major news website gets hijacked during election period.</p>
+                        
+                        <h6>DNS Hijacking Process:</h6>
+                        <ol>
+                            <li><strong>Domain Registrar Compromise:</strong> Attackers gain access to domain management account</li>
+                            <li><strong>DNS Server Change:</strong> Change authoritative DNS servers to attacker-controlled servers</li>
+                            <li><strong>Traffic Redirection:</strong> All visitors to news site are redirected to fake news site</li>
+                            <li><strong>Misinformation Campaign:</strong> Spread false information during critical time</li>
+                            <li><strong>Public Impact:</strong> Millions of people see fake news thinking it's from trusted source</li>
+                        </ol>
+                        
+                        <h6>Prevention Measures:</h6>
+                        <ul>
+                            <li><strong>Strong Authentication:</strong> Multi-factor authentication for domain management</li>
+                            <li><strong>Registry Lock:</strong> Prevent unauthorized changes to domain settings</li>
+                            <li><strong>DNS Monitoring:</strong> Alert on unexpected DNS changes</li>
+                            <li><strong>DNSSEC:</strong> Cryptographic signatures for DNS records</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. DNS Tunneling - Hiding in the Phone Book</h5>
+                    <p><strong>What it is:</strong> Attackers use DNS queries and responses to smuggle data and commands, bypassing security controls.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: Corporate Data Exfiltration</h6>
+                        <p><strong>Scenario:</strong> Malware on corporate computer needs to send stolen data to attackers without being detected.</p>
+                        
+                        <h6>DNS Tunneling Process:</h6>
+                        <ol>
+                            <li><strong>Data Preparation:</strong> Malware breaks stolen data into small chunks</li>
+                            <li><strong>DNS Query Creation:</strong> Embeds data in fake DNS queries like:
+                                <br><code>chunk1data12345.attacker-domain.com</code></li>
+                            <li><strong>Normal Appearance:</strong> Queries look like normal DNS lookups to security tools</li>
+                            <li><strong>Attacker DNS Server:</strong> Receives queries and extracts hidden data</li>
+                            <li><strong>Command Response:</strong> Sends back commands hidden in DNS responses</li>
+                            <li><strong>Stealth Communication:</strong> Ongoing two-way communication through DNS</li>
+                        </ol>
+                        
+                        <h6>Why It's Hard to Detect:</h6>
+                        <ul>
+                            <li>DNS traffic is normally allowed through firewalls</li>
+                            <li>Large volumes of DNS queries are normal</li>
+                            <li>Queries can look legitimate to automated tools</li>
+                            <li>Many security tools don't inspect DNS content deeply</li>
+                        </ul>
+                        
+                        <h6>Detection Methods:</h6>
+                        <ul>
+                            <li><strong>Query Analysis:</strong> Looking for unusually long or random domain names</li>
+                            <li><strong>Frequency Analysis:</strong> Detecting high volumes of DNS queries</li>
+                            <li><strong>Domain Reputation:</strong> Checking if domains are newly registered or suspicious</li>
+                            <li><strong>Payload Inspection:</strong> Analyzing DNS response content</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>RFID Security - Protecting Wireless Identity Cards</h3>
+            <div class="concept">
+                <h4>Understanding RFID Technology</h4>
+                <p><strong>RFID (Radio-Frequency Identification)</strong> is like having a smart ID card that can talk wirelessly. When you tap your credit card on a payment terminal, or use a keycard to enter your office, you're using RFID technology.</p>
+                
+                <div class="visual-diagram">
+                    <h4>RFID System Components</h4>
+                    <div class="diagram-text">
+                        <pre>
+RFID Reader )))))) Radio Waves )))))) RFID Tag
+     │                                    │
+     │         "What's your ID?"         │
+     │ ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←← │
+     │                                    │
+     │       "I'm employee #12345"       │
+     │ ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←← │
+     │                                    │
+     ↓                                    
+Access Control System
+"Employee #12345 is authorized - unlock door"
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>RFID Security Vulnerabilities in Detail:</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Eavesdropping - Listening to Wireless Conversations</h5>
+                    <p><strong>The Problem:</strong> RFID communications are often unencrypted, meaning anyone with the right equipment can intercept the data being transmitted.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: Credit Card Skimming</h6>
+                        <p><strong>Setup:</strong> Attacker sits in a busy café with a hidden RFID reader.</p>
+                        
+                        <h6>Eavesdropping Process:</h6>
+                        <ol>
+                            <li><strong>Equipment Setup:</strong> Attacker has laptop with powerful RFID antenna</li>
+                            <li><strong>Signal Interception:</strong> When people pay with contactless cards, attacker captures radio signals</li>
+                            <li><strong>Data Extraction:</strong> Extracts card numbers, expiration dates from captured signals</li>
+                            <li><strong>Range Extension:</strong> Can intercept from several feet away, even through wallets</li>
+                            <li><strong>Bulk Collection:</strong> Captures data from dozens of cards in one session</li>
+                            <li><strong>Fraudulent Use:</strong> Uses stolen card data for online purchases</li>
+                        </ol>
+                        
+                        <h6>Protection for Users:</h6>
+                        <ul>
+                            <li><strong>RFID-blocking wallets:</strong> Wallets with metal mesh that blocks radio signals</li>
+                            <li><strong>Card sleeves:</strong> Individual card protectors</li>
+                            <li><strong>Distance awareness:</strong> Keep cards close, be aware of surroundings</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Cloning - Creating Fake ID Cards</h5>
+                    <p><strong>The Problem:</strong> If RFID tags aren't properly secured, attackers can copy their contents to create duplicate tags.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: Office Access Card Cloning</h6>
+                        <p><strong>Scenario:</strong> Attacker wants unauthorized access to a secure office building.</p>
+                        
+                        <h6>Cloning Attack Process:</h6>
+                        <ol>
+                            <li><strong>Target Selection:</strong> Identify employee with building access</li>
+                            <li><strong>Social Engineering:</strong> Get close to employee (elevator, coffee shop)</li>
+                            <li><strong>Covert Reading:</strong> Use hidden RFID reader to capture employee's badge data</li>
+                            <li><strong>Data Analysis:</strong> Extract access credentials from captured data</li>
+                            <li><strong>Clone Creation:</strong> Program blank RFID tag with stolen credentials</li>
+                            <li><strong>Unauthorized Access:</strong> Use cloned badge to enter building</li>
+                        </ol>
+                        
+                        <h6>Advanced Cloning Techniques:</h6>
+                        <ul>
+                            <li><strong>Bump and Copy:</strong> Brief physical contact to read cards</li>
+                            <li><strong>Long-range Reading:</strong> Powerful antennas for distant reading</li>
+                            <li><strong>Real-time Cloning:</strong> Immediate replication of captured data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="attacker-techniques">
+            <h2>🎯 Attacker Techniques and Motivations</h2>
+
+            <h3>Understanding Different Types of Cyber Attackers</h3>
+            <div class="concept">
+                <h4>Why Understanding Attackers Matters</h4>
+                <p>Just like a security guard needs to understand different types of criminals (pickpockets vs. organized crime), cybersecurity professionals need to understand different types of cyber attackers. Each type has different motivations, skills, and methods, which means we need different defenses against each.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Attacker Ecosystem</h4>
+                    <div class="diagram-text">
+                        <pre>
+                    Cyber Threat Landscape
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+    Script Kiddies    Cybercriminals   Nation-States
+    (Low Skill)      (Medium-High)    (Very High)
+          │                │                │
+    ├─ Recognition    ├─ Money          ├─ Espionage
+    ├─ Learning       ├─ Ransomware     ├─ Warfare
+    └─ Defacement     ├─ Banking Fraud  ├─ Infrastructure
+          │           └─ Identity Theft └─ Surveillance
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                    Insider Threats
+                   (Variable Skill)
+                      │
+                 ├─ Revenge
+                 ├─ Financial Gain
+                 └─ Ideology
+                        </pre>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>1. Script Kiddies - The Beginners</h5>
+                    <p><strong>Who they are:</strong> Usually young individuals with limited technical skills who use tools created by others to launch attacks. Think of them as people who buy lock-picking tools online but don't really understand how locks work.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Typical Script Kiddie Attack: Website Defacement</h6>
+                        <p><strong>Scenario:</strong> A teenager wants to show off to friends by hacking a local business website.</p>
+                        
+                        <h6>Attack Process:</h6>
+                        <ol>
+                            <li><strong>Tool Download:</strong> Downloads automated hacking tools from the internet</li>
+                            <li><strong>Target Selection:</strong> Picks random websites to attack</li>
+                            <li><strong>Automated Scanning:</strong> Uses tools to find vulnerable websites</li>
+                            <li><strong>Exploit Execution:</strong> Runs pre-made exploits without understanding them</li>
+                            <li><strong>Website Defacement:</strong> Changes homepage to display "Hacked by [username]"</li>
+                            <li><strong>Bragging:</strong> Posts screenshots on social media for recognition</li>
+                        </ol>
+                        
+                        <h6>Why They're Dangerous Despite Low Skills:</h6>
+                        <ul>
+                            <li><strong>Large Numbers:</strong> Thousands of script kiddies worldwide</li>
+                            <li><strong>Easy Tools:</strong> Sophisticated tools are freely available</li>
+                            <li><strong>Unpredictable:</strong> May attack random targets</li>
+                            <li><strong>Learning Curve:</strong> Some eventually become skilled attackers</li>
+                        </ul>
+                        
+                        <h6>Defending Against Script Kiddies:</h6>
+                        <ul>
+                            <li><strong>Basic Security Hygiene:</strong> Regular updates, strong passwords</li>
+                            <li><strong>Automated Detection:</strong> Systems that detect common attack patterns</li>
+                            <li><strong>Rate Limiting:</strong> Limiting how fast someone can try different attacks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Organized Cybercriminals - The Professionals</h5>
+                    <p><strong>Who they are:</strong> Groups of skilled criminals who treat cybercrime as a business. They have specialized roles, professional tools, and sophisticated operations.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real Case Study: Banking Trojan Operation</h6>
+                        <p><strong>Background:</strong> The Zeus banking trojan was operated by organized criminal groups for years.</p>
+                        
+                        <h6>Organizational Structure:</h6>
+                        <ul>
+                            <li><strong>Technical Team:</strong> Develops and maintains malware</li>
+                            <li><strong>Distribution Team:</strong> Spreads malware through email, websites</li>
+                            <li><strong>Money Mules:</strong> Individuals who transfer stolen money</li>
+                            <li><strong>Cash-out Team:</strong> Converts stolen funds to untraceable cash</li>
+                            <li><strong>Management:</strong> Coordinates operations and manages profits</li>
+                        </ul>
+                        
+                        <h6>Attack Operation:</h6>
+                        <ol>
+                            <li><strong>Malware Development:</strong> Create sophisticated banking trojan</li>
+                            <li><strong>Distribution Campaign:</strong> Send millions of phishing emails</li>
+                            <li><strong>Infection:</strong> Victims unknowingly install malware</li>
+                            <li><strong>Credential Harvesting:</strong> Steal banking login credentials</li>
+                            <li><strong>Account Takeover:</strong> Transfer money from victim accounts</li>
+                            <li><strong>Money Laundering:</strong> Use mules to withdraw and transfer cash</li>
+                            <li><strong>Profit Distribution:</strong> Share profits among criminal organization</li>
+                        </ol>
+                        
+                        <h6>Scale of Operation:</h6>
+                        <p>Zeus infected over 3.6 million computers and stole over $70 million from bank accounts. The operation ran like a legitimate business with customer support for other criminals wanting to use their tools.</p>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Nation-State Actors - The Cyber Warriors</h5>
+                    <p><strong>Who they are:</strong> Government-sponsored hacking groups with virtually unlimited resources, advanced skills, and long-term objectives.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Case Study: Stuxnet - Cyber Warfare in Action</h6>
+                        <p><strong>Background:</strong> Stuxnet was a cyber weapon designed to damage Iran's nuclear program without traditional military action.</p>
+                        
+                        <h6>Nation-State Attack Characteristics:</h6>
+                        <ol>
+                            <li><strong>Years of Planning:</strong> Attack development took several years</li>
+                            <li><strong>Multiple Zero-Days:</strong> Used 4 previously unknown vulnerabilities</li>
+                            <li><strong>Physical Impact:</strong> Caused actual physical damage to nuclear centrifuges</li>
+                            <li><strong>Stealth Operation:</strong> Remained undetected for months</li>
+                            <li><strong>Precise Targeting:</strong> Only affected specific industrial equipment</li>
+                            <li><strong>International Cooperation:</strong> Involved multiple countries' intelligence agencies</li>
+                        </ol>
+                        
+                        <h6>Capabilities Demonstrated:</h6>
+                        <ul>
+                            <li><strong>Advanced Research:</strong> Deep understanding of target systems</li>
+                            <li><strong>Custom Malware:</strong> Purpose-built for specific targets</li>
+                            <li><strong>Multiple Attack Vectors:</strong> USB, network, and industrial system exploitation</li>
+                            <li><strong>Long-term Persistence:</strong> Operated undetected for extended periods</li>
+                        </ul>
+                        
+                        <h6>Why Nation-States are Different:</h6>
+                        <ul>
+                            <li><strong>Unlimited Budget:</strong> Can spend millions on single operations</li>
+                            <li><strong>Legal Immunity:</strong> Operate under government protection</li>
+                            <li><strong>Strategic Objectives:</strong> Focus on long-term national interests</li>
+                            <li><strong>Advanced Tools:</strong> Access to cutting-edge technology and intelligence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Social Engineering - Hacking Humans</h3>
+            <div class="concept">
+                <h4>Why Social Engineering is So Effective</h4>
+                <p><strong>Social Engineering</strong> is like being a con artist, but for cybersecurity. Instead of breaking through technical defenses (which is hard), attackers manipulate people (which is often easier) to give them what they want.</p>
+                
+                <p>The key insight: <strong>Humans are often the weakest link in security.</strong> You can have the most sophisticated firewalls and encryption, but if someone tricks your employee into giving them the password, all that technology becomes useless.</p>
+                
+                <div class="key-concepts">
+                    <h5>1. Phishing - Digital Fishing for Credentials</h5>
+                    <p><strong>What it is:</strong> Sending fake emails, texts, or websites that look legitimate to trick people into giving away sensitive information.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Detailed Phishing Attack Example</h6>
+                        <p><strong>Scenario:</strong> Attackers want to steal login credentials from a company's employees.</p>
+                        
+                        <h6>Step-by-Step Phishing Campaign:</h6>
+                        <ol>
+                            <li><strong>Target Research:</strong>
+                                <ul>
+                                    <li>Study company website to understand structure</li>
+                                    <li>Find employee names and email addresses on LinkedIn</li>
+                                    <li>Identify what software/services the company uses</li>
+                                    <li>Note recent company news or events</li>
+                                </ul>
+                            </li>
+                            <li><strong>Email Creation:</strong>
+                                <ul>
+                                    <li>Copy exact design of real company emails</li>
+                                    <li>Use urgent language: "Your account will be suspended"</li>
+                                    <li>Create fake login page identical to real one</li>
+                                    <li>Register domain name similar to real company (microsft.com instead of microsoft.com)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Distribution:</strong>
+                                <ul>
+                                    <li>Send emails appearing to come from IT department</li>
+                                    <li>Target specific employees (spear phishing)</li>
+                                    <li>Time emails for maximum impact (Monday morning, end of day)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Credential Harvesting:</strong>
+                                <ul>
+                                    <li>Employees click link and see "company login page"</li>
+                                    <li>Enter username and password thinking it's legitimate</li>
+                                    <li>Credentials automatically sent to attackers</li>
+                                    <li>Employees redirected to real site, often unaware anything happened</li>
+                                </ul>
+                            </li>
+                            <li><strong>Account Takeover:</strong>
+                                <ul>
+                                    <li>Attackers use stolen credentials on real company systems</li>
+                                    <li>Access email accounts, internal systems, sensitive data</li>
+                                    <li>Use legitimate access to avoid detection</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>Why Phishing Works So Well:</h6>
+                        <ul>
+                            <li><strong>Psychological Pressure:</strong> Creates urgency and fear</li>
+                            <li><strong>Authority Impersonation:</strong> Appears to come from trusted sources</li>
+                            <li><strong>Visual Deception:</strong> Looks exactly like legitimate communications</li>
+                            <li><strong>Human Error:</strong> People make mistakes when rushed or distracted</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Pretexting - Creating False Scenarios</h5>
+                    <p><strong>What it is:</strong> Creating an invented scenario to engage a victim and gain their trust to obtain information or access.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Attack Example: IT Support Impersonation</h6>
+                        <p><strong>Scenario:</strong> Attacker wants to gain access to a company's internal systems.</p>
+                        
+                        <h6>Pretexting Attack Process:</h6>
+                        <ol>
+                            <li><strong>Information Gathering:</strong>
+                                <ul>
+                                    <li>Research company's IT department structure</li>
+                                    <li>Find names of real IT staff from LinkedIn</li>
+                                    <li>Learn company's technical systems and procedures</li>
+                                    <li>Identify recent system issues or updates</li>
+                                </ul>
+                            </li>
+                            <li><strong>Pretext Development:</strong>
+                                <ul>
+                                    <li>Create story: "There's a critical security update needed"</li>
+                                    <li>Build credibility: Reference real systems and recent events</li>
+                                    <li>Create urgency: "Must be done today to prevent data loss"</li>
+                                </ul>
+                            </li>
+                            <li><strong>Contact and Manipulation:</strong>
+                                <ul>
+                                    <li>Call employee claiming to be from IT department</li>
+                                    <li>Reference real IT staff names and internal systems</li>
+                                    <li>Explain urgent need for employee's cooperation</li>
+                                    <li>Guide employee through "security update" process</li>
+                                </ul>
+                            </li>
+                            <li><strong>Information Extraction:</strong>
+                                <ul>
+                                    <li>Get employee to install "security software" (actually malware)</li>
+                                    <li>Obtain login credentials for "verification"</li>
+                                    <li>Gain remote access to employee's computer</li>
+                                    <li>Access internal company systems</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>Psychological Techniques Used:</h6>
+                        <ul>
+                            <li><strong>Authority:</strong> "I'm calling from IT department"</li>
+                            <li><strong>Urgency:</strong> "This must be done immediately"</li>
+                            <li><strong>Fear:</strong> "Your computer is at risk"</li>
+                            <li><strong>Helpfulness:</strong> "I'm here to help protect you"</li>
+                            <li><strong>Familiarity:</strong> "John in IT sent me" (uses real employee name)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Technical Attack Methods</h3>
+            <div class="concept">
+                <h4>Malicious Code - Digital Diseases</h4>
+                <p>Malicious code (malware) is like digital diseases that infect computers. Just like biological viruses, different types of malware spread differently, cause different symptoms, and require different treatments.</p>
+                
+                <div class="key-concepts">
+                    <h5>1. Computer Viruses - The Spreaders</h5>
+                    <p><strong>How they work:</strong> Like biological viruses, computer viruses need a host (another program or file) to survive. They attach themselves to legitimate programs and spread when those programs are shared.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Virus Infection Example: USB Spread</h6>
+                        <p><strong>Scenario:</strong> A virus spreads through an office via USB drives.</p>
+                        
+                        <h6>Infection Process:</h6>
+                        <ol>
+                            <li><strong>Initial Infection:</strong>
+                                <ul>
+                                    <li>Employee downloads infected file from email attachment</li>
+                                    <li>Virus hides inside seemingly normal document</li>
+                                    <li>When document opens, virus activates and infects computer</li>
+                                </ul>
+                            </li>
+                            <li><strong>Host Attachment:</strong>
+                                <ul>
+                                    <li>Virus finds all executable files on computer</li>
+                                    <li>Attaches copy of itself to each program</li>
+                                    <li>Modifies program startup to run virus code first</li>
+                                </ul>
+                            </li>
+                            <li><strong>USB Infection:</strong>
+                                <ul>
+                                    <li>Employee inserts USB drive</li>
+                                    <li>Virus copies itself to USB drive</li>
+                                    <li>Creates autorun file to execute when USB is inserted elsewhere</li>
+                                </ul>
+                            </li>
+                            <li><strong>Spreading:</strong>
+                                <ul>
+                                    <li>Employee shares USB with colleague</li>
+                                    <li>Colleague's computer gets infected when USB is inserted</li>
+                                    <li>Process repeats, spreading throughout office</li>
+                                </ul>
+                            </li>
+                            <li><strong>Payload Activation:</strong>
+                                <ul>
+                                    <li>After spreading to enough computers, virus activates payload</li>
+                                    <li>Could delete files, steal data, or display messages</li>
+                                    <li>Damage occurs simultaneously on all infected machines</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>Why Viruses are Effective:</h6>
+                        <ul>
+                            <li><strong>Stealth Spreading:</strong> Spread silently before activating</li>
+                            <li><strong>Human Behavior:</strong> Rely on normal file sharing activities</li>
+                            <li><strong>Trusted Sources:</strong> Spread through trusted colleagues and friends</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Worms - The Self-Spreaders</h5>
+                    <p><strong>How they work:</strong> Unlike viruses, worms don't need host files. They're like digital locusts that can spread automatically across networks, finding and exploiting vulnerabilities.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Historic Example: WannaCry Ransomware Worm (2017)</h6>
+                        <p><strong>Background:</strong> WannaCry infected over 300,000 computers in 150 countries in just 4 days.</p>
+                        
+                        <h6>How WannaCry Spread So Fast:</h6>
+                        <ol>
+                            <li><strong>Vulnerability Exploitation:</strong>
+                                <ul>
+                                    <li>Used EternalBlue exploit (stolen NSA tool)</li>
+                                    <li>Targeted Windows SMB file-sharing protocol</li>
+                                    <li>No user interaction required for infection</li>
+                                </ul>
+                            </li>
+                            <li><strong>Automated Spreading:</strong>
+                                <ul>
+                                    <li>Scanned internet for vulnerable Windows computers</li>
+                                    <li>Automatically exploited found vulnerabilities</li>
+                                    <li>Installed itself on compromised systems</li>
+                                    <li>Each infected computer became a new spreading point</li>
+                                </ul>
+                            </li>
+                            <li><strong>Exponential Growth:</strong>
+                                <ul>
+                                    <li>Hour 1: 100 infected computers</li>
+                                    <li>Hour 2: Each of those 100 infects 10 more = 1,000 total</li>
+                                    <li>Hour 3: 10,000 infected computers</li>
+                                    <li>Hour 4: 100,000 infected computers</li>
+                                </ul>
+                            </li>
+                            <li><strong>Payload Delivery:</strong>
+                                <ul>
+                                    <li>Encrypted all files on infected computers</li>
+                                    <li>Displayed ransom message demanding Bitcoin payment</li>
+                                    <li>Threatened to delete files if payment not made</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>Real-World Impact:</h6>
+                        <ul>
+                            <li><strong>Healthcare:</strong> UK's NHS hospitals had to cancel surgeries</li>
+                            <li><strong>Transportation:</strong> German railway systems disrupted</li>
+                            <li><strong>Manufacturing:</strong> Renault and Nissan stopped production</li>
+                            <li><strong>Government:</strong> Russian Interior Ministry systems affected</li>
+                        </ul>
+                        
+                        <h6>Lessons Learned:</h6>
+                        <ul>
+                            <li><strong>Patch Management:</strong> Keep systems updated with security patches</li>
+                            <li><strong>Network Segmentation:</strong> Limit how far attacks can spread</li>
+                            <li><strong>Backup Strategy:</strong> Regular backups reduce ransomware impact</li>
+                            <li><strong>Incident Response:</strong> Have plans ready for rapid response</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="defense-analysis">
+            <h2>🛡️ Defense and Analysis Techniques</h2>
+
+            <h3>Defense in Depth - Building a Digital Castle</h3>
+            <div class="concept">
+                <h4>The Medieval Castle Analogy</h4>
+                <p><strong>Defense in Depth</strong> is like protecting a medieval castle. You don't just rely on one big wall - you have multiple layers of defense, so even if attackers break through one layer, they still have to get through several more.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Digital Defense Layers (Castle Analogy)</h4>
+                    <div class="diagram-text">
+                        <pre>
+┌─────────────────────────────────────────────────────┐
+│ 🏰 DIGITAL CASTLE DEFENSE LAYERS                   │
+├─────────────────────────────────────────────────────┤
+│ 1. 🚧 Perimeter (Moat)                            │
+│    Firewalls, IDS, Border Routers                  │
+├─────────────────────────────────────────────────────┤
+│ 2. 🛡️ Network (Outer Wall)                        │
+│    Network Segmentation, VPNs, Access Control      │
+├─────────────────────────────────────────────────────┤
+│ 3. 💻 Host (Inner Wall)                           │
+│    Antivirus, Host Firewalls, System Hardening     │
+├─────────────────────────────────────────────────────┤
+│ 4. 📱 Application (Guard Towers)                   │
+│    Input Validation, WAF, Secure Coding            │
+├─────────────────────────────────────────────────────┤
+│ 5. 💾 Data (Treasury)                             │
+│    Encryption, Access Control, Data Classification  │
+└─────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+                
+                <div class="example-detailed">
+                    <h4>Real-World Defense in Depth Example: Online Banking</h4>
+                    <p><strong>Scenario:</strong> How a bank protects customer accounts using multiple security layers.</p>
+                    
+                    <h5>Layer-by-Layer Protection:</h5>
+                    <ol>
+                        <li><strong>Perimeter Defense (The Moat):</strong>
+                            <ul>
+                                <li><strong>DDoS Protection:</strong> Blocks attempts to overwhelm website</li>
+                                <li><strong>Web Application Firewall:</strong> Filters malicious web traffic</li>
+                                <li><strong>Intrusion Detection:</strong> Monitors for attack patterns</li>
+                                <li><strong>Example:</strong> When 1 million fake requests per second hit the bank's website, DDoS protection blocks them while allowing real customer traffic through</li>
+                            </ul>
+                        </li>
+                        <li><strong>Network Defense (The Outer Wall):</strong>
+                            <ul>
+                                <li><strong>Network Segmentation:</strong> Separates customer-facing systems from internal banking systems</li>
+                                <li><strong>VPN Access:</strong> Employees must use secure connections</li>
+                                <li><strong>Network Monitoring:</strong> Watches for unusual traffic patterns</li>
+                                <li><strong>Example:</strong> Even if attacker compromises the web server, they can't directly access the core banking database because it's on a separate, protected network segment</li>
+                            </ul>
+                        </li>
+                        <li><strong>Host Defense (The Inner Wall):</strong>
+                            <ul>
+                                <li><strong>Server Hardening:</strong> Removes unnecessary software and services</li>
+                                <li><strong>Antivirus/Anti-malware:</strong> Protects against malicious software</li>
+                                <li><strong>Host Firewalls:</strong> Controls what programs can access network</li>
+                                <li><strong>Example:</strong> If malware somehow gets onto a bank server, host firewall prevents it from communicating with external command servers</li>
+                            </ul>
+                        </li>
+                        <li><strong>Application Defense (The Guard Towers):</strong>
+                            <ul>
+                                <li><strong>Input Validation:</strong> Checks all user input for malicious content</li>
+                                <li><strong>Authentication:</strong> Multi-factor verification of user identity</li>
+                                <li><strong>Session Management:</strong> Secure handling of login sessions</li>
+                                <li><strong>Example:</strong> When user enters account number, system validates format and checks against known attack patterns before processing</li>
+                            </ul>
+                        </li>
+                        <li><strong>Data Defense (The Treasury):</strong>
+                            <ul>
+                                <li><strong>Encryption:</strong> All sensitive data is encrypted</li>
+                                <li><strong>Access Control:</strong> Only authorized personnel can access specific data</li>
+                                <li><strong>Audit Logging:</strong> Every data access is recorded</li>
+                                <li><strong>Example:</strong> Even if attacker reaches the database, customer account numbers are encrypted and access attempts are logged</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Why This Strategy Works:</h6>
+                    <p>An attacker might successfully get through the first layer using a sophisticated attack, but then faces four more layers of defense. Breaking through all five layers simultaneously is extremely difficult and time-consuming, giving security teams time to detect and respond.</p>
+                </div>
+            </div>
+
+            <h3>Intrusion Detection and Prevention - Digital Security Cameras</h3>
+            <div class="concept">
+                <h4>Intrusion Detection Systems (IDS) - The Watchful Eyes</h4>
+                <p><strong>What it does:</strong> Like security cameras that watch for suspicious activity. IDS systems monitor network traffic and system activities to detect potential attacks.</p>
+                
+                <div class="key-concepts">
+                    <h5>Network-based IDS (NIDS) - Watching the Streets</h5>
+                    <p><strong>How it works:</strong> Positioned at strategic network points to monitor all traffic passing through.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Corporate Network Monitoring</h6>
+                        <p><strong>Setup:</strong> NIDS sensor placed at the main internet connection point.</p>
+                        
+                        <h6>Detection in Action:</h6>
+                        <ol>
+                            <li><strong>Normal Traffic Monitoring:</strong>
+                                <ul>
+                                    <li>Watches all network packets flowing in and out</li>
+                                    <li>Learns normal traffic patterns (baseline)</li>
+                                    <li>Understands typical user behavior</li>
+                                </ul>
+                            </li>
+                            <li><strong>Attack Detection Example:</strong>
+                                <ul>
+                                    <li>NIDS notices employee computer making 1000 DNS queries per minute</li>
+                                    <li>Normal pattern: 5-10 DNS queries per minute</li>
+                                    <li>Recognizes this as potential DNS tunneling attack</li>
+                                    <li>Triggers alert to security team</li>
+                                </ul>
+                            </li>
+                            <li><strong>Investigation Process:</strong>
+                                <ul>
+                                    <li>Security team examines the DNS queries</li>
+                                    <li>Finds data hidden in query names</li>
+                                    <li>Discovers malware exfiltrating customer database</li>
+                                    <li>Takes action to stop data theft</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>Host-based IDS (HIDS) - Personal Security Guards</h5>
+                    <p><strong>How it works:</strong> Like having a personal bodyguard for each computer that watches what happens on that specific system.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Server Compromise Detection</h6>
+                        <p><strong>Scenario:</strong> Web server has HIDS monitoring system activities.</p>
+                        
+                        <h6>Detection Process:</h6>
+                        <ol>
+                            <li><strong>Baseline Learning:</strong>
+                                <ul>
+                                    <li>HIDS learns normal server behavior over weeks</li>
+                                    <li>Knows which files are normally accessed</li>
+                                    <li>Understands typical user login patterns</li>
+                                    <li>Records normal process activities</li>
+                                </ul>
+                            </li>
+                            <li><strong>Anomaly Detection:</strong>
+                                <ul>
+                                    <li>Detects new process started at 3 AM (unusual time)</li>
+                                    <li>Process is accessing customer database (unusual for web server)</li>
+                                    <li>Process is copying large amounts of data (unusual pattern)</li>
+                                    <li>Network connections to unknown external servers</li>
+                                </ul>
+                            </li>
+                            <li><strong>Alert Generation:</strong>
+                                <ul>
+                                    <li>HIDS triggers high-priority alert</li>
+                                    <li>Provides detailed information about suspicious activities</li>
+                                    <li>Security team investigates immediately</li>
+                                    <li>Discovers ongoing data theft attack</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>What HIDS Can Detect:</h6>
+                        <ul>
+                            <li>Unauthorized file access or modification</li>
+                            <li>Unusual login times or locations</li>
+                            <li>New processes or services starting</li>
+                            <li>Configuration changes</li>
+                            <li>Failed login attempts</li>
+                            <li>Privilege escalation attempts</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h4>Intrusion Prevention Systems (IPS) - The Active Guards</h4>
+                <p><strong>What it does:</strong> Like security guards who don't just watch and report, but actively stop crimes in progress.</p>
+                
+                <div class="example-detailed">
+                    <h5>IPS in Action: SQL Injection Prevention</h5>
+                    <p><strong>Scenario:</strong> Attacker tries to inject malicious SQL code into company website.</p>
+                    
+                    <h5>Prevention Process:</h5>
+                    <ol>
+                        <li><strong>Traffic Monitoring:</strong> IPS examines all web traffic in real-time</li>
+                        <li><strong>Pattern Recognition:</strong> Detects SQL injection attempt in web form submission</li>
+                        <li><strong>Immediate Action:</strong> IPS blocks the malicious request before it reaches web server</li>
+                        <li><strong>Alert Generation:</strong> Notifies security team of attack attempt</li>
+                        <li><strong>Attacker Frustration:</strong> Attacker's browser shows "Request blocked" message</li>
+                        <li><strong>System Protection:</strong> Database remains safe from injection attack</li>
+                    </ol>
+                    
+                    <h5>IPS vs IDS Comparison:</h5>
+                    <ul>
+                        <li><strong>IDS:</strong> "I saw someone trying to break in!" (detection only)</li>
+                        <li><strong>IPS:</strong> "I saw someone trying to break in and I stopped them!" (detection + prevention)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Incident Response - When Bad Things Happen</h3>
+            <div class="concept">
+                <h4>Why Incident Response Matters</h4>
+                <p>Even with the best security, attacks sometimes succeed. <strong>Incident Response</strong> is like having a fire department for cyber attacks - a trained team that knows exactly what to do when something goes wrong.</p>
+                
+                <div class="algorithm-steps">
+                    <h4>The Incident Response Process Explained</h4>
+                    
+                    <h5>1. Preparation Phase - Getting Ready Before the Fire</h5>
+                    <ul>
+                        <li><strong>Team Formation:</strong> Assemble incident response team with defined roles</li>
+                        <li><strong>Tool Preparation:</strong> Have forensic tools and procedures ready</li>
+                        <li><strong>Communication Plans:</strong> Know who to contact and how</li>
+                        <li><strong>Training:</strong> Regular drills and skill development</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Hospital IT Preparation</h6>
+                        <p><strong>Team Structure:</strong></p>
+                        <ul>
+                            <li><strong>Incident Commander:</strong> IT Director (makes major decisions)</li>
+                            <li><strong>Technical Lead:</strong> Senior System Administrator (handles technical response)</li>
+                            <li><strong>Communications:</strong> PR Manager (handles public communications)</li>
+                            <li><strong>Legal Advisor:</strong> Hospital Lawyer (ensures compliance)</li>
+                            <li><strong>Clinical Liaison:</strong> Chief Medical Officer (handles patient care impact)</li>
+                        </ul>
+                        
+                        <p><strong>Preparation Activities:</strong></p>
+                        <ul>
+                            <li>Monthly tabletop exercises simulating ransomware attacks</li>
+                            <li>Pre-written communication templates for patients and media</li>
+                            <li>Forensic imaging tools ready for immediate deployment</li>
+                            <li>Backup systems tested weekly for rapid activation</li>
+                        </ul>
+                    </div>
+                    
+                    <h5>2. Identification Phase - Spotting the Fire</h5>
+                    <ul>
+                        <li><strong>Detection:</strong> Recognize that a security incident has occurred</li>
+                        <li><strong>Analysis:</strong> Determine if it's a real incident or false alarm</li>
+                        <li><strong>Classification:</strong> Assess severity and type of incident</li>
+                        <li><strong>Documentation:</strong> Start detailed incident log</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Ransomware Detection</h6>
+                        <p><strong>Initial Signs:</strong></p>
+                        <ol>
+                            <li><strong>7:30 AM:</strong> Employee calls help desk: "My files have weird extensions"</li>
+                            <li><strong>7:35 AM:</strong> More calls coming in about encrypted files</li>
+                            <li><strong>7:40 AM:</strong> IT discovers ransom note on multiple computers</li>
+                            <li><strong>7:42 AM:</strong> Incident response team activated</li>
+                            <li><strong>7:45 AM:</strong> Classification: "Major ransomware incident, critical severity"</li>
+                        </ol>
+                        
+                        <p><strong>Quick Analysis:</strong></p>
+                        <ul>
+                            <li>Affected systems: 50+ workstations and 3 servers</li>
+                            <li>Ransomware type: Unknown variant</li>
+                            <li>Spread method: Appears to be network-based</li>
+                            <li>Business impact: Critical - patient records affected</li>
+                        </ul>
+                    </div>
+                    
+                    <h5>3. Containment Phase - Stopping the Fire from Spreading</h5>
+                    <ul>
+                        <li><strong>Short-term Containment:</strong> Immediately stop the attack from spreading</li>
+                        <li><strong>System Isolation:</strong> Disconnect affected systems</li>
+                        <li><strong>Evidence Preservation:</strong> Protect data for later analysis</li>
+                        <li><strong>Long-term Containment:</strong> Implement temporary fixes</li>
+                    </ul>
+                    
+                    <div class="example-detailed">
+                        <h6>Continuing the Ransomware Example:</h6>
+                        <ol>
+                            <li><strong>Immediate Actions (8:00 AM):</strong>
+                                <ul>
+                                    <li>Isolate all affected computers from network</li>
+                                    <li>Shut down infected servers to prevent further encryption</li>
+                                    <li>Activate backup systems for critical patient care</li>
+                                    <li>Document current state with photographs</li>
+                                </ul>
+                            </li>
+                            <li><strong>Evidence Preservation (8:30 AM):</strong>
+                                <ul>
+                                    <li>Create forensic images of infected systems</li>
+                                    <li>Preserve network logs showing attack timeline</li>
+                                    <li>Document ransom note and any communications</li>
+                                </ul>
+                            </li>
+                            <li><strong>Communication (9:00 AM):</strong>
+                                <ul>
+                                    <li>Notify hospital leadership</li>
+                                    <li>Inform patients of potential delays</li>
+                                    <li>Contact law enforcement and regulatory agencies</li>
+                                    <li>Prepare media statement</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                    
+                    <h5>4. Eradication Phase - Removing the Cause</h5>
+                    <ul>
+                        <li><strong>Root Cause Analysis:</strong> Find how the attack happened</li>
+                        <li><strong>Malware Removal:</strong> Clean all infected systems</li>
+                        <li><strong>Vulnerability Patching:</strong> Fix the security holes that allowed the attack</li>
+                        <li><strong>System Hardening:</strong> Improve security configurations</li>
+                    </ul>
+                    
+                    <h5>5. Recovery Phase - Getting Back to Normal</h5>
+                    <ul>
+                        <li><strong>System Restoration:</strong> Rebuild systems from clean backups</li>
+                        <li><strong>Monitoring:</strong> Watch restored systems for signs of lingering infection</li>
+                        <li><strong>Gradual Return:</strong> Slowly bring systems back online</li>
+                        <li><strong>Validation:</strong> Verify all systems are working correctly</li>
+                    </ul>
+                    
+                    <h5>6. Lessons Learned Phase - Making Sure It Doesn't Happen Again</h5>
+                    <ul>
+                        <li><strong>Incident Review:</strong> Analyze what went wrong and what went right</li>
+                        <li><strong>Process Improvement:</strong> Update incident response procedures</li>
+                        <li><strong>Security Enhancement:</strong> Implement additional security measures</li>
+                        <li><strong>Training Update:</strong> Improve staff training based on lessons learned</li>
+                    </ul>
+                </ol>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <div class="exam-tips">
+                <h3>💡 Exam Preparation Tips</h3>
+                <div class="key-concepts">
+                    <h4>How to Write Strong Exam Answers:</h4>
+                    <ul>
+                        <li><strong>Start with Definitions:</strong> Always begin by clearly defining key terms</li>
+                        <li><strong>Use Examples:</strong> Include real-world scenarios to demonstrate understanding</li>
+                        <li><strong>Explain Processes:</strong> Break down complex procedures into numbered steps</li>
+                        <li><strong>Compare and Contrast:</strong> Show differences between related concepts</li>
+                        <li><strong>Discuss Impact:</strong> Explain why these concepts matter in practice</li>
+                    </ul>
+                    
+                    <h4>Sample Exam Question and Answer Approach:</h4>
+                    <div class="example-detailed">
+                        <h5>Question: "Explain firewall types and their applications."</h5>
+                        
+                        <h6>Strong Answer Structure:</h6>
+                        <ol>
+                            <li><strong>Introduction (2-3 lines):</strong> Define what a firewall is and why it's important</li>
+                            <li><strong>Type 1 - Packet Filtering (3-4 lines):</strong> How it works, advantages, disadvantages, example use</li>
+                            <li><strong>Type 2 - Stateful Inspection (3-4 lines):</strong> How it differs, when to use, example scenario</li>
+                            <li><strong>Type 3 - Application Gateway (3-4 lines):</strong> Deep inspection capabilities, proxy operation, use cases</li>
+                            <li><strong>Type 4 - Next-Generation (3-4 lines):</strong> Advanced features, comprehensive protection, modern applications</li>
+                            <li><strong>Conclusion (2-3 lines):</strong> Summary of when to use each type</li>
+                        </ol>
+                        
+                        <p><strong>Result:</strong> Comprehensive 15-20 line answer demonstrating deep understanding with practical examples.</p>
+                    </div>
+                </div>
+                
+                <div class="checklist">
+                    <h4>Self-Assessment Checklist:</h4>
+                    <ul>
+                        <li>Can I explain the CIA triad with real-world examples?</li>
+                        <li>Do I understand how each firewall type works and when to use them?</li>
+                        <li>Can I describe virtualization security challenges with specific attack examples?</li>
+                        <li>Do I know how DNS attacks work and how to prevent them?</li>
+                        <li>Can I explain different attacker types and their motivations?</li>
+                        <li>Do I understand the complete incident response process with examples?</li>
+                        <li>Can I describe defense in depth with practical scenarios?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 1 Summary: Security Fundamentals</h3>
+                <div class="summary-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Topic</th>
+                                <th>Key Concepts</th>
+                                <th>Real-World Examples</th>
+                                <th>Security Measures</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CIA Triad</td>
+                                <td>Confidentiality, Integrity, Availability</td>
+                                <td>WhatsApp encryption, software updates, Netflix redundancy</td>
+                                <td>Encryption, signatures, backups</td>
+                            </tr>
+                            <tr>
+                                <td>Firewalls</td>
+                                <td>Packet filtering, stateful, application gateways, NGFW</td>
+                                <td>Home router, corporate email gateway, enterprise protection</td>
+                                <td>Rule configuration, monitoring, updates</td>
+                            </tr>
+                            <tr>
+                                <td>Virtualization</td>
+                                <td>Hypervisor attacks, VM escape, inter-VM attacks</td>
+                                <td>VENOM vulnerability, cloud server attacks</td>
+                                <td>Hypervisor hardening, network segmentation</td>
+                            </tr>
+                            <tr>
+                                <td>DNS Security</td>
+                                <td>Poisoning, hijacking, tunneling</td>
+                                <td>Banking fraud, news hijacking, data exfiltration</td>
+                                <td>DNSSEC, monitoring, filtering</td>
+                            </tr>
+                            <tr>
+                                <td>Attack Types</td>
+                                <td>Script kiddies, organized crime, nation-states</td>
+                                <td>Website defacement, Zeus banking trojan, Stuxnet</td>
+                                <td>Layered defense, threat intelligence</td>
+                            </tr>
+                            <tr>
+                                <td>Defense Strategy</td>
+                                <td>Defense in depth, detection, response</td>
+                                <td>Banking security layers, hospital incident response</td>
+                                <td>Multiple security layers, monitoring, rapid response</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Next Unit:</strong> Ethics in Cyber Security - Dive deep into digital ethics, professional standards, and cybercrime investigation tools with detailed case studies and legal implications.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

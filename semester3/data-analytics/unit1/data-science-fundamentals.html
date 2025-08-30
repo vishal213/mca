@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Data Science Fundamentals - Data Analytics</title>
+    <link rel="stylesheet" href="../../home-styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html" class="home-link">← Back to Data Analytics</a>
+                <a href="../../index.html" class="home-link">🏠 Semester 3</a>
+            </nav>
+            <h1>Unit 1: Data Science Fundamentals</h1>
+            <p class="subtitle">Statistical Foundation & Data Manipulation</p>
+        </header>
+
+        <section id="unit-outline">
+            <h2>📋 Unit Overview & Learning Path</h2>
+            
+            <div class="concept">
+                <h3>Your Data Science Journey Begins</h3>
+                <p>This unit transforms you from someone who has heard about data science to someone who can actually work with data professionally. We'll start with understanding different types of data and how to measure them, then learn to organize data using mathematical structures, and finally master the statistical tools that form the foundation of all data analysis.</p>
+                
+                <div class="visual-diagram">
+                    <h4>Data Science Foundation Concept Map</h4>
+                    <div class="diagram-text">
+                        <pre>
+                    Data Science Fundamentals
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+    Data Types &      Data Structures    Statistical Analysis
+    Measurement       (How to organize)  (What it tells us)
+        │                  │                  │
+   ├─ Nominal           ├─ Vectors         ├─ Descriptive Stats
+   ├─ Ordinal           ├─ Matrices        ├─ Central Tendency  
+   ├─ Interval          ├─ Data Frames     ├─ Variability
+   └─ Ratio             └─ Lists/Arrays    └─ Distributions
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           │
+                    Python Implementation
+                    (pandas, numpy, scipy)
+                           │
+                    ├─ Data Manipulation
+                    ├─ Statistical Computing
+                    ├─ Data Cleaning
+                    └─ Preliminary Analysis
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>What You'll Master in This Unit:</h4>
+                <ul>
+                    <li><strong>Data Understanding:</strong> How to classify and work with different types of information</li>
+                    <li><strong>Mathematical Foundation:</strong> Vectors, matrices, and data structures for data science</li>
+                    <li><strong>Statistical Analysis:</strong> Computing meaningful insights from raw numbers</li>
+                    <li><strong>Python Implementation:</strong> Using pandas and numpy for real data analysis</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="measurement-scales">
+            <h2>📏 Scales of Measurement and Implementation</h2>
+
+            <div class="concept">
+                <h3>Understanding Data Types - The Foundation of Everything</h3>
+                <p>Before you can analyze data, you need to understand what type of data you're working with. Just like you need different tools to measure temperature (thermometer) versus distance (ruler), you need different statistical methods for different types of data.</p>
+                
+                <p><strong>Why this matters:</strong> Using the wrong analysis method for your data type will give you meaningless or misleading results. It's like trying to calculate the average of people's names - it doesn't make sense!</p>
+                
+                <h4>The Four Levels of Measurement</h4>
+                
+                <div class="key-concepts">
+                    <h5>1. Nominal Scale - Categories and Labels</h5>
+                    <p><strong>Definition:</strong> Data that represents categories or labels with no inherent order or ranking. You can only say whether two values are the same or different.</p>
+                    
+                    <p><strong>Think of it like:</strong> Different colors of cars in a parking lot. Red, blue, green are just labels - you can't say red is "greater than" blue.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real-World Example: Customer Segmentation</h6>
+                        <p><strong>Scenario:</strong> An e-commerce company analyzing customer data.</p>
+                        
+                        <h6>Nominal Data Examples:</h6>
+                        <ul>
+                            <li><strong>Gender:</strong> Male, Female, Other</li>
+                            <li><strong>City:</strong> Mumbai, Delhi, Bangalore, Chennai</li>
+                            <li><strong>Product Category:</strong> Electronics, Clothing, Books, Sports</li>
+                            <li><strong>Payment Method:</strong> Credit Card, Debit Card, UPI, Cash on Delivery</li>
+                        </ul>
+                        
+                        <h6>What You CAN Do:</h6>
+                        <ul>
+                            <li><strong>Count frequencies:</strong> "40% of customers are from Mumbai"</li>
+                            <li><strong>Find mode:</strong> "Most popular payment method is UPI"</li>
+                            <li><strong>Create categories:</strong> Group customers by city</li>
+                            <li><strong>Test associations:</strong> "Are Electronics buyers more likely to use Credit Cards?"</li>
+                        </ul>
+                        
+                        <h6>What You CANNOT Do:</h6>
+                        <ul>
+                            <li>❌ Calculate mean: "Average city" makes no sense</li>
+                            <li>❌ Rank order: You can't say "Mumbai > Delhi"</li>
+                            <li>❌ Mathematical operations: Can't add "Male + Female"</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+
+# Nominal data analysis
+customers = pd.DataFrame({
+    'gender': ['Male', 'Female', 'Male', 'Other', 'Female'],
+    'city': ['Mumbai', 'Delhi', 'Mumbai', 'Chennai', 'Delhi'],
+    'payment': ['UPI', 'Credit', 'UPI', 'Debit', 'UPI']
+})
+
+# Frequency analysis
+print(customers['payment'].value_counts())
+# Output: UPI: 3, Credit: 1, Debit: 1
+
+# Mode (most common)
+print(customers['city'].mode()[0])  # Mumbai
+
+# Cross-tabulation
+pd.crosstab(customers['gender'], customers['payment'])</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Ordinal Scale - Ranked Categories</h5>
+                    <p><strong>Definition:</strong> Data with categories that have a meaningful order or ranking, but the differences between ranks aren't necessarily equal.</p>
+                    
+                    <p><strong>Think of it like:</strong> Race finishing positions (1st, 2nd, 3rd). You know the order, but 1st place might have won by 10 seconds while 2nd and 3rd were separated by 0.1 seconds.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real-World Example: Customer Satisfaction Survey</h6>
+                        <p><strong>Scenario:</strong> Restaurant chain analyzing customer feedback.</p>
+                        
+                        <h6>Ordinal Data Examples:</h6>
+                        <ul>
+                            <li><strong>Satisfaction Rating:</strong> Very Dissatisfied, Dissatisfied, Neutral, Satisfied, Very Satisfied</li>
+                            <li><strong>Education Level:</strong> High School, Bachelor's, Master's, PhD</li>
+                            <li><strong>Income Bracket:</strong> <₹25K, ₹25K-₹50K, ₹50K-₹1L, >₹1L</li>
+                            <li><strong>Star Ratings:</strong> 1 star, 2 stars, 3 stars, 4 stars, 5 stars</li>
+                        </ul>
+                        
+                        <h6>What You CAN Do:</h6>
+                        <ul>
+                            <li><strong>Find median:</strong> "Median satisfaction is 'Satisfied'"</li>
+                            <li><strong>Calculate percentiles:</strong> "75% of customers rated us 4 stars or higher"</li>
+                            <li><strong>Rank comparisons:</strong> "Customer A is more satisfied than Customer B"</li>
+                            <li><strong>Correlation analysis:</strong> "Higher education correlates with higher satisfaction"</li>
+                        </ul>
+                        
+                        <h6>What You Should Be Careful About:</h6>
+                        <ul>
+                            <li>⚠️ Mean calculation: Technically possible but interpretation is tricky</li>
+                            <li>⚠️ Mathematical operations: Adding satisfaction levels doesn't always make sense</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+# Ordinal data with proper ordering
+satisfaction_order = ['Very Dissatisfied', 'Dissatisfied', 'Neutral', 'Satisfied', 'Very Satisfied']
+
+data = pd.DataFrame({
+    'satisfaction': ['Satisfied', 'Very Satisfied', 'Neutral', 'Satisfied', 'Dissatisfied'],
+    'education': ['Bachelor', 'Master', 'High School', 'PhD', 'Bachelor']
+})
+
+# Convert to ordered categorical
+data['satisfaction'] = pd.Categorical(data['satisfaction'], 
+                                    categories=satisfaction_order, 
+                                    ordered=True)
+
+# Median (middle value when ordered)
+print(data['satisfaction'].median())  # Satisfied
+
+# Percentiles
+print(data['satisfaction'].quantile(0.75))  # 75th percentile
+
+# Comparison operations work
+print(data['satisfaction'] > 'Neutral')  # Boolean array</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Interval Scale - Equal Intervals, No True Zero</h5>
+                    <p><strong>Definition:</strong> Data with meaningful order AND equal intervals between values, but no true zero point.</p>
+                    
+                    <p><strong>Think of it like:</strong> Temperature in Celsius. 20°C to 30°C is the same difference as 30°C to 40°C (equal intervals), but 0°C doesn't mean "no temperature" - it's just the freezing point of water.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real-World Example: Student Performance Analysis</h6>
+                        <p><strong>Scenario:</strong> University analyzing student test scores and psychological measures.</p>
+                        
+                        <h6>Interval Data Examples:</h6>
+                        <ul>
+                            <li><strong>Test Scores:</strong> 65, 72, 89, 94 (equal 1-point intervals)</li>
+                            <li><strong>IQ Scores:</strong> 95, 110, 125, 140 (standardized scale)</li>
+                            <li><strong>Temperature:</strong> 15°C, 25°C, 35°C (equal degree intervals)</li>
+                            <li><strong>Calendar Years:</strong> 2020, 2021, 2022, 2023</li>
+                        </ul>
+                        
+                        <h6>What You CAN Do:</h6>
+                        <ul>
+                            <li><strong>Calculate mean:</strong> "Average test score is 78.5"</li>
+                            <li><strong>Standard deviation:</strong> "Test scores vary by ±12.3 points"</li>
+                            <li><strong>Addition/Subtraction:</strong> "Score improved by 15 points"</li>
+                            <li><strong>Linear transformations:</strong> Convert Celsius to Fahrenheit</li>
+                        </ul>
+                        
+                        <h6>What You CANNOT Do:</h6>
+                        <ul>
+                            <li>❌ Meaningful ratios: "80°C is twice as hot as 40°C" (wrong!)</li>
+                            <li>❌ Multiplication/Division: Can't say "IQ 120 is twice as smart as IQ 60"</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+# Interval data analysis
+test_scores = pd.Series([65, 72, 89, 94, 78, 82, 91])
+
+# All these operations are meaningful
+print(f"Mean score: {test_scores.mean():.1f}")           # 81.6
+print(f"Standard deviation: {test_scores.std():.1f}")   # 10.8
+print(f"Score range: {test_scores.max() - test_scores.min()}")  # 29
+
+# Temperature conversion (linear transformation)
+celsius_temps = pd.Series([20, 25, 30, 35])
+fahrenheit_temps = celsius_temps * 9/5 + 32
+print(fahrenheit_temps)  # [68, 77, 86, 95]</code></pre>
+                        </div>
+                        
+                        <h6>Real Application: Grade Point Analysis</h6>
+                        <p>University wants to analyze GPA trends over time:</p>
+                        <ol>
+                            <li><strong>Data Collection:</strong> GPA scores from 1000 students over 4 years</li>
+                            <li><strong>Temporal Analysis:</strong> Track changes in average GPA by semester</li>
+                            <li><strong>Comparative Analysis:</strong> Compare performance across different departments</li>
+                            <li><strong>Predictive Insights:</strong> Identify factors affecting academic performance</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>4. Ratio Scale - The Complete Package</h5>
+                    <p><strong>Definition:</strong> Data with meaningful order, equal intervals, AND a true zero point. This allows for all mathematical operations.</p>
+                    
+                    <p><strong>Think of it like:</strong> Height, weight, income, or time. If someone weighs 0 kg, they truly have no weight. If someone earns ₹80,000 and another earns ₹40,000, the first person earns exactly twice as much.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Real-World Example: E-commerce Sales Analysis</h6>
+                        <p><strong>Scenario:</strong> Online retailer analyzing sales performance and customer behavior.</p>
+                        
+                        <h6>Ratio Data Examples:</h6>
+                        <ul>
+                            <li><strong>Sales Revenue:</strong> ₹0, ₹1,500, ₹2,800, ₹5,200</li>
+                            <li><strong>Number of Orders:</strong> 0, 5, 12, 28 orders per customer</li>
+                            <li><strong>Website Time:</strong> 0, 3.5, 7.2, 15.8 minutes per session</li>
+                            <li><strong>Product Weight:</strong> 0.5kg, 1.2kg, 2.0kg, 3.5kg</li>
+                        </ul>
+                        
+                        <h6>What You CAN Do (All Operations):</h6>
+                        <ul>
+                            <li><strong>All interval operations PLUS:</strong></li>
+                            <li><strong>Meaningful ratios:</strong> "Customer A spends 3 times more than Customer B"</li>
+                            <li><strong>Multiplication/Division:</strong> "Revenue per customer doubled this quarter"</li>
+                            <li><strong>Percentage calculations:</strong> "Sales increased by 150%"</li>
+                            <li><strong>Geometric mean:</strong> For growth rates and ratios</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+from scipy import stats
+
+# Ratio data - sales analysis
+sales_data = pd.DataFrame({
+    'customer_id': [1, 2, 3, 4, 5],
+    'revenue': [0, 1500, 2800, 5200, 3100],
+    'orders': [0, 3, 7, 12, 8],
+    'session_time': [0, 3.5, 7.2, 15.8, 9.1]
+})
+
+# All mathematical operations are valid
+print(f"Average revenue: ₹{sales_data['revenue'].mean():.0f}")
+print(f"Revenue ratio (max/min): {sales_data['revenue'].max() / sales_data['revenue'][sales_data['revenue'] > 0].min():.1f}")
+
+# Meaningful percentages
+revenue_growth = (sales_data['revenue'].sum() / 10000 - 1) * 100
+print(f"Revenue growth: {revenue_growth:.1f}%")
+
+# Geometric mean for ratios (when applicable)
+ratios = sales_data['revenue'] / sales_data['orders'].replace(0, 1)  # Avoid division by zero
+geometric_mean = stats.gmean(ratios[ratios > 0])
+print(f"Geometric mean revenue per order: ₹{geometric_mean:.0f}")</code></pre>
+                        </div>
+                        
+                        <h6>Business Application: Customer Lifetime Value</h6>
+                        <p><strong>Analysis Process:</strong></p>
+                        <ol>
+                            <li><strong>Data Collection:</strong> Gather customer purchase history (ratio data)</li>
+                            <li><strong>Revenue Calculation:</strong> Sum total spending per customer</li>
+                            <li><strong>Time Analysis:</strong> Calculate customer lifespan in months</li>
+                            <li><strong>CLV Formula:</strong> (Average Order Value) × (Purchase Frequency) × (Customer Lifespan)</li>
+                            <li><strong>Segmentation:</strong> Group customers by CLV ranges</li>
+                            <li><strong>Business Action:</strong> Focus marketing on high-CLV segments</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <h4>Choosing the Right Scale - Practical Guidelines</h4>
+                <div class="algorithm-steps">
+                    <h5>Decision Framework:</h5>
+                    <ol>
+                        <li><strong>Ask: "Can I rank this data?"</strong>
+                            <ul>
+                                <li>No → Nominal (colors, names, categories)</li>
+                                <li>Yes → Continue to step 2</li>
+                            </ul>
+                        </li>
+                        <li><strong>Ask: "Are the intervals between values equal?"</strong>
+                            <ul>
+                                <li>No → Ordinal (rankings, satisfaction levels)</li>
+                                <li>Yes → Continue to step 3</li>
+                            </ul>
+                        </li>
+                        <li><strong>Ask: "Does zero mean 'none' or 'absence'?"</strong>
+                            <ul>
+                                <li>No → Interval (temperature, test scores)</li>
+                                <li>Yes → Ratio (height, weight, income)</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="data-structures">
+            <h2>🗂️ Working with Vectors, Matrices, and Data Frames</h2>
+
+            <div class="concept">
+                <h3>Mathematical Structures for Data Organization</h3>
+                <p>Data science is built on mathematics, and mathematics uses specific structures to organize information efficiently. Think of these as different types of containers for your data - like using the right size box when moving house.</p>
+                
+                <div class="key-concepts">
+                    <h5>1. Vectors - One-Dimensional Data</h5>
+                    <p><strong>What it is:</strong> A vector is a list of numbers (or values) in a specific order. It's like a single column of data in a spreadsheet.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Student Grades Analysis</h6>
+                        <p><strong>Scenario:</strong> Analyzing mathematics test scores for a class of students.</p>
+                        
+                        <h6>Vector Representation:</h6>
+                        <p><strong>Math scores vector:</strong> [85, 92, 78, 96, 88, 74, 91, 83]</p>
+                        
+                        <h6>Vector Operations in Practice:</h6>
+                        <ol>
+                            <li><strong>Element Access:</strong>
+                                <ul>
+                                    <li>First student's score: vector[0] = 85</li>
+                                    <li>Last student's score: vector[7] = 83</li>
+                                    <li>Third student's score: vector[2] = 78</li>
+                                </ul>
+                            </li>
+                            <li><strong>Mathematical Operations:</strong>
+                                <ul>
+                                    <li>Add 5 bonus points to all: [90, 97, 83, 101, 93, 79, 96, 88]</li>
+                                    <li>Calculate improvement needed for 90: [5, 0, 12, 0, 2, 16, 0, 7]</li>
+                                </ul>
+                            </li>
+                            <li><strong>Statistical Analysis:</strong>
+                                <ul>
+                                    <li>Mean score: 85.875</li>
+                                    <li>Highest score: 96</li>
+                                    <li>Standard deviation: 7.2 points</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import numpy as np
+import pandas as pd
+
+# Creating and working with vectors
+math_scores = np.array([85, 92, 78, 96, 88, 74, 91, 83])
+
+# Vector operations
+print(f"Class average: {math_scores.mean():.1f}")       # 85.9
+print(f"Score range: {math_scores.max() - math_scores.min()}")  # 22
+print(f"Students above average: {sum(math_scores > math_scores.mean())}")  # 4
+
+# Adding bonus points (vectorized operation)
+bonus_scores = math_scores + 5
+print(f"After bonus: {bonus_scores}")
+
+# Finding students needing improvement
+improvement_needed = np.maximum(90 - math_scores, 0)
+print(f"Points needed for 90: {improvement_needed}")</code></pre>
+                        </div>
+                        
+                        <h6>Real Application: Sales Performance Tracking</h6>
+                        <p>Sales manager tracks monthly revenue:</p>
+                        <ul>
+                            <li><strong>Revenue Vector:</strong> [₹50K, ₹65K, ₹45K, ₹78K, ₹82K, ₹67K]</li>
+                            <li><strong>Growth Analysis:</strong> Calculate month-over-month growth rates</li>
+                            <li><strong>Trend Identification:</strong> Identify upward/downward trends</li>
+                            <li><strong>Target Comparison:</strong> Compare actual vs. target performance</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Matrices - Two-Dimensional Data Tables</h5>
+                    <p><strong>What it is:</strong> A matrix is a rectangular array of numbers arranged in rows and columns. It's like a spreadsheet with only numbers.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Multi-Subject Student Performance</h6>
+                        <p><strong>Scenario:</strong> Analyzing performance of 5 students across 4 subjects.</p>
+                        
+                        <h6>Matrix Structure:</h6>
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Math</th>
+                                        <th>Science</th>
+                                        <th>English</th>
+                                        <th>History</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Student 1</td>
+                                        <td>85</td>
+                                        <td>92</td>
+                                        <td>78</td>
+                                        <td>88</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Student 2</td>
+                                        <td>92</td>
+                                        <td>88</td>
+                                        <td>85</td>
+                                        <td>90</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Student 3</td>
+                                        <td>78</td>
+                                        <td>85</td>
+                                        <td>92</td>
+                                        <td>80</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Student 4</td>
+                                        <td>96</td>
+                                        <td>94</td>
+                                        <td>89</td>
+                                        <td>93</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Student 5</td>
+                                        <td>88</td>
+                                        <td>79</td>
+                                        <td>94</td>
+                                        <td>86</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h6>Matrix Operations and Analysis:</h6>
+                        <ol>
+                            <li><strong>Row Analysis (Student Performance):</strong>
+                                <ul>
+                                    <li>Student 1 average: (85+92+78+88)/4 = 85.75</li>
+                                    <li>Student 4 is highest performer: 93.0 average</li>
+                                    <li>Identify students needing help in specific subjects</li>
+                                </ul>
+                            </li>
+                            <li><strong>Column Analysis (Subject Performance):</strong>
+                                <ul>
+                                    <li>Math class average: (85+92+78+96+88)/5 = 87.8</li>
+                                    <li>Science has highest average performance</li>
+                                    <li>English shows highest variation in scores</li>
+                                </ul>
+                            </li>
+                            <li><strong>Correlation Analysis:</strong>
+                                <ul>
+                                    <li>Students good at Math tend to be good at Science</li>
+                                    <li>English and History performance often correlate</li>
+                                    <li>Identify subject-specific strengths and weaknesses</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import numpy as np
+import pandas as pd
+
+# Creating matrix data
+scores_matrix = np.array([
+    [85, 92, 78, 88],  # Student 1
+    [92, 88, 85, 90],  # Student 2  
+    [78, 85, 92, 80],  # Student 3
+    [96, 94, 89, 93],  # Student 4
+    [88, 79, 94, 86]   # Student 5
+])
+
+subjects = ['Math', 'Science', 'English', 'History']
+
+# Row operations (student analysis)
+student_averages = scores_matrix.mean(axis=1)
+print(f"Student averages: {student_averages}")
+
+# Column operations (subject analysis)  
+subject_averages = scores_matrix.mean(axis=0)
+for i, subject in enumerate(subjects):
+    print(f"{subject} average: {subject_averages[i]:.1f}")
+
+# Correlation analysis
+correlation_matrix = np.corrcoef(scores_matrix.T)
+print(f"Math-Science correlation: {correlation_matrix[0,1]:.2f}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Data Frames - The Ultimate Data Structure</h5>
+                    <p><strong>What it is:</strong> A data frame is like an enhanced spreadsheet that can hold different types of data (numbers, text, dates) in different columns, with meaningful row and column names.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Comprehensive Customer Analysis</h6>
+                        <p><strong>Scenario:</strong> E-commerce company creating a 360-degree view of customers.</p>
+                        
+                        <h6>Data Frame Structure:</h6>
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>customer_id</th>
+                                        <th>name</th>
+                                        <th>age</th>
+                                        <th>city</th>
+                                        <th>total_spent</th>
+                                        <th>orders_count</th>
+                                        <th>satisfaction</th>
+                                        <th>join_date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>C001</td>
+                                        <td>Rajesh Kumar</td>
+                                        <td>28</td>
+                                        <td>Mumbai</td>
+                                        <td>₹15,600</td>
+                                        <td>12</td>
+                                        <td>Very Satisfied</td>
+                                        <td>2023-01-15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>C002</td>
+                                        <td>Priya Sharma</td>
+                                        <td>34</td>
+                                        <td>Delhi</td>
+                                        <td>₹28,900</td>
+                                        <td>18</td>
+                                        <td>Satisfied</td>
+                                        <td>2022-11-08</td>
+                                    </tr>
+                                    <tr>
+                                        <td>C003</td>
+                                        <td>Amit Singh</td>
+                                        <td>45</td>
+                                        <td>Bangalore</td>
+                                        <td>₹8,200</td>
+                                        <td>5</td>
+                                        <td>Neutral</td>
+                                        <td>2023-06-20</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h6>Data Frame Advantages:</h6>
+                        <ul>
+                            <li><strong>Mixed Data Types:</strong> Numbers, text, dates in same structure</li>
+                            <li><strong>Meaningful Labels:</strong> Column names describe what data represents</li>
+                            <li><strong>Easy Filtering:</strong> Find customers meeting specific criteria</li>
+                            <li><strong>Powerful Analysis:</strong> Complex queries and calculations</li>
+                        </ul>
+                        
+                        <h6>Comprehensive Analysis Examples:</h6>
+                        <ol>
+                            <li><strong>Customer Segmentation:</strong>
+                                <ul>
+                                    <li>High-value customers: total_spent > ₹20,000</li>
+                                    <li>Frequent buyers: orders_count > 15</li>
+                                    <li>Satisfied customers: satisfaction in ['Satisfied', 'Very Satisfied']</li>
+                                </ul>
+                            </li>
+                            <li><strong>Geographic Analysis:</strong>
+                                <ul>
+                                    <li>Which cities generate most revenue?</li>
+                                    <li>Average spending by city</li>
+                                    <li>Customer satisfaction by region</li>
+                                </ul>
+                            </li>
+                            <li><strong>Behavioral Analysis:</strong>
+                                <ul>
+                                    <li>Relationship between age and spending</li>
+                                    <li>Customer lifetime patterns</li>
+                                    <li>Seasonal purchasing trends</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+# Creating comprehensive data frame
+customers_df = pd.DataFrame({
+    'customer_id': ['C001', 'C002', 'C003', 'C004', 'C005'],
+    'name': ['Rajesh Kumar', 'Priya Sharma', 'Amit Singh', 'Neha Gupta', 'Rohit Patel'],
+    'age': [28, 34, 45, 29, 38],
+    'city': ['Mumbai', 'Delhi', 'Bangalore', 'Mumbai', 'Chennai'],
+    'total_spent': [15600, 28900, 8200, 19800, 12400],
+    'orders_count': [12, 18, 5, 14, 9],
+    'satisfaction': ['Very Satisfied', 'Satisfied', 'Neutral', 'Satisfied', 'Very Satisfied']
+})
+
+# Complex analysis operations
+print("=== Customer Segmentation ===")
+high_value = customers_df[customers_df['total_spent'] > 15000]
+print(f"High-value customers: {len(high_value)}")
+
+print("\n=== Geographic Analysis ===")
+city_analysis = customers_df.groupby('city').agg({
+    'total_spent': ['mean', 'sum'],
+    'orders_count': 'mean',
+    'customer_id': 'count'
+}).round(2)
+print(city_analysis)
+
+print("\n=== Behavioral Insights ===")
+# Average order value
+customers_df['avg_order_value'] = customers_df['total_spent'] / customers_df['orders_count']
+print(f"Average order value by city:")
+print(customers_df.groupby('city')['avg_order_value'].mean().round(0))
+
+# Age vs spending correlation
+correlation = customers_df['age'].corr(customers_df['total_spent'])
+print(f"Age-Spending correlation: {correlation:.2f}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Matrix Operations for Data Analysis</h5>
+                    <p><strong>Advanced Applications:</strong> Matrices become powerful when you need to perform operations across multiple dimensions simultaneously.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Sales Performance Matrix Analysis</h6>
+                        <p><strong>Scenario:</strong> Retail chain analyzing sales across products and regions.</p>
+                        
+                        <h6>Sales Matrix Structure:</h6>
+                        <div class="visual-diagram">
+                            <div class="diagram-text">
+                                <pre>
+                    Products (Columns)
+                Electronics  Clothing  Books  Sports
+            North    ₹45K     ₹32K    ₹18K   ₹25K
+Regions     South    ₹38K     ₹41K    ₹22K   ₹29K
+            East     ₹52K     ₹28K    ₹16K   ₹31K  
+            West     ₹41K     ₹38K    ₹25K   ₹27K
+                                </pre>
+                            </div>
+                        </div>
+                        
+                        <h6>Matrix Analysis Questions:</h6>
+                        <ol>
+                            <li><strong>Which region performs best overall?</strong>
+                                <ul>
+                                    <li>Sum each row: North=₹120K, South=₹130K, East=₹127K, West=₹131K</li>
+                                    <li>Answer: West region has highest total sales</li>
+                                </ul>
+                            </li>
+                            <li><strong>Which product category sells best?</strong>
+                                <ul>
+                                    <li>Sum each column: Electronics=₹176K, Clothing=₹139K, Books=₹81K, Sports=₹112K</li>
+                                    <li>Answer: Electronics dominates across all regions</li>
+                                </ul>
+                            </li>
+                            <li><strong>Which region-product combination is strongest?</strong>
+                                <ul>
+                                    <li>Highest single cell: East-Electronics at ₹52K</li>
+                                    <li>Lowest performance: East-Books at ₹16K</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6>Python Matrix Operations:</h6>
+                        <pre>
+import numpy as np
+import pandas as pd
+
+# Sales matrix
+sales_matrix = np.array([
+    [45000, 32000, 18000, 25000],  # North
+    [38000, 41000, 22000, 29000],  # South
+    [52000, 28000, 16000, 31000],  # East
+    [41000, 38000, 25000, 27000]   # West
+])
+
+regions = ['North', 'South', 'East', 'West']
+products = ['Electronics', 'Clothing', 'Books', 'Sports']
+
+# Create data frame for better analysis
+sales_df = pd.DataFrame(sales_matrix, index=regions, columns=products)
+
+# Regional performance
+print("Regional Sales Performance:")
+print(sales_df.sum(axis=1).sort_values(ascending=False))
+
+# Product performance
+print("\nProduct Category Performance:")
+print(sales_df.sum(axis=0).sort_values(ascending=False))
+
+# Best and worst performers
+print(f"\nBest performer: {sales_df.max().max()}")
+print(f"Worst performer: {sales_df.min().min()}")
+
+# Market share analysis
+total_sales = sales_df.sum().sum()
+print(f"\nElectronics market share: {sales_df['Electronics'].sum()/total_sales*100:.1f}%")
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="statistical-summaries">
+            <h2>📊 Statistical Summaries: Making Sense of Numbers</h2>
+
+            <div class="concept">
+                <h3>Central Tendency - Finding the "Typical" Value</h3>
+                <p>When you have lots of data, you need ways to summarize it into meaningful insights. <strong>Central tendency</strong> helps you answer: "What's a typical value in this dataset?"</p>
+                
+                <div class="key-concepts">
+                    <h5>1. Mean (Average) - The Mathematical Center</h5>
+                    <p><strong>What it is:</strong> Add all values and divide by the count. Most common measure, but sensitive to extreme values.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Employee Salary Analysis</h6>
+                        <p><strong>Scenario:</strong> Tech startup analyzing employee salaries.</p>
+                        
+                        <h6>Salary Data:</h6>
+                        <p>₹4L, ₹5L, ₹6L, ₹5.5L, ₹4.5L, ₹50L, ₹5.2L, ₹4.8L</p>
+                        
+                        <h6>Mean Calculation:</h6>
+                        <ol>
+                            <li><strong>Sum all values:</strong> ₹4L + ₹5L + ₹6L + ₹5.5L + ₹4.5L + ₹50L + ₹5.2L + ₹4.8L = ₹85L</li>
+                            <li><strong>Divide by count:</strong> ₹85L ÷ 8 = ₹10.625L</li>
+                            <li><strong>Result:</strong> Mean salary is ₹10.625L</li>
+                        </ol>
+                        
+                        <h6>Problem with Mean Here:</h6>
+                        <p>The CEO's salary (₹50L) skews the average upward. Most employees (7 out of 8) earn much less than the "average" salary of ₹10.625L. This is misleading!</p>
+                        
+                        <h6>When Mean Works Well:</h6>
+                        <ul>
+                            <li><strong>Normal distribution:</strong> Test scores, heights, measurement errors</li>
+                            <li><strong>No extreme outliers:</strong> Data points are relatively similar</li>
+                            <li><strong>Mathematical calculations:</strong> When you need exact mathematical average</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+salaries = pd.Series([4, 5, 6, 5.5, 4.5, 50, 5.2, 4.8])  # in lakhs
+
+mean_salary = salaries.mean()
+print(f"Mean salary: ₹{mean_salary:.1f}L")
+
+# Check for outlier impact
+salaries_no_outlier = salaries[salaries < 20]  # Remove CEO salary
+mean_without_outlier = salaries_no_outlier.mean()
+print(f"Mean without outlier: ₹{mean_without_outlier:.1f}L")
+
+print(f"Outlier impact: ₹{mean_salary - mean_without_outlier:.1f}L difference")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Median - The Middle Value</h5>
+                    <p><strong>What it is:</strong> The middle value when all data points are arranged in order. Not affected by extreme values.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Continuing the Salary Example:</h6>
+                        <p><strong>Finding the Median:</strong></p>
+                        
+                        <h6>Step-by-Step Process:</h6>
+                        <ol>
+                            <li><strong>Sort the data:</strong> ₹4L, ₹4.5L, ₹4.8L, ₹5L, ₹5.2L, ₹5.5L, ₹6L, ₹50L</li>
+                            <li><strong>Find middle position:</strong> 8 values, so middle is between 4th and 5th values</li>
+                            <li><strong>Calculate median:</strong> (₹5L + ₹5.2L) ÷ 2 = ₹5.1L</li>
+                            <li><strong>Result:</strong> Median salary is ₹5.1L</li>
+                        </ol>
+                        
+                        <h6>Why Median is Better Here:</h6>
+                        <p>₹5.1L represents the typical employee much better than ₹10.625L. Half the employees earn less than ₹5.1L, and half earn more. The CEO's high salary doesn't distort this measure.</p>
+                        
+                        <h6>Real-World Applications:</h6>
+                        <ul>
+                            <li><strong>House prices:</strong> "Median home price" is standard because of expensive outliers</li>
+                            <li><strong>Income statistics:</strong> Governments report median income, not mean</li>
+                            <li><strong>Performance metrics:</strong> Response times, where few very slow requests skew average</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+
+salaries = pd.Series([4, 5, 6, 5.5, 4.5, 50, 5.2, 4.8])
+
+median_salary = salaries.median()
+print(f"Median salary: ₹{median_salary:.1f}L")
+
+# Compare mean vs median
+print(f"Mean: ₹{salaries.mean():.1f}L")
+print(f"Median: ₹{median_salary:.1f}L")
+print(f"Difference: ₹{salaries.mean() - median_salary:.1f}L")
+
+# Percentile analysis
+print(f"25th percentile: ₹{salaries.quantile(0.25):.1f}L")
+print(f"75th percentile: ₹{salaries.quantile(0.75):.1f}L")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Mode - The Most Common Value</h5>
+                    <p><strong>What it is:</strong> The value that appears most frequently in the dataset. Especially useful for categorical data.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Product Preference Analysis</h6>
+                        <p><strong>Scenario:</strong> Online store analyzing customer purchase patterns.</p>
+                        
+                        <h6>Purchase Data:</h6>
+                        <p>Product purchases in last 100 orders: Electronics (35), Clothing (28), Books (15), Sports (12), Home (10)</p>
+                        
+                        <h6>Mode Analysis:</h6>
+                        <ul>
+                            <li><strong>Mode:</strong> Electronics (appears most frequently)</li>
+                            <li><strong>Business Insight:</strong> Electronics is the most popular category</li>
+                            <li><strong>Action:</strong> Stock more electronics, feature prominently on website</li>
+                        </ul>
+                        
+                        <h6>Numerical Data Mode Example:</h6>
+                        <p><strong>Customer age data:</strong> 25, 28, 25, 30, 25, 32, 28, 25, 29, 25</p>
+                        <ul>
+                            <li><strong>Mode:</strong> 25 years (appears 5 times)</li>
+                            <li><strong>Insight:</strong> Most customers are 25 years old</li>
+                            <li><strong>Marketing action:</strong> Target products and messaging for 25-year-olds</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+from scipy import stats
+
+# Categorical data mode
+products = pd.Series(['Electronics', 'Clothing', 'Electronics', 'Books', 
+                     'Electronics', 'Sports', 'Clothing', 'Electronics'])
+
+mode_product = products.mode()[0]
+print(f"Most popular product: {mode_product}")
+
+# Frequency count
+print(products.value_counts())
+
+# Numerical data mode
+ages = pd.Series([25, 28, 25, 30, 25, 32, 28, 25, 29, 25])
+mode_age = stats.mode(ages)[0]
+print(f"Most common age: {mode_age}")
+
+# Multiple modes possible
+sizes = pd.Series(['M', 'L', 'M', 'S', 'L', 'M', 'L'])
+print(f"All modes: {sizes.mode().tolist()}")  # Both M and L</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Measures of Variability - Understanding Data Spread</h3>
+            <div class="concept">
+                <h4>Why Variability Matters</h4>
+                <p>Two datasets can have the same average but be completely different in how spread out the values are. <strong>Variability measures</strong> tell you how much the data points differ from each other and from the center.</p>
+                
+                <div class="example-detailed">
+                    <h5>Example: Two Manufacturing Processes</h5>
+                    <p><strong>Scenario:</strong> Factory testing two machines that produce bolts.</p>
+                    
+                    <h6>Quality Control Data:</h6>
+                    <ul>
+                        <li><strong>Machine A bolt lengths (mm):</strong> 9.8, 10.0, 10.2, 9.9, 10.1</li>
+                        <li><strong>Machine B bolt lengths (mm):</strong> 8.5, 11.2, 10.0, 9.1, 11.2</li>
+                    </ul>
+                    
+                    <h6>Both machines have same average (10.0mm), but:</h6>
+                    <ul>
+                        <li><strong>Machine A:</strong> Very consistent, small variations</li>
+                        <li><strong>Machine B:</strong> Highly variable, unreliable</li>
+                    </ul>
+                    
+                    <h6>Business Impact:</h6>
+                    <p>Machine A produces consistent quality bolts (good for precision applications). Machine B's variability could lead to product failures and customer complaints.</p>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>1. Range - Simple Spread Measure</h5>
+                    <p><strong>Formula:</strong> Range = Maximum value - Minimum value</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Website Response Time Analysis</h6>
+                        <p><strong>Scenario:</strong> IT team monitoring website performance.</p>
+                        
+                        <h6>Response Times (seconds):</h6>
+                        <p>Page load times: 0.5, 1.2, 0.8, 3.4, 0.9, 1.1, 0.7, 2.1</p>
+                        
+                        <h6>Range Calculation:</h6>
+                        <ul>
+                            <li><strong>Minimum:</strong> 0.5 seconds (fastest load)</li>
+                            <li><strong>Maximum:</strong> 3.4 seconds (slowest load)</li>
+                            <li><strong>Range:</strong> 3.4 - 0.5 = 2.9 seconds</li>
+                        </ul>
+                        
+                        <h6>Business Interpretation:</h6>
+                        <p>There's a 2.9-second difference between fastest and slowest page loads. This suggests inconsistent performance that could frustrate users with slow connections.</p>
+                        
+                        <h6>Range Limitations:</h6>
+                        <ul>
+                            <li><strong>Outlier sensitivity:</strong> One very slow page load makes range look worse</li>
+                            <li><strong>No distribution info:</strong> Doesn't tell you if most pages are fast or slow</li>
+                            <li><strong>Sample size effect:</strong> Larger samples tend to have larger ranges</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>2. Variance - Average Squared Deviation</h5>
+                    <p><strong>What it measures:</strong> How much data points differ from the mean, on average. Larger variance means more spread out data.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Investment Portfolio Risk Analysis</h6>
+                        <p><strong>Scenario:</strong> Financial advisor comparing two investment options.</p>
+                        
+                        <h6>Monthly Returns Data:</h6>
+                        <ul>
+                            <li><strong>Stock A returns (%):</strong> 8%, 10%, 12%, 9%, 11%</li>
+                            <li><strong>Stock B returns (%):</strong> 2%, 18%, 5%, 15%, 10%</li>
+                        </ul>
+                        
+                        <h6>Variance Calculation for Stock A:</h6>
+                        <ol>
+                            <li><strong>Calculate mean:</strong> (8+10+12+9+11)/5 = 10%</li>
+                            <li><strong>Find deviations from mean:</strong>
+                                <ul>
+                                    <li>8% - 10% = -2%</li>
+                                    <li>10% - 10% = 0%</li>
+                                    <li>12% - 10% = 2%</li>
+                                    <li>9% - 10% = -1%</li>
+                                    <li>11% - 10% = 1%</li>
+                                </ul>
+                            </li>
+                            <li><strong>Square the deviations:</strong> 4, 0, 4, 1, 1 (removes negative signs)</li>
+                            <li><strong>Average the squared deviations:</strong> (4+0+4+1+1)/5 = 2</li>
+                            <li><strong>Variance for Stock A:</strong> 2 percentage points²</li>
+                        </ol>
+                        
+                        <h6>Variance Comparison:</h6>
+                        <ul>
+                            <li><strong>Stock A variance:</strong> 2 (low variability = lower risk)</li>
+                            <li><strong>Stock B variance:</strong> 38.8 (high variability = higher risk)</li>
+                        </ul>
+                        
+                        <h6>Investment Decision:</h6>
+                        <p>Both stocks have 10% average return, but Stock A is much less risky (consistent returns) while Stock B is volatile (unpredictable returns). Conservative investors prefer Stock A; risk-takers might choose Stock B for potential upside.</p>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+stock_a = pd.Series([8, 10, 12, 9, 11])
+stock_b = pd.Series([2, 18, 5, 15, 10])
+
+print("=== Return Analysis ===")
+print(f"Stock A - Mean: {stock_a.mean():.1f}%, Variance: {stock_a.var():.1f}")
+print(f"Stock B - Mean: {stock_b.mean():.1f}%, Variance: {stock_b.var():.1f}")
+
+# Risk assessment
+if stock_a.var() < stock_b.var():
+    print("Stock A is less risky (lower variance)")
+else:
+    print("Stock B is less risky (lower variance)")
+
+# Coefficient of variation (relative risk)
+cv_a = stock_a.std() / stock_a.mean()
+cv_b = stock_b.std() / stock_b.mean()
+print(f"Stock A relative risk: {cv_a:.2f}")
+print(f"Stock B relative risk: {cv_b:.2f}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>3. Standard Deviation - Variance in Original Units</h5>
+                    <p><strong>What it is:</strong> Square root of variance. Gives you variability in the same units as your original data, making it easier to interpret.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Quality Control in Manufacturing</h6>
+                        <p><strong>Scenario:</strong> Pharmaceutical company ensuring consistent pill weights.</p>
+                        
+                        <h6>Pill Weight Data (mg):</h6>
+                        <p>Sample weights: 498, 502, 500, 497, 503, 499, 501, 500</p>
+                        
+                        <h6>Standard Deviation Analysis:</h6>
+                        <ol>
+                            <li><strong>Mean weight:</strong> 500mg</li>
+                            <li><strong>Variance calculation:</strong> 4.57 mg²</li>
+                            <li><strong>Standard deviation:</strong> √4.57 = 2.14mg</li>
+                        </ol>
+                        
+                        <h6>Practical Interpretation:</h6>
+                        <ul>
+                            <li><strong>68% Rule:</strong> About 68% of pills weigh between 497.86mg and 502.14mg (mean ± 1 std dev)</li>
+                            <li><strong>95% Rule:</strong> About 95% weigh between 495.72mg and 504.28mg (mean ± 2 std dev)</li>
+                            <li><strong>Quality Decision:</strong> If tolerance is ±5mg, this process is well within acceptable limits</li>
+                        </ul>
+                        
+                        <h6>Industry Standards Application:</h6>
+                        <ol>
+                            <li><strong>Set Tolerance Limits:</strong> Pills must be 500mg ± 3mg</li>
+                            <li><strong>Monitor Process:</strong> Standard deviation should be < 1.5mg</li>
+                            <li><strong>Quality Action:</strong> If std dev > 1.5mg, investigate and fix process</li>
+                            <li><strong>Continuous Improvement:</strong> Aim to reduce standard deviation over time</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+
+pill_weights = pd.Series([498, 502, 500, 497, 503, 499, 501, 500])
+
+mean_weight = pill_weights.mean()
+std_weight = pill_weights.std()
+
+print(f"Mean weight: {mean_weight:.1f}mg")
+print(f"Standard deviation: {std_weight:.2f}mg")
+
+# Quality control bounds
+upper_bound = mean_weight + 2*std_weight
+lower_bound = mean_weight - 2*std_weight
+
+print(f"95% of pills should weigh between {lower_bound:.1f}mg and {upper_bound:.1f}mg")
+
+# Check quality
+tolerance = 3  # ±3mg tolerance
+if std_weight < tolerance/2:
+    print("✅ Process is within quality standards")
+else:
+    print("❌ Process needs improvement")
+
+# Identify outliers
+outliers = pill_weights[(pill_weights < lower_bound) | (pill_weights > upper_bound)]
+print(f"Outlier pills: {outliers.tolist()}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sample-vs-population">
+            <h2>🎯 Sample vs Population Concepts</h2>
+
+            <div class="concept">
+                <h3>The Big Picture vs. The Representative Sample</h3>
+                <p>This is one of the most crucial concepts in data science. Understanding the difference between a sample and population determines whether your analysis is meaningful or misleading.</p>
+                
+                <div class="key-concepts">
+                    <h5>Population - The Complete Picture</h5>
+                    <p><strong>Definition:</strong> The entire group you want to understand or make conclusions about.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Example: Indian Smartphone Usage Study</h6>
+                        <p><strong>Research Question:</strong> What's the average daily smartphone usage among Indian adults?</p>
+                        
+                        <h6>Population Definition:</h6>
+                        <ul>
+                            <li><strong>Target Population:</strong> All Indian adults (18+ years) who own smartphones</li>
+                            <li><strong>Size:</strong> Approximately 400 million people</li>
+                            <li><strong>Geographic Scope:</strong> All states and union territories</li>
+                            <li><strong>Demographic Scope:</strong> All age groups, income levels, education levels</li>
+                        </ul>
+                        
+                        <h6>Why We Can't Study the Entire Population:</h6>
+                        <ul>
+                            <li><strong>Cost:</strong> Surveying 400 million people would cost billions</li>
+                            <li><strong>Time:</strong> Would take years to complete</li>
+                            <li><strong>Logistics:</strong> Physically impossible to reach everyone</li>
+                            <li><strong>Privacy:</strong> Many people won't share personal data</li>
+                        </ul>
+                        
+                        <h6>Population Parameters (What We Want to Know):</h6>
+                        <ul>
+                            <li><strong>μ (mu):</strong> True population mean usage time</li>
+                            <li><strong>σ (sigma):</strong> True population standard deviation</li>
+                            <li><strong>These are UNKNOWN</strong> - we estimate them using samples</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-concepts">
+                    <h5>Sample - The Representative Subset</h5>
+                    <p><strong>Definition:</strong> A subset of the population that we actually study to make inferences about the entire population.</p>
+                    
+                    <div class="example-detailed">
+                        <h6>Continuing the Smartphone Usage Example:</h6>
+                        
+                        <h6>Sample Design:</h6>
+                        <ol>
+                            <li><strong>Sample Size:</strong> 2,000 smartphone users</li>
+                            <li><strong>Sampling Method:</strong> Stratified random sampling
+                                <ul>
+                                    <li>Proportional representation by state population</li>
+                                    <li>Equal representation across age groups</li>
+                                    <li>Include rural and urban users</li>
+                                </ul>
+                            </li>
+                            <li><strong>Data Collection:</strong> One-week usage tracking via app</li>
+                        </ol>
+                        
+                        <h6>Sample Results:</h6>
+                        <ul>
+                            <li><strong>Sample mean (x̄):</strong> 4.2 hours/day</li>
+                            <li><strong>Sample std dev (s):</strong> 1.8 hours</li>
+                            <li><strong>Sample size (n):</strong> 2,000 people</li>
+                        </ul>
+                        
+                        <h6>Making Population Inferences:</h6>
+                        <ol>
+                            <li><strong>Point Estimate:</strong> "We estimate Indian adults use smartphones 4.2 hours/day on average"</li>
+                            <li><strong>Confidence Interval:</strong> "We're 95% confident the true average is between 4.1 and 4.3 hours/day"</li>
+                            <li><strong>Margin of Error:</strong> ±0.1 hours with 95% confidence</li>
+                        </ol>
+                        
+                        <div class="code-example">
+                            <h6>Python Implementation:</h6>
+                            <pre><code>import pandas as pd
+import numpy as np
+from scipy import stats
+
+# Simulate sample data
+np.random.seed(42)
+sample_usage = np.random.normal(4.2, 1.8, 2000)  # Mean=4.2, SD=1.8, n=2000
+
+# Sample statistics
+sample_mean = sample_usage.mean()
+sample_std = sample_usage.std()
+sample_size = len(sample_usage)
+
+print(f"Sample Statistics:")
+print(f"Mean usage: {sample_mean:.2f} hours/day")
+print(f"Standard deviation: {sample_std:.2f} hours")
+print(f"Sample size: {sample_size}")
+
+# Confidence interval for population mean
+confidence_level = 0.95
+t_score = stats.t.ppf((1 + confidence_level) / 2, df=sample_size-1)
+margin_error = t_score * (sample_std / np.sqrt(sample_size))
+
+ci_lower = sample_mean - margin_error
+ci_upper = sample_mean + margin_error
+
+print(f"\n95% Confidence Interval for Population Mean:")
+print(f"{ci_lower:.2f} to {ci_upper:.2f} hours/day")
+print(f"Margin of Error: ±{margin_error:.2f} hours")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Sampling Methods - Getting Representative Data</h4>
+                <div class="concept">
+                    <div class="algorithm-steps">
+                        <h5>1. Simple Random Sampling</h5>
+                        <p><strong>Method:</strong> Every member of population has equal chance of being selected.</p>
+                        
+                        <div class="example-detailed">
+                            <h6>Example: Customer Satisfaction Survey</h6>
+                            <p><strong>Process:</strong></p>
+                            <ol>
+                                <li>Get complete customer database (50,000 customers)</li>
+                                <li>Assign each customer a number (1 to 50,000)</li>
+                                <li>Use random number generator to select 500 customers</li>
+                                <li>Survey those 500 customers</li>
+                            </ol>
+                            
+                            <h6>Python Implementation:</h6>
+                            <pre>
+import pandas as pd
+import numpy as np
+
+# Simulate customer database
+customers = pd.DataFrame({
+    'customer_id': range(1, 50001),
+    'age': np.random.randint(18, 70, 50000),
+    'city': np.random.choice(['Mumbai', 'Delhi', 'Bangalore'], 50000),
+    'spending': np.random.normal(15000, 5000, 50000)
+})
+
+# Simple random sample
+sample_size = 500
+random_sample = customers.sample(n=sample_size, random_state=42)
+
+print(f"Population size: {len(customers)}")
+print(f"Sample size: {len(random_sample)}")
+print(f"Sample represents {len(random_sample)/len(customers)*100:.1f}% of population")
+                            </pre>
+                        </div>
+                        
+                        <h5>2. Stratified Sampling</h5>
+                        <p><strong>Method:</strong> Divide population into groups (strata) and sample from each group proportionally.</p>
+                        
+                        <div class="example-detailed">
+                            <h6>Example: Education Survey Across India</h6>
+                            <p><strong>Challenge:</strong> India has diverse states with different education patterns.</p>
+                            
+                            <h6>Stratification Process:</h6>
+                            <ol>
+                                <li><strong>Define Strata:</strong> Group by state/region</li>
+                                <li><strong>Proportional Allocation:</strong> 
+                                    <ul>
+                                        <li>Uttar Pradesh: 16% of population → 16% of sample</li>
+                                        <li>Maharashtra: 9% of population → 9% of sample</li>
+                                        <li>Bihar: 8% of population → 8% of sample</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Random Sample Within Strata:</strong> Randomly select from each state group</li>
+                            </ol>
+                            
+                            <h6>Why Stratified is Better:</h6>
+                            <p>Ensures all regions are represented. Simple random sampling might accidentally select too many people from one region and miss others entirely.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="data-manipulation">
+            <h2>🛠️ Data Manipulation with Pandas</h2>
+
+            <div class="concept">
+                <h3>Pandas - The Swiss Army Knife of Data Science</h3>
+                <p><strong>Pandas</strong> is like having a super-powered Excel that can handle millions of rows, perform complex operations in seconds, and integrate with other Python tools. It's the most important tool you'll use for data manipulation.</p>
+                
+                <div class="key-concepts">
+                    <h5>Essential Pandas Operations</h5>
+                    
+                    <div class="example-detailed">
+                        <h6>Real-World Project: Sales Data Analysis</h6>
+                        <p><strong>Scenario:</strong> Retail company wants to analyze 6 months of sales data to understand customer behavior and product performance.</p>
+                        
+                        <h6>Data Setup:</h6>
+                        <pre>
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+# Create realistic sales dataset
+np.random.seed(42)
+dates = pd.date_range('2023-01-01', '2023-06-30', freq='D')
+sales_data = []
+
+for date in dates:
+    daily_sales = np.random.randint(50, 200)  # 50-200 transactions per day
+    for _ in range(daily_sales):
+        sales_data.append({
+            'date': date,
+            'customer_id': f"C{np.random.randint(1000, 9999)}",
+            'product_category': np.random.choice(['Electronics', 'Clothing', 'Books', 'Sports'], 
+                                                p=[0.3, 0.4, 0.2, 0.1]),
+            'product_price': np.random.uniform(500, 5000),
+            'quantity': np.random.randint(1, 5),
+            'payment_method': np.random.choice(['Credit', 'Debit', 'UPI', 'Cash'], 
+                                             p=[0.25, 0.25, 0.4, 0.1])
+        })
+
+df = pd.DataFrame(sales_data)
+df['total_amount'] = df['product_price'] * df['quantity']
+print(f"Dataset created: {len(df)} transactions")
+                        </pre>
+                        
+                        <h6>1. Data Exploration and Filtering</h6>
+                        <pre>
+# Basic data exploration
+print("=== Dataset Overview ===")
+print(f"Shape: {df.shape}")
+print(f"Date range: {df['date'].min()} to {df['date'].max()}")
+print(f"Total revenue: ₹{df['total_amount'].sum():,.0f}")
+
+# Filtering operations
+high_value_sales = df[df['total_amount'] > 10000]
+electronics_sales = df[df['product_category'] == 'Electronics']
+recent_sales = df[df['date'] >= '2023-06-01']
+
+print(f"\nHigh-value transactions (>₹10K): {len(high_value_sales)}")
+print(f"Electronics transactions: {len(electronics_sales)}")
+print(f"June transactions: {len(recent_sales)}")
+
+# Complex filtering
+premium_electronics = df[
+    (df['product_category'] == 'Electronics') & 
+    (df['total_amount'] > 15000) &
+    (df['payment_method'].isin(['Credit', 'Debit']))
+]
+print(f"Premium electronics buyers: {len(premium_electronics)}")
+                        </pre>
+                        
+                        <h6>2. Grouping and Aggregation</h6>
+                        <pre>
+# Monthly sales summary
+monthly_sales = df.groupby(df['date'].dt.to_period('M')).agg({
+    'total_amount': ['sum', 'mean', 'count'],
+    'customer_id': 'nunique'
+}).round(2)
+
+monthly_sales.columns = ['Total_Revenue', 'Avg_Transaction', 'Transaction_Count', 'Unique_Customers']
+print("=== Monthly Performance ===")
+print(monthly_sales)
+
+# Category performance analysis
+category_performance = df.groupby('product_category').agg({
+    'total_amount': ['sum', 'mean', 'std'],
+    'quantity': 'sum',
+    'customer_id': 'nunique'
+}).round(2)
+
+print("\n=== Category Performance ===")
+print(category_performance)
+
+# Customer behavior analysis
+customer_analysis = df.groupby('customer_id').agg({
+    'total_amount': 'sum',
+    'date': ['min', 'max', 'nunique'],
+    'product_category': lambda x: x.mode().iloc[0] if not x.mode().empty else 'None'
+}).round(2)
+
+customer_analysis.columns = ['Total_Spent', 'First_Purchase', 'Last_Purchase', 'Shopping_Days', 'Favorite_Category']
+top_customers = customer_analysis.nlargest(10, 'Total_Spent')
+print("\n=== Top 10 Customers ===")
+print(top_customers)
+                        </pre>
+                        
+                        <h6>3. Data Cleaning and Transformation</h6>
+                        <pre>
+# Data quality checks
+print("=== Data Quality Analysis ===")
+print(f"Missing values:\n{df.isnull().sum()}")
+print(f"Duplicate transactions: {df.duplicated().sum()}")
+
+# Handle data issues
+# Remove unrealistic transactions
+df_clean = df[
+    (df['product_price'] > 0) & 
+    (df['product_price'] < 50000) &  # Remove unrealistic prices
+    (df['quantity'] > 0) & 
+    (df['quantity'] <= 10)  # Remove bulk orders
+].copy()
+
+print(f"Records after cleaning: {len(df_clean)} (removed {len(df) - len(df_clean)})")
+
+# Create derived features
+df_clean['month'] = df_clean['date'].dt.month
+df_clean['day_of_week'] = df_clean['date'].dt.day_name()
+df_clean['is_weekend'] = df_clean['date'].dt.dayofweek >= 5
+
+# Weekend vs weekday analysis
+weekend_analysis = df_clean.groupby('is_weekend')['total_amount'].agg(['mean', 'sum', 'count'])
+weekend_analysis.index = ['Weekday', 'Weekend']
+print("\n=== Weekend vs Weekday Sales ===")
+print(weekend_analysis)
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4>Statistical Inference - Sample to Population</h4>
+                <div class="concept">
+                    <div class="example-detailed">
+                        <h5>Central Limit Theorem in Action</h5>
+                        <p><strong>Key Insight:</strong> Even if your population data isn't normally distributed, sample means will be normally distributed if your sample size is large enough (usually n ≥ 30).</p>
+                        
+                        <h6>Practical Demonstration:</h6>
+                        <pre>
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Simulate a skewed population (not normal)
+population = np.random.exponential(scale=2, size=100000)  # Exponential distribution
+
+# Take many samples and calculate their means
+sample_means = []
+sample_size = 50
+
+for i in range(1000):
+    sample = np.random.choice(population, size=sample_size)
+    sample_means.append(sample.mean())
+
+# Analysis
+pop_mean = population.mean()
+sample_means_array = np.array(sample_means)
+
+print(f"Population mean: {pop_mean:.2f}")
+print(f"Average of sample means: {sample_means_array.mean():.2f}")
+print(f"Standard error: {sample_means_array.std():.3f}")
+print(f"Theoretical standard error: {population.std()/np.sqrt(sample_size):.3f}")
+
+# The sample means are normally distributed even though population isn't!
+                        </pre>
+                        
+                        <h6>Business Application:</h6>
+                        <p>This means you can make reliable statistical inferences about the population mean using your sample, even if individual customer behaviors are highly variable or non-normal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="practical-applications">
+            <h2>🎯 Comprehensive Data Analysis Example</h2>
+
+            <div class="example-detailed">
+                <h3>Complete Case Study: E-commerce Customer Analytics</h3>
+                <p><strong>Business Challenge:</strong> Online retailer wants to optimize marketing spend and improve customer retention.</p>
+                
+                <h4>Phase 1: Data Collection and Understanding</h4>
+                <ol>
+                    <li><strong>Data Sources:</strong>
+                        <ul>
+                            <li>Transaction database (ratio data: amounts, quantities)</li>
+                            <li>Customer profiles (mixed: age-ratio, city-nominal, satisfaction-ordinal)</li>
+                            <li>Website analytics (ratio: session time, page views)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Population Definition:</strong>
+                        <ul>
+                            <li>Target: All customers who made at least one purchase</li>
+                            <li>Size: 150,000 customers</li>
+                            <li>Sample: 5,000 customers (stratified by registration date)</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h4>Phase 2: Statistical Analysis Implementation</h4>
+                <pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load and prepare data
+df = pd.read_csv('customer_data.csv')  # In real scenario
+
+# Data type identification and conversion
+print("=== Data Type Analysis ===")
+for column in df.columns:
+    print(f"{column}: {df[column].dtype}")
+
+# Convert categorical ordinals properly
+satisfaction_order = ['Very Dissatisfied', 'Dissatisfied', 'Neutral', 'Satisfied', 'Very Satisfied']
+df['satisfaction'] = pd.Categorical(df['satisfaction'], categories=satisfaction_order, ordered=True)
+
+# Comprehensive statistical summary
+print("\n=== Statistical Summary ===")
+print(df.describe())
+
+# Central tendency comparison
+print("\n=== Central Tendency Analysis ===")
+for numeric_col in ['age', 'total_spent', 'session_time']:
+    mean_val = df[numeric_col].mean()
+    median_val = df[numeric_col].median()
+    mode_val = df[numeric_col].mode()[0] if not df[numeric_col].mode().empty else "No clear mode"
+    
+    print(f"\n{numeric_col}:")
+    print(f"  Mean: {mean_val:.2f}")
+    print(f"  Median: {median_val:.2f}")
+    print(f"  Mode: {mode_val}")
+    
+    # Interpretation
+    if abs(mean_val - median_val) / median_val > 0.1:
+        print(f"  Note: Mean and median differ significantly - check for outliers")
+
+# Variability analysis
+print("\n=== Variability Analysis ===")
+for col in ['total_spent', 'session_time']:
+    std_val = df[col].std()
+    var_val = df[col].var()
+    range_val = df[col].max() - df[col].min()
+    
+    print(f"\n{col}:")
+    print(f"  Standard Deviation: {std_val:.2f}")
+    print(f"  Variance: {var_val:.2f}")
+    print(f"  Range: {range_val:.2f}")
+    print(f"  Coefficient of Variation: {std_val/df[col].mean():.2f}")
+                </pre>
+                
+                <h4>Phase 3: Business Insights Generation</h4>
+                <ol>
+                    <li><strong>Customer Segmentation:</strong>
+                        <ul>
+                            <li>High-value customers (top 20% by spending)</li>
+                            <li>Frequent buyers (above median order frequency)</li>
+                            <li>Satisfied customers (satisfaction ≥ 'Satisfied')</li>
+                        </ul>
+                    </li>
+                    <li><strong>Geographic Analysis:</strong>
+                        <ul>
+                            <li>Revenue by city (ratio data analysis)</li>
+                            <li>Customer satisfaction by region (ordinal data analysis)</li>
+                            <li>Growth opportunities identification</li>
+                        </ul>
+                    </li>
+                    <li><strong>Product Performance:</strong>
+                        <ul>
+                            <li>Category popularity (nominal data frequency)</li>
+                            <li>Revenue per category (ratio data analysis)</li>
+                            <li>Seasonal trends (time series analysis)</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h4>Phase 4: Actionable Recommendations</h4>
+                <ul>
+                    <li><strong>Marketing:</strong> Focus ad spend on cities with highest customer lifetime value</li>
+                    <li><strong>Product:</strong> Expand inventory in top-performing categories</li>
+                    <li><strong>Customer Service:</strong> Improve satisfaction in low-scoring regions</li>
+                    <li><strong>Operations:</strong> Optimize delivery for high-frequency customer areas</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <div class="exam-tips">
+                <h3>💡 Unit 1 Exam Preparation</h3>
+                <div class="key-concepts">
+                    <h4>How to Excel in Data Science Fundamentals Exams:</h4>
+                    <ul>
+                        <li><strong>Know Your Data Types:</strong> Always identify the measurement scale first</li>
+                        <li><strong>Justify Your Methods:</strong> Explain why you chose specific statistical measures</li>
+                        <li><strong>Use Real Examples:</strong> Connect concepts to business scenarios</li>
+                        <li><strong>Show Your Work:</strong> Include calculation steps for numerical problems</li>
+                        <li><strong>Interpret Results:</strong> Always explain what the numbers mean in context</li>
+                    </ul>
+                    
+                    <h4>Sample Exam Question and Complete Answer:</h4>
+                    <div class="example-detailed">
+                        <h5>Question: "A company collected customer satisfaction ratings on a 5-point scale. The data shows: 5, 4, 3, 5, 4, 2, 5, 4, 3, 4. Calculate appropriate measures of central tendency and explain your choices."</h5>
+                        
+                        <h6>Complete Answer Structure:</h6>
+                        <ol>
+                            <li><strong>Data Type Identification (2-3 lines):</strong>
+                                <p>"This is ordinal data because satisfaction ratings have meaningful order (5 > 4 > 3 > 2 > 1) but intervals between ratings may not be equal."</p>
+                            </li>
+                            <li><strong>Calculations (4-5 lines):</strong>
+                                <ul>
+                                    <li>Mean: (5+4+3+5+4+2+5+4+3+4)/10 = 3.9</li>
+                                    <li>Median: Sorted data: 2,3,3,4,4,4,4,5,5,5. Middle values: 4,4. Median = 4</li>
+                                    <li>Mode: 4 appears 4 times (most frequent)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Interpretation and Recommendations (3-4 lines):</strong>
+                                <p>"For ordinal data, median (4) is most appropriate as it's not affected by extreme values. Mode (4) confirms that most customers are satisfied. Mean (3.9) is acceptable but can be misleading due to the single '2' rating. Recommendation: Use median for business reporting."</p>
+                            </li>
+                        </ol>
+                        
+                        <p><strong>Result:</strong> Complete 10+ line answer demonstrating understanding of data types, calculations, and business application.</p>
+                    </div>
+                </div>
+                
+                <div class="checklist">
+                    <h4>Self-Assessment Checklist:</h4>
+                    <ul>
+                        <li>Can I identify measurement scales and choose appropriate statistics?</li>
+                        <li>Do I understand when to use mean vs. median vs. mode?</li>
+                        <li>Can I explain variance and standard deviation with real examples?</li>
+                        <li>Do I know the difference between sample and population?</li>
+                        <li>Can I perform complex data manipulation with pandas?</li>
+                        <li>Do I understand how to make inferences from sample to population?</li>
+                        <li>Can I create business insights from statistical analysis?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="summary-box">
+                <h3>Unit 1 Summary: Data Science Fundamentals</h3>
+                <div class="summary-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Key Learning</th>
+                                <th>Real-World Application</th>
+                                <th>Python Tools</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Measurement Scales</td>
+                                <td>Nominal, Ordinal, Interval, Ratio</td>
+                                <td>Customer segmentation, survey analysis</td>
+                                <td>pandas.Categorical, value_counts()</td>
+                            </tr>
+                            <tr>
+                                <td>Data Structures</td>
+                                <td>Vectors, matrices, data frames</td>
+                                <td>Student performance, sales analysis</td>
+                                <td>numpy.array, pandas.DataFrame</td>
+                            </tr>
+                            <tr>
+                                <td>Central Tendency</td>
+                                <td>Mean, median, mode selection</td>
+                                <td>Salary analysis, quality control</td>
+                                <td>.mean(), .median(), .mode()</td>
+                            </tr>
+                            <tr>
+                                <td>Variability</td>
+                                <td>Range, variance, standard deviation</td>
+                                <td>Risk analysis, process control</td>
+                                <td>.std(), .var(), .quantile()</td>
+                            </tr>
+                            <tr>
+                                <td>Sample vs Population</td>
+                                <td>Inference, confidence intervals</td>
+                                <td>Market research, quality assurance</td>
+                                <td>scipy.stats, sampling methods</td>
+                            </tr>
+                            <tr>
+                                <td>Data Manipulation</td>
+                                <td>Filtering, grouping, aggregation</td>
+                                <td>Business intelligence, reporting</td>
+                                <td>pandas operations, groupby()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Next Unit:</strong> Data Exploration & Visualization - Learn to uncover hidden patterns in data and create compelling visual stories that drive business decisions.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
