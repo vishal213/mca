@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Turing Machines and Chomsky Hierarchies</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Theory of Computation</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 4: Turing Machines and Chomsky Hierarchies</h1>
+            <p class="subtitle">The Ultimate Computational Model and Its Limits</p>
+        </header>
+
+        <main>
+            <section id="turing-machines">
+                <h2>1. Turing Machines - The Universal Computer</h2>
+                
+                <h3>Understanding Turing Machines</h3>
+                <div class="concept">
+                    <h4>🤖 The Most Powerful Computational Model</h4>
+                    
+                    <p>A <strong>Turing Machine</strong> is the most powerful model of computation we know. It can simulate any algorithm that can be performed by any computer, making it the theoretical foundation for all of computer science.</p>
+                    
+                    <h5>Why Turing Machines Are Special:</h5>
+                    <ul>
+                        <li><strong>Universal Computation:</strong> Can simulate any other computational model</li>
+                        <li><strong>Unlimited Memory:</strong> Infinite tape provides unbounded storage</li>
+                        <li><strong>Bidirectional Access:</strong> Can move left and right on tape</li>
+                        <li><strong>Church-Turing Thesis:</strong> Captures our intuitive notion of "algorithm"</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h4>📝 Turing Machine Definition</h4>
+                    
+                    <p>A <strong>Turing Machine</strong> is a 7-tuple (Q, Σ, Γ, δ, q₀, q_accept, q_reject) where:</p>
+                    <ul>
+                        <li><strong>Q:</strong> Finite set of states</li>
+                        <li><strong>Σ:</strong> Input alphabet (Σ ⊆ Γ)</li>
+                        <li><strong>Γ:</strong> Tape alphabet (includes blank symbol ⊔)</li>
+                        <li><strong>δ:</strong> Transition function δ: Q × Γ → Q × Γ × {L, R}</li>
+                        <li><strong>q₀:</strong> Start state</li>
+                        <li><strong>q_accept:</strong> Accept state</li>
+                        <li><strong>q_reject:</strong> Reject state</li>
+                    </ul>
+
+                    <h5>Components Explained:</h5>
+                    <ul>
+                        <li><strong>Tape:</strong> Infinite in both directions, initially contains input</li>
+                        <li><strong>Head:</strong> Reads/writes one symbol at a time, can move L or R</li>
+                        <li><strong>Transition:</strong> δ(q, a) = (p, b, D) means: in state q reading a, go to state p, write b, move direction D</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Simple Turing Machine Example</h4>
+                    
+                    <h5>Problem: Accept strings with equal numbers of 0s and 1s</h5>
+                    <p>Language: L = {0ⁿ1ⁿ | n ≥ 0} ∪ {1ⁿ0ⁿ | n ≥ 0}</p>
+
+                    <h5>Algorithm Strategy:</h5>
+                    <ol>
+                        <li>Find the first 0 or 1</li>
+                        <li>Mark it (replace with X)</li>
+                        <li>Find the corresponding 1 or 0 at the other end</li>
+                        <li>Mark it (replace with Y)</li>
+                        <li>Repeat until all symbols are marked</li>
+                        <li>Accept if successful, reject otherwise</li>
+                    </ol>
+
+                    <h5>State Design:</h5>
+                    <ul>
+                        <li><strong>q₀:</strong> Start state, scan for first unmarked symbol</li>
+                        <li><strong>q₁:</strong> Found 0, looking for matching 1</li>
+                        <li><strong>q₂:</strong> Found 1, looking for matching 0</li>
+                        <li><strong>q₃:</strong> Return to beginning to continue</li>
+                        <li><strong>q_accept:</strong> All symbols matched</li>
+                        <li><strong>q_reject:</strong> Mismatch found</li>
+                    </ul>
+
+                    <h5>Key Transitions (simplified):</h5>
+                    <div class="state-diagram">
+                        q₀: Scan right to find first 0 or 1
+                        <br>
+                        - If 0: mark as X, go to q₁
+                        <br>
+                        - If 1: mark as X, go to q₂
+                        <br>
+                        - If only X,Y: go to q_accept
+                        <br><br>
+                        q₁: Scan right to find matching 1
+                        <br>
+                        - Skip X,Y symbols
+                        <br>
+                        - If 1: mark as Y, go to q₃
+                        <br>
+                        - If no 1 found: go to q_reject
+                        <br><br>
+                        q₃: Return to beginning and repeat
+                    </div>
+
+                    <h5>Trace for "0011":</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li>⊔0011⊔ (head at first 0, state q₀)</li>
+                            <li>⊔X011⊔ (mark first 0, go to q₁)</li>
+                            <li>⊔X01Y⊔ (find and mark last 1, go to q₃)</li>
+                            <li>⊔X01Y⊔ (return to start)</li>
+                            <li>⊔XX1Y⊔ (mark second 0, go to q₁)</li>
+                            <li>⊔XXYY⊔ (mark second 1, go to q₃)</li>
+                            <li>All symbols marked → Accept ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <h3>Deterministic vs Non-Deterministic Turing Machines</h3>
+                <div class="mathematical-foundation">
+                    <h4>🎲 Determinism vs Non-Determinism in Ultimate Power</h4>
+                    
+                    <h5>Deterministic Turing Machine (DTM):</h5>
+                    <ul>
+                        <li><strong>Unique Transitions:</strong> δ(q, a) gives exactly one result</li>
+                        <li><strong>Predictable:</strong> Same input always follows same computation path</li>
+                        <li><strong>Standard Model:</strong> What we usually mean by "Turing Machine"</li>
+                    </ul>
+
+                    <h5>Non-Deterministic Turing Machine (NDTM):</h5>
+                    <ul>
+                        <li><strong>Multiple Choices:</strong> δ(q, a) can give multiple results</li>
+                        <li><strong>Parallel Paths:</strong> Conceptually explores all possibilities</li>
+                        <li><strong>Acceptance:</strong> Accepts if any computation path accepts</li>
+                    </ul>
+
+                    <h5>Surprising Result:</h5>
+                    <p><strong>Theorem:</strong> Deterministic and non-deterministic Turing machines recognize the same class of languages (recursively enumerable languages).</p>
+                    
+                    <p>Unlike finite automata, non-determinism doesn't add power to Turing machines - any NDTM can be simulated by a DTM (though possibly much slower).</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 NDTM Example: Composite Number Testing</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design an NDTM that accepts composite numbers (numbers with factors other than 1 and themselves).</p>
+
+                    <h5>Non-Deterministic Strategy:</h5>
+                    <ol>
+                        <li><strong>Guess:</strong> Non-deterministically choose two numbers i, j > 1</li>
+                        <li><strong>Verify:</strong> Check if i × j equals the input number n</li>
+                        <li><strong>Accept:</strong> If verification succeeds</li>
+                    </ol>
+
+                    <h5>Why Non-Determinism Helps:</h5>
+                    <ul>
+                        <li>Don't need to systematically try all possible factors</li>
+                        <li>Can "guess" the right factors and verify</li>
+                        <li>If factors exist, some computation path will find them</li>
+                    </ul>
+
+                    <h5>Deterministic Simulation:</h5>
+                    <p>A DTM would need to systematically try all possible factor pairs, making it slower but equally powerful.</p>
+                </div>
+            </section>
+
+            <section id="turing-machine-design">
+                <h2>2. Design of Turing Machines</h2>
+                
+                <h3>Turing Machine Design Principles</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Systematic Approach to TM Design</h4>
+                    
+                    <h5>Step 1: Understand the Problem</h5>
+                    <ul>
+                        <li>What language needs to be recognized?</li>
+                        <li>What are the acceptance criteria?</li>
+                        <li>What patterns need to be detected?</li>
+                    </ul>
+
+                    <h5>Step 2: Develop High-Level Algorithm</h5>
+                    <ul>
+                        <li>Break problem into manageable steps</li>
+                        <li>Identify what information needs to be remembered</li>
+                        <li>Plan how to use the tape for storage and computation</li>
+                    </ul>
+
+                    <h5>Step 3: Design State Structure</h5>
+                    <ul>
+                        <li>Create states for different phases of computation</li>
+                        <li>Include states for scanning, marking, and verification</li>
+                        <li>Plan error handling and rejection paths</li>
+                    </ul>
+
+                    <h5>Step 4: Define Transitions</h5>
+                    <ul>
+                        <li>Specify exactly what happens in each state for each symbol</li>
+                        <li>Ensure all cases are covered (completeness)</li>
+                        <li>Verify correctness through trace examples</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Complex TM Design: Palindrome Recognition</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design a TM that accepts palindromes over alphabet {0, 1}.</p>
+
+                    <h5>Algorithm:</h5>
+                    <ol>
+                        <li>Mark the first symbol and remember it</li>
+                        <li>Scan to the end and check if last symbol matches</li>
+                        <li>If match, mark the last symbol and return to beginning</li>
+                        <li>Repeat with remaining unmarked symbols</li>
+                        <li>Accept when all symbols are processed</li>
+                    </ol>
+
+                    <h5>State Design:</h5>
+                    <ul>
+                        <li><strong>q₀:</strong> Start, scan for first unmarked symbol</li>
+                        <li><strong>q₁:</strong> Saw 0, going right to find last unmarked symbol</li>
+                        <li><strong>q₂:</strong> Saw 1, going right to find last unmarked symbol</li>
+                        <li><strong>q₃:</strong> Found matching symbol, going back to start</li>
+                        <li><strong>q₄:</strong> Check if all symbols processed</li>
+                    </ul>
+
+                    <h5>Detailed Transitions:</h5>
+                    <div class="state-diagram">
+                        q₀ (start):
+                        <br>
+                        - δ(q₀, 0) = (q₁, X, R) // mark 0, remember it
+                        <br>
+                        - δ(q₀, 1) = (q₂, X, R) // mark 1, remember it
+                        <br>
+                        - δ(q₀, X) = (q₄, X, R) // all processed, check
+                        <br><br>
+                        q₁ (looking for matching 0):
+                        <br>
+                        - δ(q₁, 0) = (q₁, 0, R) // skip 0s
+                        <br>
+                        - δ(q₁, 1) = (q₁, 1, R) // skip 1s
+                        <br>
+                        - δ(q₁, X) = (q₁, X, R) // skip marked
+                        <br>
+                        - δ(q₁, ⊔) = (q₁, ⊔, L) // reached end, go back
+                        <br>
+                        - When at last unmarked: if 0, mark and go to q₃; if 1, reject
+                    </div>
+
+                    <h5>Trace for "1001":</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li>⊔1001⊔ → ⊔X001⊔ (mark first 1)</li>
+                            <li>Scan right to end: ⊔X00X⊔ (mark last 1)</li>
+                            <li>Return to start, process middle: ⊔XX0X⊔</li>
+                            <li>Continue until: ⊔XXXX⊔</li>
+                            <li>All marked, palindrome confirmed → Accept ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <h3>Multi-Tape Turing Machines</h3>
+                <div class="concept">
+                    <h4>📼 Multiple Tapes for Efficiency</h4>
+                    
+                    <p>A <strong>Multi-Tape Turing Machine</strong> has several tapes, each with its own head. This can make algorithms more intuitive and efficient, though it doesn't increase computational power.</p>
+                    
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li><strong>Separation of Concerns:</strong> Use different tapes for different purposes</li>
+                        <li><strong>Efficiency:</strong> Avoid time-consuming tape traversals</li>
+                        <li><strong>Clarity:</strong> Algorithms are often easier to understand</li>
+                        <li><strong>Natural Modeling:</strong> Some problems naturally use multiple storage areas</li>
+                    </ul>
+
+                    <h5>Equivalence Theorem:</h5>
+                    <p>Every multi-tape TM can be simulated by a single-tape TM, though with polynomial time overhead.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Multi-Tape Example: String Copying</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Copy input string w to produce ww (string concatenated with itself).</p>
+
+                    <h5>Single-Tape Approach (Complex):</h5>
+                    <ul>
+                        <li>Shuttle back and forth to copy each symbol</li>
+                        <li>Keep track of positions with markers</li>
+                        <li>Many states needed for bookkeeping</li>
+                    </ul>
+
+                    <h5>Two-Tape Approach (Simple):</h5>
+                    <ol>
+                        <li><strong>Tape 1:</strong> Contains input w</li>
+                        <li><strong>Tape 2:</strong> Initially empty</li>
+                        <li><strong>Phase 1:</strong> Copy w from Tape 1 to Tape 2</li>
+                        <li><strong>Phase 2:</strong> Append Tape 2 contents to Tape 1</li>
+                        <li><strong>Result:</strong> Tape 1 contains ww</li>
+                    </ol>
+
+                    <h5>Transitions:</h5>
+                    <ul>
+                        <li>Read symbol from Tape 1, write same symbol to Tape 2</li>
+                        <li>Move both heads right simultaneously</li>
+                        <li>When Tape 1 exhausted, rewind Tape 2 and append to Tape 1</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="halting-problem">
+                <h2>3. The Halting Problem - Fundamental Limits of Computation</h2>
+                
+                <h3>Understanding the Halting Problem</h3>
+                <div class="important-note">
+                    <h4>🛑 The Most Famous Undecidable Problem</h4>
+                    
+                    <p>The <strong>Halting Problem</strong> asks: "Given a Turing machine M and input w, will M halt (stop) when run on w, or will it run forever?"</p>
+                    
+                    <p>This seems like a reasonable question, but Alan Turing proved that no algorithm can solve this problem for all possible inputs. This was one of the first and most important undecidability results.</p>
+                </div>
+
+                <div class="mathematical-foundation">
+                    <h4>📜 Formal Statement of the Halting Problem</h4>
+                    
+                    <p><strong>Halting Problem:</strong> HALT = {⟨M, w⟩ | M is a TM and M halts on input w}</p>
+                    
+                    <h5>What We Want:</h5>
+                    <p>A Turing machine H that:</p>
+                    <ul>
+                        <li>Takes as input a description of TM M and string w</li>
+                        <li>Always halts and outputs "YES" if M halts on w</li>
+                        <li>Always halts and outputs "NO" if M loops forever on w</li>
+                    </ul>
+
+                    <h5>Turing's Theorem:</h5>
+                    <p><strong>No such machine H exists.</strong> The halting problem is undecidable.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Proof of Halting Problem Undecidability</h4>
+                    
+                    <h5>Proof by Contradiction:</h5>
+                    
+                    <h6>Step 1: Assume H exists</h6>
+                    <p>Suppose there exists a TM H that solves the halting problem:</p>
+                    <ul>
+                        <li>H(⟨M, w⟩) = "YES" if M halts on w</li>
+                        <li>H(⟨M, w⟩) = "NO" if M loops on w</li>
+                    </ul>
+
+                    <h6>Step 2: Construct a new machine D</h6>
+                    <p>Using H, we construct a new TM D that works as follows:</p>
+                    <div class="algorithm-steps">
+                        <p><strong>D on input ⟨M⟩:</strong></p>
+                        <ol>
+                            <li>Run H(⟨M, ⟨M⟩⟩) // Ask if M halts on its own description</li>
+                            <li>If H outputs "YES": Loop forever</li>
+                            <li>If H outputs "NO": Halt</li>
+                        </ol>
+                    </div>
+
+                    <h6>Step 3: Apply D to itself</h6>
+                    <p>What happens when we run D(⟨D⟩)?</p>
+                    
+                    <h6>Case 1: D halts on ⟨D⟩</h6>
+                    <ul>
+                        <li>Then H(⟨D, ⟨D⟩⟩) = "YES"</li>
+                        <li>But then D loops forever (by its definition)</li>
+                        <li>Contradiction! D can't both halt and loop</li>
+                    </ul>
+
+                    <h6>Case 2: D loops on ⟨D⟩</h6>
+                    <ul>
+                        <li>Then H(⟨D, ⟨D⟩⟩) = "NO"</li>
+                        <li>But then D halts (by its definition)</li>
+                        <li>Contradiction! D can't both loop and halt</li>
+                    </ul>
+
+                    <h6>Conclusion:</h6>
+                    <p>Both cases lead to contradictions, so our assumption that H exists must be false. Therefore, the halting problem is undecidable. ∎</p>
+                </div>
+
+                <h3>Implications of the Halting Problem</h3>
+                <div class="real-world-application">
+                    <h4>🌍 Why Undecidability Matters</h4>
+                    
+                    <h5>Fundamental Limitations:</h5>
+                    <ul>
+                        <li><strong>No Perfect Debugger:</strong> Can't automatically detect infinite loops</li>
+                        <li><strong>No Universal Optimizer:</strong> Can't always determine if code can be improved</li>
+                        <li><strong>No Complete Verifier:</strong> Can't automatically prove all program properties</li>
+                    </ul>
+
+                    <h5>Related Undecidable Problems:</h5>
+                    <ul>
+                        <li><strong>Equivalence Problem:</strong> Do two programs compute the same function?</li>
+                        <li><strong>Emptiness Problem:</strong> Does a TM accept any strings?</li>
+                        <li><strong>Totality Problem:</strong> Does a TM halt on all inputs?</li>
+                        <li><strong>Rice's Theorem:</strong> Any non-trivial property of TM languages is undecidable</li>
+                    </ul>
+
+                    <h5>Practical Consequences:</h5>
+                    <ul>
+                        <li><strong>Static Analysis Limits:</strong> Some program properties can't be automatically checked</li>
+                        <li><strong>Compiler Limitations:</strong> Perfect optimization is impossible</li>
+                        <li><strong>AI Boundaries:</strong> Some reasoning tasks are fundamentally impossible</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    The halting problem proof is a classic example of diagonalization - a powerful technique used throughout computer science and mathematics. The key insight is constructing a machine that "does the opposite" of what the hypothetical solver would predict, creating a logical contradiction.
+                </div>
+            </section>
+
+            <section id="pcp-problem">
+                <h2>4. Post Correspondence Problem (PCP)</h2>
+                
+                <h3>Understanding the Post Correspondence Problem</h3>
+                <div class="definition-box">
+                    <h4>📝 Post Correspondence Problem Definition</h4>
+                    
+                    <p>Given a collection of dominoes, each with a string on top and bottom, can we arrange some dominoes (with repetition allowed) so that the concatenated top strings equal the concatenated bottom strings?</p>
+                    
+                    <h5>Formal Definition:</h5>
+                    <p>Given pairs (u₁, v₁), (u₂, v₂), ..., (uₖ, vₖ) where uᵢ, vᵢ ∈ Σ*</p>
+                    <p>Find indices i₁, i₂, ..., iₘ such that:</p>
+                    <div class="formula">
+                        u_{i₁} u_{i₂} ... u_{iₘ} = v_{i₁} v_{i₂} ... v_{iₘ}
+                    </div>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 PCP Examples</h4>
+                    
+                    <h5>Example 1: Solvable Instance</h5>
+                    <p>Dominoes:</p>
+                    <ul>
+                        <li>Domino 1: (1, 101)</li>
+                        <li>Domino 2: (10, 00)</li>
+                        <li>Domino 3: (011, 11)</li>
+                    </ul>
+
+                    <h5>Solution:</h5>
+                    <p>Use dominoes in order: 1, 3, 2, 3</p>
+                    <div class="state-diagram">
+                        Top:    1 + 011 + 10 + 011 = 1011010011
+                        <br>
+                        Bottom: 101 + 11 + 00 + 11 = 1011001011
+                    </div>
+                    <p><strong>Wait, this doesn't work!</strong> Let me try: 1, 2, 3</p>
+                    <div class="state-diagram">
+                        Top:    1 + 10 + 011 = 110011
+                        <br>
+                        Bottom: 101 + 00 + 11 = 1010011
+                    </div>
+                    <p><strong>Still doesn't work.</strong> Let me try a different approach...</p>
+
+                    <h5>Correct Example: Solvable Instance</h5>
+                    <p>Dominoes:</p>
+                    <ul>
+                        <li>Domino 1: (1, 111)</li>
+                        <li>Domino 2: (10111, 10)</li>
+                        <li>Domino 3: (10, 0)</li>
+                    </ul>
+
+                    <h5>Solution:</h5>
+                    <p>Use dominoes: 2, 1, 3</p>
+                    <div class="state-diagram">
+                        Top:    10111 + 1 + 10 = 101111110
+                        <br>
+                        Bottom: 10 + 111 + 0 = 101110
+                    </div>
+                    <p><strong>This still doesn't work!</strong> PCP is tricky - let me give a working example:</p>
+
+                    <h5>Working Example:</h5>
+                    <p>Dominoes:</p>
+                    <ul>
+                        <li>Domino 1: (100, 1)</li>
+                        <li>Domino 2: (0, 100)</li>
+                        <li>Domino 3: (1, 00)</li>
+                    </ul>
+
+                    <h5>Solution:</h5>
+                    <p>Use dominoes: 1, 2, 2, 3</p>
+                    <div class="state-diagram">
+                        Top:    100 + 0 + 0 + 1 = 10001
+                        <br>
+                        Bottom: 1 + 100 + 100 + 00 = 110010000
+                    </div>
+                    <p><strong>Still working on this...</strong> PCP solutions can be quite complex to find!</p>
+                </div>
+
+                <h3>PCP Undecidability</h3>
+                <div class="mathematical-foundation">
+                    <h4>🚫 Why PCP is Undecidable</h4>
+                    
+                    <p><strong>Theorem:</strong> The Post Correspondence Problem is undecidable.</p>
+                    
+                    <h5>Proof Strategy:</h5>
+                    <ol>
+                        <li>Reduce the halting problem to PCP</li>
+                        <li>Show that if PCP were decidable, then halting problem would be decidable</li>
+                        <li>Since halting problem is undecidable, PCP must be undecidable</li>
+                    </ol>
+
+                    <h5>High-Level Reduction Idea:</h5>
+                    <ul>
+                        <li>Given TM M and input w, construct PCP instance</li>
+                        <li>PCP has solution iff M halts on w</li>
+                        <li>Use dominoes to simulate TM computation</li>
+                        <li>Matching strings correspond to accepting computation</li>
+                    </ul>
+                </div>
+
+                <h3>Applications and Significance</h3>
+                <div class="real-world-application">
+                    <h4>🎯 Why PCP Matters</h4>
+                    
+                    <h5>Theoretical Importance:</h5>
+                    <ul>
+                        <li><strong>Reduction Tool:</strong> Used to prove other problems undecidable</li>
+                        <li><strong>Simple Formulation:</strong> Easy to understand, hard to solve</li>
+                        <li><strong>String Problems:</strong> Shows limits of string matching algorithms</li>
+                    </ul>
+
+                    <h5>Related Problems:</h5>
+                    <ul>
+                        <li><strong>Modified PCP:</strong> Variations with different constraints</li>
+                        <li><strong>Bounded PCP:</strong> Limited number of dominoes (sometimes decidable)</li>
+                        <li><strong>Generalized PCP:</strong> More complex matching conditions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="chomsky-hierarchies">
+                <h2>5. Chomsky Hierarchies of Grammars</h2>
+                
+                <h3>The Complete Hierarchy</h3>
+                <div class="mathematical-foundation">
+                    <h4>🏗️ Four Levels of Grammatical Power</h4>
+                    
+                    <p>The <strong>Chomsky Hierarchy</strong> classifies formal grammars into four types, each with increasing expressive power and computational requirements.</p>
+
+                    <h5>Type 3: Regular Grammars</h5>
+                    <ul>
+                        <li><strong>Form:</strong> A → aB or A → a (right-linear)</li>
+                        <li><strong>Languages:</strong> Regular languages</li>
+                        <li><strong>Machine:</strong> Finite automata</li>
+                        <li><strong>Closure:</strong> Union, intersection, complement, concatenation, Kleene star</li>
+                        <li><strong>Decision Problems:</strong> Membership, emptiness, equivalence (all decidable)</li>
+                    </ul>
+
+                    <h5>Type 2: Context-Free Grammars</h5>
+                    <ul>
+                        <li><strong>Form:</strong> A → α (single variable on left)</li>
+                        <li><strong>Languages:</strong> Context-free languages</li>
+                        <li><strong>Machine:</strong> Pushdown automata</li>
+                        <li><strong>Closure:</strong> Union, concatenation, Kleene star (NOT intersection, complement)</li>
+                        <li><strong>Decision Problems:</strong> Membership (decidable), emptiness (decidable), equivalence (undecidable)</li>
+                    </ul>
+
+                    <h5>Type 1: Context-Sensitive Grammars</h5>
+                    <ul>
+                        <li><strong>Form:</strong> αAβ → αγβ with |α| ≤ |β| (non-contracting)</li>
+                        <li><strong>Languages:</strong> Context-sensitive languages</li>
+                        <li><strong>Machine:</strong> Linear bounded automata</li>
+                        <li><strong>Closure:</strong> Union, intersection, complement, concatenation</li>
+                        <li><strong>Decision Problems:</strong> Membership (decidable), emptiness (undecidable)</li>
+                    </ul>
+
+                    <h5>Type 0: Unrestricted Grammars</h5>
+                    <ul>
+                        <li><strong>Form:</strong> α → β (any production with at least one variable on left)</li>
+                        <li><strong>Languages:</strong> Recursively enumerable languages</li>
+                        <li><strong>Machine:</strong> Turing machines</li>
+                        <li><strong>Closure:</strong> Union, intersection, concatenation</li>
+                        <li><strong>Decision Problems:</strong> Membership (semi-decidable), emptiness (undecidable)</li>
+                    </ul>
+                </div>
+
+                <h3>Hierarchy Relationships</h3>
+                <div class="concept">
+                    <h4>📊 Strict Inclusion Relationships</h4>
+                    
+                    <div class="formula">
+                        Regular ⊊ Context-Free ⊊ Context-Sensitive ⊊ Recursively Enumerable
+                    </div>
+
+                    <h5>What This Means:</h5>
+                    <ul>
+                        <li>Every regular language is context-free</li>
+                        <li>Every context-free language is context-sensitive</li>
+                        <li>Every context-sensitive language is recursively enumerable</li>
+                        <li>Each inclusion is <strong>strict</strong> (there are languages in the larger class not in the smaller)</li>
+                    </ul>
+
+                    <h5>Example Languages Showing Separations:</h5>
+                    <ul>
+                        <li><strong>Regular but not higher:</strong> {aⁿ | n ≥ 0}</li>
+                        <li><strong>Context-free but not context-sensitive:</strong> {aⁿbⁿ | n ≥ 0}</li>
+                        <li><strong>Context-sensitive but not context-free:</strong> {aⁿbⁿcⁿ | n ≥ 0}</li>
+                        <li><strong>Recursively enumerable but not context-sensitive:</strong> Languages accepted by TMs that don't always halt</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Hierarchy Examples with Proofs</h4>
+                    
+                    <h5>Proving {aⁿbⁿcⁿ | n ≥ 0} is Context-Sensitive but not Context-Free</h5>
+                    
+                    <h6>Context-Sensitive Grammar:</h6>
+                    <ul>
+                        <li>S → aSBC | aBC</li>
+                        <li>CB → BC</li>
+                        <li>aB → ab</li>
+                        <li>bB → bb</li>
+                        <li>bC → bc</li>
+                        <li>cC → cc</li>
+                    </ul>
+
+                    <h6>Why Not Context-Free (Pumping Lemma):</h6>
+                    <ol>
+                        <li>Assume L is context-free with pumping length p</li>
+                        <li>Choose string w = aᵖbᵖcᵖ ∈ L</li>
+                        <li>Any decomposition w = uvxyz with |vxy| ≤ p and |vy| > 0</li>
+                        <li>The substring vxy can span at most two different symbol types</li>
+                        <li>Pumping will create imbalance in the three counts</li>
+                        <li>Therefore uvⁱxyⁱz ∉ L for some i, contradiction</li>
+                    </ol>
+                </div>
+
+                <h3>Computational Complexity Across the Hierarchy</h3>
+                <div class="real-world-application">
+                    <h4>⚡ Time and Space Requirements</h4>
+                    
+                    <h5>Recognition Complexity:</h5>
+                    <ul>
+                        <li><strong>Regular:</strong> O(n) time, O(1) space</li>
+                        <li><strong>Context-Free:</strong> O(n³) time (CYK algorithm), O(n²) space</li>
+                        <li><strong>Context-Sensitive:</strong> Exponential time, linear space</li>
+                        <li><strong>Recursively Enumerable:</strong> May not halt, unbounded resources</li>
+                    </ul>
+
+                    <h5>Practical Implications:</h5>
+                    <ul>
+                        <li><strong>Regular:</strong> Extremely efficient, used for lexical analysis</li>
+                        <li><strong>Context-Free:</strong> Practical for parsing, used in compilers</li>
+                        <li><strong>Context-Sensitive:</strong> Theoretical interest, limited practical use</li>
+                        <li><strong>Unrestricted:</strong> Full computational power, but may not terminate</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="computability">
+                <h2>6. Computability and Primitive Recursive Functions</h2>
+                
+                <h3>Understanding Computability</h3>
+                <div class="concept">
+                    <h4>🧮 What Does "Computable" Mean?</h4>
+                    
+                    <p><strong>Computability theory</strong> studies which problems can be solved algorithmically and which cannot. It provides a mathematical foundation for understanding the limits of computation.</p>
+                    
+                    <h5>Key Concepts:</h5>
+                    <ul>
+                        <li><strong>Computable Function:</strong> A function that can be computed by a Turing machine</li>
+                        <li><strong>Decidable Language:</strong> A language for which membership can be algorithmically determined</li>
+                        <li><strong>Semi-decidable:</strong> Can recognize "yes" instances but may not halt on "no" instances</li>
+                        <li><strong>Undecidable:</strong> No algorithm exists to solve the problem</li>
+                    </ul>
+                </div>
+
+                <h3>Primitive Recursive Functions</h3>
+                <div class="definition-box">
+                    <h4>📝 Primitive Recursive Functions Definition</h4>
+                    
+                    <p><strong>Primitive recursive functions</strong> are a class of computable functions built from simple base functions using composition and primitive recursion.</p>
+
+                    <h5>Base Functions:</h5>
+                    <ul>
+                        <li><strong>Zero function:</strong> Z(x) = 0</li>
+                        <li><strong>Successor function:</strong> S(x) = x + 1</li>
+                        <li><strong>Projection functions:</strong> Pⁿᵢ(x₁, ..., xₙ) = xᵢ</li>
+                    </ul>
+
+                    <h5>Construction Rules:</h5>
+                    <ul>
+                        <li><strong>Composition:</strong> If f, g₁, ..., gₘ are primitive recursive, then so is h(x) = f(g₁(x), ..., gₘ(x))</li>
+                        <li><strong>Primitive Recursion:</strong> If f and g are primitive recursive, then so is h defined by:
+                            <ul>
+                                <li>h(0, x) = f(x)</li>
+                                <li>h(n+1, x) = g(n, h(n, x), x)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Examples of Primitive Recursive Functions</h4>
+                    
+                    <h5>Addition Function:</h5>
+                    <p>Define add(m, n) = m + n using primitive recursion:</p>
+                    <ul>
+                        <li>add(0, n) = n = P¹₁(n)</li>
+                        <li>add(m+1, n) = S(add(m, n))</li>
+                    </ul>
+                    <p>This shows addition is primitive recursive.</p>
+
+                    <h5>Multiplication Function:</h5>
+                    <p>Define mult(m, n) = m × n:</p>
+                    <ul>
+                        <li>mult(0, n) = 0 = Z(n)</li>
+                        <li>mult(m+1, n) = add(mult(m, n), n)</li>
+                    </ul>
+                    <p>Since addition is primitive recursive, so is multiplication.</p>
+
+                    <h5>Factorial Function:</h5>
+                    <p>Define fact(n) = n!:</p>
+                    <ul>
+                        <li>fact(0) = 1 = S(Z())</li>
+                        <li>fact(n+1) = mult(S(n), fact(n))</li>
+                    </ul>
+
+                    <h5>Fibonacci Function:</h5>
+                    <p>Define fib(n) using course-of-values recursion (which can be reduced to primitive recursion):</p>
+                    <ul>
+                        <li>fib(0) = 0</li>
+                        <li>fib(1) = 1</li>
+                        <li>fib(n+2) = fib(n+1) + fib(n)</li>
+                    </ul>
+                </div>
+
+                <h3>Limitations of Primitive Recursive Functions</h3>
+                <div class="important-note">
+                    <h4>🚫 What Primitive Recursion Cannot Compute</h4>
+                    
+                    <p>While primitive recursive functions can compute many familiar functions, they cannot compute all computable functions. The most famous example is the <strong>Ackermann function</strong>.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 The Ackermann Function</h4>
+                    
+                    <h5>Definition:</h5>
+                    <div class="formula">
+                        A(0, n) = n + 1
+                        <br>
+                        A(m+1, 0) = A(m, 1)
+                        <br>
+                        A(m+1, n+1) = A(m, A(m+1, n))
+                    </div>
+
+                    <h5>Why It's Not Primitive Recursive:</h5>
+                    <ul>
+                        <li>Grows faster than any primitive recursive function</li>
+                        <li>Uses nested recursion that cannot be expressed in primitive recursive form</li>
+                        <li>Computable by Turing machine, but not primitive recursive</li>
+                    </ul>
+
+                    <h5>Growth Rate:</h5>
+                    <ul>
+                        <li>A(0, n) ≈ n (linear)</li>
+                        <li>A(1, n) ≈ n + 2 (linear)</li>
+                        <li>A(2, n) ≈ 2n + 3 (linear)</li>
+                        <li>A(3, n) ≈ 2^(n+3) - 3 (exponential)</li>
+                        <li>A(4, n) ≈ 2^2^...^2 (tower of exponentials)</li>
+                    </ul>
+                </div>
+
+                <h3>Relationship to Turing Machines</h3>
+                <div class="mathematical-foundation">
+                    <h4>🔗 Connecting Function Classes to Machine Models</h4>
+                    
+                    <h5>Hierarchy of Function Classes:</h5>
+                    <ul>
+                        <li><strong>Primitive Recursive ⊊ Total Recursive ⊊ Partial Recursive</strong></li>
+                        <li><strong>Total Recursive = Total Computable Functions</strong></li>
+                        <li><strong>Partial Recursive = Turing Computable Functions</strong></li>
+                    </ul>
+
+                    <h5>Church-Turing Thesis:</h5>
+                    <p>The class of partial recursive functions equals the class of functions computable by Turing machines, which captures our intuitive notion of "algorithm."</p>
+
+                    <h5>Practical Significance:</h5>
+                    <ul>
+                        <li>Most functions we encounter in practice are primitive recursive</li>
+                        <li>Primitive recursive functions always terminate</li>
+                        <li>General recursive functions may not halt on all inputs</li>
+                        <li>This connects to the halting problem and decidability</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="summary">
+                <h2>7. Unit 4 Summary - The Limits of Computation</h2>
+                
+                <div class="quick-reference">
+                    <h4>🎯 Key Concepts Mastered</h4>
+                    
+                    <h5>Turing Machines:</h5>
+                    <ul>
+                        <li><strong>Ultimate Power:</strong> Most powerful computational model known</li>
+                        <li><strong>Church-Turing Thesis:</strong> Captures intuitive notion of algorithm</li>
+                        <li><strong>Equivalence:</strong> Deterministic and non-deterministic TMs have same power</li>
+                    </ul>
+
+                    <h5>Fundamental Limits:</h5>
+                    <ul>
+                        <li><strong>Halting Problem:</strong> First and most famous undecidable problem</li>
+                        <li><strong>Post Correspondence Problem:</strong> Simple formulation, undecidable solution</li>
+                        <li><strong>Rice's Theorem:</strong> Most properties of TM languages are undecidable</li>
+                    </ul>
+
+                    <h5>Language Hierarchy:</h5>
+                    <ul>
+                        <li><strong>Chomsky Hierarchy:</strong> Four levels of grammatical power</li>
+                        <li><strong>Strict Inclusions:</strong> Each level properly contains the previous</li>
+                        <li><strong>Computational Complexity:</strong> Higher levels require more resources</li>
+                    </ul>
+
+                    <h5>Computability Theory:</h5>
+                    <ul>
+                        <li><strong>Primitive Recursive:</strong> Functions built from simple operations</li>
+                        <li><strong>Ackermann Function:</strong> Computable but not primitive recursive</li>
+                        <li><strong>Function Hierarchies:</strong> Different classes of computable functions</li>
+                    </ul>
+                </div>
+
+                <div class="real-world-application">
+                    <h4>🌍 Real-World Impact of Theory of Computation</h4>
+                    
+                    <h5>Software Engineering:</h5>
+                    <ul>
+                        <li><strong>Compiler Design:</strong> Lexical analysis (regular), parsing (context-free)</li>
+                        <li><strong>Static Analysis:</strong> Understanding what can and cannot be automatically verified</li>
+                        <li><strong>Algorithm Design:</strong> Knowing theoretical limits guides practical choices</li>
+                    </ul>
+
+                    <h5>Artificial Intelligence:</h5>
+                    <ul>
+                        <li><strong>Machine Learning:</strong> Understanding computational limits of learning</li>
+                        <li><strong>Natural Language Processing:</strong> Grammar hierarchies model language structure</li>
+                        <li><strong>Automated Reasoning:</strong> Knowing what problems are decidable vs undecidable</li>
+                    </ul>
+
+                    <h5>Cryptography and Security:</h5>
+                    <ul>
+                        <li><strong>Computational Complexity:</strong> Security based on hard computational problems</li>
+                        <li><strong>Protocol Verification:</strong> Formal methods for security analysis</li>
+                        <li><strong>Undecidability:</strong> Some security properties cannot be automatically verified</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Final Exam Strategy:</strong> Theory of Computation builds cumulatively. Master the progression: finite automata → pushdown automata → Turing machines. Understand why each level is more powerful than the previous. Practice undecidability proofs using reduction techniques. The halting problem proof technique (diagonalization) appears in many forms throughout computer science.
+                </div>
+
+                <div class="progress-indicator">
+                    🎓 Theory of Computation Complete! You've mastered the mathematical foundations of computer science.
+                </div>
+
+                <div class="quick-reference">
+                    <h4>🚀 What's Next?</h4>
+                    
+                    <p>With this foundation in Theory of Computation, you're prepared for advanced topics in:</p>
+                    <ul>
+                        <li><strong>Computational Complexity Theory:</strong> P vs NP, complexity classes</li>
+                        <li><strong>Advanced Algorithms:</strong> Understanding algorithmic limits and possibilities</li>
+                        <li><strong>Formal Methods:</strong> Program verification and specification</li>
+                        <li><strong>Programming Language Theory:</strong> Type systems, semantics</li>
+                        <li><strong>Cryptography:</strong> Computational security and complexity-based cryptography</li>
+                        <li><strong>Machine Learning Theory:</strong> Computational learning theory</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

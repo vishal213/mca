@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Machines and Properties of Regular Sets</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Theory of Computation</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 2: Machines and Properties of Regular Sets</h1>
+            <p class="subtitle">Understanding Machine Capabilities and Limitations</p>
+        </header>
+
+        <main>
+            <section id="machine-concepts">
+                <h2>1. Basic Machine Concepts and Properties</h2>
+                
+                <h3>Understanding Computational Machines</h3>
+                <div class="concept">
+                    <h4>🤖 What is a Computational Machine?</h4>
+                    
+                    <p>A <strong>computational machine</strong> is an abstract model that processes input according to a set of rules to produce output or make decisions. Think of it as a blueprint for how computation can be performed.</p>
+                    
+                    <h5>Key Characteristics of Machines:</h5>
+                    <ul>
+                        <li><strong>Input Processing:</strong> Takes strings from an alphabet as input</li>
+                        <li><strong>State Management:</strong> Maintains internal state during computation</li>
+                        <li><strong>Decision Making:</strong> Accepts or rejects input based on computation</li>
+                        <li><strong>Deterministic Behavior:</strong> Same input always produces same result</li>
+                    </ul>
+                </div>
+
+                <h3>Machine Properties and Capabilities</h3>
+                <div class="example-detailed">
+                    <h4>🔍 Analyzing Machine Capabilities</h4>
+                    
+                    <h5>What Can Finite Automata Do?</h5>
+                    <ul>
+                        <li><strong>Pattern Recognition:</strong> Detect specific patterns in input strings</li>
+                        <li><strong>Counting (Limited):</strong> Count modulo some fixed number</li>
+                        <li><strong>State Tracking:</strong> Remember a finite amount of information</li>
+                        <li><strong>Sequential Processing:</strong> Process input from left to right</li>
+                    </ul>
+
+                    <h5>Real-World Examples:</h5>
+                    <ul>
+                        <li><strong>Traffic Light Controller:</strong> Cycles through states based on timer</li>
+                        <li><strong>Vending Machine:</strong> Tracks coins inserted, dispenses when enough</li>
+                        <li><strong>Elevator Controller:</strong> Responds to button presses and floor sensors</li>
+                        <li><strong>Protocol Checker:</strong> Verifies communication follows correct sequence</li>
+                    </ul>
+                </div>
+
+                <h3>Machine Classification by Power</h3>
+                <div class="mathematical-foundation">
+                    <h4>📊 Hierarchy of Computational Models</h4>
+                    
+                    <h5>From Weakest to Strongest:</h5>
+                    <ol>
+                        <li><strong>Finite Automata:</strong> Finite memory, regular languages</li>
+                        <li><strong>Pushdown Automata:</strong> Stack memory, context-free languages</li>
+                        <li><strong>Linear Bounded Automata:</strong> Limited tape, context-sensitive languages</li>
+                        <li><strong>Turing Machines:</strong> Unlimited tape, recursively enumerable languages</li>
+                    </ol>
+
+                    <h5>Key Insight:</h5>
+                    <p>Each level in the hierarchy can simulate all the levels below it, but not vice versa. This creates a strict hierarchy of computational power.</p>
+                </div>
+            </section>
+
+            <section id="fsm-limitations">
+                <h2>2. Properties and Limitations of Finite State Machines</h2>
+                
+                <h3>What Finite Automata Cannot Do</h3>
+                <div class="important-note">
+                    <h4>🚫 Fundamental Limitations of Finite Automata</h4>
+                    
+                    <p>Despite their usefulness, finite automata have inherent limitations due to their finite memory. Understanding these limitations is crucial for knowing when to use more powerful computational models.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🧮 The Counting Problem</h4>
+                    
+                    <h5>Problem: Matching Parentheses</h5>
+                    <p>Can a finite automaton recognize strings with properly matched parentheses like "(())", "((()))", etc.?</p>
+                    
+                    <h5>Why It's Impossible:</h5>
+                    <ul>
+                        <li><strong>Unbounded Counting:</strong> Need to count arbitrarily many open parentheses</li>
+                        <li><strong>Finite States:</strong> Automaton has fixed, finite number of states</li>
+                        <li><strong>Pigeonhole Principle:</strong> With infinite possible counts but finite states, some counts must share states</li>
+                    </ul>
+
+                    <h5>Intuitive Explanation:</h5>
+                    <p>Imagine trying to remember how many open parentheses you've seen using only a finite number of "memory slots." Eventually, you'll run out of slots and lose track of the count.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔤 The Language {aⁿbⁿ | n ≥ 0}</h4>
+                    
+                    <h5>The Language:</h5>
+                    <p>Strings with equal numbers of a's followed by equal numbers of b's: "", "ab", "aabb", "aaabbb", ...</p>
+                    
+                    <h5>Why No Finite Automaton Can Recognize It:</h5>
+                    <ol>
+                        <li><strong>Need to Count a's:</strong> Must remember how many a's were seen</li>
+                        <li><strong>Need to Match b's:</strong> Must ensure exactly the same number of b's</li>
+                        <li><strong>Arbitrary Length:</strong> No upper bound on the count needed</li>
+                        <li><strong>Finite Memory:</strong> Automaton can only distinguish finitely many counts</li>
+                    </ol>
+
+                    <h5>Proof Sketch:</h5>
+                    <p>Any finite automaton has a finite number of states. For sufficiently large n, strings aⁿ and aᵐ (where n ≠ m) must lead to the same state. But then aⁿbⁿ and aⁿbᵐ would both be accepted or both rejected, which is incorrect.</p>
+                </div>
+
+                <h3>Closure Properties of Regular Languages</h3>
+                <div class="mathematical-foundation">
+                    <h4>🔒 What Operations Preserve Regularity</h4>
+                    
+                    <p><strong>Closure Property:</strong> If you perform certain operations on regular languages, the result is always a regular language.</p>
+                    
+                    <h5>Regular Languages are Closed Under:</h5>
+                    <ul>
+                        <li><strong>Union (L₁ ∪ L₂):</strong> Strings in either language</li>
+                        <li><strong>Intersection (L₁ ∩ L₂):</strong> Strings in both languages</li>
+                        <li><strong>Concatenation (L₁L₂):</strong> String from L₁ followed by string from L₂</li>
+                        <li><strong>Kleene Star (L*):</strong> Zero or more repetitions</li>
+                        <li><strong>Complement (L̄):</strong> All strings not in L</li>
+                        <li><strong>Difference (L₁ - L₂):</strong> Strings in L₁ but not in L₂</li>
+                        <li><strong>Reversal (Lᴿ):</strong> All strings in L written backwards</li>
+                    </ul>
+
+                    <h5>Why Closure Properties Matter:</h5>
+                    <ul>
+                        <li><strong>Language Construction:</strong> Build complex languages from simple ones</li>
+                        <li><strong>Proof Techniques:</strong> Use closure to prove languages are regular</li>
+                        <li><strong>Algorithm Design:</strong> Combine automata to solve complex problems</li>
+                    </ul>
+                </div>
+
+                <div class="algorithm-steps">
+                    <h4>🔧 Constructing Automata for Closed Operations</h4>
+                    
+                    <h5>Union Construction:</h5>
+                    <p>To build automaton for L₁ ∪ L₂:</p>
+                    <ol>
+                        <li>Create new start state</li>
+                        <li>Add ε-transitions to start states of both L₁ and L₂ automata</li>
+                        <li>Accept states are union of both accept state sets</li>
+                    </ol>
+
+                    <h5>Intersection Construction (Product Construction):</h5>
+                    <p>To build automaton for L₁ ∩ L₂:</p>
+                    <ol>
+                        <li>States are pairs (q₁, q₂) where q₁ ∈ Q₁, q₂ ∈ Q₂</li>
+                        <li>Transition: δ((q₁, q₂), a) = (δ₁(q₁, a), δ₂(q₂, a))</li>
+                        <li>Accept states: pairs where both components are accept states</li>
+                    </ol>
+
+                    <h5>Complement Construction:</h5>
+                    <p>To build automaton for L̄:</p>
+                    <ol>
+                        <li>Start with DFA for L (must be complete DFA)</li>
+                        <li>Swap accept and non-accept states</li>
+                        <li>Result accepts exactly the strings L rejects</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="moore-mealy">
+                <h2>3. Moore and Mealy Machines - Machines with Output</h2>
+                
+                <h3>Understanding Output Machines</h3>
+                <div class="concept">
+                    <h4>📤 Machines That Produce Output</h4>
+                    
+                    <p>Unlike finite automata that only accept or reject, <strong>Moore</strong> and <strong>Mealy machines</strong> produce output as they process input. They're used to model systems that transform input sequences into output sequences.</p>
+                    
+                    <h5>Key Differences from Finite Automata:</h5>
+                    <ul>
+                        <li><strong>Output Function:</strong> Produces output symbols, not just accept/reject</li>
+                        <li><strong>Transformation:</strong> Maps input sequences to output sequences</li>
+                        <li><strong>Continuous Operation:</strong> Keeps running and producing output</li>
+                        <li><strong>No Accept States:</strong> All states are "working" states</li>
+                    </ul>
+                </div>
+
+                <h3>Moore Machines - State-Based Output</h3>
+                <div class="definition-box">
+                    <h4>📝 Moore Machine Definition</h4>
+                    
+                    <p>A <strong>Moore Machine</strong> is a 6-tuple (Q, Σ, Δ, δ, λ, q₀) where:</p>
+                    <ul>
+                        <li><strong>Q:</strong> Finite set of states</li>
+                        <li><strong>Σ:</strong> Input alphabet</li>
+                        <li><strong>Δ:</strong> Output alphabet</li>
+                        <li><strong>δ:</strong> Transition function δ: Q × Σ → Q</li>
+                        <li><strong>λ:</strong> Output function λ: Q → Δ</li>
+                        <li><strong>q₀:</strong> Start state</li>
+                    </ul>
+
+                    <h5>Key Characteristic:</h5>
+                    <p>In Moore machines, <strong>output depends only on the current state</strong>, not on the input symbol being read.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Moore Machine Example: Binary Counter Modulo 3</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design a Moore machine that outputs the remainder when the input binary number is divided by 3.</p>
+                    
+                    <h5>Solution Design:</h5>
+                    <ul>
+                        <li><strong>States:</strong> q₀ (remainder 0), q₁ (remainder 1), q₂ (remainder 2)</li>
+                        <li><strong>Input:</strong> Binary digits {0, 1}</li>
+                        <li><strong>Output:</strong> Remainders {0, 1, 2}</li>
+                    </ul>
+
+                    <h5>State Transitions:</h5>
+                    <div class="state-diagram">
+                        From q₀ (remainder 0):
+                        <br>
+                        - Input 0: Stay in q₀ (0×2+0 = 0 mod 3)
+                        <br>
+                        - Input 1: Go to q₁ (0×2+1 = 1 mod 3)
+                        <br><br>
+                        From q₁ (remainder 1):
+                        <br>
+                        - Input 0: Go to q₂ (1×2+0 = 2 mod 3)
+                        <br>
+                        - Input 1: Go to q₀ (1×2+1 = 3 ≡ 0 mod 3)
+                        <br><br>
+                        From q₂ (remainder 2):
+                        <br>
+                        - Input 0: Go to q₁ (2×2+0 = 4 ≡ 1 mod 3)
+                        <br>
+                        - Input 1: Go to q₂ (2×2+1 = 5 ≡ 2 mod 3)
+                    </div>
+
+                    <h5>Output Function:</h5>
+                    <ul>
+                        <li>λ(q₀) = 0</li>
+                        <li>λ(q₁) = 1</li>
+                        <li>λ(q₂) = 2</li>
+                    </ul>
+
+                    <h5>Example Trace for Input "101":</h5>
+                    <ol>
+                        <li><strong>Start:</strong> State q₀, Output 0</li>
+                        <li><strong>Read '1':</strong> Go to q₁, Output 1</li>
+                        <li><strong>Read '0':</strong> Go to q₂, Output 2</li>
+                        <li><strong>Read '1':</strong> Go to q₂, Output 2</li>
+                        <li><strong>Result:</strong> Output sequence "0122", final remainder 2</li>
+                    </ol>
+                    
+                    <p><strong>Verification:</strong> Binary "101" = decimal 5, and 5 mod 3 = 2 ✓</p>
+                </div>
+
+                <h3>Mealy Machines - Transition-Based Output</h3>
+                <div class="definition-box">
+                    <h4>📝 Mealy Machine Definition</h4>
+                    
+                    <p>A <strong>Mealy Machine</strong> is a 6-tuple (Q, Σ, Δ, δ, λ, q₀) where:</p>
+                    <ul>
+                        <li><strong>Q:</strong> Finite set of states</li>
+                        <li><strong>Σ:</strong> Input alphabet</li>
+                        <li><strong>Δ:</strong> Output alphabet</li>
+                        <li><strong>δ:</strong> Transition function δ: Q × Σ → Q</li>
+                        <li><strong>λ:</strong> Output function λ: Q × Σ → Δ</li>
+                        <li><strong>q₀:</strong> Start state</li>
+                    </ul>
+
+                    <h5>Key Characteristic:</h5>
+                    <p>In Mealy machines, <strong>output depends on both current state and input symbol</strong>.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Mealy Machine Example: Sequence Detector</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design a Mealy machine that outputs '1' whenever it detects the sequence "01" in the input, '0' otherwise.</p>
+                    
+                    <h5>Solution Design:</h5>
+                    <ul>
+                        <li><strong>States:</strong> q₀ (initial/after 1), q₁ (after seeing 0)</li>
+                        <li><strong>Strategy:</strong> Track whether we just saw a '0' that could start "01"</li>
+                    </ul>
+
+                    <h5>Transitions and Outputs:</h5>
+                    <div class="state-diagram">
+                        From q₀:
+                        <br>
+                        - Input 0: Go to q₁, Output 0 (potential start of "01")
+                        <br>
+                        - Input 1: Stay in q₀, Output 0 (no sequence detected)
+                        <br><br>
+                        From q₁:
+                        <br>
+                        - Input 0: Stay in q₁, Output 0 (still potential start)
+                        <br>
+                        - Input 1: Go to q₀, Output 1 (detected "01"!)
+                    </div>
+
+                    <h5>Example Trace for Input "0101":</h5>
+                    <ol>
+                        <li><strong>Start:</strong> State q₀</li>
+                        <li><strong>Read '0':</strong> Go to q₁, Output 0</li>
+                        <li><strong>Read '1':</strong> Go to q₀, Output 1 (detected "01")</li>
+                        <li><strong>Read '0':</strong> Go to q₁, Output 0</li>
+                        <li><strong>Read '1':</strong> Go to q₀, Output 1 (detected "01" again)</li>
+                        <li><strong>Result:</strong> Output sequence "0101"</li>
+                    </ol>
+                </div>
+
+                <h3>Equivalence of Moore and Mealy Machines</h3>
+                <div class="mathematical-foundation">
+                    <h4>⚖️ Converting Between Moore and Mealy</h4>
+                    
+                    <p><strong>Theorem:</strong> Moore and Mealy machines are equivalent in computational power. Any function computable by one can be computed by the other.</p>
+                    
+                    <h5>Moore to Mealy Conversion:</h5>
+                    <ol>
+                        <li>Keep the same states and transitions</li>
+                        <li>For each transition δ(q, a) = q', set output λ(q, a) = λ_Moore(q')</li>
+                        <li>Output is determined by the destination state</li>
+                    </ol>
+
+                    <h5>Mealy to Moore Conversion:</h5>
+                    <ol>
+                        <li>For each state q and output symbol o, create new state (q, o)</li>
+                        <li>If δ(q, a) = q' with output o in Mealy machine, then δ_Moore((q, x), a) = (q', o)</li>
+                        <li>Output function: λ_Moore((q, o)) = o</li>
+                    </ol>
+
+                    <h5>Key Differences in Practice:</h5>
+                    <ul>
+                        <li><strong>Moore:</strong> Output appears one step later, more states needed</li>
+                        <li><strong>Mealy:</strong> Immediate output, fewer states, more complex transitions</li>
+                        <li><strong>Choice:</strong> Use Moore for state-based systems, Mealy for input-response systems</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="pumping-lemma">
+                <h2>4. The Pumping Lemma for Regular Sets</h2>
+                
+                <h3>Understanding the Pumping Lemma</h3>
+                <div class="important-note">
+                    <h4>🎯 The Most Important Tool for Proving Non-Regularity</h4>
+                    
+                    <p>The <strong>Pumping Lemma</strong> is a fundamental theorem that gives us a way to prove that certain languages are NOT regular. It's like a "stress test" for regular languages.</p>
+                </div>
+
+                <div class="mathematical-foundation">
+                    <h4>📜 Pumping Lemma Statement</h4>
+                    
+                    <p><strong>Pumping Lemma for Regular Languages:</strong></p>
+                    <p>If L is a regular language, then there exists a positive integer p (pumping length) such that for any string w ∈ L with |w| ≥ p, w can be divided into three parts w = xyz where:</p>
+                    
+                    <ol>
+                        <li><strong>|y| > 0</strong> (y is non-empty)</li>
+                        <li><strong>|xy| ≤ p</strong> (xy fits within pumping length)</li>
+                        <li><strong>xy^i z ∈ L for all i ≥ 0</strong> (can pump y any number of times)</li>
+                    </ol>
+
+                    <h5>Intuitive Explanation:</h5>
+                    <p>In any sufficiently long string accepted by a finite automaton, there must be a loop somewhere in the first p states. This loop can be repeated (pumped) any number of times, and the resulting string will still be accepted.</p>
+                </div>
+
+                <h3>Why the Pumping Lemma Works</h3>
+                <div class="example-detailed">
+                    <h4>🔍 The Pigeonhole Principle in Action</h4>
+                    
+                    <h5>The Setup:</h5>
+                    <ul>
+                        <li>Finite automaton has finite number of states (say n states)</li>
+                        <li>Long string (length > n) must visit more than n states</li>
+                        <li>By pigeonhole principle, some state must be visited twice</li>
+                    </ul>
+
+                    <h5>The Loop:</h5>
+                    <ul>
+                        <li>First visit to repeated state: end of x part</li>
+                        <li>Second visit to repeated state: end of xy part</li>
+                        <li>The y part forms a loop that can be repeated</li>
+                        <li>Rest of string: z part</li>
+                    </ul>
+
+                    <div class="state-diagram">
+                        Start --x--> State q --y--> State q --z--> Accept
+                        <br><br>
+                        The y loop can be taken 0, 1, 2, 3, ... times
+                        <br>
+                        Resulting in strings: xz, xyz, xy²z, xy³z, ...
+                    </div>
+                </div>
+
+                <h3>Using the Pumping Lemma - Proof by Contradiction</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Standard Proof Template</h4>
+                    
+                    <p>To prove language L is not regular:</p>
+                    
+                    <ol>
+                        <li><strong>Assume for contradiction</strong> that L is regular</li>
+                        <li><strong>Let p be the pumping length</strong> guaranteed by pumping lemma</li>
+                        <li><strong>Choose a specific string w ∈ L</strong> with |w| ≥ p</li>
+                        <li><strong>Consider all possible divisions</strong> w = xyz satisfying pumping conditions</li>
+                        <li><strong>Show that for some i</strong>, xy^i z ∉ L</li>
+                        <li><strong>This contradicts the pumping lemma</strong>, so L is not regular</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🧪 Example: Proving {a^n b^n | n ≥ 0} is Not Regular</h4>
+                    
+                    <h5>Step 1: Assume for Contradiction</h5>
+                    <p>Assume L = {a^n b^n | n ≥ 0} is regular.</p>
+
+                    <h5>Step 2: Let p be the Pumping Length</h5>
+                    <p>By the pumping lemma, there exists p > 0.</p>
+
+                    <h5>Step 3: Choose a Specific String</h5>
+                    <p>Choose w = a^p b^p. Clearly w ∈ L and |w| = 2p ≥ p.</p>
+
+                    <h5>Step 4: Consider All Possible Divisions</h5>
+                    <p>Any division w = xyz with |xy| ≤ p and |y| > 0 means:</p>
+                    <ul>
+                        <li>x and y consist only of a's (since |xy| ≤ p)</li>
+                        <li>y = a^k for some k > 0</li>
+                        <li>x = a^j for some j ≥ 0</li>
+                        <li>z = a^(p-j-k) b^p</li>
+                    </ul>
+
+                    <h5>Step 5: Show Pumping Fails</h5>
+                    <p>Consider xy^2z:</p>
+                    <ul>
+                        <li>xy^2z = a^j (a^k)^2 a^(p-j-k) b^p = a^(j+2k+p-j-k) b^p = a^(p+k) b^p</li>
+                        <li>Since k > 0, we have p+k > p</li>
+                        <li>So xy^2z has more a's than b's</li>
+                        <li>Therefore xy^2z ∉ L</li>
+                    </ul>
+
+                    <h5>Step 6: Contradiction</h5>
+                    <p>This contradicts the pumping lemma, so L is not regular. ∎</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🧪 Example: Proving {ww | w ∈ {0,1}*} is Not Regular</h4>
+                    
+                    <h5>The Language:</h5>
+                    <p>L = strings that are repetitions of some substring: "00", "0101", "110110", etc.</p>
+
+                    <h5>Proof:</h5>
+                    <ol>
+                        <li><strong>Assume</strong> L is regular with pumping length p</li>
+                        <li><strong>Choose</strong> w = 0^p 1^p 0^p 1^p ∈ L (it's of the form uu where u = 0^p 1^p)</li>
+                        <li><strong>Any division</strong> w = xyz with |xy| ≤ p means y consists only of 0's</li>
+                        <li><strong>Pumping up:</strong> xy^2z has more 0's in the first half than the second half</li>
+                        <li><strong>Result:</strong> xy^2z is not of the form uu, so xy^2z ∉ L</li>
+                        <li><strong>Contradiction:</strong> L is not regular ∎</li>
+                    </ol>
+                </div>
+
+                <h3>Applications of the Pumping Lemma</h3>
+                <div class="real-world-application">
+                    <h4>🌍 When to Use the Pumping Lemma</h4>
+                    
+                    <h5>Languages That Are Typically Non-Regular:</h5>
+                    <ul>
+                        <li><strong>Counting Languages:</strong> {a^n b^n}, {a^n b^n c^n}, etc.</li>
+                        <li><strong>Palindromes:</strong> {w | w = w^R} over alphabets with ≥2 symbols</li>
+                        <li><strong>Perfect Powers:</strong> {a^(n²) | n ≥ 0}, {a^(2^n) | n ≥ 0}</li>
+                        <li><strong>Context Dependencies:</strong> Languages where distant parts must match</li>
+                    </ul>
+
+                    <h5>Practical Implications:</h5>
+                    <ul>
+                        <li><strong>Parser Design:</strong> Know when you need more than regular expressions</li>
+                        <li><strong>Language Recognition:</strong> Understand limits of finite automata</li>
+                        <li><strong>Algorithm Choice:</strong> Choose appropriate computational model</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Exam Strategy:</strong> When using the pumping lemma, be very careful about your choice of string w. Pick a string where you can clearly analyze all possible ways to divide it. Often, strings with clear structure (like a^p b^p) work well because you can precisely determine where x, y, and z must be.
+                </div>
+            </section>
+
+            <section id="closure-properties">
+                <h2>5. Closure Properties of Regular Sets</h2>
+                
+                <h3>Understanding Closure Properties</h3>
+                <div class="concept">
+                    <h4>🔒 What Does "Closed Under" Mean?</h4>
+                    
+                    <p>A class of languages is <strong>closed under an operation</strong> if performing that operation on languages in the class always produces another language in the same class.</p>
+                    
+                    <h5>Why Closure Properties Matter:</h5>
+                    <ul>
+                        <li><strong>Language Construction:</strong> Build complex regular languages from simple ones</li>
+                        <li><strong>Proof Techniques:</strong> Prove regularity by showing construction from known regular languages</li>
+                        <li><strong>Algorithm Design:</strong> Combine automata to solve complex problems</li>
+                        <li><strong>Decidability:</strong> Determine if certain problems are solvable</li>
+                    </ul>
+                </div>
+
+                <h3>Basic Closure Properties</h3>
+                <div class="mathematical-foundation">
+                    <h4>✅ Operations That Preserve Regularity</h4>
+                    
+                    <h5>Union (L₁ ∪ L₂):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {w | w ∈ L₁ or w ∈ L₂}</li>
+                        <li><strong>Construction:</strong> Create automaton with ε-transitions to both L₁ and L₂ automata</li>
+                        <li><strong>Example:</strong> If L₁ = {a*} and L₂ = {b*}, then L₁ ∪ L₂ = {a*, b*}</li>
+                    </ul>
+
+                    <h5>Concatenation (L₁L₂):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {w₁w₂ | w₁ ∈ L₁ and w₂ ∈ L₂}</li>
+                        <li><strong>Construction:</strong> Connect accept states of L₁ to start state of L₂ with ε-transitions</li>
+                        <li><strong>Example:</strong> If L₁ = {a} and L₂ = {b}, then L₁L₂ = {ab}</li>
+                    </ul>
+
+                    <h5>Kleene Star (L*):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {ε} ∪ L ∪ LL ∪ LLL ∪ ...</li>
+                        <li><strong>Construction:</strong> Add ε-transitions for loops and bypassing</li>
+                        <li><strong>Example:</strong> If L = {ab}, then L* = {ε, ab, abab, ababab, ...}</li>
+                    </ul>
+                </div>
+
+                <div class="mathematical-foundation">
+                    <h4>✅ Advanced Closure Properties</h4>
+                    
+                    <h5>Intersection (L₁ ∩ L₂):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {w | w ∈ L₁ and w ∈ L₂}</li>
+                        <li><strong>Construction:</strong> Product automaton with states (q₁, q₂)</li>
+                        <li><strong>Accept condition:</strong> Both components must be in accept states</li>
+                    </ul>
+
+                    <h5>Complement (L̄):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {w | w ∉ L}</li>
+                        <li><strong>Construction:</strong> Swap accept and non-accept states in complete DFA</li>
+                        <li><strong>Note:</strong> Must ensure DFA is complete (has transition for every state-symbol pair)</li>
+                    </ul>
+
+                    <h5>Difference (L₁ - L₂):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {w | w ∈ L₁ and w ∉ L₂}</li>
+                        <li><strong>Construction:</strong> L₁ - L₂ = L₁ ∩ L̄₂</li>
+                        <li><strong>Uses:</strong> Combine intersection and complement</li>
+                    </ul>
+
+                    <h5>Reversal (Lᴿ):</h5>
+                    <ul>
+                        <li><strong>Definition:</strong> {wᴿ | w ∈ L}</li>
+                        <li><strong>Construction:</strong> Reverse all transitions, swap start and accept states</li>
+                        <li><strong>Example:</strong> If L = {ab, abc}, then Lᴿ = {ba, cba}</li>
+                    </ul>
+                </div>
+
+                <h3>Proving Closure Properties</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Intersection Closure Proof (Product Construction)</h4>
+                    
+                    <h5>Theorem:</h5>
+                    <p>If L₁ and L₂ are regular languages, then L₁ ∩ L₂ is also regular.</p>
+
+                    <h5>Proof by Construction:</h5>
+                    <ol>
+                        <li><strong>Given:</strong> DFAs M₁ = (Q₁, Σ, δ₁, q₁, F₁) and M₂ = (Q₂, Σ, δ₂, q₂, F₂)</li>
+                        <li><strong>Construct:</strong> M = (Q, Σ, δ, q₀, F) where:
+                            <ul>
+                                <li>Q = Q₁ × Q₂ (Cartesian product)</li>
+                                <li>q₀ = (q₁, q₂)</li>
+                                <li>F = F₁ × F₂ (both components must be accepting)</li>
+                                <li>δ((p₁, p₂), a) = (δ₁(p₁, a), δ₂(p₂, a))</li>
+                            </ul>
+                        </li>
+                        <li><strong>Correctness:</strong> M accepts w iff both M₁ and M₂ accept w</li>
+                        <li><strong>Therefore:</strong> L(M) = L₁ ∩ L₂, proving closure ∎</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🧪 Example: Intersection Construction</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Construct automaton for L₁ ∩ L₂ where:</p>
+                    <ul>
+                        <li>L₁ = strings with even number of a's</li>
+                        <li>L₂ = strings with even number of b's</li>
+                    </ul>
+
+                    <h5>Original Automata:</h5>
+                    <div class="state-diagram">
+                        M₁: q₀ (even a's) ⟷ q₁ (odd a's)
+                        <br>
+                        M₂: r₀ (even b's) ⟷ r₁ (odd b's)
+                    </div>
+
+                    <h5>Product Automaton States:</h5>
+                    <ul>
+                        <li>(q₀, r₀): Even a's, even b's ← Accept state</li>
+                        <li>(q₀, r₁): Even a's, odd b's</li>
+                        <li>(q₁, r₀): Odd a's, even b's</li>
+                        <li>(q₁, r₁): Odd a's, odd b's</li>
+                    </ul>
+
+                    <h5>Result:</h5>
+                    <p>The intersection language contains strings with both even number of a's AND even number of b's.</p>
+                </div>
+
+                <h3>Using Closure Properties in Proofs</h3>
+                <div class="real-world-application">
+                    <h4>🎯 Proof Techniques Using Closure</h4>
+                    
+                    <h5>Proving Regularity:</h5>
+                    <p>To prove L is regular, show L can be constructed from known regular languages using closure operations.</p>
+                    
+                    <h5>Example: L = {w ∈ {a,b}* | w contains 'aba' but not 'bab'}</h5>
+                    <ol>
+                        <li>L₁ = strings containing 'aba' (regular)</li>
+                        <li>L₂ = strings containing 'bab' (regular)</li>
+                        <li>L = L₁ - L₂ = L₁ ∩ L̄₂</li>
+                        <li>Since regular languages are closed under intersection and complement, L is regular</li>
+                    </ol>
+
+                    <h5>Proving Non-Regularity:</h5>
+                    <p>Sometimes closure properties help prove non-regularity by contradiction.</p>
+                    
+                    <h5>Example: If L = {aⁿbⁿ | n ≥ 0} were regular...</h5>
+                    <ol>
+                        <li>Then L ∩ a*b* = L would be regular (closure under intersection)</li>
+                        <li>But we know L is not regular (by pumping lemma)</li>
+                        <li>Contradiction shows our assumption was wrong</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="myhill-nerode">
+                <h2>6. Myhill-Nerode Theorem and Minimization</h2>
+                
+                <h3>Understanding the Myhill-Nerode Theorem</h3>
+                <div class="mathematical-foundation">
+                    <h4>🎯 The Fundamental Characterization of Regular Languages</h4>
+                    
+                    <p>The <strong>Myhill-Nerode Theorem</strong> provides a precise characterization of regular languages in terms of equivalence relations. It's both a powerful theoretical tool and a practical algorithm for minimizing automata.</p>
+                    
+                    <h5>Key Concepts:</h5>
+                    <ul>
+                        <li><strong>String Equivalence:</strong> Two strings are equivalent if they lead to the same future behavior</li>
+                        <li><strong>Right Invariant:</strong> Equivalence that respects concatenation on the right</li>
+                        <li><strong>Finite Index:</strong> Only finitely many equivalence classes</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h4>📝 Myhill-Nerode Equivalence Relation</h4>
+                    
+                    <p>For a language L, define equivalence relation ≡_L on strings:</p>
+                    <div class="formula">
+                        x ≡_L y if and only if
+                        <br>
+                        for all strings z, xz ∈ L ⟺ yz ∈ L
+                    </div>
+
+                    <h5>What This Means:</h5>
+                    <p>Two strings x and y are equivalent if they have the same "future" - appending any string z to either x or y gives the same membership result in L.</p>
+
+                    <h5>Myhill-Nerode Theorem:</h5>
+                    <p>A language L is regular if and only if ≡_L has finite index (finitely many equivalence classes).</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Analyzing L = {w | w has even number of a's}</h4>
+                    
+                    <h5>Finding Equivalence Classes:</h5>
+                    <p>We need to partition all strings based on their "future behavior."</p>
+                    
+                    <h5>Key Insight:</h5>
+                    <p>For membership in L, only the parity (even/odd) of a's matters, not the exact count or positions.</p>
+
+                    <h5>Equivalence Classes:</h5>
+                    <ul>
+                        <li><strong>[ε]:</strong> Strings with even number of a's
+                            <ul>
+                                <li>Examples: ε, "bb", "aa", "baba", "aabb"</li>
+                                <li>Future: Need even number of a's to stay in L</li>
+                            </ul>
+                        </li>
+                        <li><strong>[a]:</strong> Strings with odd number of a's
+                            <ul>
+                                <li>Examples: "a", "aba", "aaa", "bab"</li>
+                                <li>Future: Need odd number of a's to get into L</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Verification:</h5>
+                    <ul>
+                        <li><strong>Finite Index:</strong> Only 2 equivalence classes</li>
+                        <li><strong>Right Invariant:</strong> Appending same string to equivalent strings preserves equivalence</li>
+                        <li><strong>Conclusion:</strong> L is regular (which we already knew)</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Proving L = {aⁿbⁿ | n ≥ 0} is Not Regular</h4>
+                    
+                    <h5>Strategy:</h5>
+                    <p>Show that ≡_L has infinitely many equivalence classes.</p>
+
+                    <h5>Consider Strings:</h5>
+                    <p>ε, a, aa, aaa, aaaa, ... (all strings of only a's)</p>
+
+                    <h5>Showing They're All Different:</h5>
+                    <p>For any i ≠ j, consider strings aⁱ and aʲ:</p>
+                    <ul>
+                        <li>Append bⁱ: aⁱbⁱ ∈ L but aʲbⁱ ∉ L (since i ≠ j)</li>
+                        <li>Therefore aⁱ ≢_L aʲ</li>
+                        <li>So each aⁱ is in a different equivalence class</li>
+                    </ul>
+
+                    <h5>Conclusion:</h5>
+                    <p>Since there are infinitely many equivalence classes, L is not regular by Myhill-Nerode theorem.</p>
+                </div>
+
+                <h3>DFA Minimization Algorithm</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Table-Filling Algorithm for DFA Minimization</h4>
+                    
+                    <h5>Goal:</h5>
+                    <p>Find the minimal DFA (fewest states) that recognizes the same language.</p>
+
+                    <h5>Algorithm Steps:</h5>
+                    <ol>
+                        <li><strong>Create Distinguishability Table:</strong> Make table for all pairs of states</li>
+                        <li><strong>Mark Obviously Different Pairs:</strong> Mark pairs where one is accepting, other is not</li>
+                        <li><strong>Iteratively Mark Pairs:</strong> If δ(p,a) and δ(q,a) are marked as different, mark (p,q) as different</li>
+                        <li><strong>Repeat Until No Changes:</strong> Continue until no new pairs are marked</li>
+                        <li><strong>Merge Equivalent States:</strong> States not marked as different are equivalent</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Minimization Example</h4>
+                    
+                    <h5>Original DFA:</h5>
+                    <div class="state-diagram">
+                        States: {q₀, q₁, q₂, q₃, q₄}
+                        <br>
+                        Start: q₀, Accept: {q₂, q₄}
+                        <br>
+                        Transitions on 'a': q₀→q₁, q₁→q₂, q₂→q₃, q₃→q₄, q₄→q₄
+                        <br>
+                        Transitions on 'b': all states go to q₀
+                    </div>
+
+                    <h5>Distinguishability Table:</h5>
+                    <div class="algorithm-steps">
+                        <h6>Initial Marking (Accept vs Non-Accept):</h6>
+                        <ul>
+                            <li>Mark (q₀,q₂), (q₀,q₄), (q₁,q₂), (q₁,q₄), (q₃,q₂), (q₃,q₄)</li>
+                        </ul>
+
+                        <h6>Iterative Marking:</h6>
+                        <ul>
+                            <li>Check transitions: if δ(p,a) and δ(q,a) are marked different, mark (p,q)</li>
+                            <li>Continue until no new markings</li>
+                        </ul>
+
+                        <h6>Result:</h6>
+                        <ul>
+                            <li>Equivalent states: {q₂, q₄} (both accepting with same transitions)</li>
+                            <li>Merge q₂ and q₄ into single state</li>
+                            <li>Minimal DFA has 4 states instead of 5</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Applications of Minimization</h3>
+                <div class="real-world-application">
+                    <h4>🌍 Why Minimization Matters</h4>
+                    
+                    <h5>Practical Benefits:</h5>
+                    <ul>
+                        <li><strong>Memory Efficiency:</strong> Fewer states mean less memory usage</li>
+                        <li><strong>Faster Execution:</strong> Fewer states to process</li>
+                        <li><strong>Canonical Form:</strong> Unique minimal representation for each regular language</li>
+                        <li><strong>Equivalence Testing:</strong> Two DFAs are equivalent iff their minimal forms are identical</li>
+                    </ul>
+
+                    <h5>Applications:</h5>
+                    <ul>
+                        <li><strong>Compiler Optimization:</strong> Minimize lexical analyzer automata</li>
+                        <li><strong>Hardware Design:</strong> Reduce circuit complexity</li>
+                        <li><strong>Protocol Verification:</strong> Simplify state space for analysis</li>
+                        <li><strong>Pattern Matching:</strong> Optimize regular expression engines</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="summary">
+                <h2>7. Unit 2 Summary - Understanding Machine Boundaries</h2>
+                
+                <div class="quick-reference">
+                    <h4>🎯 Key Concepts Mastered</h4>
+                    
+                    <h5>Machine Models:</h5>
+                    <ul>
+                        <li><strong>Moore Machines:</strong> Output depends on state</li>
+                        <li><strong>Mealy Machines:</strong> Output depends on state and input</li>
+                        <li><strong>Equivalence:</strong> Both models have same computational power</li>
+                    </ul>
+
+                    <h5>Fundamental Limitations:</h5>
+                    <ul>
+                        <li><strong>Finite Memory:</strong> Cannot count unboundedly</li>
+                        <li><strong>No Context:</strong> Cannot match distant parts of input</li>
+                        <li><strong>Pumping Lemma:</strong> Tool for proving non-regularity</li>
+                    </ul>
+
+                    <h5>Closure Properties:</h5>
+                    <ul>
+                        <li><strong>Closed Under:</strong> Union, intersection, complement, concatenation, Kleene star</li>
+                        <li><strong>Construction Methods:</strong> Product automata, state elimination</li>
+                        <li><strong>Proof Techniques:</strong> Use closure to prove regularity or non-regularity</li>
+                    </ul>
+
+                    <h5>Theoretical Tools:</h5>
+                    <ul>
+                        <li><strong>Myhill-Nerode Theorem:</strong> Characterizes regular languages</li>
+                        <li><strong>Minimization:</strong> Find optimal automaton representation</li>
+                        <li><strong>Equivalence Testing:</strong> Determine if automata are equivalent</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Exam Strategy:</strong> Master the pumping lemma proof technique - it's frequently tested. Practice identifying which languages are regular vs non-regular. Understand closure properties both for constructing automata and for theoretical proofs. The Myhill-Nerode theorem provides both a way to prove non-regularity and to minimize automata.
+                </div>
+
+                <div class="progress-indicator">
+                    🎓 Unit 2 Complete! Next: Unit 3 - Grammars and Pushdown Automata
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

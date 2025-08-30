@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3: Grammars and Pushdown Automata</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Theory of Computation</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 3: Grammars and Pushdown Automata</h1>
+            <p class="subtitle">Beyond Regular Languages - Context-Free Power</p>
+        </header>
+
+        <main>
+            <section id="grammar-introduction">
+                <h2>1. Grammar Definitions and Types</h2>
+                
+                <h3>Understanding Formal Grammars</h3>
+                <div class="concept">
+                    <h4>📝 What is a Grammar?</h4>
+                    
+                    <p>A <strong>formal grammar</strong> is a set of rules for generating strings in a language. Think of it as a recipe or blueprint that tells you how to construct valid sentences in a language.</p>
+                    
+                    <h5>Real-World Analogy:</h5>
+                    <p>Just like English grammar has rules ("A sentence needs a subject and verb"), formal grammars have mathematical rules for constructing strings. The difference is that formal grammars are precise and unambiguous.</p>
+                    
+                    <h5>Why Grammars Matter:</h5>
+                    <ul>
+                        <li><strong>Language Definition:</strong> Precisely specify what strings belong to a language</li>
+                        <li><strong>Parser Construction:</strong> Build programs that understand structured input</li>
+                        <li><strong>Compiler Design:</strong> Analyze programming language syntax</li>
+                        <li><strong>Natural Language Processing:</strong> Model human language structure</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h4>📝 Formal Grammar Definition</h4>
+                    
+                    <p>A <strong>grammar</strong> G is a 4-tuple (V, T, P, S) where:</p>
+                    <ul>
+                        <li><strong>V:</strong> Finite set of variables (non-terminals)</li>
+                        <li><strong>T:</strong> Finite set of terminals (alphabet symbols)</li>
+                        <li><strong>P:</strong> Finite set of production rules</li>
+                        <li><strong>S:</strong> Start variable (S ∈ V)</li>
+                    </ul>
+
+                    <h5>Components Explained:</h5>
+                    <ul>
+                        <li><strong>Variables (Non-terminals):</strong> Symbols that can be replaced by other symbols</li>
+                        <li><strong>Terminals:</strong> Final symbols that appear in the language strings</li>
+                        <li><strong>Productions:</strong> Rules of the form A → α (replace A with α)</li>
+                        <li><strong>Start Variable:</strong> The symbol we begin with when generating strings</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Simple Grammar Example</h4>
+                    
+                    <h5>Grammar for Simple Arithmetic Expressions:</h5>
+                    <ul>
+                        <li><strong>Variables:</strong> V = {E, T, F} (Expression, Term, Factor)</li>
+                        <li><strong>Terminals:</strong> T = {+, *, (, ), id} (operators and identifiers)</li>
+                        <li><strong>Start Variable:</strong> S = E</li>
+                        <li><strong>Productions:</strong>
+                            <ul>
+                                <li>E → E + T | T</li>
+                                <li>T → T * F | F</li>
+                                <li>F → (E) | id</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Generating String "id + id * id":</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li>E (start)</li>
+                            <li>E + T (using E → E + T)</li>
+                            <li>T + T (using E → T)</li>
+                            <li>F + T (using T → F)</li>
+                            <li>id + T (using F → id)</li>
+                            <li>id + T * F (using T → T * F)</li>
+                            <li>id + F * F (using T → F)</li>
+                            <li>id + id * F (using F → id)</li>
+                            <li>id + id * id (using F → id)</li>
+                        </ol>
+                    </div>
+
+                    <p><strong>Result:</strong> The string "id + id * id" can be generated by this grammar, so it's in the language.</p>
+                </div>
+
+                <h3>The Chomsky Hierarchy</h3>
+                <div class="mathematical-foundation">
+                    <h4>🏗️ Classification of Grammars by Power</h4>
+                    
+                    <p>Noam Chomsky classified grammars into four types based on the restrictions on their production rules. Each type defines a different class of languages with different computational requirements.</p>
+
+                    <h5>Type 0: Unrestricted Grammars</h5>
+                    <ul>
+                        <li><strong>Rules:</strong> α → β where α, β ∈ (V ∪ T)* and α contains at least one variable</li>
+                        <li><strong>Languages:</strong> Recursively enumerable languages</li>
+                        <li><strong>Machine:</strong> Turing machines</li>
+                        <li><strong>Example:</strong> Any computable language</li>
+                    </ul>
+
+                    <h5>Type 1: Context-Sensitive Grammars</h5>
+                    <ul>
+                        <li><strong>Rules:</strong> αAβ → αγβ where A ∈ V, α,β ∈ (V ∪ T)*, γ ∈ (V ∪ T)+</li>
+                        <li><strong>Restriction:</strong> |α| ≤ |β| (non-contracting)</li>
+                        <li><strong>Languages:</strong> Context-sensitive languages</li>
+                        <li><strong>Machine:</strong> Linear bounded automata</li>
+                        <li><strong>Example:</strong> {aⁿbⁿcⁿ | n ≥ 1}</li>
+                    </ul>
+
+                    <h5>Type 2: Context-Free Grammars</h5>
+                    <ul>
+                        <li><strong>Rules:</strong> A → α where A ∈ V, α ∈ (V ∪ T)*</li>
+                        <li><strong>Restriction:</strong> Left side is always a single variable</li>
+                        <li><strong>Languages:</strong> Context-free languages</li>
+                        <li><strong>Machine:</strong> Pushdown automata</li>
+                        <li><strong>Example:</strong> {aⁿbⁿ | n ≥ 0}, programming languages</li>
+                    </ul>
+
+                    <h5>Type 3: Regular Grammars</h5>
+                    <ul>
+                        <li><strong>Rules:</strong> A → aB or A → a where A,B ∈ V, a ∈ T</li>
+                        <li><strong>Restriction:</strong> Right-linear or left-linear</li>
+                        <li><strong>Languages:</strong> Regular languages</li>
+                        <li><strong>Machine:</strong> Finite automata</li>
+                        <li><strong>Example:</strong> Languages recognized by regular expressions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="context-free-grammars">
+                <h2>2. Context-Free and Context-Sensitive Grammars</h2>
+                
+                <h3>Context-Free Grammars - The Sweet Spot</h3>
+                <div class="concept">
+                    <h4>🎯 Why Context-Free Grammars are Special</h4>
+                    
+                    <p><strong>Context-Free Grammars (CFGs)</strong> are the most important class for practical applications. They're powerful enough to describe most programming languages and natural language constructs, yet simple enough to parse efficiently.</p>
+                    
+                    <h5>Key Properties:</h5>
+                    <ul>
+                        <li><strong>Single Variable Left Side:</strong> A → α (only one variable on left)</li>
+                        <li><strong>Context Independence:</strong> Variable A can always be replaced by α, regardless of context</li>
+                        <li><strong>Recursive Structure:</strong> Can express nested and recursive patterns</li>
+                        <li><strong>Efficient Parsing:</strong> Polynomial-time parsing algorithms exist</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Context-Free Grammar Examples</h4>
+                    
+                    <h5>Example 1: Balanced Parentheses</h5>
+                    <p>Language: {ε, (), (()), ()(), (())(), ...}</p>
+                    <ul>
+                        <li><strong>Grammar:</strong> S → (S) | SS | ε</li>
+                        <li><strong>Explanation:</strong> 
+                            <ul>
+                                <li>S → (S): Wrap existing balanced string in parentheses</li>
+                                <li>S → SS: Concatenate two balanced strings</li>
+                                <li>S → ε: Empty string is balanced</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Example 2: Arithmetic Expressions with Precedence</h5>
+                    <ul>
+                        <li><strong>Grammar:</strong>
+                            <ul>
+                                <li>E → E + T | E - T | T</li>
+                                <li>T → T * F | T / F | F</li>
+                                <li>F → (E) | id | num</li>
+                            </ul>
+                        </li>
+                        <li><strong>Features:</strong> Handles operator precedence (* before +) and associativity</li>
+                    </ul>
+
+                    <h5>Example 3: Simple Programming Language Constructs</h5>
+                    <ul>
+                        <li><strong>Grammar:</strong>
+                            <ul>
+                                <li>Stmt → if (Expr) Stmt | while (Expr) Stmt | {StmtList} | id = Expr;</li>
+                                <li>StmtList → Stmt StmtList | ε</li>
+                                <li>Expr → id | num | Expr + Expr | Expr * Expr</li>
+                            </ul>
+                        </li>
+                        <li><strong>Features:</strong> Nested control structures, block statements</li>
+                    </ul>
+                </div>
+
+                <h3>Context-Sensitive Grammars - More Powerful but Complex</h3>
+                <div class="mathematical-foundation">
+                    <h4>🔧 Understanding Context Sensitivity</h4>
+                    
+                    <p><strong>Context-Sensitive Grammars</strong> allow the replacement of a variable to depend on its surrounding context. This makes them more powerful but also more complex to work with.</p>
+
+                    <h5>General Form:</h5>
+                    <p>αAβ → αγβ where:</p>
+                    <ul>
+                        <li>A is a variable</li>
+                        <li>α, β are the context (can be empty)</li>
+                        <li>γ is the replacement (cannot be empty)</li>
+                    </ul>
+
+                    <h5>Key Restriction:</h5>
+                    <p>Productions are non-contracting: |αAβ| ≤ |αγβ|, which means |A| ≤ |γ|</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Context-Sensitive Grammar Example</h4>
+                    
+                    <h5>Language: {aⁿbⁿcⁿ | n ≥ 1}</h5>
+                    <p>Strings: "abc", "aabbcc", "aaabbbccc", ...</p>
+                    
+                    <h5>Why Context-Free Won't Work:</h5>
+                    <p>We need to ensure three different symbols have equal counts. Context-free grammars can match two counts (like aⁿbⁿ) but not three.</p>
+
+                    <h5>Context-Sensitive Solution:</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li>S → aSBC | aBC</li>
+                            <li>CB → BC (swap B and C)</li>
+                            <li>aB → ab</li>
+                            <li>bB → bb</li>
+                            <li>bC → bc</li>
+                            <li>cC → cc</li>
+                        </ol>
+                    </div>
+
+                    <h5>How It Works:</h5>
+                    <ul>
+                        <li><strong>Step 1:</strong> Generate aⁿBⁿCⁿ structure</li>
+                        <li><strong>Step 2:</strong> Use CB → BC to move all C's to the right</li>
+                        <li><strong>Step 3:</strong> Convert symbols to terminals in proper order</li>
+                    </ul>
+                </div>
+
+                <h3>Comparing Context-Free and Context-Sensitive</h3>
+                <div class="real-world-application">
+                    <h4>🌍 Practical Applications and Trade-offs</h4>
+                    
+                    <h5>Context-Free Applications:</h5>
+                    <ul>
+                        <li><strong>Programming Languages:</strong> Most syntax can be described by CFGs</li>
+                        <li><strong>Markup Languages:</strong> HTML, XML structure</li>
+                        <li><strong>Mathematical Expressions:</strong> Formulas with proper precedence</li>
+                        <li><strong>Natural Language:</strong> Basic sentence structure</li>
+                    </ul>
+
+                    <h5>Context-Sensitive Applications:</h5>
+                    <ul>
+                        <li><strong>Type Checking:</strong> Variable declarations must match usage</li>
+                        <li><strong>Semantic Constraints:</strong> "goto" labels must be declared</li>
+                        <li><strong>Natural Language:</strong> Agreement (subject-verb, gender)</li>
+                        <li><strong>Biological Sequences:</strong> Complex DNA/protein patterns</li>
+                    </ul>
+
+                    <h5>Computational Complexity:</h5>
+                    <ul>
+                        <li><strong>Context-Free:</strong> O(n³) parsing (CYK algorithm)</li>
+                        <li><strong>Context-Sensitive:</strong> PSPACE-complete (exponential worst case)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="ambiguity">
+                <h2>3. Ambiguity in Grammars</h2>
+                
+                <h3>Understanding Ambiguity</h3>
+                <div class="important-note">
+                    <h4>⚠️ When Grammars Give Multiple Meanings</h4>
+                    
+                    <p>A grammar is <strong>ambiguous</strong> if there exists at least one string that can be generated in two or more different ways (different parse trees or leftmost derivations).</p>
+                    
+                    <p>Ambiguity is often problematic because it means the same input can have multiple interpretations.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Classic Ambiguity Example: Arithmetic Expressions</h4>
+                    
+                    <h5>Ambiguous Grammar:</h5>
+                    <ul>
+                        <li>E → E + E | E * E | (E) | id</li>
+                    </ul>
+
+                    <h5>Ambiguous String: "id + id * id"</h5>
+                    
+                    <h6>Parse Tree 1 (+ first):</h6>
+                    <div class="state-diagram">
+                        E
+                        <br>
+                        ├── E
+                        <br>
+                        │   ├── id
+                        <br>
+                        │   └── +
+                        <br>
+                        └── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│   └── id
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── *
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── id
+                    </div>
+                    <p><strong>Interpretation:</strong> (id + id) * id</p>
+
+                    <h6>Parse Tree 2 (* first):</h6>
+                    <div class="state-diagram">
+                        E
+                        <br>
+                        ├── E
+                        <br>
+                        │   └── id
+                        <br>
+                        ├── +
+                        <br>
+                        └── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│   └── id
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── *
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── E
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── id
+                    </div>
+                    <p><strong>Interpretation:</strong> id + (id * id)</p>
+
+                    <h5>The Problem:</h5>
+                    <p>Same string, two different meanings! In mathematics, we want * to have higher precedence than +.</p>
+                </div>
+
+                <h3>Removing Ambiguity</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Techniques for Eliminating Ambiguity</h4>
+                    
+                    <h5>Method 1: Introduce Precedence Levels</h5>
+                    <p>Create separate non-terminals for different precedence levels:</p>
+                    <ul>
+                        <li>E → E + T | T (addition has lowest precedence)</li>
+                        <li>T → T * F | F (multiplication has higher precedence)</li>
+                        <li>F → (E) | id (parentheses and identifiers have highest precedence)</li>
+                    </ul>
+
+                    <h5>Method 2: Enforce Associativity</h5>
+                    <p>For operators of same precedence:</p>
+                    <ul>
+                        <li><strong>Left Associative:</strong> E → E + T | T</li>
+                        <li><strong>Right Associative:</strong> E → T + E | T</li>
+                    </ul>
+
+                    <h5>Method 3: Use Parsing Directives</h5>
+                    <p>In parser generators, specify precedence and associativity rules separately from grammar.</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Dangling Else Problem</h4>
+                    
+                    <h5>Ambiguous Grammar:</h5>
+                    <ul>
+                        <li>Stmt → if (Expr) Stmt | if (Expr) Stmt else Stmt | other</li>
+                    </ul>
+
+                    <h5>Ambiguous String: "if (E1) if (E2) S1 else S2"</h5>
+                    
+                    <h6>Interpretation 1:</h6>
+                    <p>if (E1) { if (E2) S1 else S2 } (else belongs to inner if)</p>
+
+                    <h6>Interpretation 2:</h6>
+                    <p>if (E1) { if (E2) S1 } else S2 (else belongs to outer if)</p>
+
+                    <h5>Standard Solution:</h5>
+                    <p><strong>Most Closely Nested Rule:</strong> else always belongs to the nearest unmatched if.</p>
+                    
+                    <h5>Unambiguous Grammar:</h5>
+                    <ul>
+                        <li>Stmt → MatchedStmt | UnmatchedStmt</li>
+                        <li>MatchedStmt → if (Expr) MatchedStmt else MatchedStmt | other</li>
+                        <li>UnmatchedStmt → if (Expr) Stmt | if (Expr) MatchedStmt else UnmatchedStmt</li>
+                    </ul>
+                </div>
+
+                <h3>Inherent Ambiguity</h3>
+                <div class="important-note">
+                    <h4>🚫 When Ambiguity Cannot Be Removed</h4>
+                    
+                    <p>Some context-free languages are <strong>inherently ambiguous</strong> - every grammar that generates the language must be ambiguous.</p>
+                    
+                    <h5>Example: L = {aⁱbʲcᵏ | i = j or j = k}</h5>
+                    <p>This language requires matching either the first two counts or the last two counts, but any grammar must handle both cases, leading to unavoidable ambiguity.</p>
+                </div>
+            </section>
+
+            <section id="normal-forms">
+                <h2>4. Grammar Normal Forms</h2>
+                
+                <h3>Why Normal Forms Matter</h3>
+                <div class="concept">
+                    <h4>🎯 Standardizing Grammar Structure</h4>
+                    
+                    <p><strong>Normal forms</strong> are standardized ways of writing grammars that make them easier to analyze and work with algorithmically. They're like "canonical forms" that preserve the language while simplifying the structure.</p>
+                    
+                    <h5>Benefits of Normal Forms:</h5>
+                    <ul>
+                        <li><strong>Algorithm Design:</strong> Many algorithms work only on grammars in specific forms</li>
+                        <li><strong>Theoretical Analysis:</strong> Easier to prove properties about languages</li>
+                        <li><strong>Parser Construction:</strong> Some parsing methods require specific forms</li>
+                        <li><strong>Complexity Analysis:</strong> Uniform structure simplifies analysis</li>
+                    </ul>
+                </div>
+
+                <h3>Chomsky Normal Form (CNF)</h3>
+                <div class="definition-box">
+                    <h4>📝 Chomsky Normal Form Definition</h4>
+                    
+                    <p>A context-free grammar is in <strong>Chomsky Normal Form</strong> if every production is of one of these forms:</p>
+                    <ul>
+                        <li><strong>A → BC</strong> (two variables)</li>
+                        <li><strong>A → a</strong> (single terminal)</li>
+                        <li><strong>S → ε</strong> (empty string, only for start symbol)</li>
+                    </ul>
+
+                    <h5>Key Properties:</h5>
+                    <ul>
+                        <li>Every derivation tree is a binary tree</li>
+                        <li>Derivation of string of length n takes exactly 2n-1 steps</li>
+                        <li>Enables efficient parsing algorithms (CYK algorithm)</li>
+                    </ul>
+                </div>
+
+                <div class="algorithm-steps">
+                    <h4>🔧 Converting to Chomsky Normal Form</h4>
+                    
+                    <h5>Step 1: Eliminate ε-productions</h5>
+                    <ol>
+                        <li>Find all nullable variables (can derive ε)</li>
+                        <li>For each production A → α, add all versions with nullable variables removed</li>
+                        <li>Remove all ε-productions except S → ε if needed</li>
+                    </ol>
+
+                    <h5>Step 2: Eliminate unit productions (A → B)</h5>
+                    <ol>
+                        <li>Find all unit pairs (A, B) where A ⇒* B via unit productions</li>
+                        <li>For each unit pair (A, B) and production B → α (non-unit), add A → α</li>
+                        <li>Remove all unit productions</li>
+                    </ol>
+
+                    <h5>Step 3: Convert to proper form</h5>
+                    <ol>
+                        <li>Replace terminals in long productions with new variables</li>
+                        <li>Break long productions into binary productions</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 CNF Conversion Example</h4>
+                    
+                    <h5>Original Grammar:</h5>
+                    <ul>
+                        <li>S → ASA | aB | ε</li>
+                        <li>A → B | S</li>
+                        <li>B → b | ε</li>
+                    </ul>
+
+                    <h5>Step 1: Eliminate ε-productions</h5>
+                    <p>Nullable variables: {S, A, B}</p>
+                    <ul>
+                        <li>S → ASA | SA | AS | S | aB | a | ε</li>
+                        <li>A → B | S | ε</li>
+                        <li>B → b | ε</li>
+                    </ul>
+                    <p>After removing ε-productions (except S → ε):</p>
+                    <ul>
+                        <li>S → ASA | SA | AS | S | aB | a | ε</li>
+                        <li>A → B | S</li>
+                        <li>B → b</li>
+                    </ul>
+
+                    <h5>Step 2: Eliminate unit productions</h5>
+                    <p>Unit pairs: (A,B), (A,S), (S,S), (S,A), (S,B)</p>
+                    <ul>
+                        <li>S → ASA | SA | AS | aB | a | ε</li>
+                        <li>A → ASA | SA | AS | aB | a | b</li>
+                        <li>B → b</li>
+                    </ul>
+
+                    <h5>Step 3: Convert to binary form</h5>
+                    <ul>
+                        <li>S → AA₁ | SA | AS | AB | a | ε</li>
+                        <li>A₁ → SA</li>
+                        <li>A → AA₁ | SA | AS | AB | a | b</li>
+                        <li>B → b</li>
+                    </ul>
+                    <p>Where A₁ is a new variable and we need to handle terminals in mixed productions.</p>
+                </div>
+
+                <h3>Greibach Normal Form (GNF)</h3>
+                <div class="definition-box">
+                    <h4>📝 Greibach Normal Form Definition</h4>
+                    
+                    <p>A context-free grammar is in <strong>Greibach Normal Form</strong> if every production is of the form:</p>
+                    <ul>
+                        <li><strong>A → aα</strong> where a is a terminal and α is a (possibly empty) string of variables</li>
+                        <li><strong>S → ε</strong> (only if ε is in the language)</li>
+                    </ul>
+
+                    <h5>Key Properties:</h5>
+                    <ul>
+                        <li>Every derivation step consumes exactly one input symbol</li>
+                        <li>Derivation of string of length n takes exactly n steps</li>
+                        <li>Useful for constructing pushdown automata</li>
+                        <li>Enables certain parsing strategies</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Greibach Normal Form Example</h4>
+                    
+                    <h5>Grammar in GNF:</h5>
+                    <ul>
+                        <li>S → aAB | bB</li>
+                        <li>A → aA | a</li>
+                        <li>B → bB | b</li>
+                    </ul>
+
+                    <h5>Language Generated:</h5>
+                    <p>Strings starting with 'a' followed by equal numbers of a's and b's, or strings of just b's.</p>
+
+                    <h5>Derivation Example for "aabb":</h5>
+                    <ol>
+                        <li>S → aAB</li>
+                        <li>aAB → aaB (using A → a)</li>
+                        <li>aaB → aabB (using B → bB)</li>
+                        <li>aabB → aabb (using B → b)</li>
+                    </ol>
+                    <p>Notice: Each step consumes exactly one terminal symbol.</p>
+                </div>
+
+                <h3>Reduced Forms and Useless Symbol Removal</h3>
+                <div class="algorithm-steps">
+                    <h4>🧹 Cleaning Up Grammars</h4>
+                    
+                    <h5>Types of Useless Symbols:</h5>
+                    <ul>
+                        <li><strong>Non-generating:</strong> Variables that cannot derive any terminal string</li>
+                        <li><strong>Unreachable:</strong> Symbols that cannot be reached from the start symbol</li>
+                    </ul>
+
+                    <h5>Removal Algorithm:</h5>
+                    <ol>
+                        <li><strong>Step 1:</strong> Remove non-generating symbols
+                            <ul>
+                                <li>Find all variables that can derive terminal strings</li>
+                                <li>Remove variables and productions that cannot</li>
+                            </ul>
+                        </li>
+                        <li><strong>Step 2:</strong> Remove unreachable symbols
+                            <ul>
+                                <li>Find all symbols reachable from start symbol</li>
+                                <li>Remove symbols and productions that are not reachable</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h5>Unit Production Removal:</h5>
+                    <p>Productions of the form A → B (single variable) can often be eliminated:</p>
+                    <ol>
+                        <li>Find all unit pairs (A, C) where A ⇒* C via unit productions</li>
+                        <li>For each non-unit production C → α, add A → α</li>
+                        <li>Remove all unit productions</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="pushdown-automata">
+                <h2>5. Pushdown Automata - Machines with Memory</h2>
+                
+                <h3>Understanding Pushdown Automata</h3>
+                <div class="concept">
+                    <h4>📚 Adding Stack Memory to Finite Automata</h4>
+                    
+                    <p>A <strong>Pushdown Automaton (PDA)</strong> is like a finite automaton with an additional stack memory. This extra memory allows it to recognize context-free languages that finite automata cannot handle.</p>
+                    
+                    <h5>Key Components:</h5>
+                    <ul>
+                        <li><strong>Finite Control:</strong> Like a finite automaton's states</li>
+                        <li><strong>Input Tape:</strong> Read-only input string</li>
+                        <li><strong>Stack:</strong> Last-in-first-out (LIFO) memory</li>
+                        <li><strong>Stack Alphabet:</strong> Symbols that can be stored on stack</li>
+                    </ul>
+
+                    <h5>Why Stacks Work for Context-Free Languages:</h5>
+                    <ul>
+                        <li><strong>Nested Structure:</strong> Stacks naturally handle nested patterns</li>
+                        <li><strong>Matching:</strong> Can count and match symbols (like parentheses)</li>
+                        <li><strong>Recursive Patterns:</strong> Stack grows and shrinks with recursive structure</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h4>📝 Pushdown Automaton Definition</h4>
+                    
+                    <p>A <strong>Pushdown Automaton</strong> is a 7-tuple (Q, Σ, Γ, δ, q₀, Z₀, F) where:</p>
+                    <ul>
+                        <li><strong>Q:</strong> Finite set of states</li>
+                        <li><strong>Σ:</strong> Input alphabet</li>
+                        <li><strong>Γ:</strong> Stack alphabet</li>
+                        <li><strong>δ:</strong> Transition function δ: Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*)</li>
+                        <li><strong>q₀:</strong> Start state</li>
+                        <li><strong>Z₀:</strong> Initial stack symbol</li>
+                        <li><strong>F:</strong> Set of accept states</li>
+                    </ul>
+
+                    <h5>Transition Function Explained:</h5>
+                    <p>δ(q, a, X) = {(p₁, γ₁), (p₂, γ₂), ...} means:</p>
+                    <ul>
+                        <li>In state q, reading input a, with X on top of stack</li>
+                        <li>Can go to state pᵢ and replace X with string γᵢ</li>
+                        <li>If γᵢ = ε, then X is popped (removed)</li>
+                        <li>If γᵢ = XY, then Y is pushed onto stack (X remains)</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 PDA Example: Balanced Parentheses</h4>
+                    
+                    <h5>Language: L = {ww^R | w ∈ {(,)}*}</h5>
+                    <p>Strings of balanced parentheses: ε, (), (()), ()(), (())(), ...</p>
+
+                    <h5>PDA Design Strategy:</h5>
+                    <ul>
+                        <li>Push '(' symbols onto stack</li>
+                        <li>Pop stack when seeing ')' symbols</li>
+                        <li>Accept if stack is empty at end</li>
+                    </ul>
+
+                    <h5>Formal PDA:</h5>
+                    <ul>
+                        <li><strong>States:</strong> Q = {q₀, q₁}</li>
+                        <li><strong>Input Alphabet:</strong> Σ = {(, )}</li>
+                        <li><strong>Stack Alphabet:</strong> Γ = {(, Z₀}</li>
+                        <li><strong>Start State:</strong> q₀</li>
+                        <li><strong>Initial Stack:</strong> Z₀</li>
+                        <li><strong>Accept States:</strong> F = {q₁}</li>
+                    </ul>
+
+                    <h5>Transitions:</h5>
+                    <ul>
+                        <li>δ(q₀, (, Z₀) = {(q₀, (Z₀)} (push first '(')</li>
+                        <li>δ(q₀, (, () = {(q₀, (()} (push additional '(')</li>
+                        <li>δ(q₀, ), () = {(q₀, ε)} (pop '(' for ')')</li>
+                        <li>δ(q₀, ε, Z₀) = {(q₁, Z₀)} (accept when stack empty)</li>
+                    </ul>
+
+                    <h5>Trace for String "(())":</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li>(q₀, ((), Z₀) - read '(', push onto Z₀</li>
+                            <li>(q₀, (), (Z₀) - read '(', push onto stack</li>
+                            <li>(q₀, ), ((Z₀) - read ')', pop one '('</li>
+                            <li>(q₀, ε, (Z₀) - read ')', pop last '('</li>
+                            <li>(q₀, ε, Z₀) - stack back to initial, can accept</li>
+                            <li>(q₁, ε, Z₀) - accept state reached ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 PDA Example: L = {aⁿbⁿ | n ≥ 0}</h4>
+                    
+                    <h5>Language:</h5>
+                    <p>Equal numbers of a's followed by equal numbers of b's: ε, ab, aabb, aaabbb, ...</p>
+
+                    <h5>PDA Strategy:</h5>
+                    <ul>
+                        <li>Push each 'a' onto stack</li>
+                        <li>Pop stack for each 'b'</li>
+                        <li>Accept if stack empty when input exhausted</li>
+                    </ul>
+
+                    <h5>Transitions:</h5>
+                    <ul>
+                        <li>δ(q₀, a, Z₀) = {(q₀, aZ₀)} (push first 'a')</li>
+                        <li>δ(q₀, a, a) = {(q₀, aa)} (push more a's)</li>
+                        <li>δ(q₀, b, a) = {(q₁, ε)} (start popping for b's)</li>
+                        <li>δ(q₁, b, a) = {(q₁, ε)} (continue popping)</li>
+                        <li>δ(q₁, ε, Z₀) = {(q₂, Z₀)} (accept when balanced)</li>
+                    </ul>
+
+                    <h5>Why This Works:</h5>
+                    <p>The stack acts as a counter, growing with each 'a' and shrinking with each 'b'. Perfect balance means the stack returns to its initial state.</p>
+                </div>
+
+                <h3>Equivalence of PDAs and Context-Free Grammars</h3>
+                <div class="mathematical-foundation">
+                    <h4>⚖️ Two Ways to Define Context-Free Languages</h4>
+                    
+                    <p><strong>Theorem:</strong> A language is context-free if and only if it is accepted by some pushdown automaton.</p>
+                    
+                    <h5>This Equivalence Means:</h5>
+                    <ul>
+                        <li>Every context-free grammar has an equivalent PDA</li>
+                        <li>Every PDA has an equivalent context-free grammar</li>
+                        <li>Both models define exactly the same class of languages</li>
+                    </ul>
+
+                    <h5>Conversion Strategies:</h5>
+                    <ul>
+                        <li><strong>CFG → PDA:</strong> Use stack to simulate derivations</li>
+                        <li><strong>PDA → CFG:</strong> Create variables for stack configurations</li>
+                    </ul>
+                </div>
+
+                <h3>Applications of Pushdown Automata</h3>
+                <div class="real-world-application">
+                    <h4>🌍 Where PDAs Are Used</h4>
+                    
+                    <h5>Parser Construction:</h5>
+                    <ul>
+                        <li><strong>LR Parsers:</strong> Use stack to track parsing state</li>
+                        <li><strong>Recursive Descent:</strong> Implicit stack via function calls</li>
+                        <li><strong>Expression Evaluation:</strong> Stack-based calculators</li>
+                    </ul>
+
+                    <h5>Programming Language Implementation:</h5>
+                    <ul>
+                        <li><strong>Syntax Analysis:</strong> Check if program follows grammar</li>
+                        <li><strong>Bracket Matching:</strong> Ensure proper nesting</li>
+                        <li><strong>Function Calls:</strong> Stack manages call/return sequence</li>
+                    </ul>
+
+                    <h5>Data Structure Validation:</h5>
+                    <ul>
+                        <li><strong>XML/HTML Parsing:</strong> Verify proper tag nesting</li>
+                        <li><strong>JSON Validation:</strong> Check bracket/brace matching</li>
+                        <li><strong>Mathematical Expressions:</strong> Validate parentheses</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="summary">
+                <h2>6. Unit 3 Summary - Beyond Regular Languages</h2>
+                
+                <div class="quick-reference">
+                    <h4>🎯 Key Concepts Mastered</h4>
+                    
+                    <h5>Grammar Theory:</h5>
+                    <ul>
+                        <li><strong>Chomsky Hierarchy:</strong> Four types of grammars with increasing power</li>
+                        <li><strong>Context-Free Grammars:</strong> Sweet spot for practical applications</li>
+                        <li><strong>Context-Sensitive Grammars:</strong> More powerful but computationally expensive</li>
+                    </ul>
+
+                    <h5>Grammar Properties:</h5>
+                    <ul>
+                        <li><strong>Ambiguity:</strong> Multiple parse trees for same string</li>
+                        <li><strong>Normal Forms:</strong> CNF and GNF for algorithmic processing</li>
+                        <li><strong>Reduced Forms:</strong> Elimination of useless symbols and productions</li>
+                    </ul>
+
+                    <h5>Pushdown Automata:</h5>
+                    <ul>
+                        <li><strong>Stack Memory:</strong> LIFO storage enables context-free recognition</li>
+                        <li><strong>Equivalence:</strong> PDAs and CFGs define same language class</li>
+                        <li><strong>Applications:</strong> Parsing, syntax analysis, bracket matching</li>
+                    </ul>
+
+                    <h5>Practical Skills:</h5>
+                    <ul>
+                        <li>Design grammars for given languages</li>
+                        <li>Convert grammars to normal forms</li>
+                        <li>Construct PDAs for context-free languages</li>
+                        <li>Identify and resolve grammar ambiguity</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Exam Strategy:</strong> Practice grammar construction and PDA design extensively. Understand the relationship between grammar productions and PDA transitions. Master normal form conversions as they're frequently tested. Be able to identify ambiguous grammars and know techniques for removing ambiguity.
+                </div>
+
+                <div class="progress-indicator">
+                    🎓 Unit 3 Complete! Next: Unit 4 - Turing Machines and Computational Limits
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 0: Theory of Computation Basics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Theory of Computation</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 0: Theory of Computation Basics</h1>
+            <p class="subtitle">Understanding the Foundation - What is Theory of Computation?</p>
+        </header>
+
+        <main>
+            <section id="what-is-toc">
+                <h2>1. What is Theory of Computation?</h2>
+                
+                <h3>Understanding the Digital Universe</h3>
+                <p><strong>Theory of Computation</strong> is like the physics of the digital world. Just as physics explains how the physical universe works - from atoms to galaxies - Theory of Computation explains how the digital universe works - from simple calculations to complex artificial intelligence.</p>
+                
+                <p>But let's start with a simple question: <em>What can computers actually do, and what are their limits?</em> This might seem like a strange question since computers seem to do everything these days, but there are actually mathematical limits to what any computer can accomplish, no matter how powerful.</p>
+                
+                <div class="concept">
+                    <h4>Think of Theory of Computation as Three Big Questions:</h4>
+                    <ul>
+                        <li><strong>What problems can computers solve?</strong> (Computability Theory)</li>
+                        <li><strong>How efficiently can computers solve problems?</strong> (Complexity Theory)</li>
+                        <li><strong>How do we describe and design computational processes?</strong> (Formal Language Theory)</li>
+                    </ul>
+                </div>
+
+                <h3>Real-World Analogy: The Universal Translator</h3>
+                <div class="example-detailed">
+                    <h4>🌍 Imagine You're Building a Universal Language Translator</h4>
+                    
+                    <h5>The Challenge:</h5>
+                    <p>You want to build a device that can translate between any two human languages. Before you start building, you need to answer some fundamental questions:</p>
+                    
+                    <ol>
+                        <li><strong>Is it even possible?</strong> Can any machine perfectly translate between all languages?</li>
+                        <li><strong>What's the best approach?</strong> Should you use rules, examples, or something else?</li>
+                        <li><strong>How do you represent languages?</strong> How do you describe grammar, meaning, and context mathematically?</li>
+                        <li><strong>What are the limits?</strong> What kinds of translations will always be impossible?</li>
+                    </ol>
+
+                    <h5>Theory of Computation Provides the Framework:</h5>
+                    <ul>
+                        <li><strong>Formal Languages:</strong> Mathematical ways to describe language structure and grammar</li>
+                        <li><strong>Automata Theory:</strong> Models of computation that can recognize and process languages</li>
+                        <li><strong>Computability:</strong> Determines what translation problems are solvable in principle</li>
+                        <li><strong>Complexity:</strong> Determines what translation problems are solvable in practice</li>
+                    </ul>
+
+                    <p><strong>The Real-World Impact:</strong> Google Translate, ChatGPT, and other AI systems are built using these theoretical foundations. The theory tells us what's possible and guides us toward practical solutions.</p>
+                </div>
+
+                <h3>Why Study Theory of Computation?</h3>
+                <div class="real-world-application">
+                    <h4>🚀 Theory of Computation Powers Modern Technology</h4>
+                    
+                    <h5>Compiler Design:</h5>
+                    <ul>
+                        <li><strong>Problem:</strong> How do we convert human-readable code into machine instructions?</li>
+                        <li><strong>Solution:</strong> Formal grammars describe programming language syntax, finite automata recognize tokens</li>
+                        <li><strong>Real Example:</strong> When you write <code>if (x > 5) { print("hello"); }</code>, the compiler uses automata theory to understand this syntax</li>
+                    </ul>
+
+                    <h5>Cryptography and Security:</h5>
+                    <ul>
+                        <li><strong>Problem:</strong> How do we create unbreakable codes?</li>
+                        <li><strong>Solution:</strong> Complexity theory proves that certain mathematical problems are computationally hard</li>
+                        <li><strong>Real Example:</strong> Your online banking uses encryption based on problems that would take billions of years to solve</li>
+                    </ul>
+
+                    <h5>Artificial Intelligence:</h5>
+                    <ul>
+                        <li><strong>Problem:</strong> What are the fundamental limits of machine intelligence?</li>
+                        <li><strong>Solution:</strong> Computability theory defines what problems are solvable, complexity theory defines what's practical</li>
+                        <li><strong>Real Example:</strong> AI researchers use these theories to understand why some problems (like perfect translation) remain challenging</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="mathematical-foundations">
+                <h2>2. Mathematical Foundations - The Language of Computation</h2>
+                
+                <h3>Sets - The Building Blocks of Everything</h3>
+                <p>In Theory of Computation, everything is built from <strong>sets</strong>. A set is simply a collection of distinct objects. Think of it as a bag containing different items, where each item appears only once.</p>
+                
+                <div class="mathematical-foundation">
+                    <h4>🧮 Set Theory Basics</h4>
+                    
+                    <h5>What is a Set?</h5>
+                    <p>A <strong>set</strong> is a well-defined collection of distinct objects called <strong>elements</strong> or <strong>members</strong>.</p>
+                    
+                    <div class="formula">
+                        A = {1, 2, 3, 4, 5}
+                        <br>
+                        B = {red, blue, green}
+                        <br>
+                        C = {a, b, c, d, e, ..., z}
+                    </div>
+
+                    <h5>Set Notation:</h5>
+                    <ul>
+                        <li><strong>∈ (belongs to):</strong> 3 ∈ A means "3 is an element of set A"</li>
+                        <li><strong>∉ (does not belong to):</strong> 7 ∉ A means "7 is not an element of set A"</li>
+                        <li><strong>⊆ (subset):</strong> {1, 2} ⊆ A means "{1, 2} is a subset of A"</li>
+                        <li><strong>∪ (union):</strong> A ∪ B contains all elements from both A and B</li>
+                        <li><strong>∩ (intersection):</strong> A ∩ B contains elements common to both A and B</li>
+                        <li><strong>∅ (empty set):</strong> The set containing no elements</li>
+                    </ul>
+
+                    <h5>Real-World Set Examples:</h5>
+                    <ul>
+                        <li><strong>Students in your class:</strong> {Alice, Bob, Charlie, Diana}</li>
+                        <li><strong>Days of the week:</strong> {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}</li>
+                        <li><strong>Valid email characters:</strong> {a, b, c, ..., z, 0, 1, 2, ..., 9, @, ., -, _}</li>
+                        <li><strong>Programming languages:</strong> {Python, Java, C++, JavaScript, Go}</li>
+                    </ul>
+                </div>
+
+                <h3>Functions - Mapping Between Sets</h3>
+                <div class="mathematical-foundation">
+                    <h4>📊 Functions in Computation</h4>
+                    
+                    <p>A <strong>function</strong> is a rule that assigns to each element in one set (called the <strong>domain</strong>) exactly one element in another set (called the <strong>codomain</strong>).</p>
+                    
+                    <h5>Function Notation:</h5>
+                    <div class="formula">
+                        f: A → B
+                        <br>
+                        This means "function f maps from set A to set B"
+                    </div>
+
+                    <h5>Real-World Function Examples:</h5>
+                    <ul>
+                        <li><strong>Student ID Function:</strong> f(student_name) = student_ID</li>
+                        <li><strong>Square Function:</strong> f(x) = x²</li>
+                        <li><strong>ASCII Function:</strong> f(character) = ASCII_code</li>
+                        <li><strong>Hash Function:</strong> f(password) = encrypted_hash</li>
+                    </ul>
+
+                    <h5>Types of Functions:</h5>
+                    <ul>
+                        <li><strong>One-to-One (Injective):</strong> Different inputs always produce different outputs</li>
+                        <li><strong>Onto (Surjective):</strong> Every element in the codomain is mapped to by some element in the domain</li>
+                        <li><strong>Bijective:</strong> Both one-to-one and onto (perfect pairing)</li>
+                    </ul>
+                </div>
+
+                <h3>Relations - Connections Between Elements</h3>
+                <div class="mathematical-foundation">
+                    <h4>🔗 Understanding Relations</h4>
+                    
+                    <p>A <strong>relation</strong> is a way of describing connections or relationships between elements of sets. Unlike functions, relations can connect one element to multiple elements.</p>
+                    
+                    <h5>Types of Relations:</h5>
+                    <ul>
+                        <li><strong>Reflexive:</strong> Every element is related to itself (like "equals")</li>
+                        <li><strong>Symmetric:</strong> If a is related to b, then b is related to a (like "is friends with")</li>
+                        <li><strong>Transitive:</strong> If a is related to b and b is related to c, then a is related to c (like "is ancestor of")</li>
+                        <li><strong>Equivalence Relation:</strong> Reflexive, symmetric, and transitive (like "has same birthday as")</li>
+                    </ul>
+
+                    <h5>Computational Examples:</h5>
+                    <ul>
+                        <li><strong>Network Connections:</strong> "Computer A can communicate with Computer B"</li>
+                        <li><strong>File Dependencies:</strong> "Program X requires Library Y"</li>
+                        <li><strong>State Transitions:</strong> "State S1 can transition to State S2"</li>
+                        <li><strong>Data Relationships:</strong> "Student X is enrolled in Course Y"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="logic-proofs">
+                <h2>3. Logic and Proof Techniques - The Art of Mathematical Reasoning</h2>
+                
+                <h3>Propositional Logic - Building Blocks of Reasoning</h3>
+                <div class="concept">
+                    <h4>🧠 Understanding Logical Statements</h4>
+                    
+                    <p><strong>Propositional Logic</strong> deals with statements that are either true or false. In computation, we use logic to reason about programs, algorithms, and system behavior.</p>
+                    
+                    <h5>Basic Logical Operators:</h5>
+                    <ul>
+                        <li><strong>AND (∧):</strong> Both conditions must be true</li>
+                        <li><strong>OR (∨):</strong> At least one condition must be true</li>
+                        <li><strong>NOT (¬):</strong> Opposite of the condition</li>
+                        <li><strong>IMPLIES (→):</strong> If the first is true, then the second must be true</li>
+                        <li><strong>IF AND ONLY IF (↔):</strong> Both statements have the same truth value</li>
+                    </ul>
+
+                    <h5>Programming Logic Examples:</h5>
+                    <ul>
+                        <li><strong>AND:</strong> <code>if (age >= 18 AND hasLicense)</code> - Both conditions needed to drive</li>
+                        <li><strong>OR:</strong> <code>if (isWeekend OR isHoliday)</code> - Either condition means no work</li>
+                        <li><strong>NOT:</strong> <code>if (NOT isLoggedIn)</code> - Show login page if user is not logged in</li>
+                        <li><strong>IMPLIES:</strong> "If it's raining, then the ground is wet"</li>
+                    </ul>
+                </div>
+
+                <h3>Proof Techniques - How to Prove Things are True</h3>
+                <div class="algorithm-steps">
+                    <h4>🔍 Essential Proof Methods</h4>
+                    
+                    <h5>1. Direct Proof:</h5>
+                    <p><strong>Method:</strong> Start with what you know, use logical steps to reach what you want to prove.</p>
+                    <p><strong>Example:</strong> Prove that the sum of two even numbers is even.</p>
+                    <ol>
+                        <li>Let a and b be even numbers</li>
+                        <li>Then a = 2k and b = 2m for some integers k and m</li>
+                        <li>a + b = 2k + 2m = 2(k + m)</li>
+                        <li>Since (k + m) is an integer, a + b is even</li>
+                    </ol>
+
+                    <h5>2. Proof by Contradiction:</h5>
+                    <p><strong>Method:</strong> Assume the opposite of what you want to prove, show this leads to a contradiction.</p>
+                    <p><strong>Example:</strong> Prove that √2 is irrational.</p>
+                    <ol>
+                        <li>Assume √2 is rational (can be written as p/q where p and q are integers)</li>
+                        <li>Show this assumption leads to a logical contradiction</li>
+                        <li>Therefore, √2 must be irrational</li>
+                    </ol>
+
+                    <h5>3. Mathematical Induction:</h5>
+                    <p><strong>Method:</strong> Like climbing a ladder - prove the first step works, then prove if any step works, the next step also works.</p>
+                    <p><strong>Example:</strong> Prove that 1 + 2 + 3 + ... + n = n(n+1)/2</p>
+                    <ol>
+                        <li><strong>Base Case:</strong> Prove it works for n = 1</li>
+                        <li><strong>Inductive Step:</strong> Assume it works for n = k, prove it works for n = k+1</li>
+                        <li><strong>Conclusion:</strong> It works for all positive integers</li>
+                    </ol>
+                </div>
+
+                <div class="exam-tip">
+                    In Theory of Computation, you'll use these proof techniques to prove properties of languages, show that certain problems are undecidable, and demonstrate the correctness of algorithms. Practice identifying which proof technique is most appropriate for each type of problem.
+                </div>
+            </section>
+
+            <section id="formal-languages">
+                <h2>4. Introduction to Formal Languages - The DNA of Computation</h2>
+                
+                <h3>Alphabets, Strings, and Languages - The Basic Building Blocks</h3>
+                <div class="definition-box">
+                    <h4>📝 Core Definitions</h4>
+                    
+                    <h5>Alphabet (Σ):</h5>
+                    <p>An <strong>alphabet</strong> is a finite, non-empty set of symbols. Think of it as the basic "letters" you can use to write "words".</p>
+                    
+                    <div class="formula">
+                        Examples of Alphabets:
+                        <br>
+                        Σ₁ = {0, 1} (Binary alphabet)
+                        <br>
+                        Σ₂ = {a, b, c, ..., z} (English lowercase letters)
+                        <br>
+                        Σ₃ = {+, -, *, /, (, )} (Mathematical operators)
+                    </div>
+
+                    <h5>String (Word):</h5>
+                    <p>A <strong>string</strong> is a finite sequence of symbols from an alphabet. It's like a "word" made from the "letters" in your alphabet.</p>
+                    
+                    <div class="formula">
+                        Examples of Strings over Σ₁ = {0, 1}:
+                        <br>
+                        "0", "1", "01", "10", "001", "110", "101010"
+                        <br><br>
+                        Special String:
+                        <br>
+                        ε (epsilon) = empty string (string with no symbols)
+                    </div>
+
+                    <h5>Language (L):</h5>
+                    <p>A <strong>language</strong> is a set of strings over an alphabet. It's like a "dictionary" containing all the valid "words" you can make.</p>
+                    
+                    <div class="formula">
+                        Examples of Languages over Σ = {0, 1}:
+                        <br>
+                        L₁ = {ε, 0, 1, 00, 01, 10, 11} (All strings of length ≤ 2)
+                        <br>
+                        L₂ = {0, 00, 000, 0000, ...} (All strings of only 0s)
+                        <br>
+                        L₃ = {01, 0011, 000111, ...} (Strings with equal 0s and 1s, 0s first)
+                    </div>
+                </div>
+
+                <h3>Real-World Language Examples</h3>
+                <div class="real-world-application">
+                    <h4>🌍 Languages in Computer Science</h4>
+                    
+                    <h5>Programming Languages:</h5>
+                    <ul>
+                        <li><strong>Alphabet:</strong> {a-z, A-Z, 0-9, +, -, *, /, =, (, ), {, }, ;, ...}</li>
+                        <li><strong>Valid Strings:</strong> <code>int x = 5;</code>, <code>if (x > 0) { print(x); }</code></li>
+                        <li><strong>Language:</strong> All syntactically correct programs in that language</li>
+                    </ul>
+
+                    <h5>Email Addresses:</h5>
+                    <ul>
+                        <li><strong>Alphabet:</strong> {a-z, A-Z, 0-9, @, ., -, _}</li>
+                        <li><strong>Valid Strings:</strong> <code>user@example.com</code>, <code>john.doe@university.edu</code></li>
+                        <li><strong>Language:</strong> All valid email address formats</li>
+                    </ul>
+
+                    <h5>DNA Sequences:</h5>
+                    <ul>
+                        <li><strong>Alphabet:</strong> {A, T, G, C} (the four DNA bases)</li>
+                        <li><strong>Valid Strings:</strong> <code>ATGCATGC</code>, <code>AAATTTGGGCCC</code></li>
+                        <li><strong>Language:</strong> All possible DNA sequences, or specific patterns like genes</li>
+                    </ul>
+
+                    <h5>Network Protocols:</h5>
+                    <ul>
+                        <li><strong>Alphabet:</strong> {0, 1} (binary data)</li>
+                        <li><strong>Valid Strings:</strong> Properly formatted network packets</li>
+                        <li><strong>Language:</strong> All valid HTTP requests, TCP packets, etc.</li>
+                    </ul>
+                </div>
+
+                <h3>Operations on Strings and Languages</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 String Operations</h4>
+                    
+                    <h5>String Length |w|:</h5>
+                    <p>The number of symbols in a string.</p>
+                    <ul>
+                        <li>|"hello"| = 5</li>
+                        <li>|"01101"| = 5</li>
+                        <li>|ε| = 0 (empty string has length 0)</li>
+                    </ul>
+
+                    <h5>String Concatenation (w₁w₂):</h5>
+                    <p>Joining two strings together.</p>
+                    <ul>
+                        <li>"hello" + "world" = "helloworld"</li>
+                        <li>"01" + "10" = "0110"</li>
+                        <li>w + ε = ε + w = w (concatenating with empty string)</li>
+                    </ul>
+
+                    <h5>String Powers (wⁿ):</h5>
+                    <p>Concatenating a string with itself n times.</p>
+                    <ul>
+                        <li>"ab"² = "ab" + "ab" = "abab"</li>
+                        <li>"01"³ = "01" + "01" + "01" = "010101"</li>
+                        <li>w⁰ = ε for any string w</li>
+                    </ul>
+
+                    <h5>String Reversal (wᴿ):</h5>
+                    <p>Writing the string backwards.</p>
+                    <ul>
+                        <li>("hello")ᴿ = "olleh"</li>
+                        <li>("01101")ᴿ = "10110"</li>
+                        <li>(ε)ᴿ = ε</li>
+                    </ul>
+                </div>
+
+                <div class="algorithm-steps">
+                    <h4>🔧 Language Operations</h4>
+                    
+                    <h5>Union (L₁ ∪ L₂):</h5>
+                    <p>All strings that are in either L₁ or L₂ (or both).</p>
+                    <div class="formula">
+                        L₁ = {a, aa, aaa}
+                        <br>
+                        L₂ = {b, bb, bbb}
+                        <br>
+                        L₁ ∪ L₂ = {a, aa, aaa, b, bb, bbb}
+                    </div>
+
+                    <h5>Concatenation (L₁L₂):</h5>
+                    <p>All strings formed by concatenating a string from L₁ with a string from L₂.</p>
+                    <div class="formula">
+                        L₁ = {a, aa}
+                        <br>
+                        L₂ = {b, bb}
+                        <br>
+                        L₁L₂ = {ab, abb, aab, aabb}
+                    </div>
+
+                    <h5>Kleene Star (L*):</h5>
+                    <p>All possible concatenations of strings from L, including the empty string.</p>
+                    <div class="formula">
+                        L = {a, b}
+                        <br>
+                        L* = {ε, a, b, aa, ab, ba, bb, aaa, aab, aba, abb, baa, bab, bba, bbb, ...}
+                    </div>
+                </div>
+            </section>
+
+            <section id="applications-overview">
+                <h2>5. Real-World Applications Overview - Where Theory Meets Practice</h2>
+                
+                <h3>Compiler Design - Translating Human Code to Machine Code</h3>
+                <div class="real-world-application">
+                    <h4>🔧 How Compilers Use Theory of Computation</h4>
+                    
+                    <h5>The Problem:</h5>
+                    <p>When you write code like <code>if (x > 5) { print("hello"); }</code>, the computer doesn't understand this directly. It needs to be translated into machine language (0s and 1s).</p>
+                    
+                    <h5>The Solution Using Theory of Computation:</h5>
+                    <ol>
+                        <li><strong>Lexical Analysis (Finite Automata):</strong>
+                            <ul>
+                                <li>Break code into tokens: "if", "(", "x", ">", "5", ")", "{", "print", "(", "hello", ")", ";", "}"</li>
+                                <li>Use finite automata to recognize each token type</li>
+                            </ul>
+                        </li>
+                        <li><strong>Syntax Analysis (Context-Free Grammars):</strong>
+                            <ul>
+                                <li>Check if the token sequence follows the language grammar</li>
+                                <li>Build a parse tree showing the program structure</li>
+                            </ul>
+                        </li>
+                        <li><strong>Code Generation:</strong>
+                            <ul>
+                                <li>Convert the parse tree into machine instructions</li>
+                                <li>Optimize the code for better performance</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h5>Real Example - Recognizing Numbers:</h5>
+                    <p>A finite automaton can recognize valid numbers like "123", "45.67", "0.001" but reject invalid ones like "12.34.56" or "abc".</p>
+                </div>
+
+                <h3>Text Processing and Search - Finding Patterns in Data</h3>
+                <div class="real-world-application">
+                    <h4>🔍 Pattern Matching in the Real World</h4>
+                    
+                    <h5>Regular Expressions in Action:</h5>
+                    <ul>
+                        <li><strong>Email Validation:</strong> <code>[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}</code></li>
+                        <li><strong>Phone Number Extraction:</strong> <code>\(\d{3}\)\s\d{3}-\d{4}</code></li>
+                        <li><strong>URL Detection:</strong> <code>https?://[^\s]+</code></li>
+                        <li><strong>Credit Card Numbers:</strong> <code>\d{4}-\d{4}-\d{4}-\d{4}</code></li>
+                    </ul>
+
+                    <h5>Search Engines:</h5>
+                    <p>When you search for "machine learning tutorials", the search engine uses formal language theory to:</p>
+                    <ul>
+                        <li>Parse your query into meaningful components</li>
+                        <li>Match patterns in billions of web pages</li>
+                        <li>Rank results based on relevance algorithms</li>
+                    </ul>
+                </div>
+
+                <h3>Network Security - Protecting Digital Communications</h3>
+                <div class="real-world-application">
+                    <h4>🔒 Security Through Computational Complexity</h4>
+                    
+                    <h5>Cryptographic Protocols:</h5>
+                    <ul>
+                        <li><strong>RSA Encryption:</strong> Based on the computational difficulty of factoring large numbers</li>
+                        <li><strong>Digital Signatures:</strong> Use mathematical functions that are easy to compute but hard to reverse</li>
+                        <li><strong>Blockchain:</strong> Uses computational puzzles that are hard to solve but easy to verify</li>
+                    </ul>
+
+                    <h5>Intrusion Detection:</h5>
+                    <p>Security systems use finite automata to recognize attack patterns:</p>
+                    <ul>
+                        <li>Monitor network traffic for suspicious patterns</li>
+                        <li>Detect SQL injection attempts in web requests</li>
+                        <li>Identify malware signatures in file systems</li>
+                    </ul>
+                </div>
+
+                <h3>Artificial Intelligence - The Limits of Machine Intelligence</h3>
+                <div class="real-world-application">
+                    <h4>🤖 AI and Computational Limits</h4>
+                    
+                    <h5>Natural Language Processing:</h5>
+                    <ul>
+                        <li><strong>Grammar Parsing:</strong> Understanding sentence structure using context-free grammars</li>
+                        <li><strong>Machine Translation:</strong> Converting between formal language representations</li>
+                        <li><strong>Chatbots:</strong> Using finite state machines to manage conversation flow</li>
+                    </ul>
+
+                    <h5>The Halting Problem and AI Limits:</h5>
+                    <p>Theory of Computation proves that some problems are fundamentally unsolvable:</p>
+                    <ul>
+                        <li>No algorithm can determine if any given program will halt or run forever</li>
+                        <li>This has implications for AI safety and program verification</li>
+                        <li>Helps us understand the theoretical limits of what AI can achieve</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="course-roadmap">
+                <h2>6. Course Roadmap - Your Journey Through Theory of Computation</h2>
+                
+                <div class="progress-indicator">
+                    🎯 You are here: Unit 0 - Building the Foundation
+                </div>
+
+                <h3>What's Coming Next</h3>
+                <div class="algorithm-steps">
+                    <h4>📚 Your Learning Journey</h4>
+                    
+                    <h5>Unit 1: Finite Automata and Regular Expressions</h5>
+                    <ul>
+                        <li><strong>What you'll learn:</strong> How to build simple computational models</li>
+                        <li><strong>Key concepts:</strong> State machines, regular languages, pattern matching</li>
+                        <li><strong>Real applications:</strong> Text editors, lexical analyzers, network protocols</li>
+                        <li><strong>Skills gained:</strong> Design automata, convert between representations</li>
+                    </ul>
+
+                    <h5>Unit 2: Machine Properties and Regular Set Limitations</h5>
+                    <ul>
+                        <li><strong>What you'll learn:</strong> What finite automata can and cannot do</li>
+                        <li><strong>Key concepts:</strong> Pumping lemma, closure properties, minimization</li>
+                        <li><strong>Real applications:</strong> Compiler optimization, protocol verification</li>
+                        <li><strong>Skills gained:</strong> Prove language properties, optimize automata</li>
+                    </ul>
+
+                    <h5>Unit 3: Grammars and Pushdown Automata</h5>
+                    <ul>
+                        <li><strong>What you'll learn:</strong> More powerful computational models with memory</li>
+                        <li><strong>Key concepts:</strong> Context-free grammars, stack-based computation</li>
+                        <li><strong>Real applications:</strong> Programming language parsers, XML processing</li>
+                        <li><strong>Skills gained:</strong> Design grammars, build parsers</li>
+                    </ul>
+
+                    <h5>Unit 4: Turing Machines and Computational Limits</h5>
+                    <ul>
+                        <li><strong>What you'll learn:</strong> The most powerful computational model and its limits</li>
+                        <li><strong>Key concepts:</strong> Universal computation, undecidability, complexity classes</li>
+                        <li><strong>Real applications:</strong> Algorithm analysis, AI limitations, cryptography</li>
+                        <li><strong>Skills gained:</strong> Understand computational boundaries, analyze complexity</li>
+                    </ul>
+                </div>
+
+                <div class="quick-reference">
+                    <h4>🎓 Study Strategy for Success</h4>
+                    <ul>
+                        <li><strong>Master the Basics:</strong> Ensure you understand sets, functions, and logic before moving on</li>
+                        <li><strong>Practice Constructions:</strong> Draw lots of automata and state diagrams</li>
+                        <li><strong>Connect Theory to Practice:</strong> Always ask "Where is this used in real systems?"</li>
+                        <li><strong>Work Through Proofs:</strong> Don't just read proofs - work through them step by step</li>
+                        <li><strong>Build Intuition:</strong> Use analogies and real-world examples to understand abstract concepts</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="summary">
+                <h2>7. Unit 0 Summary - Ready for the Journey</h2>
+                
+                <div class="quick-reference">
+                    <h4>🎯 Key Takeaways from Unit 0</h4>
+                    
+                    <h5>Core Concepts Mastered:</h5>
+                    <ul>
+                        <li><strong>Theory of Computation:</strong> The mathematical study of computation and its limits</li>
+                        <li><strong>Sets and Functions:</strong> The mathematical foundation for describing computational objects</li>
+                        <li><strong>Logic and Proofs:</strong> Tools for reasoning about computational properties</li>
+                        <li><strong>Formal Languages:</strong> Mathematical way to describe and analyze languages</li>
+                        <li><strong>Real-World Applications:</strong> How theory powers modern technology</li>
+                    </ul>
+
+                    <h5>Skills Developed:</h5>
+                    <ul>
+                        <li>Understanding mathematical notation and set theory</li>
+                        <li>Working with alphabets, strings, and languages</li>
+                        <li>Applying basic proof techniques</li>
+                        <li>Connecting abstract theory to practical applications</li>
+                    </ul>
+
+                    <h5>Preparation for Advanced Units:</h5>
+                    <ul>
+                        <li>Mathematical maturity to handle formal definitions</li>
+                        <li>Intuition about computational processes</li>
+                        <li>Understanding of why theory matters in practice</li>
+                        <li>Foundation for building and analyzing computational models</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Next Steps:</strong> You're now ready to dive into Unit 1, where you'll learn to build your first computational models - finite automata. These simple but powerful machines form the foundation for understanding all of computation. Remember to review this unit if you need to refresh your understanding of the mathematical foundations as you progress through the course.
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

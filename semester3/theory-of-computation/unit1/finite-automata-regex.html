@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Finite Automata and Regular Expressions</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="breadcrumb">
+                <a href="../index.html">← Back to Theory of Computation</a>
+                <a href="../../index.html" class="home-link">← Back to Semester 3</a>
+                <a href="../../../index.html" class="home-link">🏠 All Semesters</a>
+            </nav>
+            <h1>Unit 1: Finite Automata and Regular Expressions</h1>
+            <p class="subtitle">Building Your First Computational Models</p>
+        </header>
+
+        <main>
+            <section id="finite-state-systems">
+                <h2>1. Finite State Systems - The Foundation of Computation</h2>
+                
+                <h3>Understanding State Machines Through Real-World Examples</h3>
+                <p>A <strong>Finite State System</strong> is like a simple robot that can be in different "states" and can change from one state to another based on inputs it receives. Think of it as a machine with a limited memory that can only remember which state it's currently in.</p>
+                
+                <div class="example-detailed">
+                    <h4>🚦 Traffic Light System - Your First State Machine</h4>
+                    
+                    <h5>The System:</h5>
+                    <p>A traffic light has three states: Red, Yellow, and Green. It changes states based on a timer (input).</p>
+                    
+                    <h5>States and Transitions:</h5>
+                    <ul>
+                        <li><strong>State 1: Red</strong> → Timer expires → Go to Green</li>
+                        <li><strong>State 2: Green</strong> → Timer expires → Go to Yellow</li>
+                        <li><strong>State 3: Yellow</strong> → Timer expires → Go to Red</li>
+                    </ul>
+
+                    <div class="state-diagram">
+                        Red → Green → Yellow → Red → Green → ...
+                        <br><br>
+                        Input: Timer Signal
+                        <br>
+                        States: {Red, Green, Yellow}
+                        <br>
+                        Start State: Red
+                    </div>
+
+                    <h5>Key Insights:</h5>
+                    <ul>
+                        <li><strong>Finite States:</strong> Only 3 possible states (not infinite)</li>
+                        <li><strong>Deterministic:</strong> From each state, there's exactly one next state for each input</li>
+                        <li><strong>Memory:</strong> The system only "remembers" its current state</li>
+                        <li><strong>Input-Driven:</strong> State changes happen based on inputs</li>
+                    </ul>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔐 Password Validation System</h4>
+                    
+                    <h5>The Problem:</h5>
+                    <p>Create a system that accepts passwords with exactly the pattern: "pass" followed by any number of digits.</p>
+                    
+                    <h5>Valid Passwords:</h5>
+                    <ul>
+                        <li>"pass1" ✓</li>
+                        <li>"pass123" ✓</li>
+                        <li>"pass0000" ✓</li>
+                    </ul>
+
+                    <h5>Invalid Passwords:</h5>
+                    <ul>
+                        <li>"password" ✗ (extra letters after digits)</li>
+                        <li>"pas1" ✗ (incomplete "pass")</li>
+                        <li>"pass" ✗ (no digits)</li>
+                    </ul>
+
+                    <h5>State Machine Design:</h5>
+                    <div class="state-diagram">
+                        q0 --p--> q1 --a--> q2 --s--> q3 --s--> q4 --digit--> q5
+                        <br>
+                        q5 --digit--> q5 (loop for more digits)
+                        <br><br>
+                        States: q0(start), q1, q2, q3, q4, q5(accept)
+                        <br>
+                        Alphabet: {p, a, s, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+                        <br>
+                        Accept State: q5 (password is valid)
+                    </div>
+                </div>
+
+                <h3>Basic Definitions and Components</h3>
+                <div class="definition-box">
+                    <h4>📝 Formal Definition of Finite Automaton</h4>
+                    
+                    <p>A <strong>Finite Automaton</strong> is a 5-tuple (Q, Σ, δ, q₀, F) where:</p>
+                    
+                    <ul>
+                        <li><strong>Q:</strong> Finite set of states</li>
+                        <li><strong>Σ:</strong> Finite input alphabet</li>
+                        <li><strong>δ:</strong> Transition function δ: Q × Σ → Q</li>
+                        <li><strong>q₀:</strong> Start state (q₀ ∈ Q)</li>
+                        <li><strong>F:</strong> Set of accept states (F ⊆ Q)</li>
+                    </ul>
+
+                    <h5>What Each Component Means:</h5>
+                    <ul>
+                        <li><strong>States (Q):</strong> All possible conditions the machine can be in</li>
+                        <li><strong>Alphabet (Σ):</strong> All possible input symbols the machine can read</li>
+                        <li><strong>Transitions (δ):</strong> Rules for moving from one state to another</li>
+                        <li><strong>Start State (q₀):</strong> Where the machine begins processing</li>
+                        <li><strong>Accept States (F):</strong> States that indicate successful processing</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="dfa">
+                <h2>2. Deterministic Finite Automata (DFA) - Predictable Machines</h2>
+                
+                <h3>Understanding Deterministic Behavior</h3>
+                <div class="concept">
+                    <h4>🎯 What Makes an Automaton "Deterministic"?</h4>
+                    
+                    <p>A <strong>Deterministic Finite Automaton (DFA)</strong> is like a well-programmed robot that always knows exactly what to do next. Given its current state and the next input symbol, there is exactly one state it will move to - no ambiguity, no choices.</p>
+                    
+                    <h5>Key Properties of DFAs:</h5>
+                    <ul>
+                        <li><strong>Unique Transitions:</strong> From each state, each input leads to exactly one next state</li>
+                        <li><strong>Complete Function:</strong> Every state has a transition for every input symbol</li>
+                        <li><strong>Predictable:</strong> Given the same input sequence, always produces the same result</li>
+                        <li><strong>No Memory:</strong> Only remembers the current state, not the history</li>
+                    </ul>
+                </div>
+
+                <h3>Building Your First DFA - Even Number of 1s</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Step-by-Step DFA Construction</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design a DFA that accepts binary strings containing an even number of 1s.</p>
+                    
+                    <h5>Examples:</h5>
+                    <ul>
+                        <li>"" (empty string) ✓ (0 is even)</li>
+                        <li>"0" ✓ (zero 1s)</li>
+                        <li>"11" ✓ (two 1s)</li>
+                        <li>"101" ✗ (three 1s)</li>
+                        <li>"1001" ✓ (two 1s)</li>
+                    </ul>
+
+                    <h5>Step 1: Identify What to Track</h5>
+                    <p>We need to track whether we've seen an even or odd number of 1s so far.</p>
+                    
+                    <h5>Step 2: Design States</h5>
+                    <ul>
+                        <li><strong>q₀ (Even):</strong> Seen even number of 1s (including 0)</li>
+                        <li><strong>q₁ (Odd):</strong> Seen odd number of 1s</li>
+                    </ul>
+
+                    <h5>Step 3: Define Transitions</h5>
+                    <div class="state-diagram">
+                        From q₀ (Even):
+                        <br>
+                        - Read '0': Stay in q₀ (count unchanged)
+                        <br>
+                        - Read '1': Go to q₁ (even → odd)
+                        <br><br>
+                        From q₁ (Odd):
+                        <br>
+                        - Read '0': Stay in q₁ (count unchanged)
+                        <br>
+                        - Read '1': Go to q₀ (odd → even)
+                    </div>
+
+                    <h5>Step 4: Complete DFA Definition</h5>
+                    <ul>
+                        <li><strong>Q = {q₀, q₁}</strong></li>
+                        <li><strong>Σ = {0, 1}</strong></li>
+                        <li><strong>Start State = q₀</strong></li>
+                        <li><strong>Accept States = {q₀}</strong></li>
+                        <li><strong>Transition Function δ:</strong>
+                            <ul>
+                                <li>δ(q₀, 0) = q₀</li>
+                                <li>δ(q₀, 1) = q₁</li>
+                                <li>δ(q₁, 0) = q₁</li>
+                                <li>δ(q₁, 1) = q₀</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Testing Your DFA - Trace Through Examples</h3>
+                <div class="example-detailed">
+                    <h4>🧪 Tracing String "1101"</h4>
+                    
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li><strong>Start:</strong> State q₀, String "1101"</li>
+                            <li><strong>Read '1':</strong> δ(q₀, 1) = q₁, Remaining "101"</li>
+                            <li><strong>Read '1':</strong> δ(q₁, 1) = q₀, Remaining "01"</li>
+                            <li><strong>Read '0':</strong> δ(q₀, 0) = q₀, Remaining "1"</li>
+                            <li><strong>Read '1':</strong> δ(q₀, 1) = q₁, Remaining ""</li>
+                            <li><strong>End:</strong> State q₁ (not accepting)</li>
+                            <li><strong>Result:</strong> String "1101" is REJECTED ✗</li>
+                        </ol>
+                    </div>
+
+                    <p><strong>Verification:</strong> "1101" has three 1s, which is odd, so rejection is correct!</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🧪 Tracing String "1100"</h4>
+                    
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li><strong>Start:</strong> State q₀, String "1100"</li>
+                            <li><strong>Read '1':</strong> δ(q₀, 1) = q₁, Remaining "100"</li>
+                            <li><strong>Read '1':</strong> δ(q₁, 1) = q₀, Remaining "00"</li>
+                            <li><strong>Read '0':</strong> δ(q₀, 0) = q₀, Remaining "0"</li>
+                            <li><strong>Read '0':</strong> δ(q₀, 0) = q₀, Remaining ""</li>
+                            <li><strong>End:</strong> State q₀ (accepting)</li>
+                            <li><strong>Result:</strong> String "1100" is ACCEPTED ✓</li>
+                        </ol>
+                    </div>
+
+                    <p><strong>Verification:</strong> "1100" has two 1s, which is even, so acceptance is correct!</p>
+                </div>
+            </section>
+
+            <section id="ndfa">
+                <h2>3. Non-Deterministic Finite Automata (NDFA) - Machines with Choices</h2>
+                
+                <h3>Understanding Non-Determinism</h3>
+                <div class="concept">
+                    <h4>🎲 What Makes an Automaton "Non-Deterministic"?</h4>
+                    
+                    <p>A <strong>Non-Deterministic Finite Automaton (NDFA)</strong> is like a machine that can make choices. When it reads an input symbol, it might have multiple possible next states to choose from, or sometimes no valid transition at all.</p>
+                    
+                    <h5>Key Differences from DFA:</h5>
+                    <ul>
+                        <li><strong>Multiple Transitions:</strong> From one state, the same input can lead to multiple states</li>
+                        <li><strong>Missing Transitions:</strong> Some state-input combinations might have no transition</li>
+                        <li><strong>Parallel Computation:</strong> Conceptually explores all possible paths simultaneously</li>
+                        <li><strong>Acceptance:</strong> Accepts if ANY possible path leads to an accept state</li>
+                    </ul>
+                </div>
+
+                <h3>NDFA Example - Strings Ending with "01"</h3>
+                <div class="algorithm-steps">
+                    <h4>🔧 Building an NDFA</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design an NDFA that accepts binary strings ending with "01".</p>
+                    
+                    <h5>Examples:</h5>
+                    <ul>
+                        <li>"01" ✓</li>
+                        <li>"101" ✓</li>
+                        <li>"1001" ✓</li>
+                        <li>"110101" ✓</li>
+                        <li>"10" ✗</li>
+                        <li>"011" ✗</li>
+                    </ul>
+
+                    <h5>NDFA Design Strategy:</h5>
+                    <p>The key insight: We don't know when the final "01" pattern starts, so we need to "guess" when we see a '0' that might be the start of the ending "01".</p>
+                    
+                    <h5>States:</h5>
+                    <ul>
+                        <li><strong>q₀:</strong> Start state, haven't seen the beginning of "01" yet</li>
+                        <li><strong>q₁:</strong> Just read '0', might be start of final "01"</li>
+                        <li><strong>q₂:</strong> Just completed "01" pattern (accept state)</li>
+                    </ul>
+
+                    <h5>Transitions:</h5>
+                    <div class="state-diagram">
+                        From q₀:
+                        <br>
+                        - Read '0': Go to q₀ (stay) AND q₁ (guess this starts "01")
+                        <br>
+                        - Read '1': Go to q₀ (stay)
+                        <br><br>
+                        From q₁:
+                        <br>
+                        - Read '1': Go to q₂ (complete "01" pattern)
+                        <br>
+                        - Read '0': No transition (this path dies)
+                        <br><br>
+                        From q₂:
+                        <br>
+                        - Read '0': Go to q₁ (new "01" might start)
+                        <br>
+                        - Read '1': No transition (string doesn't end with "01")
+                    </div>
+                </div>
+
+                <h3>Tracing NDFA Execution - Multiple Paths</h3>
+                <div class="example-detailed">
+                    <h4>🧪 Tracing String "1001" in NDFA</h4>
+                    
+                    <div class="algorithm-steps">
+                        <h5>Initial:</h5>
+                        <p>Current states: {q₀}, Remaining string: "1001"</p>
+                        
+                        <h5>Read '1':</h5>
+                        <ul>
+                            <li>From q₀ on '1': Go to q₀</li>
+                            <li>Current states: {q₀}, Remaining: "001"</li>
+                        </ul>
+
+                        <h5>Read '0':</h5>
+                        <ul>
+                            <li>From q₀ on '0': Go to q₀ AND q₁</li>
+                            <li>Current states: {q₀, q₁}, Remaining: "01"</li>
+                        </ul>
+
+                        <h5>Read '0':</h5>
+                        <ul>
+                            <li>From q₀ on '0': Go to q₀ AND q₁</li>
+                            <li>From q₁ on '0': No transition (this path dies)</li>
+                            <li>Current states: {q₀, q₁}, Remaining: "1"</li>
+                        </ul>
+
+                        <h5>Read '1':</h5>
+                        <ul>
+                            <li>From q₀ on '1': Go to q₀</li>
+                            <li>From q₁ on '1': Go to q₂</li>
+                            <li>Current states: {q₀, q₂}, Remaining: ""</li>
+                        </ul>
+
+                        <h5>Result:</h5>
+                        <p>Final states include q₂ (accept state) → String "1001" is ACCEPTED ✓</p>
+                    </div>
+                </div>
+
+                <div class="important-note">
+                    <h4>🎯 Key NDFA Insight</h4>
+                    <p>An NDFA accepts a string if there exists at least one computational path that leads to an accept state. It doesn't matter if other paths fail - as long as one path succeeds, the string is accepted.</p>
+                </div>
+            </section>
+
+            <section id="equivalence">
+                <h2>4. Equivalence of DFA and NDFA - Same Power, Different Style</h2>
+                
+                <h3>The Fundamental Equivalence Theorem</h3>
+                <div class="concept">
+                    <h4>⚖️ DFA vs NDFA: Equal Computational Power</h4>
+                    
+                    <p><strong>Theorem:</strong> For every NDFA, there exists an equivalent DFA that accepts exactly the same language.</p>
+                    
+                    <p>This means that non-determinism doesn't give us more computational power - it just gives us a more convenient way to design automata for certain problems.</p>
+                    
+                    <h5>Why This Matters:</h5>
+                    <ul>
+                        <li><strong>Design Flexibility:</strong> Use NDFA when it's easier to design</li>
+                        <li><strong>Implementation Reality:</strong> Convert to DFA for actual computer implementation</li>
+                        <li><strong>Theoretical Understanding:</strong> Both models recognize the same class of languages (regular languages)</li>
+                    </ul>
+                </div>
+
+                <h3>Subset Construction Algorithm - Converting NDFA to DFA</h3>
+                <div class="algorithm-steps">
+                    <h4>🔄 The Conversion Process</h4>
+                    
+                    <h5>Key Idea:</h5>
+                    <p>Each state in the new DFA represents a <em>set of states</em> that the NDFA could be in simultaneously.</p>
+                    
+                    <h5>Algorithm Steps:</h5>
+                    <ol>
+                        <li><strong>Start State:</strong> Create DFA start state = {NDFA start state}</li>
+                        <li><strong>For each DFA state (set of NDFA states):</strong>
+                            <ul>
+                                <li>For each input symbol</li>
+                                <li>Find all NDFA states reachable from any state in the current set</li>
+                                <li>Create new DFA state for this set (if not already created)</li>
+                                <li>Add transition to this new state</li>
+                            </ul>
+                        </li>
+                        <li><strong>Accept States:</strong> DFA state is accepting if it contains any NDFA accept state</li>
+                        <li><strong>Repeat:</strong> Until no new DFA states are created</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Converting "Ends with 01" NDFA to DFA</h4>
+                    
+                    <h5>Original NDFA States:</h5>
+                    <ul>
+                        <li>q₀: Start state</li>
+                        <li>q₁: Seen '0', might be start of "01"</li>
+                        <li>q₂: Accept state (completed "01")</li>
+                    </ul>
+
+                    <h5>Conversion Process:</h5>
+                    <div class="algorithm-steps">
+                        <h6>Step 1: DFA Start State</h6>
+                        <p>DFA_q₀ = {q₀}</p>
+
+                        <h6>Step 2: Transitions from DFA_q₀</h6>
+                        <ul>
+                            <li>On '0': NDFA q₀ goes to {q₀, q₁} → Create DFA_q₁ = {q₀, q₁}</li>
+                            <li>On '1': NDFA q₀ goes to {q₀} → Stay in DFA_q₀</li>
+                        </ul>
+
+                        <h6>Step 3: Transitions from DFA_q₁ = {q₀, q₁}</h6>
+                        <ul>
+                            <li>On '0': From q₀→{q₀,q₁}, From q₁→∅ → Result: {q₀, q₁} = DFA_q₁</li>
+                            <li>On '1': From q₀→{q₀}, From q₁→{q₂} → Create DFA_q₂ = {q₀, q₂}</li>
+                        </ul>
+
+                        <h6>Step 4: Transitions from DFA_q₂ = {q₀, q₂}</h6>
+                        <ul>
+                            <li>On '0': From q₀→{q₀,q₁}, From q₂→{q₁} → Result: {q₀, q₁} = DFA_q₁</li>
+                            <li>On '1': From q₀→{q₀}, From q₂→∅ → Result: {q₀} = DFA_q₀</li>
+                        </ul>
+                    </div>
+
+                    <h5>Final DFA:</h5>
+                    <ul>
+                        <li><strong>States:</strong> {DFA_q₀, DFA_q₁, DFA_q₂}</li>
+                        <li><strong>Start State:</strong> DFA_q₀</li>
+                        <li><strong>Accept States:</strong> {DFA_q₂} (contains NDFA accept state q₂)</li>
+                        <li><strong>Transitions:</strong> Complete and deterministic</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="epsilon-moves">
+                <h2>5. Finite Automata with ε-moves - Silent Transitions</h2>
+                
+                <h3>Understanding Epsilon Transitions</h3>
+                <div class="concept">
+                    <h4>👻 Silent Moves in Automata</h4>
+                    
+                    <p><strong>Epsilon (ε) transitions</strong> are "silent" moves that an automaton can make without reading any input symbol. Think of them as "free" transitions that happen spontaneously.</p>
+                    
+                    <h5>Key Properties of ε-moves:</h5>
+                    <ul>
+                        <li><strong>No Input Consumed:</strong> Machine moves to new state without reading a symbol</li>
+                        <li><strong>Non-deterministic:</strong> Can choose when to take ε-transitions</li>
+                        <li><strong>Closure:</strong> From any state, can reach all states connected by ε-transitions</li>
+                        <li><strong>Convenience:</strong> Makes some automata designs much simpler</li>
+                    </ul>
+                </div>
+
+                <h3>ε-Closure and Extended Transitions</h3>
+                <div class="mathematical-foundation">
+                    <h4>🔄 Computing ε-Closure</h4>
+                    
+                    <h5>ε-Closure Definition:</h5>
+                    <p>The <strong>ε-closure</strong> of a state q is the set of all states reachable from q using only ε-transitions (including q itself).</p>
+                    
+                    <h5>Algorithm for ε-Closure:</h5>
+                    <ol>
+                        <li>Start with the state itself: ε-closure(q) = {q}</li>
+                        <li>Add all states reachable by one ε-transition</li>
+                        <li>Recursively add states reachable from newly added states</li>
+                        <li>Continue until no new states are added</li>
+                    </ol>
+
+                    <h5>Extended Transition Function:</h5>
+                    <p>δ̂(q, w) = set of all states reachable from q by reading string w (including ε-moves)</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Automaton with ε-moves</h4>
+                    
+                    <h5>Problem:</h5>
+                    <p>Design an automaton that accepts strings that are either all 0s or all 1s.</p>
+                    
+                    <h5>Solution with ε-moves:</h5>
+                    <div class="state-diagram">
+                        q₀ --ε--> q₁ (branch to "all 0s" path)
+                        <br>
+                        q₀ --ε--> q₂ (branch to "all 1s" path)
+                        <br>
+                        q₁ --0--> q₁ (loop on 0s)
+                        <br>
+                        q₂ --1--> q₂ (loop on 1s)
+                        <br><br>
+                        Accept states: {q₁, q₂}
+                    </div>
+
+                    <h5>ε-Closures:</h5>
+                    <ul>
+                        <li>ε-closure(q₀) = {q₀, q₁, q₂}</li>
+                        <li>ε-closure(q₁) = {q₁}</li>
+                        <li>ε-closure(q₂) = {q₂}</li>
+                    </ul>
+
+                    <h5>String Processing "000":</h5>
+                    <ol>
+                        <li>Start: ε-closure({q₀}) = {q₀, q₁, q₂}</li>
+                        <li>Read '0': From q₁ go to q₁, others have no transition → {q₁}</li>
+                        <li>Read '0': From q₁ go to q₁ → {q₁}</li>
+                        <li>Read '0': From q₁ go to q₁ → {q₁}</li>
+                        <li>Result: q₁ is accept state → ACCEPTED ✓</li>
+                    </ol>
+                </div>
+
+                <h3>Eliminating ε-moves</h3>
+                <div class="algorithm-steps">
+                    <h4>🔄 Converting ε-NFA to NFA</h4>
+                    
+                    <p>Any automaton with ε-moves can be converted to an equivalent automaton without ε-moves.</p>
+                    
+                    <h5>Conversion Algorithm:</h5>
+                    <ol>
+                        <li><strong>Compute ε-closures:</strong> For every state, find all states reachable via ε-moves</li>
+                        <li><strong>New transitions:</strong> If state p can reach state q via ε-moves, and q has transition on symbol a to r, then add transition from p on a to r</li>
+                        <li><strong>New accept states:</strong> If a state can reach an accept state via ε-moves, make it an accept state</li>
+                        <li><strong>Remove ε-transitions:</strong> Delete all ε-transitions from the automaton</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="regular-expressions">
+                <h2>6. Regular Expressions - Pattern Matching Language</h2>
+                
+                <h3>Understanding Regular Expressions</h3>
+                <div class="concept">
+                    <h4>🔍 The Language of Patterns</h4>
+                    
+                    <p><strong>Regular Expressions</strong> are a concise way to describe patterns in strings. They're like a mathematical shorthand for describing the same languages that finite automata can recognize.</p>
+                    
+                    <h5>Why Regular Expressions Matter:</h5>
+                    <ul>
+                        <li><strong>Practical:</strong> Used in text editors, programming languages, databases</li>
+                        <li><strong>Concise:</strong> Describe complex patterns in short expressions</li>
+                        <li><strong>Equivalent:</strong> Express exactly the same languages as finite automata</li>
+                        <li><strong>Intuitive:</strong> Often easier to write than drawing automata</li>
+                    </ul>
+                </div>
+
+                <h3>Regular Expression Syntax and Operations</h3>
+                <div class="definition-box">
+                    <h4>📝 Basic Regular Expression Operations</h4>
+                    
+                    <h5>Atomic Expressions:</h5>
+                    <ul>
+                        <li><strong>∅:</strong> Empty language (matches nothing)</li>
+                        <li><strong>ε:</strong> Empty string (matches only the empty string)</li>
+                        <li><strong>a:</strong> Single symbol (matches only the string "a")</li>
+                    </ul>
+
+                    <h5>Compound Operations:</h5>
+                    <ul>
+                        <li><strong>Union (R₁ + R₂):</strong> Matches strings that match either R₁ or R₂</li>
+                        <li><strong>Concatenation (R₁R₂):</strong> Matches strings that are R₁ followed by R₂</li>
+                        <li><strong>Kleene Star (R*):</strong> Matches zero or more repetitions of R</li>
+                    </ul>
+
+                    <h5>Operator Precedence (highest to lowest):</h5>
+                    <ol>
+                        <li>Kleene Star (*)</li>
+                        <li>Concatenation</li>
+                        <li>Union (+)</li>
+                    </ol>
+                </div>
+
+                <h3>Building Regular Expressions - Examples</h3>
+                <div class="example-detailed">
+                    <h4>🔧 Regular Expression Construction Examples</h4>
+                    
+                    <h5>Example 1: Binary strings with even number of 1s</h5>
+                    <ul>
+                        <li><strong>Pattern:</strong> Any number of 0s, with pairs of 1s scattered throughout</li>
+                        <li><strong>Strategy:</strong> 0s can appear anywhere, 1s must appear in pairs</li>
+                        <li><strong>Regular Expression:</strong> (0 + 11)*</li>
+                        <li><strong>Explanation:</strong> Any combination of 0s and pairs of 1s</li>
+                    </ul>
+
+                    <h5>Example 2: Strings ending with "01"</h5>
+                    <ul>
+                        <li><strong>Pattern:</strong> Any string followed by "01"</li>
+                        <li><strong>Strategy:</strong> (any symbols)* followed by 01</li>
+                        <li><strong>Regular Expression:</strong> (0 + 1)*01</li>
+                        <li><strong>Explanation:</strong> Any sequence of 0s and 1s, ending with 01</li>
+                    </ul>
+
+                    <h5>Example 3: Strings containing "101" as substring</h5>
+                    <ul>
+                        <li><strong>Pattern:</strong> (prefix)(101)(suffix)</li>
+                        <li><strong>Strategy:</strong> Any string + "101" + any string</li>
+                        <li><strong>Regular Expression:</strong> (0 + 1)*101(0 + 1)*</li>
+                        <li><strong>Explanation:</strong> "101" appears somewhere in the string</li>
+                    </ul>
+
+                    <h5>Example 4: Valid identifiers (programming)</h5>
+                    <ul>
+                        <li><strong>Pattern:</strong> Letter followed by letters/digits</li>
+                        <li><strong>Strategy:</strong> (letter)(letter + digit)*</li>
+                        <li><strong>Regular Expression:</strong> (a+b+...+z)(a+b+...+z+0+1+...+9)*</li>
+                        <li><strong>Explanation:</strong> Starts with letter, continues with letters or digits</li>
+                    </ul>
+                </div>
+
+                <h3>Regular Expression to Automaton Conversion</h3>
+                <div class="algorithm-steps">
+                    <h4>🔄 Thompson's Construction Algorithm</h4>
+                    
+                    <p>Any regular expression can be converted to an equivalent ε-NFA using Thompson's construction.</p>
+                    
+                    <h5>Base Cases:</h5>
+                    <ul>
+                        <li><strong>∅:</strong> No accept state</li>
+                        <li><strong>ε:</strong> Start state is also accept state</li>
+                        <li><strong>a:</strong> Start state → a → Accept state</li>
+                    </ul>
+
+                    <h5>Inductive Cases:</h5>
+                    <ul>
+                        <li><strong>Union (R₁ + R₂):</strong> Create new start state with ε-transitions to both R₁ and R₂ start states</li>
+                        <li><strong>Concatenation (R₁R₂):</strong> Connect accept states of R₁ to start state of R₂ with ε-transitions</li>
+                        <li><strong>Kleene Star (R*):</strong> Add ε-transitions for loops and bypassing</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="equivalence-regex-fa">
+                <h2>7. Equivalence of Regular Expressions and Finite Automata</h2>
+                
+                <h3>The Fundamental Equivalence</h3>
+                <div class="concept">
+                    <h4>⚖️ Two Ways to Describe the Same Languages</h4>
+                    
+                    <p><strong>Theorem:</strong> A language is regular if and only if it can be described by a regular expression if and only if it can be recognized by a finite automaton.</p>
+                    
+                    <p>This means:</p>
+                    <ul>
+                        <li>Every regular expression has an equivalent finite automaton</li>
+                        <li>Every finite automaton has an equivalent regular expression</li>
+                        <li>Regular expressions and finite automata define the same class of languages</li>
+                    </ul>
+                </div>
+
+                <h3>Automaton to Regular Expression Conversion</h3>
+                <div class="algorithm-steps">
+                    <h4>🔄 State Elimination Method</h4>
+                    
+                    <h5>Algorithm Overview:</h5>
+                    <ol>
+                        <li><strong>Prepare:</strong> Ensure single start state and single accept state</li>
+                        <li><strong>Eliminate:</strong> Remove states one by one (except start and accept)</li>
+                        <li><strong>Update:</strong> When removing a state, update transitions to preserve language</li>
+                        <li><strong>Result:</strong> Final expression is the label on the transition from start to accept</li>
+                    </ol>
+
+                    <h5>State Elimination Rule:</h5>
+                    <p>When eliminating state q with:</p>
+                    <ul>
+                        <li>Incoming transitions labeled R₁, R₂, ... from states p₁, p₂, ...</li>
+                        <li>Outgoing transitions labeled S₁, S₂, ... to states r₁, r₂, ...</li>
+                        <li>Self-loop labeled T</li>
+                    </ul>
+                    <p>Add direct transitions from each pᵢ to each rⱼ labeled: RᵢT*Sⱼ</p>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Converting Simple DFA to Regular Expression</h4>
+                    
+                    <h5>Original DFA (accepts strings with even number of 1s):</h5>
+                    <div class="state-diagram">
+                        q₀ --0--> q₀
+                        <br>
+                        q₀ --1--> q₁
+                        <br>
+                        q₁ --0--> q₁
+                        <br>
+                        q₁ --1--> q₀
+                        <br><br>
+                        Start: q₀, Accept: {q₀}
+                    </div>
+
+                    <h5>Conversion Process:</h5>
+                    <ol>
+                        <li><strong>Add new start and accept states:</strong> q_start → q₀, q₀ → q_accept</li>
+                        <li><strong>Eliminate q₁:</strong>
+                            <ul>
+                                <li>Path q₀ → q₁ → q₀: Label becomes 1·0*·1</li>
+                                <li>Update transition q₀ → q₀: 0 + 10*1</li>
+                            </ul>
+                        </li>
+                        <li><strong>Final expression:</strong> (0 + 10*1)*</li>
+                    </ol>
+
+                    <p><strong>Verification:</strong> This expression matches strings with even number of 1s!</p>
+                </div>
+            </section>
+
+            <section id="ardens-method">
+                <h2>8. Arden's Method - Converting NFA to Regular Expression</h2>
+                
+                <h3>Understanding Arden's Theorem</h3>
+                <div class="mathematical-foundation">
+                    <h4>🧮 Arden's Theorem</h4>
+                    
+                    <p><strong>Theorem:</strong> If X = AX + B where A and B are regular expressions and ε ∉ L(A), then X = A*B.</p>
+                    
+                    <h5>What This Means:</h5>
+                    <ul>
+                        <li>X represents the set of strings that reach a particular state</li>
+                        <li>AX represents strings that loop back to the same state</li>
+                        <li>B represents strings that reach the state directly</li>
+                        <li>The solution X = A*B gives us the regular expression</li>
+                    </ul>
+
+                    <h5>Application Strategy:</h5>
+                    <ol>
+                        <li>Write equations for each state based on incoming transitions</li>
+                        <li>Solve the system of equations using substitution</li>
+                        <li>Apply Arden's theorem to eliminate recursive definitions</li>
+                        <li>The equation for accept states gives the final regular expression</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>🔧 Example: Arden's Method Application</h4>
+                    
+                    <h5>Given NFA:</h5>
+                    <div class="state-diagram">
+                        q₀ --a--> q₀
+                        <br>
+                        q₀ --b--> q₁
+                        <br>
+                        q₁ --a--> q₂
+                        <br>
+                        q₁ --b--> q₁
+                        <br>
+                        q₂ --a--> q₂
+                        <br>
+                        q₂ --b--> q₁
+                        <br><br>
+                        Start: q₀, Accept: {q₂}
+                    </div>
+
+                    <h5>Step 1: Write State Equations</h5>
+                    <ul>
+                        <li>q₀ = ε + q₀a (start state plus loops)</li>
+                        <li>q₁ = q₀b + q₁b + q₂b</li>
+                        <li>q₂ = q₁a + q₂a</li>
+                    </ul>
+
+                    <h5>Step 2: Solve Using Arden's Theorem</h5>
+                    <div class="algorithm-steps">
+                        <ol>
+                            <li><strong>From q₀ = ε + q₀a:</strong> q₀ = a*</li>
+                            <li><strong>Substitute into q₁ equation:</strong> q₁ = a*b + q₁b + q₂b</li>
+                            <li><strong>From q₂ = q₁a + q₂a:</strong> q₂ = q₁a*</li>
+                            <li><strong>Substitute q₂ into q₁:</strong> q₁ = a*b + q₁b + q₁a*b</li>
+                            <li><strong>Simplify:</strong> q₁ = a*b + q₁(b + a*b) = a*b + q₁b(ε + a*)</li>
+                            <li><strong>Apply Arden's:</strong> q₁ = (b(ε + a*))*a*b</li>
+                            <li><strong>Final result:</strong> q₂ = q₁a* = (b(ε + a*))*a*ba*</li>
+                        </ol>
+                    </div>
+
+                    <h5>Simplified Regular Expression:</h5>
+                    <p>After algebraic simplification: <strong>(a + ba*b)*ba*</strong></p>
+                </div>
+            </section>
+
+            <section id="conversion-methods">
+                <h2>9. Conversion Methods Summary - The Complete Toolkit</h2>
+                
+                <div class="quick-reference">
+                    <h4>🔄 Conversion Methods Overview</h4>
+                    
+                    <h5>Between Automata Types:</h5>
+                    <ul>
+                        <li><strong>NDFA → DFA:</strong> Subset construction algorithm</li>
+                        <li><strong>ε-NFA → NFA:</strong> ε-closure elimination</li>
+                        <li><strong>NFA → DFA:</strong> Subset construction (handles non-determinism)</li>
+                    </ul>
+
+                    <h5>Regular Expression ↔ Automata:</h5>
+                    <ul>
+                        <li><strong>RegEx → ε-NFA:</strong> Thompson's construction</li>
+                        <li><strong>DFA → RegEx:</strong> State elimination method</li>
+                        <li><strong>NFA → RegEx:</strong> Arden's method or state elimination</li>
+                    </ul>
+
+                    <h5>When to Use Each Method:</h5>
+                    <ul>
+                        <li><strong>Design Phase:</strong> Use NDFA or RegEx (easier to design)</li>
+                        <li><strong>Implementation:</strong> Convert to DFA (easier to implement)</li>
+                        <li><strong>Analysis:</strong> Use RegEx (easier to analyze and modify)</li>
+                        <li><strong>Optimization:</strong> Use DFA minimization techniques</li>
+                    </ul>
+                </div>
+
+                <div class="exam-tip">
+                    <strong>Exam Strategy:</strong> Practice all conversion methods thoroughly. Exam questions often ask you to convert between different representations. Start with the representation that's easiest for the given problem, then convert as needed. Remember that all these representations are equivalent - they describe the same class of regular languages.
+                </div>
+            </section>
+
+            <section id="applications">
+                <h2>10. Real-World Applications - Theory in Practice</h2>
+                
+                <div class="real-world-application">
+                    <h4>🌍 Finite Automata in Modern Technology</h4>
+                    
+                    <h5>Lexical Analysis in Compilers:</h5>
+                    <ul>
+                        <li><strong>Problem:</strong> Recognize tokens in source code (keywords, identifiers, numbers)</li>
+                        <li><strong>Solution:</strong> DFA for each token type, combined into a single lexer</li>
+                        <li><strong>Example:</strong> Recognizing integer literals: (0 + 1 + ... + 9)(0 + 1 + ... + 9)*</li>
+                    </ul>
+
+                    <h5>Text Processing and Search:</h5>
+                    <ul>
+                        <li><strong>grep command:</strong> Uses regular expressions for pattern matching</li>
+                        <li><strong>Text editors:</strong> Find/replace functionality</li>
+                        <li><strong>Web forms:</strong> Input validation (email, phone numbers)</li>
+                    </ul>
+
+                    <h5>Network Protocol Analysis:</h5>
+                    <ul>
+                        <li><strong>Packet filtering:</strong> Firewalls use automata to match packet patterns</li>
+                        <li><strong>Intrusion detection:</strong> Recognize attack signatures</li>
+                        <li><strong>Protocol verification:</strong> Ensure communication follows standards</li>
+                    </ul>
+
+                    <h5>Bioinformatics:</h5>
+                    <ul>
+                        <li><strong>DNA sequence analysis:</strong> Find gene patterns</li>
+                        <li><strong>Protein folding:</strong> Recognize structural motifs</li>
+                        <li><strong>Evolutionary analysis:</strong> Compare genetic sequences</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="summary">
+                <h2>11. Unit 1 Summary - Your Automata Toolkit</h2>
+                
+                <div class="quick-reference">
+                    <h4>🎯 Key Concepts Mastered</h4>
+                    
+                    <h5>Automata Models:</h5>
+                    <ul>
+                        <li><strong>DFA:</strong> Deterministic, predictable, easy to implement</li>
+                        <li><strong>NDFA:</strong> Non-deterministic, flexible design, multiple paths</li>
+                        <li><strong>ε-NFA:</strong> Silent transitions, even more design flexibility</li>
+                    </ul>
+
+                    <h5>Regular Expressions:</h5>
+                    <ul>
+                        <li><strong>Syntax:</strong> Union (+), concatenation, Kleene star (*)</li>
+                        <li><strong>Applications:</strong> Pattern matching, text processing</li>
+                        <li><strong>Equivalence:</strong> Same power as finite automata</li>
+                    </ul>
+
+                    <h5>Conversion Techniques:</h5>
+                    <ul>
+                        <li><strong>Subset Construction:</strong> NDFA to DFA conversion</li>
+                        <li><strong>Thompson's Construction:</strong> RegEx to ε-NFA</li>
+                        <li><strong>State Elimination:</strong> Automata to RegEx</li>
+                        <li><strong>Arden's Method:</strong> Systematic equation solving</li>
+                    </ul>
+
+                    <h5>Practical Skills:</h5>
+                    <ul>
+                        <li>Design automata for given language specifications</li>
+                        <li>Convert between different representations</li>
+                        <li>Trace automata execution on input strings</li>
+                        <li>Write regular expressions for common patterns</li>
+                    </ul>
+                </div>
+
+                <div class="progress-indicator">
+                    🎓 Unit 1 Complete! Next: Unit 2 - Machine Properties and Limitations
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
