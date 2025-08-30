@@ -546,7 +546,7 @@ h5 {
 }
 
 /* Code and Programming Content Styles */
-.code-block, .code-example pre, .code-example code {
+.code-block, .code-example pre {
     background-color: #2d3748;
     color: #e2e8f0;
     padding: 1.5rem;
@@ -557,8 +557,19 @@ h5 {
     margin: 1.5rem 0;
     overflow-x: auto;
     border: 1px solid #4a5568;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    white-space: pre; /* prevent wrapping; show horizontal scroll */
+    max-width: 100%;
+    display: block;
+}
+
+/* Reset inner code tag to avoid double background/padding */
+.code-example pre code {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    white-space: inherit;
 }
 
 .code-example {
@@ -799,5 +810,10 @@ strong:hover {
     .summary-table {
         break-inside: avoid;
         page-break-inside: avoid;
+    }
+    /* prevent code blocks from breaking across pages */
+    pre, code, .code-block, .code-example {
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 }
