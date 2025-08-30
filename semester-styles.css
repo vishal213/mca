@@ -102,6 +102,17 @@ body {
     font-weight: 700;
 }
 
+.semester-heading-link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.semester-heading-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
 .semester-status {
     padding: 10px 20px;
     border-radius: 30px;
@@ -167,6 +178,15 @@ body {
     font-size: 0.9em;
     font-weight: 500;
     box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.subject-chip:hover {
+    background: linear-gradient(135deg, #0984e3, #0652dd);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
+    text-decoration: none;
 }
 
 .subject-chip.coming-soon {
@@ -186,13 +206,14 @@ body {
 }
 
 .feature {
-    background: linear-gradient(135deg, #00b894, #00cec9);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 20px;
+    background: rgba(0, 184, 148, 0.1);
+    color: #00b894;
+    padding: 8px 15px;
+    border-radius: 18px;
     font-size: 0.9em;
     font-weight: 500;
-    box-shadow: 0 3px 12px rgba(0, 184, 148, 0.3);
+    border: 1px solid rgba(0, 184, 148, 0.2);
+    cursor: default;
 }
 
 .semester-stats {
@@ -245,6 +266,10 @@ body {
     transition: all 0.3s ease;
     cursor: pointer;
     display: inline-block;
+}
+
+.btn:hover {
+    text-decoration: none;
 }
 
 .btn-primary {
