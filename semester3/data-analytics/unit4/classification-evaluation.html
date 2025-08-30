@@ -6,6 +6,7 @@
     <title>Unit 4: Classification & Model Evaluation - Data Analytics</title>
     <link rel="stylesheet" href="../../home-styles.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.css">
 </head>
 <body>
     <div class="container">
@@ -1431,5 +1432,38 @@ if best_clv_model == 'Decision Tree':
             <p>Unit 4: Classification & Model Evaluation - Master advanced classification algorithms and comprehensive model evaluation for production-ready data science solutions.</p>
         </footer>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            // Convert legacy .code-block divs to <pre><code>
+            document.querySelectorAll('.code-block').forEach(function(node){
+                if (node.tagName.toLowerCase() === 'div') {
+                    var text = node.textContent;
+                    var pre = document.createElement('pre');
+                    pre.className = 'code-block';
+                    var code = document.createElement('code');
+                    code.className = 'language-python';
+                    code.textContent = text.trimEnd();
+                    pre.appendChild(code);
+                    node.replaceWith(pre);
+                }
+            });
+
+            // Ensure all code tags carry language class
+            document.querySelectorAll('.code-example pre code, pre > code').forEach(function(el){
+                if (![...el.classList].some(function(c){ return c.indexOf('language-') === 0; })) {
+                    el.classList.add('language-python');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+    <script>
+        window.addEventListener('load', function(){
+            if (window.Prism && typeof Prism.highlightAll === 'function') {
+                Prism.highlightAll();
+            }
+        });
+    </script>
 </body>
 </html>

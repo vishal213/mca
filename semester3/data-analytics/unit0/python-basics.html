@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit 0: Python Foundations for Data Analytics</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.css">
 </head>
 <body>
     <div class="container">
@@ -1261,6 +1262,26 @@ print(f"Age-Spending Relationship: {relationship} correlation ({correlation:.3f}
     <script>
         // Add interactive features for better learning
         document.addEventListener('DOMContentLoaded', function() {
+            // Ensure code blocks are set up for Prism highlighting
+            document.querySelectorAll('.code-example pre code, pre > code').forEach(function(el){
+                if (![...el.classList].some(function(c){ return c.indexOf('language-') === 0; })) {
+                    el.classList.add('language-python');
+                }
+            });
+            // Transform .code-block divs into <pre><code> for Prism
+            document.querySelectorAll('.code-block').forEach(function(node){
+                if (node.tagName.toLowerCase() === 'div') {
+                    var text = node.textContent;
+                    var pre = document.createElement('pre');
+                    pre.className = 'code-block';
+                    var code = document.createElement('code');
+                    code.className = 'language-python';
+                    code.textContent = text.trimEnd();
+                    pre.appendChild(code);
+                    node.replaceWith(pre);
+                }
+            });
+
             // Add click-to-highlight for key terms
             const keyTerms = document.querySelectorAll('strong');
             keyTerms.forEach(term => {
@@ -1364,6 +1385,16 @@ print(f"Age-Spending Relationship: {relationship} correlation ({correlation:.3f}
             
             printButton.onclick = () => window.print();
             document.body.appendChild(printButton);
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+    <script>
+        // After Prism and language load, trigger highlighting (handles late loading)
+        window.addEventListener('load', function(){
+            if (window.Prism && typeof Prism.highlightAll === 'function') {
+                Prism.highlightAll();
+            }
         });
     </script>
 </body>

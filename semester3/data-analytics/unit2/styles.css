@@ -562,10 +562,11 @@ h5 {
     display: block;
 }
 
-.code-example pre code {
-    background: transparent;
-    padding: 0;
-    border: 0;
+.code-example pre code,
+pre code {
+    background: transparent !important;
+    padding: 0 !important;
+    border: 0 !important;
     color: inherit;
     font: inherit;
     white-space: inherit;
@@ -578,6 +579,23 @@ h5 {
     padding: 1rem;
     margin: 1.5rem 0;
 }
+
+/* Make sure Prism token colors show (avoid overly strong container color rules) */
+pre[class*="language-"], code[class*="language-"] {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Prism token overrides for good contrast on dark bg */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: #9AA5B1; }
+.token.punctuation { color: #E2E8F0; }
+.token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #F56565; }
+.token.boolean, .token.number { color: #90cdf4; }
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #68d391; }
+.token.operator, .token.entity, .token.url { color: #F6AD55; }
+.token.atrule, .token.attr-value, .token.keyword { color: #F6AD55; }
+.token.function, .token.class-name { color: #FAF089; }
+.token.regex, .token.important, .token.variable { color: #FBB6CE; }
 
 .code-example h4, .code-example h5 {
     color: #2d3748;
