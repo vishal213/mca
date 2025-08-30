@@ -510,6 +510,12 @@
                     <li><strong>Section 6:</strong> Use of electronic records by government</li>
                     <li><strong>Section 11:</strong> Attribution of electronic records</li>
                 </ul>
+                <h5>What this enables in simple terms:</h5>
+                <ul>
+                    <li><strong>Electronic = Paper:</strong> Properly signed e‑records are treated like paper documents.</li>
+                    <li><strong>Online services:</strong> Filing, approvals, notices and payments can be done online legally.</li>
+                    <li><strong>Accountability:</strong> Attribution rules help decide who is responsible for a message/transaction.</li>
+                </ul>
                 
                 <h4>Digital Signatures and Certification (Sections 14-34):</h4>
                 <ul>
@@ -518,12 +524,23 @@
                     <li><strong>Section 21:</strong> Certifying authorities</li>
                     <li><strong>Section 30:</strong> Duties of subscribers</li>
                 </ul>
+                <h5>Key points to write:</h5>
+                <ul>
+                    <li><strong>Secure signatures</strong> use prescribed crypto (PKI) so courts trust integrity and origin.</li>
+                    <li><strong>CA ecosystem:</strong> Licensed CAs issue/maintain certificates; maintain logs; can suspend/revoke.</li>
+                    <li><strong>Subscriber duties:</strong> Protect private key, report compromise; otherwise liable for misuse.</li>
+                </ul>
                 
                 <h4>Cyber Contraventions (Sections 43-45):</h4>
                 <ul>
                     <li><strong>Section 43:</strong> Penalty for damage to computer systems</li>
                     <li><strong>Section 43A:</strong> Compensation for data protection failure</li>
                     <li><strong>Section 44:</strong> Penalty for failure to protect data</li>
+                </ul>
+                <h5>How these are used:</h5>
+                <ul>
+                    <li>For negligent data leaks, users can seek <strong>compensation</strong> (43A) even if no crime is proven.</li>
+                    <li>Disruption without intent (e.g., contractor wipes a server) can still attract <strong>damages</strong> (43).</li>
                 </ul>
                 
                 <h4>Cyber Crimes (Sections 66-78):</h4>
@@ -539,6 +556,13 @@
                     <li><strong>Section 67A:</strong> Publishing sexually explicit material</li>
                     <li><strong>Section 67B:</strong> Child pornography</li>
                 </ul>
+                <h5>Short exam lines:</h5>
+                <ul>
+                    <li><strong>66C:</strong> Using another’s password/OTP/identity tokens – up to 3 years + fine.</li>
+                    <li><strong>66D:</strong> Impersonating bank/government online to cheat – up to 3 years + fine.</li>
+                    <li><strong>66E:</strong> Publishing private images without consent – up to 3 years + ₹2 lakh fine.</li>
+                    <li><strong>66F:</strong> Attack on critical systems endangering life/sovereignty – <strong>life imprisonment</strong>.</li>
+                </ul>
             </div>
 
             <h3>IT Act 2008 Amendments</h3>
@@ -551,14 +575,11 @@
                     <li><strong>Data Protection:</strong> Mandatory security practices</li>
                     <li><strong>Cyber Appellate Tribunal:</strong> Specialized adjudication body</li>
                 </ul>
-                
-                <h4>Key Additions:</h4>
+                <h5>Why important for exams:</h5>
                 <ul>
-                    <li>Definition of "cyber terrorism" (Section 66F)</li>
-                    <li>Corporate liability for data protection (Section 43A)</li>
-                    <li>Expanded definition of "computer"</li>
-                    <li>Intermediary liability provisions</li>
-                    <li>Digital signature certificate validity</li>
+                    <li>Added <strong>43A</strong> (compensation for negligent data protection) relevant to modern breaches.</li>
+                    <li>Defined <strong>66F</strong> (cyber‑terrorism) with the highest punishment.</li>
+                    <li>Clarified <strong>intermediary due diligence</strong> duties (takedown on valid notice, log retention).</li>
                 </ul>
             </div>
         </section>
@@ -881,6 +902,12 @@ Document → Hash Function → Document Hash
                     <li><strong>Directory Traversal:</strong> Accessing files outside web root</li>
                     <li><strong>Remote File Inclusion:</strong> Including malicious files from remote servers</li>
                 </ul>
+                <h5>How to remember (3 bullets):</h5>
+                <ul>
+                    <li><strong>Injection → DB</strong> (use parameterized queries)</li>
+                    <li><strong>XSS → User</strong> (encode output, set CSP)</li>
+                    <li><strong>CSRF → Session</strong> (CSRF tokens, SameSite cookies)</li>
+                </ul>
                 
                 <h4>Web Infrastructure Attacks:</h4>
                 <ul>
@@ -889,6 +916,13 @@ Document → Hash Function → Document Hash
                     <li><strong>Session Hijacking:</strong> Stealing user session tokens</li>
                     <li><strong>DNS Attacks:</strong> Poisoning, hijacking, tunneling</li>
                     <li><strong>SSL/TLS Vulnerabilities:</strong> Exploiting encryption weaknesses</li>
+                </ul>
+                <h5>Quick mitigations:</h5>
+                <ul>
+                    <li>DDoS → CDN/WAF + rate limits</li>
+                    <li>MITM → HTTPS + HSTS</li>
+                    <li>Sessions → httpOnly + Secure + SameSite=strict</li>
+                    <li>DNS → DNSSEC + registrar locks + MFA</li>
                 </ul>
                 
                 <div class="example-detailed">
@@ -939,6 +973,10 @@ Password: anything</pre>
                     <li>Use Web Application Firewalls (WAF)</li>
                     <li>Implement proper logging and monitoring</li>
                     <li>User input validation and output encoding</li>
+                </ul>
+                <h5>Exam tip:</h5>
+                <ul>
+                    <li>Write <strong>one line</strong> each for <em>what it is</em> + <em>one control</em> for 5 OWASP items to secure quick marks.</li>
                 </ul>
             </div>
         </section>
@@ -1074,6 +1112,8 @@ Password: anything</pre>
                 </div>
             </div>
         </section>
+
+        
 
         <section id="exam-tips">
             <div class="exam-tips">

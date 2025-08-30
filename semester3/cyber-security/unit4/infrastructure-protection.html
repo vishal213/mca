@@ -208,6 +208,12 @@
                         </tbody>
                     </table>
                 </div>
+                <h4>How to prioritize protection quickly:</h4>
+                <ul>
+                    <li><strong>Identify crown jewels:</strong> Which systems cause public harm if down for 24 hours?</li>
+                    <li><strong>Map dependencies:</strong> What does this system need (power, telecom, vendors)?</li>
+                    <li><strong>Set targets:</strong> RTO/RPO, minimum service levels, manual fallback procedures.</li>
+                </ul>
             </div>
 
             <h3>Asset Classification and Prioritization</h3>
@@ -256,6 +262,11 @@
                     <li><strong>Data Sharing:</strong> Information exchange between agencies</li>
                     <li><strong>Cloud Services:</strong> Shared computing infrastructure</li>
                 </ul>
+                <h5>Mitigation:</h5>
+                <ul>
+                    <li>Segment IT and OT; use one‑way data diodes/DMZ for historians.</li>
+                    <li>Zero‑trust access with MFA for any remote/vendor connectivity.</li>
+                </ul>
                 
                 <h4>Geographic Interdependencies:</h4>
                 <p>Infrastructure components located in the same geographic area.</p>
@@ -264,6 +275,11 @@
                     <li>Regional power grid failures</li>
                     <li>Urban infrastructure concentration risks</li>
                 </ul>
+                <h5>Mitigation:</h5>
+                <ul>
+                    <li>Place backup sites in different flood/seismic zones; diversify cloud regions.</li>
+                    <li>Plan manual operations if a region is isolated.</li>
+                </ul>
                 
                 <h4>Logical Interdependencies:</h4>
                 <p>Coupling between infrastructure systems through human decisions.</p>
@@ -271,6 +287,11 @@
                     <li>Policy decisions affecting multiple sectors</li>
                     <li>Shared governance and regulation</li>
                     <li>Economic interdependencies</li>
+                </ul>
+                <h5>Mitigation:</h5>
+                <ul>
+                    <li>Cross‑sector coordination cells; common playbooks and data formats.</li>
+                    <li>Agreements with regulators to relax constraints during emergencies.</li>
                 </ul>
                 
                 <div class="visual-diagram">
@@ -567,6 +588,96 @@
                         </li>
                     </ol>
                 </div>
+            </div>
+        </section>
+
+        <section id="resilience-recovery">
+            <h2>🔄 Resilience, Incident Response and Recovery (Exam‑Focused)</h2>
+
+            <div class="concept">
+                <h3>What is Resilience?</h3>
+                <p><strong>Resilience</strong> means the system can continue essential services and recover quickly even when attacked.</p>
+
+                <div class="algorithm-steps">
+                    <h4>Five Practical Building Blocks</h4>
+                    <ol>
+                        <li><strong>Redundancy:</strong> Backup power, network paths, data centers.</li>
+                        <li><strong>Segmentation:</strong> Break networks into zones so attacks don’t spread.</li>
+                        <li><strong>Fail‑Safe Defaults:</strong> Safe shutdown modes for ICS processes.</li>
+                        <li><strong>Immutable Backups:</strong> Offline copies that ransomware can’t encrypt.</li>
+                        <li><strong>Exercise & Drill:</strong> Regular tabletop and technical drills.</li>
+                    </ol>
+                </div>
+
+                <div class="example-detailed">
+                    <h4>Example: Water Utility</h4>
+                    <ul>
+                        <li>Two control rooms (primary + hot standby).</li>
+                        <li>Air‑gapped backup of PLC programs every day.</li>
+                        <li>Manual valves documented for emergency operations.</li>
+                        <li>Quarterly blackout drills with local authorities.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="concept">
+                <h3>Incident Response for Infrastructure (Who does what?)</h3>
+                <div class="algorithm-steps">
+                    <ol>
+                        <li><strong>Detect:</strong> SOC/OT monitoring flags anomaly (e.g., pump speed change).</li>
+                        <li><strong>Assess & Contain:</strong> Switch to manual control, isolate affected segment, block C2.</li>
+                        <li><strong>Notify:</strong> NCIIPC/CERT‑In, sector regulator, law enforcement, management.</li>
+                        <li><strong>Eradicate:</strong> Remove malware, reset credentials, patch exploited flaws.</li>
+                        <li><strong>Recover:</strong> Restore from <strong>known‑good</strong> golden images; validate process set‑points.</li>
+                        <li><strong>Post‑Incident:</strong> Root cause analysis, update runbooks, share intel.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="concept">
+                <h3>Metrics You Can Quote in Exams</h3>
+                <ul>
+                    <li><strong>MTTD</strong> (Mean Time to Detect): time to spot an attack.</li>
+                    <li><strong>MTTR</strong> (Mean Time to Recover): time to restore normal operations.</li>
+                    <li><strong>RTO</strong> (Recovery Time Objective): maximum acceptable downtime.</li>
+                    <li><strong>RPO</strong> (Recovery Point Objective): acceptable data loss window.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="supply-chain-security">
+            <h2>🚚 Supply Chain Security (Why SolarWinds‑style risks matter)</h2>
+
+            <div class="concept">
+                <h3>Where the Risk Enters</h3>
+                <ul>
+                    <li><strong>Software:</strong> Compromised updates, open‑source dependencies.</li>
+                    <li><strong>Hardware:</strong> Tainted devices/firmware from vendors.</li>
+                    <li><strong>Services:</strong> Third‑party maintenance with remote access.</li>
+                </ul>
+
+                <h4>Practical Controls:</h4>
+                <ul>
+                    <li>Vendor risk assessments and security clauses in contracts.</li>
+                    <li>Code signing verification; SBOM (Software Bill of Materials).</li>
+                    <li>Separate vendor access via jump‑hosts; time‑bound credentials.</li>
+                    <li>Continuous monitoring of update channels; test in staging first.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="people-process">
+            <h2>👥 People, Process, Technology – Making It Work</h2>
+
+            <div class="concept">
+                <h3>Non‑Technical Measures that Save the Day</h3>
+                <ul>
+                    <li><strong>Clear Roles:</strong> OT engineers, IT security, facility managers, PR – all have defined tasks.</li>
+                    <li><strong>Change Control:</strong> No direct PLC changes without approvals and rollback plan.</li>
+                    <li><strong>Access Reviews:</strong> Quarterly review of all privileged accounts.</li>
+                    <li><strong>Vendor Drills:</strong> Include maintenance vendors in incident exercises.</li>
+                    <li><strong>Awareness:</strong> Short, scenario‑based training for shift operators.</li>
+                </ul>
             </div>
         </section>
 
