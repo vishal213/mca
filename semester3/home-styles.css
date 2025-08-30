@@ -27,6 +27,27 @@ body {
     border-bottom: 1px solid rgba(52, 73, 94, 0.1);
 }
 
+.breadcrumb .semester-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.breadcrumb .semester-link:hover {
+    background: linear-gradient(135deg, #2980b9, #1c5980);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
 .home-link {
     display: inline-flex;
     align-items: center;
