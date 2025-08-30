@@ -21,98 +21,739 @@
         <section id="os-functions">
             <h2>1. Operating System Functions and Characteristics</h2>
             
-            <h3>Core Functions of an Operating System</h3>
-            <p>An operating system performs several critical functions that make computers usable and efficient. Think of the OS as a city's infrastructure that provides essential services to all residents (programs and users).</p>
+            <h3>Understanding OS as a Digital City Manager</h3>
+            <p>An operating system performs several critical functions that make computers usable and efficient. Think of the OS as a city's infrastructure that provides essential services to all residents (programs and users). Just like a city needs water, electricity, transportation, and security systems, a computer needs resource management, process coordination, and security services.</p>
 
             <div class="concept">
-                <h5>Primary OS Functions:</h5>
-                <h4>1. Resource Management</h4>
-                <ul>
-                    <li><strong>CPU Management:</strong> Decides which program gets to use the processor and for how long</li>
-                    <li><strong>Memory Management:</strong> Allocates and deallocates memory space for programs</li>
-                    <li><strong>Storage Management:</strong> Organizes data on hard drives and manages file systems</li>
-                    <li><strong>Device Management:</strong> Controls input/output devices like keyboard, mouse, printer</li>
-                </ul>
+                <h4>The Complete OS Function Framework</h4>
+                <p>Operating systems provide two main categories of functions: <strong>Core System Functions</strong> (essential for basic operation) and <strong>Extended Services</strong> (that make the system user-friendly and efficient).</p>
+                
+                <h5>Core System Functions:</h5>
+                
+                <h4>1. Resource Management - The City's Infrastructure</h4>
+                <div class="example-detailed">
+                    <h5>CPU Management - Traffic Control System</h5>
+                    <p><strong>Challenge:</strong> Multiple programs want to use the single CPU simultaneously</p>
+                    
+                    <h6>How OS Solves This:</h6>
+                    <ol>
+                        <li><strong>Process Scheduling:</strong> Like traffic lights controlling intersection flow
+                            <ul>
+                                <li>Round-robin: Each program gets equal time slices</li>
+                                <li>Priority-based: Important programs get more CPU time</li>
+                                <li>Real-time: Critical programs get immediate attention</li>
+                            </ul>
+                        </li>
+                        <li><strong>Context Switching:</strong> Rapidly switching between programs
+                            <ul>
+                                <li>Save current program's state (registers, memory pointers)</li>
+                                <li>Load next program's state</li>
+                                <li>Resume execution from where it left off</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Video Call While Gaming</h6>
+                    <p><strong>Scenario:</strong> You're playing a game while on a Zoom call</p>
+                    <ul>
+                        <li><strong>Game:</strong> Gets 60% CPU time for smooth graphics</li>
+                        <li><strong>Zoom:</strong> Gets 30% CPU time for video processing</li>
+                        <li><strong>System:</strong> Gets 10% CPU time for background tasks</li>
+                        <li><strong>Result:</strong> Both applications work smoothly without interfering</li>
+                    </ul>
+                </div>
+                
+                <div class="example-detailed">
+                    <h5>Memory Management - City Housing Authority</h5>
+                    <p><strong>Challenge:</strong> Limited RAM must be shared among all running programs</p>
+                    
+                    <h6>OS Memory Management Strategies:</h6>
+                    <ol>
+                        <li><strong>Memory Allocation:</strong> Like assigning apartments to residents
+                            <ul>
+                                <li>Each program gets its own protected memory space</li>
+                                <li>OS tracks which memory is free and which is occupied</li>
+                                <li>Prevents programs from accessing each other's memory</li>
+                            </ul>
+                        </li>
+                        <li><strong>Virtual Memory:</strong> Creating illusion of unlimited space
+                            <ul>
+                                <li>Uses hard disk as extended memory (swap space)</li>
+                                <li>Moves inactive data to disk when RAM is full</li>
+                                <li>Brings data back to RAM when needed</li>
+                            </ul>
+                        </li>
+                        <li><strong>Memory Protection:</strong> Building walls between programs
+                            <ul>
+                                <li>Hardware-assisted protection boundaries</li>
+                                <li>Prevents malicious programs from accessing system memory</li>
+                                <li>Isolates program crashes to prevent system-wide failures</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Photo Editing with Limited RAM</h6>
+                    <p><strong>Scenario:</strong> Editing large photos on a computer with 8GB RAM</p>
+                    <ul>
+                        <li><strong>Photoshop:</strong> Needs 4GB for large image files</li>
+                        <li><strong>Chrome:</strong> Using 2GB for multiple tabs</li>
+                        <li><strong>System:</strong> Requires 1.5GB for OS operations</li>
+                        <li><strong>Available:</strong> Only 500MB free</li>
+                        <li><strong>OS Solution:</strong> Moves inactive Chrome tabs to virtual memory, freeing up RAM for Photoshop</li>
+                    </ul>
+                </div>
+                
+                <div class="example-detailed">
+                    <h5>Storage Management - City Library System</h5>
+                    <p><strong>Challenge:</strong> Organize millions of files on storage devices efficiently</p>
+                    
+                    <h6>File System Functions:</h6>
+                    <ol>
+                        <li><strong>File Organization:</strong> Like library cataloging system
+                            <ul>
+                                <li>Hierarchical directory structure (folders within folders)</li>
+                                <li>File naming conventions and metadata</li>
+                                <li>Efficient search and retrieval mechanisms</li>
+                            </ul>
+                        </li>
+                        <li><strong>Space Management:</strong> Optimizing storage utilization
+                            <ul>
+                                <li>Allocating disk space for new files</li>
+                                <li>Reclaiming space from deleted files</li>
+                                <li>Defragmentation to optimize access speed</li>
+                            </ul>
+                        </li>
+                        <li><strong>Access Control:</strong> File permissions and security
+                            <ul>
+                                <li>Read, write, execute permissions</li>
+                                <li>User and group-based access control</li>
+                                <li>File encryption and protection</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Corporate File Server</h6>
+                    <p><strong>Scenario:</strong> Company with 1000 employees sharing files</p>
+                    <ul>
+                        <li><strong>Organization:</strong> Departments have separate folders</li>
+                        <li><strong>Permissions:</strong> HR files only accessible to HR staff</li>
+                        <li><strong>Backup:</strong> Automatic daily backups of critical files</li>
+                        <li><strong>Search:</strong> Employees can quickly find documents by name or content</li>
+                    </ul>
+                </div>
+                
+                <div class="example-detailed">
+                    <h5>Device Management - City Utilities Coordination</h5>
+                    <p><strong>Challenge:</strong> Coordinate access to various hardware devices</p>
+                    
+                    <h6>Device Management Components:</h6>
+                    <ol>
+                        <li><strong>Device Drivers:</strong> Like specialized technicians
+                            <ul>
+                                <li>Software that knows how to communicate with specific hardware</li>
+                                <li>Translates generic OS commands to device-specific instructions</li>
+                                <li>Handles device-specific error conditions</li>
+                            </ul>
+                        </li>
+                        <li><strong>I/O Scheduling:</strong> Managing device access requests
+                            <ul>
+                                <li>Queuing requests when devices are busy</li>
+                                <li>Optimizing access patterns for efficiency</li>
+                                <li>Handling device interrupts and notifications</li>
+                            </ul>
+                        </li>
+                        <li><strong>Buffering and Caching:</strong> Optimizing data transfer
+                            <ul>
+                                <li>Temporary storage for data in transit</li>
+                                <li>Caching frequently accessed data</li>
+                                <li>Handling speed differences between devices</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Printing from Multiple Applications</h6>
+                    <p><strong>Scenario:</strong> Three people try to print documents simultaneously</p>
+                    <ul>
+                        <li><strong>Print Spooler:</strong> OS queues all print jobs</li>
+                        <li><strong>Priority Handling:</strong> Urgent documents can jump the queue</li>
+                        <li><strong>Error Management:</strong> If printer jams, OS notifies users and pauses queue</li>
+                        <li><strong>Resource Sharing:</strong> One printer serves multiple users efficiently</li>
+                    </ul>
+                </div>
 
-                <h4>2. Process Management</h4>
-                <ul>
-                    <li><strong>Process Creation:</strong> Starting new programs when users request them</li>
-                    <li><strong>Process Scheduling:</strong> Deciding execution order of multiple programs</li>
-                    <li><strong>Process Synchronization:</strong> Coordinating programs that need to work together</li>
-                    <li><strong>Process Communication:</strong> Enabling programs to share data safely</li>
-                </ul>
+                <h4>2. Process Management - The City's Activity Coordination</h4>
+                <div class="example-detailed">
+                    <h5>Understanding Processes vs Programs</h5>
+                    <p><strong>Key Distinction:</strong> A program is like a recipe book, a process is like actually cooking the recipe</p>
+                    
+                    <ul>
+                        <li><strong>Program:</strong> Static code stored on disk (like Microsoft Word executable file)</li>
+                        <li><strong>Process:</strong> Program in execution with allocated resources (Word running with your document open)</li>
+                    </ul>
+                    
+                    <h6>Process Lifecycle Management:</h6>
+                    <ol>
+                        <li><strong>Process Creation:</strong> Birth of a new process
+                            <ul>
+                                <li>User double-clicks application icon</li>
+                                <li>OS allocates memory and resources</li>
+                                <li>Program code loaded from disk to memory</li>
+                                <li>Process assigned unique identifier (PID)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Process Execution:</strong> Active running phase
+                            <ul>
+                                <li>CPU executes program instructions</li>
+                                <li>Process can be running, waiting, or ready</li>
+                                <li>OS schedules CPU time among processes</li>
+                            </ul>
+                        </li>
+                        <li><strong>Process Communication:</strong> Inter-process coordination
+                            <ul>
+                                <li>Shared memory for data exchange</li>
+                                <li>Message passing between processes</li>
+                                <li>Synchronization to prevent conflicts</li>
+                            </ul>
+                        </li>
+                        <li><strong>Process Termination:</strong> Clean shutdown
+                            <ul>
+                                <li>Release allocated memory and resources</li>
+                                <li>Close open files and network connections</li>
+                                <li>Notify parent processes of completion</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Web Browser Process Management</h6>
+                    <p><strong>Scenario:</strong> Opening Chrome with multiple tabs</p>
+                    <ul>
+                        <li><strong>Main Process:</strong> Browser interface and coordination</li>
+                        <li><strong>Tab Processes:</strong> Each tab runs in separate process for isolation</li>
+                        <li><strong>Extension Processes:</strong> Browser extensions run independently</li>
+                        <li><strong>GPU Process:</strong> Hardware acceleration for graphics</li>
+                        <li><strong>Benefit:</strong> If one tab crashes, others continue working</li>
+                    </ul>
+                </div>
 
-                <h4>3. Security and Protection</h4>
-                <ul>
-                    <li><strong>User Authentication:</strong> Verifying user identity through passwords</li>
-                    <li><strong>Access Control:</strong> Controlling who can access which files and programs</li>
-                    <li><strong>System Protection:</strong> Preventing malicious programs from damaging system</li>
-                    <li><strong>Data Protection:</strong> Ensuring data integrity and preventing unauthorized access</li>
-                </ul>
+                <h4>3. Security and Protection - The City's Safety System</h4>
+                <div class="example-detailed">
+                    <h5>Multi-Layer Security Architecture</h5>
+                    <p><strong>Defense in Depth:</strong> Like a city with multiple security layers</p>
+                    
+                    <h6>Security Layers:</h6>
+                    <ol>
+                        <li><strong>User Authentication:</strong> City gates with ID checking
+                            <ul>
+                                <li>Username/password verification</li>
+                                <li>Multi-factor authentication (SMS, biometrics)</li>
+                                <li>Single sign-on for convenience</li>
+                            </ul>
+                        </li>
+                        <li><strong>Access Control:</strong> Building-specific permissions
+                            <ul>
+                                <li>File and folder permissions (read, write, execute)</li>
+                                <li>Role-based access control (admin, user, guest)</li>
+                                <li>Mandatory access control for high security</li>
+                            </ul>
+                        </li>
+                        <li><strong>System Protection:</strong> Critical infrastructure protection
+                            <ul>
+                                <li>Kernel protection from user programs</li>
+                                <li>System file protection</li>
+                                <li>Hardware resource protection</li>
+                            </ul>
+                        </li>
+                        <li><strong>Data Protection:</strong> Information security
+                            <ul>
+                                <li>File encryption for sensitive data</li>
+                                <li>Secure communication channels</li>
+                                <li>Data backup and recovery systems</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h6>Real Example: Corporate Computer Security</h6>
+                    <p><strong>Scenario:</strong> Employee laptop in a company</p>
+                    <ul>
+                        <li><strong>Login:</strong> Employee must authenticate with company credentials</li>
+                        <li><strong>File Access:</strong> Can only access files relevant to their role</li>
+                        <li><strong>Software Installation:</strong> Requires administrator approval</li>
+                        <li><strong>Network Access:</strong> Company firewall controls internet access</li>
+                        <li><strong>Data Protection:</strong> Sensitive files automatically encrypted</li>
+                    </ul>
+                </div>
             </div>
 
             <h3>Key Characteristics of Operating Systems</h3>
             
             <div class="example-detailed">
-                <h4>Essential OS Characteristics</h4>
+                <h4>Essential OS Characteristics - The DNA of Operating Systems</h4>
+                <p>These characteristics define what makes an operating system effective and distinguish it from simple programs.</p>
                 
-                <h5>1. Concurrency</h5>
-                <p><strong>Definition:</strong> Ability to handle multiple tasks simultaneously</p>
-                <p><strong>Example:</strong> You can listen to music while browsing internet and downloading files</p>
-                <p><strong>How it works:</strong> OS rapidly switches CPU attention between tasks</p>
+                <h5>1. Concurrency - The Multitasking Master</h5>
+                <div class="concept">
+                    <p><strong>Definition:</strong> Ability to handle multiple tasks simultaneously, creating the illusion that everything happens at once</p>
+                    
+                    <h6>Types of Concurrency:</h6>
+                    <ul>
+                        <li><strong>Process Concurrency:</strong> Multiple programs running "simultaneously"</li>
+                        <li><strong>Thread Concurrency:</strong> Multiple parts of same program running in parallel</li>
+                        <li><strong>I/O Concurrency:</strong> Processing continues while waiting for input/output</li>
+                    </ul>
+                    
+                    <h6>Real-World Example: Modern Smartphone</h6>
+                    <p><strong>Scenario:</strong> Using your phone while multiple apps are active</p>
+                    <ul>
+                        <li><strong>Foreground:</strong> You're texting in WhatsApp</li>
+                        <li><strong>Background:</strong> Spotify plays music</li>
+                        <li><strong>Background:</strong> Gmail checks for new emails</li>
+                        <li><strong>Background:</strong> Maps updates your location</li>
+                        <li><strong>Background:</strong> Weather app updates forecasts</li>
+                        <li><strong>System:</strong> OS manages battery, network, security</li>
+                    </ul>
+                    <p><strong>Result:</strong> All apps appear to run simultaneously on a single-core processor through rapid task switching</p>
+                </div>
 
-                <h5>2. Sharing</h5>
-                <p><strong>Definition:</strong> Multiple users/programs can share computer resources</p>
-                <p><strong>Example:</strong> Multiple browser tabs sharing the same computer memory</p>
-                <p><strong>Benefit:</strong> Efficient use of expensive computer resources</p>
+                <h5>2. Sharing - The Resource Diplomat</h5>
+                <div class="concept">
+                    <p><strong>Definition:</strong> Multiple users and programs can efficiently share computer resources without conflicts</p>
+                    
+                    <h6>Types of Sharing:</h6>
+                    <ul>
+                        <li><strong>Time Sharing:</strong> CPU time divided among processes</li>
+                        <li><strong>Space Sharing:</strong> Memory and storage divided among programs</li>
+                        <li><strong>Device Sharing:</strong> Hardware devices shared among applications</li>
+                    </ul>
+                    
+                    <h6>Real-World Example: University Computer Lab</h6>
+                    <p><strong>Scenario:</strong> 30 students using computers simultaneously</p>
+                    <ul>
+                        <li><strong>CPU Sharing:</strong> Each student's program gets fair CPU time</li>
+                        <li><strong>Memory Sharing:</strong> RAM divided among all active programs</li>
+                        <li><strong>Printer Sharing:</strong> One printer serves all students through print queue</li>
+                        <li><strong>Network Sharing:</strong> Internet bandwidth shared among all users</li>
+                        <li><strong>File Sharing:</strong> Common software and resources accessible to all</li>
+                    </ul>
+                    <p><strong>Benefit:</strong> 30 students can work productively with resources that would be idle if used by one person</p>
+                </div>
 
-                <h5>3. Long-term Storage</h5>
-                <p><strong>Definition:</strong> Data persists even when computer is turned off</p>
-                <p><strong>Example:</strong> Your documents remain saved even after shutdown</p>
-                <p><strong>Implementation:</strong> File system organizes data on permanent storage</p>
+                <h5>3. Long-term Storage - The Digital Memory Keeper</h5>
+                <div class="concept">
+                    <p><strong>Definition:</strong> Data and programs persist beyond the current session, surviving power cycles and system restarts</p>
+                    
+                    <h6>Storage Persistence Levels:</h6>
+                    <ul>
+                        <li><strong>Volatile Storage:</strong> RAM - lost when power off</li>
+                        <li><strong>Non-volatile Storage:</strong> Hard drives, SSDs - survives power cycles</li>
+                        <li><strong>Archival Storage:</strong> Backup systems - long-term preservation</li>
+                    </ul>
+                    
+                    <h6>Real-World Example: Digital Photography Workflow</h6>
+                    <p><strong>Scenario:</strong> Professional photographer managing thousands of photos</p>
+                    <ol>
+                        <li><strong>Capture:</strong> Photos stored on camera's memory card</li>
+                        <li><strong>Import:</strong> OS copies photos to computer's hard drive</li>
+                        <li><strong>Organization:</strong> File system creates dated folders automatically</li>
+                        <li><strong>Editing:</strong> Photos loaded into RAM for fast editing</li>
+                        <li><strong>Saving:</strong> Edited versions saved back to permanent storage</li>
+                        <li><strong>Backup:</strong> OS automatically backs up to cloud storage</li>
+                        <li><strong>Archive:</strong> Old photos moved to external drives for long-term storage</li>
+                    </ol>
+                    <p><strong>Result:</strong> Photos remain accessible years later, surviving multiple computer upgrades</p>
+                </div>
 
-                <h5>4. Nondeterminacy</h5>
-                <p><strong>Definition:</strong> OS must handle unpredictable events and user actions</p>
-                <p><strong>Example:</strong> User might suddenly close a program or plug in a USB drive</p>
-                <p><strong>Challenge:</strong> OS must be prepared for any sequence of events</p>
+                <h5>4. Nondeterminacy - The Chaos Manager</h5>
+                <div class="concept">
+                    <p><strong>Definition:</strong> OS must handle unpredictable events, user actions, and system conditions in any order at any time</p>
+                    
+                    <h6>Sources of Nondeterminacy:</h6>
+                    <ul>
+                        <li><strong>User Actions:</strong> Unpredictable clicks, key presses, program launches</li>
+                        <li><strong>Hardware Events:</strong> Device connections, network changes, power fluctuations</li>
+                        <li><strong>Software Events:</strong> Program crashes, resource requests, timer expirations</li>
+                        <li><strong>External Events:</strong> Network messages, sensor inputs, interrupts</li>
+                    </ul>
+                    
+                    <h6>Real-World Example: Gaming Session Chaos</h6>
+                    <p><strong>Scenario:</strong> Intense gaming session with multiple unpredictable events</p>
+                    <ul>
+                        <li><strong>T+0 seconds:</strong> Game launches normally</li>
+                        <li><strong>T+30 seconds:</strong> Friend sends Discord message (interrupt)</li>
+                        <li><strong>T+45 seconds:</strong> Windows Update notification appears</li>
+                        <li><strong>T+60 seconds:</strong> USB headset disconnects unexpectedly</li>
+                        <li><strong>T+75 seconds:</strong> Game tries to save progress</li>
+                        <li><strong>T+80 seconds:</strong> Antivirus starts background scan</li>
+                        <li><strong>T+90 seconds:</strong> User Alt+Tabs to browser</li>
+                        <li><strong>T+95 seconds:</strong> Low battery warning appears</li>
+                    </ul>
+                    <p><strong>OS Response:</strong> Handles each event appropriately without crashing, maintains game performance, manages resource conflicts</p>
+                </div>
+
+                <h5>5. Additional Critical Characteristics</h5>
+                <div class="concept">
+                    <h6>Reliability - The Stability Guardian</h6>
+                    <ul>
+                        <li><strong>Fault Tolerance:</strong> System continues working despite component failures</li>
+                        <li><strong>Error Recovery:</strong> Graceful handling of software and hardware errors</li>
+                        <li><strong>System Integrity:</strong> Maintains consistent state even during crashes</li>
+                    </ul>
+                    
+                    <h6>Scalability - The Growth Accommodator</h6>
+                    <ul>
+                        <li><strong>Performance Scaling:</strong> Handles increasing workloads efficiently</li>
+                        <li><strong>Resource Scaling:</strong> Adapts to more memory, storage, processors</li>
+                        <li><strong>User Scaling:</strong> Supports growing number of users and applications</li>
+                    </ul>
+                    
+                    <h6>Portability - The Platform Bridge</h6>
+                    <ul>
+                        <li><strong>Hardware Independence:</strong> Runs on different computer architectures</li>
+                        <li><strong>Application Compatibility:</strong> Programs work across different OS versions</li>
+                        <li><strong>Standard Interfaces:</strong> Consistent APIs across platforms</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
         <section id="computer-organization">
             <h2>2. Computer System Organization</h2>
 
-            <h3>Understanding Computer System Structure</h3>
-            <p>A computer system is organized in layers, with each layer building upon the lower layers. Understanding this organization helps explain how the operating system fits into the overall system.</p>
+            <h3>The Layered Architecture - Building a Digital Skyscraper</h3>
+            <p>A computer system is organized in layers, with each layer building upon the lower layers. Think of it like constructing a skyscraper - you need a solid foundation (hardware), then structural framework (operating system), and finally the offices and amenities (applications) that people actually use.</p>
 
             <div class="visual-diagram">
-                <h4>Computer System Layers (Bottom to Top)</h4>
+                <h4>Complete Computer System Architecture</h4>
                 <div class="diagram-text">
                     <pre>
-┌─────────────────────────────────────────────────────────┐
-│                    USER PROGRAMS                        │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐      │
-│  │   Browser   │ │Text Editors │ │   Games     │      │
-│  │   Office    │ │Calculators  │ │Media Players│ ...  │
-│  └─────────────┘ └─────────────┘ └─────────────┘      │
-├─────────────────────────────────────────────────────────┤
-│                 SYSTEM SOFTWARE                         │
-│  ┌─────────────────────────────────────────────────┐   │
-│  │         OPERATING SYSTEM                        │   │
-│  │  File Mgmt │ Process Mgmt │ Memory Mgmt │ I/O   │   │
-│  └─────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────┐   │
-│  │    DEVICE DRIVERS & SYSTEM UTILITIES           │   │
-│  └─────────────────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────────┤
-│                     HARDWARE                            │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐      │
-│  │   CPU   │ │ Memory  │ │ Storage │ │   I/O   │      │
-│  │ Control │ │  (RAM)  │ │(HDD/SSD)│ │ Devices │      │
-│  │  Unit   │ │  Cache  │ │ Optical │ │Keyboard │      │
-│  │   ALU   │ │Register │ │   etc.  │ │ Mouse   │      │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘      │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        USER PROGRAMS                            │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────┐  │
+│  │   Browser   │ │Text Editors │ │   Games     │ │Business │  │
+│  │   Office    │ │Calculators  │ │Media Players│ │  Apps   │  │
+│  │Development  │ │Graphics     │ │Communication│ │Database │  │
+│  │   Tools     │ │  Software   │ │    Tools    │ │ Systems │  │
+│  └─────────────┘ └─────────────┘ └─────────────┘ └─────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                      SYSTEM SOFTWARE                           │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                OPERATING SYSTEM                         │   │
+│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │   │
+│  │ │File System │ │Process Mgmt │ │Memory Mgmt  │       │   │
+│  │ │Network Mgmt │ │Security     │ │Device Mgmt  │       │   │
+│  │ │User Interface│ │System Calls │ │Error Handle │       │   │
+│  │ └─────────────┘ └─────────────┘ └─────────────┘       │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │         DEVICE DRIVERS & SYSTEM UTILITIES              │   │
+│  │  Graphics Drivers │ Network Drivers │ Audio Drivers    │   │
+│  │  Compilers │ Debuggers │ System Monitors │ Utilities   │   │
+│  └─────────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────┤
+│                         HARDWARE                               │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────┐  │
+│  │     CPU     │ │   Memory    │ │   Storage   │ │   I/O   │  │
+│  │ ┌─────────┐ │ │ ┌─────────┐ │ │ ┌─────────┐ │ │Keyboard │  │
+│  │ │Control  │ │ │ │  Cache  │ │ │ │   HDD   │ │ │ Mouse   │  │
+│  │ │  Unit   │ │ │ │   RAM   │ │ │ │   SSD   │ │ │Monitor  │  │
+│  │ │   ALU   │ │ │ │Register │ │ │ │ Optical │ │ │Network  │  │
+│  │ └─────────┘ │ │ └─────────┘ │ │ └─────────┘ │ │ Cards   │  │
+│  └─────────────┘ └─────────────┘ └─────────────┘ └─────────┘  │
+└─────────────────────────────────────────────────────────────────┘
                     </pre>
+                </div>
+            </div>
+
+            <h3>Layer-by-Layer Deep Dive</h3>
+            <p>Let's explore each layer in detail, understanding not just what it contains, but how it interacts with other layers and why this organization is so effective.</p>
+
+            <h4>Layer 1: Hardware Foundation - The Physical Reality</h4>
+            <div class="concept">
+                <h5>The Building Blocks of Computing</h5>
+                <p>Hardware is where the magic actually happens - where electrical signals become computation, where magnetic fields become memory, and where light becomes communication.</p>
+                
+                <div class="example-detailed">
+                    <h6>CPU - The Computational Powerhouse</h6>
+                    <p><strong>Internal Architecture:</strong></p>
+                    <ul>
+                        <li><strong>Control Unit:</strong> The "foreman" that manages instruction execution
+                            <ul>
+                                <li>Fetches instructions from memory</li>
+                                <li>Decodes instruction meaning</li>
+                                <li>Coordinates execution across CPU components</li>
+                            </ul>
+                        </li>
+                        <li><strong>Arithmetic Logic Unit (ALU):</strong> The "calculator" that performs operations
+                            <ul>
+                                <li>Mathematical operations (add, subtract, multiply, divide)</li>
+                                <li>Logical operations (AND, OR, NOT, XOR)</li>
+                                <li>Comparison operations (greater than, equal to)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Registers:</strong> Ultra-fast temporary storage
+                            <ul>
+                                <li>Program Counter: Tracks next instruction to execute</li>
+                                <li>Instruction Register: Holds current instruction</li>
+                                <li>General Purpose Registers: Temporary data storage</li>
+                            </ul>
+                        </li>
+                        <li><strong>Cache Memory:</strong> High-speed data buffer
+                            <ul>
+                                <li>L1 Cache: Fastest, smallest (32KB typical)</li>
+                                <li>L2 Cache: Fast, medium (256KB typical)</li>
+                                <li>L3 Cache: Slower, larger (8MB typical)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h6>Real Example: CPU Processing a Simple Addition</h6>
+                    <p><strong>Task:</strong> Calculate 15 + 27</p>
+                    <ol>
+                        <li><strong>Fetch:</strong> Control unit retrieves "ADD 15, 27" instruction from memory</li>
+                        <li><strong>Decode:</strong> Control unit recognizes this as addition operation</li>
+                        <li><strong>Load:</strong> Numbers 15 and 27 loaded into CPU registers</li>
+                        <li><strong>Execute:</strong> ALU performs addition: 15 + 27 = 42</li>
+                        <li><strong>Store:</strong> Result (42) stored in destination register or memory</li>
+                        <li><strong>Time:</strong> Entire process takes about 1 nanosecond!</li>
+                    </ol>
+                </div>
+                
+                <div class="example-detailed">
+                    <h6>Memory Hierarchy - The Speed-Size Trade-off</h6>
+                    <p><strong>Why Multiple Memory Types?</strong> It's impossible to have memory that's simultaneously fast, large, and cheap. So we use a hierarchy.</p>
+                    
+                    <h6>Memory Performance Comparison:</h6>
+                    <ul>
+                        <li><strong>CPU Registers:</strong> 1 nanosecond access, 32-64 bytes total</li>
+                        <li><strong>L1 Cache:</strong> 2-4 nanoseconds, 32-64 KB</li>
+                        <li><strong>L2 Cache:</strong> 10-20 nanoseconds, 256KB-1MB</li>
+                        <li><strong>L3 Cache:</strong> 20-40 nanoseconds, 8-32MB</li>
+                        <li><strong>Main RAM:</strong> 50-100 nanoseconds, 4-64GB</li>
+                        <li><strong>SSD Storage:</strong> 0.1 milliseconds, 256GB-4TB</li>
+                        <li><strong>HDD Storage:</strong> 10 milliseconds, 1-20TB</li>
+                    </ul>
+                    
+                    <h6>Smart Caching in Action:</h6>
+                    <p><strong>Scenario:</strong> Playing a video game</p>
+                    <ol>
+                        <li><strong>Game Assets:</strong> Stored on SSD (textures, models, sounds)</li>
+                        <li><strong>Active Level:</strong> Loaded into RAM for quick access</li>
+                        <li><strong>Current Scene:</strong> Critical data cached in L3</li>
+                        <li><strong>Immediate Objects:</strong> Player character data in L1/L2 cache</li>
+                        <li><strong>Current Calculation:</strong> Player position in CPU registers</li>
+                    </ol>
+                    <p><strong>Result:</strong> Smooth 60 FPS gameplay despite massive amounts of data</p>
+                </div>
+                
+                <div class="example-detailed">
+                    <h6>I/O Devices - The Communication Bridge</h6>
+                    <p><strong>Challenge:</strong> CPU operates at gigahertz speeds, but humans and external devices are much slower</p>
+                    
+                    <h6>I/O Device Categories:</h6>
+                    <ul>
+                        <li><strong>Human Interface Devices:</strong>
+                            <ul>
+                                <li>Keyboard: 100 characters per minute (human speed)</li>
+                                <li>Mouse: 1000 position updates per second</li>
+                                <li>Monitor: 60-144 screen refreshes per second</li>
+                                <li>Speakers: 44,100 audio samples per second</li>
+                            </ul>
+                        </li>
+                        <li><strong>Storage Devices:</strong>
+                            <ul>
+                                <li>SSD: 500MB/s to 7GB/s transfer rates</li>
+                                <li>HDD: 100-200MB/s transfer rates</li>
+                                <li>USB 3.0: 5 Gbps theoretical maximum</li>
+                            </ul>
+                        </li>
+                        <li><strong>Network Devices:</strong>
+                            <ul>
+                                <li>Ethernet: 1 Gbps to 100 Gbps</li>
+                                <li>WiFi: 54 Mbps to 9.6 Gbps (WiFi 6)</li>
+                                <li>Cellular: 1 Mbps to 10 Gbps (5G)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4>Layer 2: Operating System - The Master Coordinator</h4>
+            <div class="concept">
+                <h5>OS as the System Conductor</h5>
+                <p>The operating system is like a symphony conductor - it doesn't play any instruments itself, but coordinates all the musicians (hardware and software) to create beautiful music (useful computing).</p>
+                
+                <div class="example-detailed">
+                    <h6>OS Kernel - The Core Decision Maker</h6>
+                    <p><strong>What makes the kernel special:</strong> It's the only software that can directly control hardware</p>
+                    
+                    <h6>Kernel Responsibilities:</h6>
+                    <ul>
+                        <li><strong>Hardware Abstraction:</strong> Provides simple interfaces for complex hardware
+                            <ul>
+                                <li>File operations hide disk sector management</li>
+                                <li>Network operations hide protocol complexity</li>
+                                <li>Graphics operations hide GPU programming</li>
+                            </ul>
+                        </li>
+                        <li><strong>Resource Arbitration:</strong> Decides who gets what when
+                            <ul>
+                                <li>CPU scheduling among processes</li>
+                                <li>Memory allocation and protection</li>
+                                <li>I/O device access coordination</li>
+                            </ul>
+                        </li>
+                        <li><strong>System Security:</strong> Enforces access control and protection
+                            <ul>
+                                <li>User authentication and authorization</li>
+                                <li>Process isolation and protection</li>
+                                <li>System integrity maintenance</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h6>Real Example: Kernel Managing a Crisis</h6>
+                    <p><strong>Scenario:</strong> System running low on memory while user tries to open large video file</p>
+                    <ol>
+                        <li><strong>Detection:</strong> Kernel monitors memory usage continuously</li>
+                        <li><strong>Analysis:</strong> Determines video player needs 2GB, only 500MB available</li>
+                        <li><strong>Decision Making:</strong> Evaluates options:
+                            <ul>
+                                <li>Move inactive browser tabs to virtual memory</li>
+                                <li>Compress memory contents</li>
+                                <li>Ask user to close applications</li>
+                            </ul>
+                        </li>
+                        <li><strong>Action:</strong> Swaps out inactive data, frees up 1.5GB</li>
+                        <li><strong>Allocation:</strong> Grants memory to video player</li>
+                        <li><strong>Monitoring:</strong> Continues watching for further memory pressure</li>
+                    </ol>
+                    <p><strong>User Experience:</strong> Video opens smoothly, user unaware of complex background management</p>
+                </div>
+                
+                <div class="example-detailed">
+                    <h6>System Services - The OS Toolkit</h6>
+                    <p><strong>Purpose:</strong> Provide common functionality that all programs need</p>
+                    
+                    <h6>Essential System Services:</h6>
+                    <ul>
+                        <li><strong>File System Services:</strong>
+                            <ul>
+                                <li>File creation, deletion, reading, writing</li>
+                                <li>Directory management and navigation</li>
+                                <li>File permissions and security</li>
+                                <li>File search and indexing</li>
+                            </ul>
+                        </li>
+                        <li><strong>Network Services:</strong>
+                            <ul>
+                                <li>TCP/IP protocol implementation</li>
+                                <li>DNS resolution (converting names to IP addresses)</li>
+                                <li>Network security and encryption</li>
+                                <li>Bandwidth management and QoS</li>
+                            </ul>
+                        </li>
+                        <li><strong>Security Services:</strong>
+                            <ul>
+                                <li>User account management</li>
+                                <li>Encryption and decryption</li>
+                                <li>Digital certificates and signatures</li>
+                                <li>Audit logging and monitoring</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4>Layer 3: Application Programs - The User Experience</h4>
+            <div class="concept">
+                <h5>Where Computing Meets Human Needs</h5>
+                <p>Applications are where all the underlying complexity becomes useful - they're the reason computers exist.</p>
+                
+                <div class="example-detailed">
+                    <h6>Application Categories and Their OS Dependencies</h6>
+                    
+                    <h6>System Applications:</h6>
+                    <ul>
+                        <li><strong>File Managers:</strong> Heavily use file system services</li>
+                        <li><strong>Task Managers:</strong> Monitor and control system processes</li>
+                        <li><strong>System Settings:</strong> Configure OS behavior and preferences</li>
+                        <li><strong>Command Shells:</strong> Provide direct access to OS functions</li>
+                    </ul>
+                    
+                    <h6>Productivity Applications:</h6>
+                    <ul>
+                        <li><strong>Word Processors:</strong> Use file system, printing, clipboard services</li>
+                        <li><strong>Spreadsheets:</strong> Intensive memory and calculation services</li>
+                        <li><strong>Presentation Software:</strong> Graphics, multimedia, and display services</li>
+                        <li><strong>Email Clients:</strong> Network, security, and notification services</li>
+                    </ul>
+                    
+                    <h6>Entertainment Applications:</h6>
+                    <ul>
+                        <li><strong>Games:</strong> Graphics, audio, input, and timing services</li>
+                        <li><strong>Media Players:</strong> File system, codec, and audio/video services</li>
+                        <li><strong>Streaming Apps:</strong> Network, decoding, and buffering services</li>
+                    </ul>
+                    
+                    <h6>Development Applications:</h6>
+                    <ul>
+                        <li><strong>Code Editors:</strong> File system, text processing, plugin services</li>
+                        <li><strong>Compilers:</strong> File system, process management, memory services</li>
+                        <li><strong>Debuggers:</strong> Process control, memory inspection, system monitoring</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Inter-Layer Communication - The Glue That Binds</h3>
+            <div class="concept">
+                <h4>How Layers Talk to Each Other</h4>
+                <p>The beauty of layered architecture is that each layer only needs to know about the layer directly below it, creating clean interfaces and maintainable systems.</p>
+                
+                <div class="example-detailed">
+                    <h5>Complete Example: Saving a Document</h5>
+                    <p><strong>Scenario:</strong> User presses Ctrl+S in Microsoft Word</p>
+                    
+                    <h6>The Journey Through the Layers:</h6>
+                    <ol>
+                        <li><strong>Application Layer (Word):</strong>
+                            <ul>
+                                <li>Detects Ctrl+S keyboard shortcut</li>
+                                <li>Prepares document data for saving</li>
+                                <li>Calls OS file system API: "Save this data to MyDocument.docx"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Operating System Layer:</strong>
+                            <ul>
+                                <li>Receives save request through system call interface</li>
+                                <li>Checks file permissions and available disk space</li>
+                                <li>Allocates disk sectors for the file</li>
+                                <li>Calls device driver: "Write this data to sectors 1000-1050"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Device Driver Layer:</strong>
+                            <ul>
+                                <li>Translates generic write command to SSD-specific instructions</li>
+                                <li>Manages write queue and optimization</li>
+                                <li>Sends low-level commands to SSD controller</li>
+                            </ul>
+                        </li>
+                        <li><strong>Hardware Layer:</strong>
+                            <ul>
+                                <li>SSD controller receives write commands</li>
+                                <li>Data written to flash memory cells</li>
+                                <li>Confirmation sent back up the chain</li>
+                            </ul>
+                        </li>
+                        <li><strong>Return Journey:</strong>
+                            <ul>
+                                <li>Hardware confirms write completion</li>
+                                <li>Device driver reports success to OS</li>
+                                <li>OS updates file system metadata</li>
+                                <li>Word displays "Document Saved" message</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <p><strong>Total Time:</strong> 10-50 milliseconds for the entire process!</p>
                 </div>
             </div>
 
